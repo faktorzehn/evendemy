@@ -1,0 +1,8 @@
+.link-as-button{
+  color: black;
+  opacity: 0.2;
+}
+
+.link-as-button:hover{
+  opacity: 0.5;
+}

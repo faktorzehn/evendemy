@@ -1,0 +1,13 @@
+.comment{
+  white-space: pre-wrap;
+}
+
+.comment-row{
+  margin-top: 15px;
+}
+.comment-row:nth-child(even){
+  background-color:#dddddd;
+}
+.comment-row:nth-child(odd){
+  background-color:##f1f1f1;
+}

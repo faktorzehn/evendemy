@@ -1,0 +1,26 @@
+{
+  "name": "evendemy-server",
+  "version": "1.0.0-beta.1",
+  "license": "GNU General Public License v3.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "devDependencies": {},
+  "dependencies": {
+    "basic-auth": "^1.1.0",
+    "ical-generator": "^0.2.9",
+    "ldapauth-fork": "^3.0.0",
+    "moment": "^2.18.1",
+    "mongoose": "^4.7.6",
+    "mongoose-auto-increment": "^5.0.1",
+    "mustache": "^2.3.0",
+    "nodemailer": "^2.7.0",
+    "restify": "^4.3.0",
+    "restify-cors-middleware": "0.0.8",
+    "underscore": "^1.8.3"
+  }
+}

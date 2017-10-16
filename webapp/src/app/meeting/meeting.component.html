@@ -1,0 +1,188 @@
+<app-menu>
+</app-menu><div class="component-content">
+    <div style="padding: 10px 25% 10px 25%;">
+            <form #form="ngForm" *ngIf="meeting != undefined" name="form">
+                    <div *ngIf="isEditable" class="row">
+                        <h3>Meeting Information</h3>
+                    </div>
+
+                    <!--Image-->
+                    <div class="row" style="overflow: hidden; height: 400px;">
+                        <img src="images/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'" style="width: 100%"/>
+                    </div>
+
+
+                    <!--Title-->
+                    <div class="row form-row" *ngIf="isEditable">
+                        <div class="col-md-4">Title</div>
+                        <div class="col-md-8">
+                          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.title" name="title"/>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="!isEditable">
+                      <h1>{{meeting.title}}</h1>
+                    </div>
+
+                    <!--Description-->
+                    <div class="row form-row" *ngIf="isEditable">
+                        <div class="col-md-4">Description</div>
+                        <div class="col-md-8">
+                          <app-editor [value]="meeting?.description" [editable]="isEditable"></app-editor>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="!isEditable">
+                        <div class="col-md-12">
+                          <app-editor [value]="meeting?.description" [editable]="isEditable"></app-editor>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!isEditable" class="row" style="margin-top: 50px;">
+                        <h3>More Information</h3>
+                    </div>
+
+                    <!--TABLE-->
+                    <div class="row form-row">
+                        <div class="col-md-4">Short Description</div>
+                        <div class="col-md-8">
+                          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.shortDescription" name="shortDescription"/>
+                          <div *ngIf="!isEditable">{{meeting.shortDescription}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">Date</div>
+                        <div *ngIf="isEditable" class="col-md-8">
+                          <input type="text" id="date" class="form-control"
+                                 pattern="(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[012]).(19|20)\d\d"
+                                 name="date" [(ngModel)]="inputDate"
+                                 placeholder="dd.MM.yyyy"
+                                 #date="ngModel" >
+                          <div *ngIf="date.errors && (date.dirty || date.touched)"
+                               class="alert alert-danger">
+                              <div [hidden]="!date.errors.pattern">
+                                Date has to be a valid date: dd.MM.yyyy. For example 1.1.2017
+                              </div>
+                          </div>
+                        </div>
+                        <div *ngIf="!isEditable" class="col-md-8">
+                            {{meeting.date | date:'dd.MM.yyyy'}}
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">From</div>
+                        <div *ngIf="isEditable" class="col-md-8">
+                          <input type="text" id="startTime" class="form-control"
+                                 pattern="(0?[0-9]|[1][0-9]|2[0-4]):([0-4][0-9]|5[0-9])"
+                                 name="startTime" [(ngModel)]="meeting.startTime"
+                                  placeholder="hh:mm"
+                                 #startTime="ngModel" >
+                          <div *ngIf="startTime.errors && (startTime.dirty || startTime.touched)"
+                               class="alert alert-danger">
+                              <div [hidden]="!startTime.errors.pattern">
+                                Time has to be like HH:MM. For example 12:00
+                              </div>
+                          </div>
+                        </div>
+                        <div *ngIf="!isEditable" class="col-md-8">
+                            {{meeting.startTime}}
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">To</div>
+                        <div *ngIf="isEditable" class="col-md-8">
+                          <input type="text" id="endTime" class="form-control"
+                                 pattern="(0?[0-9]|[1][0-9]|2[0-4]):([0-4][0-9]|5[0-9])"
+                                 name="endTime" [(ngModel)]="meeting.endTime"
+                                 placeholder="hh:mm"
+                                 #endTime="ngModel" >
+                          <div *ngIf="endTime.errors && (endTime.dirty || endTime.touched)"
+                               class="alert alert-danger">
+                              <div [hidden]="!endTime.errors.pattern">
+                                Time has to be like HH:MM. For example 12:00
+                              </div>
+                          </div>
+                        </div>
+                        <div *ngIf="!isEditable" class="col-md-8">
+                            {{meeting.endTime}}
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">Location</div>
+                        <div class="col-md-8">
+                          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.location" name="location"/>
+                          <div *ngIf="!isEditable">{{meeting.location}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">SAP Cost Center</div>
+                        <div class="col-md-8">
+                          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.costCenter" name="costCenter"/>
+                          <div *ngIf="!isEditable">{{meeting.costCenter}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">Is in freetime</div>
+                        <input type="checkbox" class="icheckbox_flat" [(ngModel)]="meeting.isFreetime" [disabled]="!isEditable" style="margin-left: 15px;" name="isFreetime">
+                    </div>
+                    <div class="row form-row" *ngIf="isEditable">
+                        <div class="col-md-4">Image</div>
+                        <input type="file" name="file-upload" accept=".jpeg" />
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">Author</div>
+                        <div class="col-md-8">{{meeting.username}}</div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-md-4">Creation-Date</div>
+                        <div class="col-md-8">{{meeting.creationDate | date:'dd.MM.yyyy'}}</div>
+                    </div>
+
+                    <!--Attenees-List-->
+                    <div>
+                        <div class="row" style="margin-top: 50px;">
+                          <h3>People who want to participate...</h3>
+                        </div>
+                        <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px;">
+                            <p class="col-md-2">{{attendee.username}}</p>
+                            <button class="btn btn-success col-md-2" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart">
+                              <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
+                              has taken part
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--Tools-->
+                    <div class="meeting-tools" style="margin-top: 20px; text-align: center;">
+                      <!--READ-ONLY-VIEW-->
+                      <button *ngIf="(isNew == false) && !userHasAccepted" class="btn btn-info" (click)="onAcceptMeeting()">I want to participate</button>
+                      <button *ngIf="(isNew == false) && userHasAccepted && !userHasFinished" class="btn btn-danger" (click)="onRejectMeeting()">I cannot participate anymore</button>
+                      <p *ngIf="(isNew == false) && !isEditable &&  userHasAccepted && userHasFinished">Thank you for participating <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span></p>
+                    </div>
+
+
+                    <!--COMMENTS-->
+                    <div class="row" style="margin-top: 50px;">
+                        <h5>Comments</h5>
+                    </div>
+                    <div *ngFor="let comment of meeting.comments" class="row comment-row">
+                            <div class="col-md-2" >{{comment.author}}</div>
+                            <div class="col-md-10 comment">{{comment.text}}</div>
+                    </div>
+                    <div class="row">
+                          <textarea class="col-md-12" [(ngModel)]="commentbox" name="commentbox" style="margin-top: 10px;"></textarea>
+                          <div class="col-md-offset-9 col-md-3" style=" padding-right: 0px; padding-top: 5px;">
+                              <button class="btn btn-info" (click)="onAddComment()" style="float: right;">Add Comment</button>
+                          </div>
+                    </div>
+
+                    <!--Tools-->
+                    <div class="row meeting-tools" *ngIf="isEditable" style="padding-right: 0px; margin-top: 20px; text-align: right;">
+                      <!--EDITOR-MODE-->
+                      <button *ngIf="isNew" class="btn btn-info" (click)="onCreateMeeting()" [disabled]="!form.form.valid">Create</button>
+                      <button *ngIf="!isNew && isEditable" class="btn btn-info" (click)="onUpdateMeeting()" [disabled]="!form.form.valid">Update</button>
+                      <button *ngIf="!isNew && isEditable" class="btn btn-info" (click)="onDeleteMeeting()">Delete</button>
+                    </div>
+
+                </form>
+    </div>
+</div>

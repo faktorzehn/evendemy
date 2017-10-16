@@ -1,0 +1,61 @@
+<app-menu></app-menu>
+<div class="component-content">
+  <h1>{{greeting}}</h1>
+
+  <h3 style="padding-top:20px;">Attended Courses</h3>
+  <p *ngIf="courses.length==0">Nothing here at the moment...</p>
+  <div class="row">
+    <div *ngFor="let course of courses">
+      <div class="col-md-1">
+        <div style="text-align: center;">
+          <img src="assets/star.png" style="width: 50%;" />
+          <div class="meeting-label">
+            <a routerLink="/meeting/{{course.mid}}">{{course.title}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3 style="padding-top:20px;">Attended Events</h3>
+  <p *ngIf="events.length==0">Nothing here at the moment...</p>
+  <div class="row">
+    <div *ngFor="let event of events">
+      <div class="col-md-1">
+        <div style="text-align: center;">
+          <img src="assets/ticket.png" style="width: 50%;" />
+          <div class="event-label">
+            <a routerLink="/meeting/{{event.mid}}">{{event.title}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="padding-top:20px;">Account Information</h3>
+  <div *ngIf="user != undefined" class="form-table">
+    <div class="row form-row">
+      <div class="col-md-2">
+        Username
+      </div>
+      <div class="col-md-2">
+        {{user.username}}
+      </div>
+    </div>
+    <div class="row form-row">
+      <div class="col-md-2">
+        EMail
+      </div>
+      <div class="col-md-2">
+        {{user.email}}
+      </div>
+    </div>
+    <div class="row form-row">
+      <div class="col-md-2">
+        Name
+      </div>
+      <div class="col-md-2">
+        {{user.firstname}} {{user.lastname}}
+      </div>
+    </div>
+  </div>
+</div>

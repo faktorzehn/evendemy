@@ -1,0 +1,29 @@
+.meeting-label{
+  border-radius: 10px;
+  background: orange;
+  padding: 1px 5px 0px 5px;
+  text-align: center;
+  margin-top:5px;
+  font-size: 12px;
+}
+.meeting-label:hover{
+  background: #fcd30a;
+}
+.meeting-label a{
+  color: rgb(67, 74, 84);
+}
+
+.event-label{
+  border-radius: 10px;
+  background: rgb(179,185, 185);
+  padding: 1px 5px 0px 5px;
+  text-align: center;
+  margin-top:5px;
+  font-size: 12px;
+}
+.event-label:hover{
+  background: rgb(206, 207, 207);
+}
+.event-label a{
+  color: rgb(67, 74, 84);
+}
