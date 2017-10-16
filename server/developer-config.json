@@ -15,7 +15,7 @@
 				"header": "Evendemy - Ein neuer Teilnehmer: {{attendee.firstname}} {{attendee.lastname}}",
 				"title": "Evendemy: Ein neuer Teilnehmer: {{attendee.firstname }} {{attendee.lastname}}",
 				"body": "Hi!\n An deinem Meeting: '{{meeting.title}}' will {{attendee.firstname}} {{attendee.lastname}} teilnehmen.\n",
-				"button_href": "https://evendemy.faktorzehn.at/meeting/{{meeting.mid}}",
+				"button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
 				"button_label": "Meeting ansehen",
 				"foot": "Evendemy"
 		},
@@ -23,7 +23,7 @@
 			"header": "Evendemy News",
 			"title": "Evendemy News: {{meeting1.title}}",
 			"body": "Hallo!\n Es gibt einen neuen Eintrag in der Evendemy: '{{meeting1.title}}'",
-			"button_href": "https://evendemy.faktorzehn.at/meeting/{{meeting1.mid}}",
+			"button_href": "https://your-evendemy-app/meeting/{{meeting1.mid}}",
 			"button_label": "Meeting ansehen",
 			"foot": "Evendemy"
 		},
@@ -32,7 +32,7 @@
 			"title": "Evendemy: Du nimmst teil an {{meeting.title}}",
 			"body": "Hi!\n Danke das du an dem Meeting '{{meeting.title}}' teil nimmst.\nAnbei senden wir dir noch ein Kalendar Eintrag und den Link um das Meeting anzuschauen.",
 			"body_no_calendar": "Hi!\n Danke das du an dem Meeting '{{meeting.title}}' teil nimmst.\nDer Termin steht leider noch nicht komplett fest - deswegen schaue bitte regelmäßig in die Evendemy um Neuigkeiten zu erfahren.",
-			"button_href": "https://evendemy.faktorzehn.at/meeting/{{meeting.mid}}",
+			"button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
 			"button_label": "Meeting ansehen",
 			"foot": "Evendemy"
 		},
@@ -40,7 +40,7 @@
 			"header": "Evendemy - Ein neues Kommentar zu {{meeting.title}}",
 			"title": "Evendemy: Es gibt ein neues Kommentar zu {{meeting.title}}",
 			"body": "Hi!\n Bei dem Meeting '{{meeting.title}}' schreibt {{comment.author}}:\n {{comment.text}}",
-			"button_href": "https://evendemy.faktorzehn.at/meeting/{{meeting.mid}}",
+			"button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
 			"button_label": "Meeting ansehen",
 			"foot": "Evendemy"
 		}
@@ -54,7 +54,7 @@
 			"product": "Evendemy",
 			"name": "Evendemy",
 			"timezone": "Europe/Berlin",
-			"organizer": "EvendemyAgent <NodejsMailUser@faktorzehn.at>"
+			"organizer": ""
 		}
 	}]
 }
