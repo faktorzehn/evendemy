@@ -7,8 +7,8 @@
                     </div>
 
                     <!--Image-->
-                    <div class="row" style="overflow: hidden; height: 400px;">
-                        <img src="images/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'" style="width: 100%"/>
+                    <div class="row meeting-image">
+                        <img src="images/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'"/>
                     </div>
 
 
@@ -126,7 +126,7 @@
                     </div>
                     <div class="row form-row" *ngIf="isEditable">
                         <div class="col-md-4">Image</div>
-                        <input type="file" name="file-upload" accept=".jpeg" />
+                        <input type="file" name="file-upload" accept=".jpg" />
                     </div>
                     <div class="row form-row">
                         <div class="col-md-4">Author</div>

@@ -32,3 +32,11 @@
 .will-be-announced-label{
   display: inline-block;
 }
+
+.filter-checkbox{
+  padding-top: 5px; padding-right: 5px;
+}
+
+.filter-label{
+  padding-top: 5px; padding-right: 5px;
+}

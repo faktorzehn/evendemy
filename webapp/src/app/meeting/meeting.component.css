@@ -11,3 +11,11 @@
 .comment-row:nth-child(odd){
   background-color:##f1f1f1;
 }
+
+.meeting-image{
+  overflow: hidden; height: 400px;
+}
+
+.meeting-image > img {
+  width: 100%;
+}

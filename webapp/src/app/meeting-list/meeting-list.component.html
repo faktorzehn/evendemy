@@ -1,21 +1,22 @@
 <app-menu></app-menu>
 <div class="component-content">
+  <!-- filter bar -->
   <div class="tool-bar row">
-    <!-- <button class="btn btn-info" routerLink="/new-meeting/{{type}}">Create</button> -->
-    <div style="padding-top: 5px; padding-right: 5px;">
+    <div class="filter-label">
         Show:
     </div>
-    <div style="padding-top: 5px; padding-right: 5px;">
+    <div class="filter-checkbox">
         <input type="checkbox" name="not announced"  [(ngModel)]="showNotAnnounced" (change)="onCheckboxClick()"> not Announced
     </div>
-    <div style="padding-top: 5px; padding-right: 5px;">
+    <div class="filter-checkbox">
         <input type="checkbox" name="old"  [(ngModel)]="showOld" (change)="onCheckboxClick()"> old
     </div>
-    <div style="padding-top: 5px; padding-right: 5px;">
+    <div class="filter-checkbox">
         <input type="checkbox" name="new"  [(ngModel)]="showNew" (change)="onCheckboxClick()"> new
     </div>
   </div>
 
+  <!-- meetings -->
   <div class="meeting-list">
    <div class="" *ngFor="let meeting of meetings | async" style="width:20%; padding: 5px;">
     <div class="thumbnail">
