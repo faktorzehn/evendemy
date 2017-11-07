@@ -6,3 +6,29 @@
 .link-as-button:hover{
   opacity: 0.5;
 }
+
+.meeting-list{
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  -webkit-flex-wrap: wrap; /* Safari */
+  flex-wrap: wrap;
+  -webkit-flex-direction: row; /* Safari */
+  flex-direction: row;
+}
+
+.meeting-image{
+  height: 150px;
+  overflow: hidden;
+}
+
+.meeting-image > img{
+  width: 100%;
+}
+
+.more-button{
+  margin-top: 20px;
+}
+
+.will-be-announced-label{
+  display: inline-block;
+}

@@ -16,30 +16,31 @@
     </div>
   </div>
 
-  <div class="" style="
-  display: -webkit-flex; /* Safari */
-  display: flex;
- -webkit-flex-wrap: wrap; /* Safari */
- flex-wrap: wrap;
- -webkit-flex-direction: row; /* Safari */
- flex-direction: row;">
+  <div class="meeting-list">
    <div class="" *ngFor="let meeting of meetings | async" style="width:20%; padding: 5px;">
     <div class="thumbnail">
       <div class="caption text-center">
-        <div style="height: 150px; overflow: hidden;">
-            <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'" style="width: 100%"/>
+        <!-- picture -->
+        <div class="meeting-image">
+            <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
         </div>
+
+        <!-- title -->
         <h3>{{meeting.title}}</h3>
         <p style="margin-top: 10px;">{{meeting.shortDescription}}</p>
+
+        <!-- time info -->
         <div style="margin-top: 20px;">
           <i class="fa fa-calendar" aria-hidden="true" style="padding-right: 5px;"></i>
           <div style="display: inline-block;" *ngIf="meeting.date">
             <div *ngIf="!(meeting.startTime && meeting.endTime)" style="display:inline;">{{meeting.date | date:'dd.MM.yyyy'}}</div>
             <div *ngIf="meeting.startTime && meeting.endTime" style="display:inline;">{{meeting.date | date:'dd.MM.yyyy'}}, {{meeting.startTime}}-{{meeting.endTime}}</div>
           </div>
-          <div style="display: inline-block;" *ngIf="!meeting.date">will be announced</div>
+          <div class="will-be-announced-label" *ngIf="!meeting.date">will be announced</div>
         </div>
-        <button type="button" class="btn btn-default" routerLink="/meeting/{{meeting.mid}}" style="margin-top: 20px;">more</button>
+
+        <!-- more-button -->
+        <button type="button" class="btn btn-default more-button" routerLink="/meeting/{{meeting.mid}}">more</button>
       </div>
     </div>
   </div>
