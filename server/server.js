@@ -495,7 +495,7 @@ server.post('/meeting_user', function (req, res, next) {
         		if(meeting !== null) {
                 getUser(req.params.username).then(function(user){
                     confirmAttendee(meeting, user);
-                    notifyAuthor(meeting, user);
+                    notifyAuthorNewAttendee(meeting, user);
                 }, function(err){
                     console.error('post of meeting_user, user not found to send mail: '+req.params.username + err);
                 });
@@ -572,21 +572,38 @@ function confirmAttendee(meeting, user){
   sendMail(sendTo, mustache.render(config.mail.confirmMail.header, {meeting, user}), view, attachments);
 }
 
-function notifyAuthor(meeting, attendee){
+function notifyAuthorNewAttendee(meeting, attendee){
   getUser(meeting.username).then(function(author){
 
     var view_notify_author = {
-			title: mustache.render(config.mail.notificationMail.title, {meeting, attendee}),
-			body: mustache.render(config.mail.notificationMail.body, {meeting, attendee}),
-			button_href: mustache.render(config.mail.notificationMail.button_href, {meeting, attendee}),
-			button_label: mustache.render(config.mail.notificationMail.button_label, {meeting, attendee}),
-			foot: mustache.render(config.mail.notificationMail.foot, {meeting, attendee})
+			title: mustache.render(config.mail.notificationMail.newAttendee.title, {meeting, attendee}),
+			body: mustache.render(config.mail.notificationMail.newAttendee.body, {meeting, attendee}),
+			button_href: mustache.render(config.mail.notificationMail.newAttendee.button_href, {meeting, attendee}),
+			button_label: mustache.render(config.mail.notificationMail.newAttendee.button_label, {meeting, attendee}),
+			foot: mustache.render(config.mail.notificationMail.newAttendee.foot, {meeting, attendee})
     };
 
-    sendMail(author.email, mustache.render(config.mail.notificationMail.header, {meeting, attendee}), view_notify_author);
+    sendMail(author.email, mustache.render(config.mail.notificationMail.newAttendee.header, {meeting, attendee}), view_notify_author);
 
   }, function(err){
-      console.error('post of meeting_user, user not found to notify via mail: '+meeting.username + err);
+      console.error('notify via mail: '+meeting.username + err);
+  });
+}
+function notifyAuthorCanceledAttendee(meeting, attendee){
+  getUser(meeting.username).then(function(author){
+		
+    var view_notify_author = {
+			title: mustache.render(config.mail.notificationMail.canceledAttendee.title, {meeting, attendee}),
+			body: mustache.render(config.mail.notificationMail.canceledAttendee.body, {meeting, attendee}),
+			button_href: mustache.render(config.mail.notificationMail.canceledAttendee.button_href, {meeting, attendee}),
+			button_label: mustache.render(config.mail.notificationMail.canceledAttendee.button_label, {meeting, attendee}),
+			foot: mustache.render(config.mail.notificationMail.canceledAttendee.foot, {meeting, attendee})
+		};
+		
+    sendMail(author.email, mustache.render(config.mail.notificationMail.canceledAttendee.header, {meeting, attendee}), view_notify_author);
+
+  }, function(err){
+      console.error('notify via mail: '+meeting.username + err);
   });
 }
 
@@ -618,6 +635,20 @@ server.del('/meeting_user/:mid/:username', function (req, res, next) {
 				return res.send(500, { error: err });
 			}
 
+			//send mail to notify author
+			Meeting.findOne({mid: req.params.mid}).where('deleted').eq(false).exec(function(err,meeting) {
+					if(err) {
+						console.error('should have found deleted meeting so that author can be notified, mid:'+req.params.mid+", can not send a mail");
+					}else{
+					if(meeting !== null) {
+							getUser(req.params.username).then(function(user){
+								notifyAuthorCanceledAttendee(meeting, user);
+							}, function(err){
+									console.error('put of meeting_user, user not found to send mail: '+req.params.username + err);
+							});
+					}
+				}
+			});
 
 
 			res.send(meeting_user1);
@@ -645,7 +676,7 @@ function getPluginConfig(plugin_name){
 function sendMail(sendTo, title, view, attachments){
 	console.log('sending mail');
   if(!config.mail || !config.mail.enableMail || config.mail.enableMail === false){
-    console.log('There is no configuration for sending mails. The email will not be sent.');
+		console.log('There is no configuration for sending mails. The email will not be sent.');
     return;
   }
 
