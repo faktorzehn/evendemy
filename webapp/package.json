@@ -1,6 +1,6 @@
 {
   "name": "evendemy-webapp",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "license": "GNU General Public License v3.0",
   "scripts": {
     "ng": "ng",
