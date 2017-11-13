@@ -20,6 +20,7 @@ import { meetingsReducer } from './reducers/meetings.reducer';
 import { MeetingService } from './services/meeting.service';
 import { selectMeetingReducer } from './reducers/selectMeeting.reducer';
 import { ErrorComponent } from './error/error.component';
+import { FooterComponent } from './footer/footer.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -44,7 +45,8 @@ export function configFactory() {
     LoginComponent,
     MeetingComponent,
     EditorComponent,
-    ErrorComponent
+    ErrorComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
