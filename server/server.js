@@ -230,22 +230,26 @@ server.get('/meeting', function (req, res, next) {
 		filter.$or.push({'date': null});
 	}
 
-	Meeting.find(filter).where('deleted').eq(false).sort('date').exec(function(err,meetings) {
-		if(err) {
-			return res.send(500, { error: err });
-		}
-		for(var i=0;i<meetings.length;i++) {
-			var meeting = meetings[i];
-			var add = true;
-			if(add) {
-				retArray.push(meeting);
-			}
-		}
-
+	if(!showNew && !showNotAnnounced && !showOld){
 		res.send(retArray);
-	});
+	}else{
+		Meeting.find(filter).where('deleted').eq(false).sort('date').exec(function(err,meetings) {
+			if(err) {
+				return res.send(500, { error: err });
+			}
+			for(var i=0;i<meetings.length;i++) {
+				var meeting = meetings[i];
+				var add = true;
+				if(add) {
+					retArray.push(meeting);
+				}
+			}
 
-    return next();
+			res.send(retArray);
+		});
+	}
+
+  return next();
 });
 
 server.get('/meeting/:mid', function (req, res, next) {
