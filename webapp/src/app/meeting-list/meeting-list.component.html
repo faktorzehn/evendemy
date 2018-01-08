@@ -30,7 +30,7 @@
         <p class="meeting-shortdescription">{{meeting.shortDescription}}</p>
 
         <!-- time info -->
-        <div style="margin-top: 20px; margin-bottom:20px;">
+        <div style="margin-bottom:20px;">
           <i class="fa fa-calendar" aria-hidden="true" style="padding-right: 5px;"></i>
           <div style="display: inline-block;" *ngIf="meeting.date">
             <div *ngIf="!(meeting.startTime && meeting.endTime)" style="display:inline;">{{meeting.date | date:'dd.MM.yyyy'}}</div>

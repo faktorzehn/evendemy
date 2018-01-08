@@ -39,10 +39,15 @@
 
 .meeting-shortdescription{
   width: 200px;
+  height: 35px;
   margin-top: 10px;
   overflow:hidden;
   white-space:nowrap;
   text-overflow: ellipsis;
+}
+
+.meeting-title{
+  margin-top: 5px;
 }
 
 .meeting-more-button{
