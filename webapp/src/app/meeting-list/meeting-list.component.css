@@ -62,6 +62,13 @@
   padding-top: 5px; padding-right: 5px;
 }
 
+.filter-checkbox > input{
+  vertical-align: bottom;
+  width: 16px;
+  height: 16px;
+}
+
 .filter-label{
   padding-top: 5px; padding-right: 5px;
+  vertical-align: bottom;
 }

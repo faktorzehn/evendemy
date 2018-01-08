@@ -3,16 +3,16 @@
   <!-- filter bar -->
   <div class="tool-bar">
     <div class="filter-label">
-        Show:
+        show:
     </div>
     <div class="filter-checkbox">
-        <input type="checkbox" name="not announced"  [(ngModel)]="showNotAnnounced" (change)="onCheckboxClick()"> not Announced
+        <input type="checkbox" class="icheckbox_flat"  name="not announced"  [(ngModel)]="showNotAnnounced" (change)="onCheckboxClick()"> not announced
     </div>
     <div class="filter-checkbox">
-        <input type="checkbox" name="old"  [(ngModel)]="showOld" (change)="onCheckboxClick()"> old
+        <input type="checkbox" name="old" class="icheckbox_flat" [(ngModel)]="showOld" (change)="onCheckboxClick()"> old
     </div>
     <div class="filter-checkbox">
-        <input type="checkbox" name="new"  [(ngModel)]="showNew" (change)="onCheckboxClick()"> new
+        <input type="checkbox" name="new" class="icheckbox_flat"  [(ngModel)]="showNew" (change)="onCheckboxClick()"> new
     </div>
   </div>
 
