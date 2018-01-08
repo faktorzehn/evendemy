@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+
+.component-content{
+    padding: 0px 10px 10px 10px;
+  }
+  .tool-bar{
+    padding: 5px 15px 10px 0px;
+    margin-bottom: 5px;
+    text-align: right;
+    background-color: #dddddd;
+  }
+  .tool-bar > *{
+    display: inline-block;
+  }
+  .form-row{
+    padding: 10px;
+  }
+  .form-row:nth-child(even){
+    background-color:#dddddd;
+  }
+  .form-row:nth-child(odd){
+    background-color:##f1f1f1;
+  }
+  .form-table{
+    border-color: #dddddd;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+  }
