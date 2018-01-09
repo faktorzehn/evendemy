@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Client } from './../middleware/client';
-import { Meeting } from './../model/meeting';
-import { Comment } from './../model/comment';
-import { MeetingUser } from './../model/meeting_user';
-import { EditorComponent } from '../editor/editor.component';
-import { MeetingService } from '../services/meeting.service';
+import { Client } from './../../middleware/client';
+import { Meeting } from './../../model/meeting';
+import { Comment } from './../../model/comment';
+import { MeetingUser } from './../../model/meeting_user';
+import { EditorComponent } from '../../components/editor/editor.component';
+import { MeetingService } from '../../services/meeting.service';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { AppState } from '../appState';
+import { AppState } from '../../appState';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({

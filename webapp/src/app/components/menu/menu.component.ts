@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, Event} from '@angular/router';
-import { Client } from './../middleware/client';
+import { Client } from './../../middleware/client';
 
 @Component({
   selector: 'app-menu',

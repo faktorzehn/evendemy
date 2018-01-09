@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 declare var require: any;
 
 @Component({
@@ -14,7 +14,7 @@ export class FooterComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.version = require('../../../package.json').version;
+    this.version = require('../../../../package.json').version;
   }
 
 }

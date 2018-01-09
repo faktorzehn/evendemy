@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from './../middleware/client';
-import { User } from './../model/user';
-import { MeetingUser } from '../model/meeting_user';
-import { Meeting } from '../model/meeting';
+import { Client } from '../../middleware/client';
+import { User } from '../../model/user';
+import { MeetingUser } from '../../model/meeting_user';
+import { Meeting } from '../../model/meeting';
 
 @Component({
   selector: 'app-user-info',

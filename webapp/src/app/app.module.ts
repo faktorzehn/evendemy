@@ -7,20 +7,20 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ConfigModule, ConfigLoader, ConfigStaticLoader } from 'ng2-config';
 
 import { AppComponent } from './app.component';
-import { MeetingListComponent } from './meeting-list/meeting-list.component';
-import { MenuComponent } from './menu/menu.component';
-import { UserInfoComponent } from './user-info/user-info.component';
-import { LoginComponent } from './login/login.component';
-import { MeetingComponent } from './meeting/meeting.component';
+import { MeetingListComponent } from './pages/meeting-list/meeting-list.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { UserInfoComponent } from './pages/user-info/user-info.component';
+import { LoginComponent } from './pages/login/login.component';
+import { MeetingComponent } from './pages/meeting/meeting.component';
 import {LoggedInGuardService} from './services/logged-in-guard.service';
 import { Client } from './middleware/client';
-import { EditorComponent } from './editor/editor.component';
+import { EditorComponent } from './components/editor/editor.component';
 import { StoreModule } from '@ngrx/store';
 import { meetingsReducer } from './reducers/meetings.reducer';
 import { MeetingService } from './services/meeting.service';
 import { selectMeetingReducer } from './reducers/selectMeeting.reducer';
-import { ErrorComponent } from './error/error.component';
-import { FooterComponent } from './footer/footer.component';
+import { ErrorComponent } from './pages/error/error.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },

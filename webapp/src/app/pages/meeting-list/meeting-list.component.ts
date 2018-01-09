@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Client } from './../middleware/client';
-import { Meeting } from './../model/meeting';
+import { Client } from '../../middleware/client';
+import { Meeting } from '../../model/meeting';
 import { MeetingComponent } from '../meeting/meeting.component';
 import { Store } from '@ngrx/store';
-import { AppState } from '../appState';
+import { AppState } from '../../appState';
 import { Observable } from 'rxjs/Observable';
-import { MeetingService } from '../services/meeting.service';
+import { MeetingService } from '../../services/meeting.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({

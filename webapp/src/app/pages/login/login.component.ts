@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Client } from './../middleware/client';
+import { Client } from './../../middleware/client';
 
 @Component({
   selector: 'app-login',
