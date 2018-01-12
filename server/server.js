@@ -4,7 +4,6 @@ var corsMiddleware = require('restify-cors-middleware');
 var autoIncrement = require('mongoose-auto-increment');
 var config = require('./config');
 var auth = require('./auth.js');
-var schemas = require('./schemas.js');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 var mustache = require('mustache');
@@ -33,20 +32,10 @@ var cors = corsMiddleware({
 var db = mongoose.connect(config.db.url);
 autoIncrement.initialize(db);
 
-var commentSchema = schemas.getCommentSchema(mongoose);
-var Comment = mongoose.model('Comment', commentSchema);
-
-var meetingSchema = schemas.getMeetingSchema(mongoose, commentSchema);
-meetingSchema.plugin(autoIncrement.plugin, {model:'Meeting', field: 'mid'});
-var Meeting = mongoose.model('Meeting', meetingSchema);
-
-var userSchema = schemas.getUserSchema(mongoose);
-userSchema.plugin(autoIncrement.plugin, 'User');
-var User = mongoose.model('User',userSchema);
-
-var meeting_userSchema = schemas.getMeeting_userSchema(mongoose);
-meeting_userSchema.plugin(autoIncrement.plugin, 'Meeting_User');
-var Meeting_User = mongoose.model('Meeting_User',meeting_userSchema);
+var Comment = require('./models/comment');
+var Meeting = require('./models/meeting');
+var User = require('./models/user');
+var MeetingUser = require('./models/meeting_user');
 
 //config for restify server
 var serverconfig = config.serverconfig;
@@ -441,7 +430,7 @@ server.get('/meeting_user', function (req, res, next) {
 		filter.tookPart = (req.params.tookPart === 'true');
 	}
 
-	Meeting_User.find(filter).where('deleted').eq(false).exec(function(err,meeting_users) {
+	MeetingUser.find(filter).where('deleted').eq(false).exec(function(err,meeting_users) {
 		if(err) {
 			return res.send(500, { error: err });
 		}
@@ -466,7 +455,7 @@ server.get('/meeting_user/:mid/:username', function (req, res, next) {
 		filter.tookPart = (req.params.tookPart === 'true');
 	}
 
-	Meeting_User.find(filter).where('deleted').eq(false).exec(function(err,meeting_users) {
+	MeetingUser.find(filter).where('deleted').eq(false).exec(function(err,meeting_users) {
 		if(err) {
 			return res.send(500, { error: err });
 		}
@@ -479,7 +468,7 @@ server.get('/meeting_user/:mid/:username', function (req, res, next) {
 
 server.post('/meeting_user', function (req, res, next) {
 
-	var meeting_user1 = new Meeting_User();
+	var meeting_user1 = new MeetingUser();
 	if(req.params.mid !== undefined && req.params.username !== undefined) {
 		meeting_user1.mid = req.params.mid;
 		meeting_user1.username = req.params.username;
@@ -618,7 +607,7 @@ server.put('/meeting_user/:mid/:username', function (req, res, next) {
 		if(req.params.tookPart !== undefined) {
 			updateMeeting_User.tookPart = req.params.tookPart;
 		}
-		Meeting_User.update({$and:[{mid:req.params.mid},{username: req.params.username},{deleted: false}]},{$set: updateMeeting_User},{upsert:true},function(err,meeting_user1) {
+		MeetingUser.update({$and:[{mid:req.params.mid},{username: req.params.username},{deleted: false}]},{$set: updateMeeting_User},{upsert:true},function(err,meeting_user1) {
 			if(err) {
 				return res.send(500, { error: err });
 			}
@@ -634,7 +623,7 @@ server.put('/meeting_user/:mid/:username', function (req, res, next) {
 
 server.del('/meeting_user/:mid/:username', function (req, res, next) {
 	if(req.params.mid !== undefined && req.params.username !== undefined) {
-		Meeting_User.update({$and:[{mid:req.params.mid},{username: req.params.username},{deleted: false}]},{$set: {deleted: true}},{upsert:true},function(err,meeting_user1) {
+		MeetingUser.update({$and:[{mid:req.params.mid},{username: req.params.username},{deleted: false}]},{$set: {deleted: true}},{upsert:true},function(err,meeting_user1) {
 			if(err) {
 				return res.send(500, { error: err });
 			}
