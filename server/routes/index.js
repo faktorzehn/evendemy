@@ -671,13 +671,12 @@ module.exports = function (server, config) {
         if (!req.params.data) {
             return res.send(500, { error: 'No image' });
         }
-        
-        imageService.save(req.params.mid, req.params.data, config, function (err) {
-            if (err) {
-                console.log(err);
-                res.send(500, { error: 'Image could not be saved.' });
-            }
+
+        imageService.save(req.params.mid, req.params.data, config).then(function(){
             res.send(req.params.data);
+        }).catch(function (err) {
+            console.log(err);
+            res.send(500, { error: 'Image could not be saved.' });
         });
         
         return next();
