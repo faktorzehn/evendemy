@@ -12,6 +12,8 @@ module.exports = function (server, config) {
     var User = require('../models/user');
     var MeetingUser = require('../models/meeting_user');
 
+    var imageService = require('../services/imageService');
+
 
     server.get('/ping', function (req, res, next) {
         res.send('ping');
@@ -662,23 +664,22 @@ module.exports = function (server, config) {
     }
 
     server.post('/image/:mid', function (req, res, next) {
-        if (req.params.mid) {
-            if (req.params.data) {
-                var bitmap = new Buffer(req.params.data, 'base64');
-                var options = { "encoding": "utf-8", "flag": "w+" };
-                fs.writeFile(config.imageFolder + "/" + req.params.mid + ".jpg", bitmap, options, function (err) {
-                    if (err) {
-                        console.log(err);
-                        res.send(500, { error: 'Image could not be saved.' });
-                    }
-                    res.send(req.params.data);
-                });
-            } else {
-                return res.send(500, { error: 'No image' });
-            }
-        } else {
+        if (!req.params.mid) {
             return res.send(500, { error: 'No mid' });
         }
+
+        if (!req.params.data) {
+            return res.send(500, { error: 'No image' });
+        }
+        
+        imageService.save(req.params.mid, req.params.data, config, function (err) {
+            if (err) {
+                console.log(err);
+                res.send(500, { error: 'Image could not be saved.' });
+            }
+            res.send(req.params.data);
+        });
+        
         return next();
     });
 
