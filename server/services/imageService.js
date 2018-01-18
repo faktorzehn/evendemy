@@ -10,6 +10,7 @@ module.exports = {
             fs.writeFile(config.imageFolder + "/" + mid + ".jpg", bitmap, options, function(error){
                 if (err) {
                     reject(err);
+                    return;
                 }
                 resolve();
             });

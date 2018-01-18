@@ -13,6 +13,7 @@ module.exports = function (server, config) {
 
     var imageService = require('../services/imageService');
     var userService = require('../services/userService');
+    var meetingService = require('../services/meetingService');
 
     server.get('/ping', function (req, res, next) {
         res.send('ping');
@@ -49,79 +50,22 @@ module.exports = function (server, config) {
     });
 
     server.get('/meeting', function (req, res, next) {
-
-        var retArray = [];
-        var showNotAnnounced = (req.params.showNotAnnounced === 'true');
-        var showOld = (req.params.showOld === 'true');
-        var showNew = (req.params.showNew === 'true');
-        var filter = {};
-
-        if (req.params.username !== undefined) {
-            filter.username = req.params.username;
-        }
-        if (req.params.courseOrEvent !== undefined) {
-            filter.courseOrEvent = req.params.courseOrEvent;
-        }
-        if (req.params.isFreetime !== undefined) {
-            filter.isFreetime = (req.params.isFreetime === 'true');
-        }
-
-        if (showNew || showOld || showNotAnnounced) {
-            filter['$or'] = [];
-        }
-
-        var currentDate;
-
-        if (showNew) {
-            currentDate = moment({ h: 0, m: 0, s: 0, ms: 0 }).toDate();
-            filter.$or.push({ 'date': { '$gte': currentDate } });
-        }
-
-        if (showOld) {
-            currentDate = moment({ h: 0, m: 0, s: 0, ms: 0 }).toDate();
-            filter.$or.push({ 'date': { '$lt': currentDate } });
-        }
-
-        if (showNotAnnounced) {
-            filter.$or.push({ 'date': null });
-        }
-
-        if (!showNew && !showNotAnnounced && !showOld) {
-            res.send(retArray);
-        } else {
-            Meeting.find(filter).where('deleted').eq(false).sort('date').exec(function (err, meetings) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-                for (var i = 0; i < meetings.length; i++) {
-                    var meeting = meetings[i];
-                    var add = true;
-                    if (add) {
-                        retArray.push(meeting);
-                    }
-                }
-
-                res.send(retArray);
-            });
-        }
+        meetingService.getMeetings(req.params).then(function(meetings){
+            res.send(meetings);
+        }, function(err){
+            return res.send(500, { error: err });
+        });
 
         return next();
     });
 
     server.get('/meeting/:mid', function (req, res, next) {
-
-        Meeting.findOne({ mid: req.params.mid }).where('deleted').eq(false).exec(function (err, meeting) {
-            if (err) {
-                return res.send(500, { error: err });
-            }
-
-            if (meeting !== null) {
-                res.send(meeting);
-            }
-            else {
-                res.send({});
-            }
+        meetingService.getMeeting(req.params.mid).then(function(meeting){
+            res.send(meeting);
+        }, function(err){
+            return res.send(500, { error: err });
         });
+
         return next();
     });
 
