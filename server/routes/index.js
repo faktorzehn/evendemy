@@ -13,7 +13,7 @@ module.exports = function (server, config) {
     var MeetingUser = require('../models/meeting_user');
 
     var imageService = require('../services/imageService');
-
+    var userService = require('../services/userService');
 
     server.get('/ping', function (req, res, next) {
         res.send('ping');
@@ -39,14 +39,6 @@ module.exports = function (server, config) {
         return next();
     });
 
-    function getUsers() {
-        return User.find({}).where('deleted').eq(false).exec();
-    }
-
-    function getUser(username) {
-        return User.findOne({ username: username }).where('deleted').eq(false).exec();
-    }
-
     function getMailAdresses(dbUsers) {
         if (!dbUsers) {
             return [];
@@ -54,74 +46,18 @@ module.exports = function (server, config) {
         return _.map(dbUsers, function (x) { return x.email; })
     }
 
-    server.get('/user', function (req, res, next) {
-
-        getUsers().then(function (users) {
-            res.send(users);
-        }, function (err) {
-            return res.send(500, { error: err });
-        });
-
-        return next();
-    });
-
     server.get('/user/:username', function (req, res, next) {
 
-        User.findOne({ username: req.params.username }).where('deleted').eq(false).exec(function (err, user) {
-            if (err) {
-                return res.send(500, { error: err });
-            }
+        userService.getUserByUsername(req.params.username).then(function(user){
             if (user !== null) {
                 res.send(user);
             }
             else {
-                res.send({});
+                res.send(404, { error: "No user found"});
             }
+        }, function (err){
+            return res.send(500, { error: err });
         });
-        return next();
-    });
-
-    server.put('/user/:username', function (req, res, next) {
-
-        if (req.params.username !== undefined) {
-            var updateUser = {};
-            if (req.params.firstname !== undefined) {
-                updateUser.firstname = req.params.firstname;
-            }
-            if (req.params.lastname !== undefined) {
-                updateUser.lastname = req.params.lastname;
-            }
-            if (req.params.email !== undefined) {
-                updateUser.email = req.params.email;
-            }
-
-            User.update({ username: req.params.username }, { $set: updateUser }, { upsert: true }, function (err, user1) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-                res.send(user1);
-            });
-        }
-        else {
-            return res.send(500, { error: 'No username specified' });
-        }
-
-        return next();
-    });
-
-    server.del('/user/:username', function (req, res, next) {
-
-        if (req.params.username !== undefined) {
-            User.update({ username: req.params.username }, { $set: { deleted: true } }, { upsert: true }, function (err, user1) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-                res.send(user1);
-            });
-        }
-        else {
-            return res.send(500, { error: 'No id specified' });
-        }
 
         return next();
     });
@@ -242,7 +178,7 @@ module.exports = function (server, config) {
             }
 
             //inform all users about the new meeting entry
-            getUsers().then(function (users) {
+            userService.getAllUsers().then(function (users) {
                 var view = {
                     title: mustache.render(config.mail.informAllMail.title, { meeting1 }),
                     body: mustache.render(config.mail.informAllMail.body, { meeting1 }),
@@ -431,7 +367,7 @@ module.exports = function (server, config) {
                         console.error('post of meeting_user, meeting not found with mid:' + req.params.mid + ", can not send a mail");
                     } else {
                         if (meeting !== null) {
-                            getUser(req.params.username).then(function (user) {
+                            userService.getUserByUsername(req.params.username).then(function (user) {
                                 confirmAttendee(meeting, user);
                                 notifyAuthorNewAttendee(meeting, user);
                             }, function (err) {
@@ -511,7 +447,7 @@ module.exports = function (server, config) {
     }
 
     function notifyAuthorNewAttendee(meeting, attendee) {
-        getUser(meeting.username).then(function (author) {
+        userService.getUserByUsername(meeting.username).then(function (author) {
 
             var view_notify_author = {
                 title: mustache.render(config.mail.notificationMail.newAttendee.title, { meeting, attendee }),
@@ -528,7 +464,7 @@ module.exports = function (server, config) {
         });
     }
     function notifyAuthorCanceledAttendee(meeting, attendee) {
-        getUser(meeting.username).then(function (author) {
+        userService.getUserByUsername(meeting.username).then(function (author) {
 
             var view_notify_author = {
                 title: mustache.render(config.mail.notificationMail.canceledAttendee.title, { meeting, attendee }),
@@ -579,7 +515,7 @@ module.exports = function (server, config) {
                         console.error('should have found deleted meeting so that author can be notified, mid:' + req.params.mid + ", can not send a mail");
                     } else {
                         if (meeting !== null) {
-                            getUser(req.params.username).then(function (user) {
+                            userService.getUserByUsername(req.params.username).then(function (user) {
                                 notifyAuthorCanceledAttendee(meeting, user);
                             }, function (err) {
                                 console.error('put of meeting_user, user not found to send mail: ' + req.params.username + err);
