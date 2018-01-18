@@ -1,6 +1,6 @@
 module.exports = {
 
-    getMeetings: function(options){
+    getMeetings: function (options) {
         var moment = require('moment');
         var Meeting = require('../models/meeting');
 
@@ -39,7 +39,7 @@ module.exports = {
             filter.$or.push({ 'date': null });
         }
 
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             if (!showNew && !showNotAnnounced && !showOld) {
                 resolve([]);
             } else {
@@ -56,29 +56,49 @@ module.exports = {
                             result.push(meeting);
                         }
                     }
-    
+
                     resolve(result);
                 });
             }
         });
     },
 
-    getMeeting: function(mid){
-        return new Promise(function(resolve, reject){
+    getMeeting: function (mid) {
+        return new Promise(function (resolve, reject) {
             var Meeting = require('../models/meeting');
             Meeting.findOne({ mid: mid }).where('deleted').eq(false).exec(function (err, meeting) {
                 if (err) {
                     reject(err);
                     return;
                 }
-    
-                if (meeting !== null) {
+
+                if (meeting) {
                     resolve(meeting);
                 }
                 else {
-                    resolve({});
+                    reject('404');
                 }
             });
+        });
+    },
+
+    deleteMeeting: function (mid) {
+        return new Promise(function (resolve, reject) {
+            var Meeting = require('../models/meeting');
+
+            if (mid === undefined) {
+                reject('No mid specified');
+            }
+
+            Meeting.update({ mid: mid }, { $set: { deleted: true } }, { upsert: true }, function (err, meeting) {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                resolve(meeting);
+            });
+
         });
     }
 

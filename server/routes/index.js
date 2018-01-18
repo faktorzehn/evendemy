@@ -63,6 +63,9 @@ module.exports = function (server, config) {
         meetingService.getMeeting(req.params.mid).then(function(meeting){
             res.send(meeting);
         }, function(err){
+            if(err==='404'){
+                return res.send(404, {error: 'No meeting found.'});
+            }
             return res.send(500, { error: err });
         });
 
@@ -219,17 +222,11 @@ module.exports = function (server, config) {
 
     server.del('/meeting/:mid', function (req, res, next) {
 
-        if (req.params.mid !== undefined) {
-            Meeting.update({ mid: req.params.mid }, { $set: { deleted: true } }, { upsert: true }, function (err, meeting1) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-                res.send(meeting1);
-            });
-        }
-        else {
-            return res.send(500, { error: 'No mid specified' });
-        }
+        meetingService.deleteMeeting(req.params.mid).then(function(meeting){
+            res.send(meeting);
+        },function(err){
+            return res.send(500, { error: err });
+        });
 
         return next();
     });
