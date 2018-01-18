@@ -9,7 +9,6 @@ module.exports = function (server, config) {
 
     var Comment = require('../models/comment');
     var Meeting = require('../models/meeting');
-    var User = require('../models/user');
     var MeetingUser = require('../models/meeting_user');
 
     var imageService = require('../services/imageService');
@@ -21,13 +20,7 @@ module.exports = function (server, config) {
     });
 
     server.post('/auth', function (req, res, next) {
-        var user1 = new User();
-        user1.username = req.user.uid;
-        user1.email = req.user.mail;
-        user1.firstname = req.user.firstname;
-        user1.lastname = req.user.lastname;
-
-        user1.save(function (err, user1) {
+        userService.saveUser(req.user).then(function(){
             res.send(true);
         });
 
@@ -38,13 +31,6 @@ module.exports = function (server, config) {
         res.send(req.user);
         return next();
     });
-
-    function getMailAdresses(dbUsers) {
-        if (!dbUsers) {
-            return [];
-        }
-        return _.map(dbUsers, function (x) { return x.email; })
-    }
 
     server.get('/user/:username', function (req, res, next) {
 
@@ -138,6 +124,13 @@ module.exports = function (server, config) {
         });
         return next();
     });
+
+    function getMailAdresses(dbUsers) {
+        if (!dbUsers) {
+            return [];
+        }
+        return _.map(dbUsers, function (x) { return x.email; })
+    }
 
     server.post('/meeting', function (req, res, next) {
         var meeting1 = new Meeting();
