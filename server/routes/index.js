@@ -80,39 +80,8 @@ module.exports = function (server, config) {
     }
 
     server.post('/meeting', function (req, res, next) {
-        var meeting1 = new Meeting();
-        if (req.params.title !== undefined) {
-            meeting1.title = req.params.title;
-        }
-        if (req.params.shortDescription !== undefined) {
-            meeting1.shortDescription = req.params.shortDescription;
-        }
-        if (req.params.description !== undefined) {
-            meeting1.description = req.params.description;
-        }
-        if (req.params.startTime !== undefined) {
-            meeting1.startTime = req.params.startTime;
-        }
-        if (req.params.endTime !== undefined) {
-            meeting1.endTime = req.params.endTime;
-        }
-        if (req.params.location !== undefined) {
-            meeting1.location = req.params.location;
-        }
-        if (req.params.costCenter !== undefined) {
-            meeting1.costCenter = req.params.costCenter;
-        }
-        if (req.params.courseOrEvent !== undefined) {
-            meeting1.courseOrEvent = req.params.courseOrEvent;
-        }
-        if (req.params.isFreetime !== undefined) {
-            meeting1.isFreetime = req.params.isFreetime;
-        }
-        if (req.params.date !== undefined) {
-            meeting1.date = req.params.date;
-        }
-        meeting1.username = req.username;
-        meeting1.save(function (err, meeting1) {
+
+        meetingService.saveMeeting(req.params).then(function(meeting){
             if (err) {
                 return res.send(500, { error: err });
             }
@@ -134,39 +103,17 @@ module.exports = function (server, config) {
             });
             res.send(meeting1);
         });
+
         return next();
     });
 
     server.post('/addComment/:mid', function (req, res, next) {
-        Meeting.findOne({ mid: req.params.mid }).where('deleted').eq(false).exec(function (err, meeting) {
-            if (err) {
-                return res.send(500, { error: err });
-            }
+        meetingService.addComment(req.params.mid, req.params).then(function(meeting){
+            res.send(meeting);
+        },function(err){
+            res.send(500, { error: err });
+        })
 
-            if (meeting === null) {
-                console.log('meeting is null');
-            }
-
-            if (meeting !== null && req.params.text) {
-                var comment = new Comment();
-                comment.text = req.params.text;
-                comment.author = req.params.author;
-                if (!meeting.comments) {
-                    meeting.comments = [];
-                }
-                meeting.comments.push(comment);
-
-                meeting.save(function (err, meeting1) {
-                    if (err) {
-                        return res.send(500, { error: err });
-                    }
-                    res.send(meeting1);
-                });
-            }
-            else {
-                res.send({});
-            }
-        });
         return next();
     });
 

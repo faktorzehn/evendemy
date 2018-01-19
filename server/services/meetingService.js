@@ -82,6 +82,70 @@ module.exports = {
         });
     },
 
+    saveMeeting: function(request){
+        var meeting = new Meeting();
+        if (request.title !== undefined) {
+            meeting.title = request.title;
+        }
+        if (request.shortDescription !== undefined) {
+            meeting.shortDescription = request.shortDescription;
+        }
+        if (request.description !== undefined) {
+            meeting.description = request.description;
+        }
+        if (request.startTime !== undefined) {
+            meeting.startTime = request.startTime;
+        }
+        if (request.endTime !== undefined) {
+            meeting.endTime = request.endTime;
+        }
+        if (request.location !== undefined) {
+            meeting.location = request.location;
+        }
+        if (request.costCenter !== undefined) {
+            meeting.costCenter = request.costCenter;
+        }
+        if (request.courseOrEvent !== undefined) {
+            meeting.courseOrEvent = request.courseOrEvent;
+        }
+        if (request.isFreetime !== undefined) {
+            meeting.isFreetime = request.isFreetime;
+        }
+        if (request.date !== undefined) {
+            meeting.date = request.date;
+        }
+        meeting.username = req.username;
+        return meeting.save();
+    },
+
+    addComment: function(mid, request){
+        var Meeting = require('../models/meeting');
+        var Comment = require('../models/comment');
+        
+        return this.getMeeting(mid).then(function(meeting){
+
+            if (meeting === null) {
+                console.error('addComment: meeting is null');
+                return;
+            }
+
+            if(!request.text || !request.author){
+                console.error('addComment: text or author is null');
+                return;
+            }
+
+            var comment = new Comment();
+            comment.text = request.text;
+            comment.author = request.author;
+            if (!meeting.comments) {
+                    meeting.comments = [];
+            }
+            meeting.comments.push(comment);
+
+            return meeting.save();
+        });
+    },
+
     deleteMeeting: function (mid) {
         return new Promise(function (resolve, reject) {
             var Meeting = require('../models/meeting');
