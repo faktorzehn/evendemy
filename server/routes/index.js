@@ -21,7 +21,7 @@ module.exports = function (server, config) {
     });
 
     server.post('/auth', function (req, res, next) {
-        userService.saveUser(req.user).then(function(){
+        userService.saveUser(req.user).then(function () {
             res.send(true);
         });
 
@@ -35,14 +35,14 @@ module.exports = function (server, config) {
 
     server.get('/user/:username', function (req, res, next) {
 
-        userService.getUserByUsername(req.params.username).then(function(user){
+        userService.getUserByUsername(req.params.username).then(function (user) {
             if (user !== null) {
                 res.send(user);
             }
             else {
-                res.send(404, { error: "No user found"});
+                res.send(404, { error: "No user found" });
             }
-        }, function (err){
+        }, function (err) {
             return res.send(500, { error: err });
         });
 
@@ -50,9 +50,9 @@ module.exports = function (server, config) {
     });
 
     server.get('/meeting', function (req, res, next) {
-        meetingService.getMeetings(req.params).then(function(meetings){
+        meetingService.getMeetings(req.params).then(function (meetings) {
             res.send(meetings);
-        }, function(err){
+        }, function (err) {
             return res.send(500, { error: err });
         });
 
@@ -60,11 +60,11 @@ module.exports = function (server, config) {
     });
 
     server.get('/meeting/:mid', function (req, res, next) {
-        meetingService.getMeeting(req.params.mid).then(function(meeting){
+        meetingService.getMeeting(req.params.mid).then(function (meeting) {
             res.send(meeting);
-        }, function(err){
-            if(err==='404'){
-                return res.send(404, {error: 'No meeting found.'});
+        }, function (err) {
+            if (err === '404') {
+                return res.send(404, { error: 'No meeting found.' });
             }
             return res.send(500, { error: err });
         });
@@ -81,7 +81,7 @@ module.exports = function (server, config) {
 
     server.post('/meeting', function (req, res, next) {
 
-        meetingService.saveMeeting(req.params).then(function(meeting){
+        meetingService.saveMeeting(req.params).then(function (meeting) {
             if (err) {
                 return res.send(500, { error: err });
             }
@@ -108,9 +108,9 @@ module.exports = function (server, config) {
     });
 
     server.post('/addComment/:mid', function (req, res, next) {
-        meetingService.addComment(req.params.mid, req.params).then(function(meeting){
+        meetingService.addComment(req.params.mid, req.params).then(function (meeting) {
             res.send(meeting);
-        },function(err){
+        }, function (err) {
             res.send(500, { error: err });
         })
 
@@ -120,9 +120,9 @@ module.exports = function (server, config) {
     server.put('/meeting/:mid', function (req, res, next) {
 
         if (req.params.mid !== undefined) {
-            meetingService.updateMeeting(req.params.mid, req.params).then(function(meeting){
+            meetingService.updateMeeting(req.params.mid, req.params).then(function (meeting) {
                 res.send(meeting);
-            }, function(err){
+            }, function (err) {
                 return res.send(500, { error: err });
             });
         }
@@ -135,9 +135,9 @@ module.exports = function (server, config) {
 
     server.del('/meeting/:mid', function (req, res, next) {
 
-        meetingService.deleteMeeting(req.params.mid).then(function(meeting){
+        meetingService.deleteMeeting(req.params.mid).then(function (meeting) {
             res.send(meeting);
-        },function(err){
+        }, function (err) {
             return res.send(500, { error: err });
         });
 
@@ -171,64 +171,52 @@ module.exports = function (server, config) {
 
     server.get('/meeting_user/:mid/:username', function (req, res, next) {
 
-        var filter = {};
-
         if (req.params.mid !== undefined) {
-            filter.mid = req.params.mid;
-        }
-        if (req.params.username !== undefined) {
-            filter.username = req.params.username;
-        }
-        if (req.params.tookPart !== undefined) {
-            filter.tookPart = (req.params.tookPart === 'true');
+            meetingService.getUsersForMid(req.params.mid).then(function (users) {
+                res.send(users);
+            }, function (err) {
+                res.send(500, { error: err });
+            });
+        } else if (req.params.username !== undefined) {
+            meetingService.getMeetingsForUser(req.params.username).then(function (meetings) {
+                res.send(meetings);
+            }, function (err) {
+                res.send(500, { error: err });
+            });
+        } else {
+            res.send(500, { error: 'no mid or username specified' });
+            return;
         }
 
-        MeetingUser.find(filter).where('deleted').eq(false).exec(function (err, meeting_users) {
-            if (err) {
-                return res.send(500, { error: err });
-            }
-
-            res.send(meeting_users);
-        });
 
         return next();
     });
 
     server.post('/meeting_user', function (req, res, next) {
-
-        var meeting_user1 = new MeetingUser();
-        if (req.params.mid !== undefined && req.params.username !== undefined) {
-            meeting_user1.mid = req.params.mid;
-            meeting_user1.username = req.params.username;
-            if (req.params.tookPart !== undefined) {
-                meeting_user1.tookPart = req.params.tookPart;
-            }
-            meeting_user1.save(function (err, meeting_user1) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-
-                //send mail to the new attendee
-                Meeting.findOne({ mid: req.params.mid }).where('deleted').eq(false).exec(function (err, meeting) {
-                    if (err) {
-                        console.error('post of meeting_user, meeting not found with mid:' + req.params.mid + ", can not send a mail");
-                    } else {
-                        if (meeting !== null) {
-                            userService.getUserByUsername(req.params.username).then(function (user) {
-                                confirmAttendee(meeting, user);
-                                notifyAuthorNewAttendee(meeting, user);
-                            }, function (err) {
-                                console.error('post of meeting_user, user not found to send mail: ' + req.params.username + err);
-                            });
-                        }
-                    }
-                });
-
-                res.send(meeting_user1);
-            });
-        } else {
-            return res.send(500, { error: 'No mid or username specified' });
+        if (req.params.mid === undefined || req.params.username === undefined) {
+            return res.send(500, { error: 'no mid or username' });
         }
+        meetingService.attendingToMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
+            //send mail to the new attendee
+            meetingService.getMeeting(req.params.mid).then(function (meeting) {
+                if (meeting !== null) {
+                    userService.getUserByUsername(req.params.username).then(function (user) {
+                        confirmAttendee(meeting, user);
+                        notifyAuthorNewAttendee(meeting, user);
+                    }, function (err) {
+                        console.error('post of meeting_user, user not found to send mail: ' + req.params.username + err);
+                    });
+                }
+            }, function (err) {
+                console.error('post of meeting_user, meeting not found with mid:' + req.params.mid + ", can not send a mail");
+                return;
+            })
+
+            res.send(meeting_user);
+        }, function (err) {
+            return res.send(500, { error: err });
+        });
+
         return next();
     });
 
@@ -329,55 +317,51 @@ module.exports = function (server, config) {
     }
 
     server.put('/meeting_user/:mid/:username', function (req, res, next) {
-
-        if (req.params.mid !== undefined && req.params.username !== undefined) {
-            var updateMeeting_User = {};
-            if (req.params.tookPart !== undefined) {
-                updateMeeting_User.tookPart = req.params.tookPart;
-            }
-            MeetingUser.update({ $and: [{ mid: req.params.mid }, { username: req.params.username }, { deleted: false }] }, { $set: updateMeeting_User }, { upsert: true }, function (err, meeting_user1) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-                res.send(meeting_user1);
-            });
+        if (req.params.mid === undefined || req.params.username === undefined) {
+            res.send(500, { error: 'no mid or username' });
+            return;
         }
-        else {
-            return res.send(500, { error: 'No mid or username specified' });
+
+        if (req.params.tookPart) {
+            meetingService.confirmUserForMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
+                res.send(meeting_user1);
+            }, function (err) {
+                return res.send(500, { error: err });
+            });
+        } else {
+            meetingService.rejectUserFromMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
+                res.send(meeting_user1);
+            }, function (err) {
+                return res.send(500, { error: err });
+            });
         }
 
         return next();
     });
 
     server.del('/meeting_user/:mid/:username', function (req, res, next) {
-        if (req.params.mid !== undefined && req.params.username !== undefined) {
-            MeetingUser.update({ $and: [{ mid: req.params.mid }, { username: req.params.username }, { deleted: false }] }, { $set: { deleted: true } }, { upsert: true }, function (err, meeting_user1) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-
-                //send mail to notify author
-                Meeting.findOne({ mid: req.params.mid }).where('deleted').eq(false).exec(function (err, meeting) {
-                    if (err) {
-                        console.error('should have found deleted meeting so that author can be notified, mid:' + req.params.mid + ", can not send a mail");
-                    } else {
-                        if (meeting !== null) {
-                            userService.getUserByUsername(req.params.username).then(function (user) {
-                                notifyAuthorCanceledAttendee(meeting, user);
-                            }, function (err) {
-                                console.error('put of meeting_user, user not found to send mail: ' + req.params.username + err);
-                            });
-                        }
-                    }
-                });
-
-
-                res.send(meeting_user1);
-            });
-        }
-        else {
+        if (req.params.mid === undefined || req.params.username === undefined) {
             return res.send(500, { error: 'No mid or username specified' });
         }
+
+        meetingService.notAttendingToMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
+            //send mail to notify author
+            meetingService.getMeeting(req.params.mid).then(function(meeting){
+                if (meeting !== null) {
+                    userService.getUserByUsername(req.params.username).then(function (user) {
+                        notifyAuthorCanceledAttendee(meeting, user);
+                    }, function (err) {
+                        console.error('put of meeting_user, user not found to send mail: ' + req.params.username + err);
+                    });
+                }
+            }, function(err){
+                console.error('should have found deleted meeting so that author can be notified, mid:' + req.params.mid + ", can not send a mail");
+            });
+
+            res.send(meeting_user);
+        }, function (err) {
+            return res.send(500, { error: err });
+        });
 
         return next();
     });
@@ -455,13 +439,13 @@ module.exports = function (server, config) {
             return res.send(500, { error: 'No image' });
         }
 
-        imageService.save(req.params.mid, req.params.data, config).then(function(){
+        imageService.save(req.params.mid, req.params.data, config).then(function () {
             res.send(req.params.data);
         }).catch(function (err) {
             console.log(err);
             res.send(500, { error: 'Image could not be saved.' });
         });
-        
+
         return next();
     });
 

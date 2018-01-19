@@ -202,6 +202,41 @@ module.exports = {
             });
 
         });
-    }
+    },
 
+    getUsersForMid: function(mid){
+        var MeetingUser = require('../models/meeting_user');
+        return MeetingUser.find({mid: mid}).where('deleted').eq(false).exec();
+    },
+
+    getMeetingsForUser: function(username){
+        var MeetingUser = require('../models/meeting_user');
+        return MeetingUser.find({username: username, tookPart: true}).where('deleted').eq(false).exec();
+    },
+
+    attendingToMeeting: function(mid, username){
+        var MeetingUser = require('../models/meeting_user');
+
+        var meeting_user = new MeetingUser();
+        meeting_user.mid = mid;
+        meeting_user.username = username;
+        meeting_user.tookPart = false;
+
+        return meeting_user.save();
+    },
+
+    notAttendingToMeeting: function(mid, username){
+        var MeetingUser = require('../models/meeting_user');
+        return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: { deleted: true } }, { upsert: true });
+    }, 
+
+    confirmUserForMeeting: function(mid, username){
+        var MeetingUser = require('../models/meeting_user');
+        return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: {tookPart: true} }, { upsert: true });
+    },
+
+    rejectUserFromMeeting: function(mid, username){
+        var MeetingUser = require('../models/meeting_user');
+        return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: {tookPart: false} }, { upsert: true });
+    }
 }
