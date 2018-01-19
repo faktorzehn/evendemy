@@ -82,7 +82,7 @@ module.exports = {
         });
     },
 
-    saveMeeting: function(request){
+    saveMeeting: function (request) {
         var meeting = new Meeting();
         if (request.title !== undefined) {
             meeting.title = request.title;
@@ -118,18 +118,56 @@ module.exports = {
         return meeting.save();
     },
 
-    addComment: function(mid, request){
+    updateMeeting: function (mid, request) {
+        var Meeting = require('../models/meeting');
+        
+        var updateMeeting = {};
+        if (request.title !== undefined) {
+            updateMeeting.title = request.title;
+        }
+        if (request.shortDescription !== undefined) {
+            updateMeeting.shortDescription = request.shortDescription;
+        }
+        if (request.description !== undefined) {
+            updateMeeting.description = request.description;
+        }
+        if (request.startTime !== undefined) {
+            updateMeeting.startTime = request.startTime;
+        }
+        if (request.endTime !== undefined) {
+            updateMeeting.endTime = request.endTime;
+        }
+        if (request.location !== undefined) {
+            updateMeeting.location = request.location;
+        }
+        if (request.costCenter !== undefined) {
+            updateMeeting.costCenter = request.costCenter;
+        }
+        if (request.courseOrEvent !== undefined) {
+            updateMeeting.courseOrEvent = request.courseOrEvent;
+        }
+        if (request.isFreetime !== undefined) {
+            updateMeeting.isFreetime = request.isFreetime;
+        }
+        if (request.date !== undefined) {
+            updateMeeting.date = request.date;
+        }
+
+        return Meeting.update({ mid: mid }, { $set: updateMeeting }, { upsert: true });
+    },
+
+    addComment: function (mid, request) {
         var Meeting = require('../models/meeting');
         var Comment = require('../models/comment');
-        
-        return this.getMeeting(mid).then(function(meeting){
+
+        return this.getMeeting(mid).then(function (meeting) {
 
             if (meeting === null) {
                 console.error('addComment: meeting is null');
                 return;
             }
 
-            if(!request.text || !request.author){
+            if (!request.text || !request.author) {
                 console.error('addComment: text or author is null');
                 return;
             }
@@ -138,7 +176,7 @@ module.exports = {
             comment.text = request.text;
             comment.author = request.author;
             if (!meeting.comments) {
-                    meeting.comments = [];
+                meeting.comments = [];
             }
             meeting.comments.push(comment);
 

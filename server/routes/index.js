@@ -120,44 +120,10 @@ module.exports = function (server, config) {
     server.put('/meeting/:mid', function (req, res, next) {
 
         if (req.params.mid !== undefined) {
-            var updateMeeting = {};
-            if (req.params.title !== undefined) {
-                updateMeeting.title = req.params.title;
-            }
-            if (req.params.shortDescription !== undefined) {
-                updateMeeting.shortDescription = req.params.shortDescription;
-            }
-            if (req.params.description !== undefined) {
-                updateMeeting.description = req.params.description;
-            }
-            if (req.params.startTime !== undefined) {
-                updateMeeting.startTime = req.params.startTime;
-            }
-            if (req.params.endTime !== undefined) {
-                updateMeeting.endTime = req.params.endTime;
-            }
-            if (req.params.location !== undefined) {
-                updateMeeting.location = req.params.location;
-            }
-            if (req.params.costCenter !== undefined) {
-                updateMeeting.costCenter = req.params.costCenter;
-            }
-            if (req.params.courseOrEvent !== undefined) {
-                updateMeeting.courseOrEvent = req.params.courseOrEvent;
-            }
-            if (req.params.isFreetime !== undefined) {
-                updateMeeting.isFreetime = req.params.isFreetime;
-            }
-            if (req.params.date !== undefined) {
-                updateMeeting.date = req.params.date;
-            }
-
-            Meeting.update({ mid: req.params.mid }, { $set: updateMeeting }, { upsert: true }, function (err, meeting1) {
-                if (err) {
-                    return res.send(500, { error: err });
-                }
-
-                res.send(meeting1);
+            meetingService.updateMeeting(req.params.mid, req.params).then(function(meeting){
+                res.send(meeting);
+            }, function(err){
+                return res.send(500, { error: err });
             });
         }
         else {
