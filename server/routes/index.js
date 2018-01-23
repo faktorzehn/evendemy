@@ -1,8 +1,5 @@
 module.exports = function (server, config, production_mode) {
 
-    var fs = require('fs');
-    var nodemailer = require('nodemailer');
-    var mustache = require('mustache');
     var _ = require('underscore');
     var moment = require('moment');
 
@@ -88,7 +85,7 @@ module.exports = function (server, config, production_mode) {
 
             //inform all users about the new meeting entry
             userService.getAllUsers().then(function (users) {
-                var view = mailService.renderTemplates(mailConfig.informAllMail, meeting, null);
+                var view = mailService.renderAllTemplates(mailConfig.informAllMail, meeting, null);
                 var sendTo = getMailAdresses(users);
                 mailService.sendMail(config, sendTo, view, null, production_mode);
             }, function (err) {
@@ -217,9 +214,9 @@ module.exports = function (server, config, production_mode) {
 
     function confirmAttendee(meeting, user) {
 
-        var view = mailService.renderTemplates(mailConfig.confirmMail, meeting, user);
+        var view = mailService.renderAllTemplates(mailConfig.confirmMail, meeting, user);
         if (!meeting.date || !meeting.startTime || !meeting.endTime) {
-            view.body = mustache.render(mailConfig.confirmMail.body_no_calendar, { meeting, user });
+            view.body = mailService.renderTemplate(mailConfig.confirmMail.body_no_calendar, meeting, user);
         }
 
         var sendTo = user.email;
@@ -270,9 +267,9 @@ module.exports = function (server, config, production_mode) {
 
             var view;
             if(isNewAttendee){
-                view = mailService.renderTemplates(mailConfig.notificationMail.newAttendee, meeting, attendee);
+                view = mailService.renderAllTemplates(mailConfig.notificationMail.newAttendee, meeting, attendee);
             } else{
-                view = mailService.renderTemplates(mailConfig.notificationMail.canceledAttendee, meeting, attendee);
+                view = mailService.renderAllTemplates(mailConfig.notificationMail.canceledAttendee, meeting, attendee);
             }
 
             mailService.sendMail(config, author.email, view, null, production_mode);
