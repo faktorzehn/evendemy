@@ -1,11 +1,10 @@
-module.exports = function (server, config) {
+module.exports = function (server, config, production_mode) {
 
     var fs = require('fs');
     var nodemailer = require('nodemailer');
     var mustache = require('mustache');
     var _ = require('underscore');
     var moment = require('moment');
-
 
     var Comment = require('../models/comment');
     var Meeting = require('../models/meeting');
@@ -14,6 +13,10 @@ module.exports = function (server, config) {
     var imageService = require('../services/imageService');
     var userService = require('../services/userService');
     var meetingService = require('../services/meetingService');
+    var mailService = require('../services/mailService');
+    var calendarService = require('../services/calendarService');
+
+    var mailConfig = require('../assets/mail-config.de');
 
     server.get('/ping', function (req, res, next) {
         res.send('ping');
@@ -81,27 +84,19 @@ module.exports = function (server, config) {
 
     server.post('/meeting', function (req, res, next) {
 
-        meetingService.saveMeeting(req.params).then(function (meeting) {
-            if (err) {
-                return res.send(500, { error: err });
-            }
+        meetingService.saveMeeting(req.params, req.username).then(function (meeting) {
 
             //inform all users about the new meeting entry
             userService.getAllUsers().then(function (users) {
-                var view = {
-                    title: mustache.render(config.mail.informAllMail.title, { meeting1 }),
-                    body: mustache.render(config.mail.informAllMail.body, { meeting1 }),
-                    button_href: mustache.render(config.mail.informAllMail.button_href, { meeting1 }),
-                    button_label: mustache.render(config.mail.informAllMail.button_label, { meeting1 }),
-                    foot: mustache.render(config.mail.informAllMail.foot, { meeting1 })
-                };
+                var view = mailService.renderTemplates(mailConfig.informAllMail, meeting, null);
                 var sendTo = getMailAdresses(users);
-
-                sendMail(sendTo, mustache.render(config.mail.informAllMail.header, { meeting1 }), view);
+                mailService.sendMail(config, sendTo, view, null, production_mode);
             }, function (err) {
                 return res.send(500, { error: err });
             });
-            res.send(meeting1);
+            res.send(meeting);
+        }, function(err){
+            return res.send(500, { error: err });
         });
 
         return next();
@@ -202,7 +197,7 @@ module.exports = function (server, config) {
                 if (meeting !== null) {
                     userService.getUserByUsername(req.params.username).then(function (user) {
                         confirmAttendee(meeting, user);
-                        notifyAuthorNewAttendee(meeting, user);
+                        notifyAuthor(true, meeting, user);
                     }, function (err) {
                         console.error('post of meeting_user, user not found to send mail: ' + req.params.username + err);
                     });
@@ -222,28 +217,17 @@ module.exports = function (server, config) {
 
     function confirmAttendee(meeting, user) {
 
-        var message = "";
-        if (meeting.date && meeting.startTime && meeting.endTime) {
-            message = mustache.render(config.mail.confirmMail.body, { meeting, user });
-        } else {
-            message = mustache.render(config.mail.confirmMail.body_no_calendar, { meeting, user });
+        var view = mailService.renderTemplates(mailConfig.confirmMail, meeting, user);
+        if (!meeting.date || !meeting.startTime || !meeting.endTime) {
+            view.body = mustache.render(mailConfig.confirmMail.body_no_calendar, { meeting, user });
         }
-
-        var view = {
-            title: mustache.render(config.mail.confirmMail.title, { meeting, user }),
-            body: message,
-            button_href: mustache.render(config.mail.confirmMail.button_href, { meeting, user }),
-            button_label: mustache.render(config.mail.confirmMail.button_label, { meeting, user }),
-            foot: mustache.render(config.mail.confirmMail.foot, { meeting, user })
-        };
 
         var sendTo = user.email;
 
         //create cal attachment
-        var attachments = [];
+        var attachment;
 
         if (meeting.date && meeting.startTime && meeting.endTime) {
-            var evendemy_plugin = require('../plugins/evendemy-plugin-calendar');
 
             var startDate = moment(meeting.date);
             var time = meeting.startTime.split(':');
@@ -255,61 +239,43 @@ module.exports = function (server, config) {
             endDate.hour(time[0]);
             endDate.minute(time[1]);
 
-            var evendemy_plugin_config = getPluginConfig('evendemy-plugin-calendar');
-
-            if (evendemy_plugin !== null && evendemy_plugin_config !== null) {
+            if (config.calendar !== null) {
 
                 var evendemy_event = {
                     start: startDate.toDate(),
                     end: endDate.toDate(),
                     timestamp: new Date(),
                     summary: 'Evendemy:' + meeting.title,
-                    organizer: evendemy_plugin_config.organizer
+                    organizer: config.calendar.organizer
                 };
 
                 if (meeting.location) {
                     evendemy_event.location = meeting.location;
                 }
 
-                var txt = evendemy_plugin(evendemy_plugin_config, evendemy_event);
-                attachments.push({
+                var txt = calendarService.createEvent(config.calendar, evendemy_event);
+                attachment = {
                     "filename": "ical.ics",
                     "content": txt
-                });
+                };
             }
         }
-        sendMail(sendTo, mustache.render(config.mail.confirmMail.header, { meeting, user }), view, attachments);
+        
+        mailService.sendMail(config, sendTo, view, attachment, production_mode);
     }
 
-    function notifyAuthorNewAttendee(meeting, attendee) {
+    function notifyAuthor(isNewAttendee, meeting, attendee) {
+        console.log('notify', isNewAttendee, meeting, attendee);
         userService.getUserByUsername(meeting.username).then(function (author) {
 
-            var view_notify_author = {
-                title: mustache.render(config.mail.notificationMail.newAttendee.title, { meeting, attendee }),
-                body: mustache.render(config.mail.notificationMail.newAttendee.body, { meeting, attendee }),
-                button_href: mustache.render(config.mail.notificationMail.newAttendee.button_href, { meeting, attendee }),
-                button_label: mustache.render(config.mail.notificationMail.newAttendee.button_label, { meeting, attendee }),
-                foot: mustache.render(config.mail.notificationMail.newAttendee.foot, { meeting, attendee })
-            };
+            var view;
+            if(isNewAttendee){
+                view = mailService.renderTemplates(mailConfig.notificationMail.newAttendee, meeting, attendee);
+            } else{
+                view = mailService.renderTemplates(mailConfig.notificationMail.canceledAttendee, meeting, attendee);
+            }
 
-            sendMail(author.email, mustache.render(config.mail.notificationMail.newAttendee.header, { meeting, attendee }), view_notify_author);
-
-        }, function (err) {
-            console.error('notify via mail: ' + meeting.username + err);
-        });
-    }
-    function notifyAuthorCanceledAttendee(meeting, attendee) {
-        userService.getUserByUsername(meeting.username).then(function (author) {
-
-            var view_notify_author = {
-                title: mustache.render(config.mail.notificationMail.canceledAttendee.title, { meeting, attendee }),
-                body: mustache.render(config.mail.notificationMail.canceledAttendee.body, { meeting, attendee }),
-                button_href: mustache.render(config.mail.notificationMail.canceledAttendee.button_href, { meeting, attendee }),
-                button_label: mustache.render(config.mail.notificationMail.canceledAttendee.button_label, { meeting, attendee }),
-                foot: mustache.render(config.mail.notificationMail.canceledAttendee.foot, { meeting, attendee })
-            };
-
-            sendMail(author.email, mustache.render(config.mail.notificationMail.canceledAttendee.header, { meeting, attendee }), view_notify_author);
+            mailService.sendMail(config, author.email, view, null, production_mode);
 
         }, function (err) {
             console.error('notify via mail: ' + meeting.username + err);
@@ -349,7 +315,7 @@ module.exports = function (server, config) {
             meetingService.getMeeting(req.params.mid).then(function(meeting){
                 if (meeting !== null) {
                     userService.getUserByUsername(req.params.username).then(function (user) {
-                        notifyAuthorCanceledAttendee(meeting, user);
+                        notifyAuthor(false, meeting, user);
                     }, function (err) {
                         console.error('put of meeting_user, user not found to send mail: ' + req.params.username + err);
                     });
@@ -365,70 +331,6 @@ module.exports = function (server, config) {
 
         return next();
     });
-
-    function getPluginConfig(plugin_name) {
-        if (config && config.plugins) {
-            for (var i = 0; i < config.plugins.length; i++) {
-                if (config.plugins[i].name == plugin_name) {
-                    return config.plugins[i].config;
-                }
-            }
-        }
-        return null;
-    }
-
-
-    function sendMail(sendTo, title, view, attachments) {
-        console.log('sending mail');
-        if (!config.mail || !config.mail.enableMail || config.mail.enableMail === false) {
-            console.log('There is no configuration for sending mails. The email will not be sent.');
-            return;
-        }
-
-
-        fs.readFile(config.mail.htmlFilePath, 'utf8', function (err, template) {
-            if (err) {
-                return console.log(err);
-            }
-
-            var html = mustache.render(template, view);
-
-            var smtpConfig = {
-                host: config.mail.host,
-                port: config.mail.port,
-                secureConnection: false,
-                auth: {
-                    user: config.mail.user,
-                    pass: config.mail.pass
-                },
-                tls: {
-                    ciphers: 'SSLv3'
-                }
-            };
-
-            var transporter = nodemailer.createTransport(smtpConfig);
-
-            var mailOptions = {
-                from: config.mail.address, // sender address
-                bcc: sendTo, // list of receivers
-                subject: title, // Subject line
-                html: html
-            };
-
-            if (attachments && attachments.length > 0) {
-                mailOptions.attachments = attachments;
-            }
-
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Message sent: ' + info.response);
-            });
-
-        });
-    }
 
     server.post('/image/:mid', function (req, res, next) {
         if (!req.params.mid) {

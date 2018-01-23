@@ -5,14 +5,16 @@ var autoIncrement = require('mongoose-auto-increment');
 var config = require('./config');
 var auth = require('./auth.js');
 
+var production_mode = true;
+
 //load config for production mode or development and log it
 try {
 	var developer_config = require('./developer-config');
 	if (developer_config) {
 		console.warn('ATTENTION: You are using the developer - not production mode.');
 		console.warn('If you dont want developer mode: Please delete developer-config.json and restart this server.');
-		production_mode = false;
 		config = developer_config;
+		production_mode = false;
 	}
 } catch (e) {
 	console.warn('No developer config found. Production mode!');
@@ -58,5 +60,5 @@ server.use(function (req, res, next) {
 
 server.listen(40274, function () {
 	console.log('Server started @ 40274');
-	require('./routes')(server, config);
+	require('./routes')(server, config, production_mode);
 });

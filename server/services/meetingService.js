@@ -82,8 +82,10 @@ module.exports = {
         });
     },
 
-    saveMeeting: function (request) {
+    saveMeeting: function (request, username) {
+        var Meeting = require('../models/meeting');
         var meeting = new Meeting();
+        
         if (request.title !== undefined) {
             meeting.title = request.title;
         }
@@ -114,7 +116,9 @@ module.exports = {
         if (request.date !== undefined) {
             meeting.date = request.date;
         }
-        meeting.username = req.username;
+
+        meeting.username = username;
+
         return meeting.save();
     },
 
