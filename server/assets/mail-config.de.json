@@ -1,17 +1,17 @@
 {
     "notificationMail":{
         "newAttendee":{
-            "header": "Evendemy - Ein neuer Teilnehmer: {{attendee.firstname}} {{attendee.lastname}}",
-            "title": "Evendemy: Ein neuer Teilnehmer: {{attendee.firstname }} {{attendee.lastname}}",
-            "body": "Hi!\n An deinem Meeting: '{{meeting.title}}' will {{attendee.firstname}} {{attendee.lastname}} teilnehmen.\n",
+            "header": "Evendemy - Ein neuer Teilnehmer: {{user.firstname}} {{user.lastname}}",
+            "title": "Evendemy: Ein neuer Teilnehmer: {{user.firstname }} {{user.lastname}}",
+            "body": "Hi!\n An deinem Meeting: '{{meeting.title}}' will {{user.firstname}} {{user.lastname}} teilnehmen.\n",
             "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
             "button_label": "Meeting ansehen",
             "foot": "Evendemy"
         },
         "canceledAttendee":{
-            "header": "Evendemy - Ein Teilnehmer will nicht mehr teilnehmen: {{attendee.firstname}} {{attendee.lastname}}",
-            "title": "Evendemy: Ein Teilnehmer will nicht mehr teilnehmen: {{attendee.firstname }} {{attendee.lastname}}",
-            "body": "Hi!\n Leider will an deinem Meeting: '{{meeting.title}}' {{attendee.firstname}} {{attendee.lastname}} nicht mehr teilnehmen.\n",
+            "header": "Evendemy - Ein Teilnehmer will nicht mehr teilnehmen: {{user.firstname}} {{user.lastname}}",
+            "title": "Evendemy: Ein Teilnehmer will nicht mehr teilnehmen: {{user.firstname }} {{user.lastname}}",
+            "body": "Hi!\n Leider will an deinem Meeting: '{{meeting.title}}' {{user.firstname}} {{user.lastname}} nicht mehr teilnehmen.\n",
             "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
             "button_label": "Meeting ansehen",
             "foot": "Evendemy"

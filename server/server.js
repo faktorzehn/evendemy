@@ -1,5 +1,6 @@
 var restify = require('restify');
 var mongoose = require('mongoose');
+var fs = require('fs');
 var corsMiddleware = require('restify-cors-middleware');
 var autoIncrement = require('mongoose-auto-increment');
 var config = require('./config');
