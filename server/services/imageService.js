@@ -8,8 +8,8 @@ module.exports = {
             var options = { "encoding": "utf-8", "flag": "w+" };
             
             fs.writeFile(config.imageFolder + "/" + mid + ".jpg", bitmap, options, function(error){
-                if (err) {
-                    reject(err);
+                if (error) {
+                    reject(error);
                     return;
                 }
                 resolve();
