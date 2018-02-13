@@ -13,3 +13,11 @@ At the current state, the server part is configured for development. If you like
 * delete developer-config.json
 * configure config.json
 * and implement auth.json for your authentification (e.g. ldap)
+
+## How to update from an existing installation
+Be sure that you make a backup before updating to a new version!
+* save config.json, auth.js
+* if you changed something in the assets folder: save it
+* remove and update all other files from the server (don't forget to remove the developers-config.json)
+* replace saved files
+* run 'npm install' again

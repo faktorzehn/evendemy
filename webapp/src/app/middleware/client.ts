@@ -69,25 +69,10 @@ export class Client {
           return this.http.get(url, {headers: headers}).map(res => res.json());
      }
 
-     public getAllUsers() {
-          const headers = this.createHeaders();
-          const url = this.url + '/user';
-          return this.http.get(url, {headers: headers}).map(res => res.json());
-     }
-
      public getUserByUsername(username: string) {
           const headers = this.createHeaders();
           const url = this.url + '/user/' + username;
           return this.http.get(url, {headers: headers}).map(res => res.json());
-     }
-
-     public updateUser(user: User) {
-          const headers = this.createHeaders();
-          if (user.username !== undefined) {
-               const url = this.url + '/user/' + user.username;
-               return this.http.put(url, user, {headers: headers}).map(res => res.json());
-          }
-          return null;
      }
 
      public getAllMeetingUsers(options?: any) {
