@@ -127,7 +127,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.userHasAccepted = false;
     this.userHasFinished = false;
 
-    this.client.getAllMeetingUsers({ 'mid': mid }).subscribe((result) => {
+    this.client.getAllAttendingUsers(mid).subscribe((result) => {
       this.potentialAttendees = result;
       const attendee = this.potentialAttendees.find(a => a.username === this.client.getLoggedInUsername());
       if (attendee) {

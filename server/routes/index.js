@@ -102,7 +102,7 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
-    server.post('/addComment/:mid', function (req, res, next) {
+    server.post('/comment/:mid', function (req, res, next) {
         meetingService.addComment(req.params.mid, req.params).then(function (meeting) {
             res.send(meeting);
         }, function (err) {
@@ -139,52 +139,33 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
-    server.get('/meeting_user', function (req, res, next) {
-
-        var filter = {};
-
-        if (req.params.mid !== undefined) {
-            filter.mid = req.params.mid;
-        }
-        if (req.params.username !== undefined) {
-            filter.username = req.params.username;
-        }
-        if (req.params.tookPart !== undefined) {
-            filter.tookPart = (req.params.tookPart === 'true');
-        }
-
-        MeetingUser.find(filter).where('deleted').eq(false).exec(function (err, meeting_users) {
-            if (err) {
-                return res.send(500, { error: err });
-            }
-
-            res.send(meeting_users);
-        });
-
-        return next();
-    });
-
-    server.get('/meeting_user/:mid/:username', function (req, res, next) {
-
+    server.get('/attending-users/:mid', function (req, res, next) {
         if (req.params.mid !== undefined) {
             meetingService.getUsersForMid(req.params.mid).then(function (users) {
                 res.send(users);
             }, function (err) {
                 res.send(500, { error: err });
             });
-        } else if (req.params.username !== undefined) {
+        } else {
+            res.send(500, { error: 'no mid specified' });
+            return;
+        }
+
+
+        return next();
+    });
+
+    server.get('/my-meetings/:username', function (req, res, next) {
+        if (req.params.username !== undefined) {
             meetingService.getMeetingsForUser(req.params.username).then(function (meetings) {
                 res.send(meetings);
             }, function (err) {
                 res.send(500, { error: err });
             });
         } else {
-            res.send(500, { error: 'no mid or username specified' });
+            res.send(500, { error: 'no username specified' });
             return;
         }
-
-
-        return next();
     });
 
     server.post('/meeting_user', function (req, res, next) {
@@ -290,13 +271,13 @@ module.exports = function (server, config, production_mode) {
 
         if (req.params.tookPart) {
             meetingService.confirmUserForMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
-                res.send(meeting_user1);
+                res.send(meeting_user);
             }, function (err) {
                 return res.send(500, { error: err });
             });
         } else {
             meetingService.rejectUserFromMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
-                res.send(meeting_user1);
+                res.send(meeting_user);
             }, function (err) {
                 return res.send(500, { error: err });
             });

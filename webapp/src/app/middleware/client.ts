@@ -75,28 +75,20 @@ export class Client {
           return this.http.get(url, {headers: headers}).map(res => res.json());
      }
 
-     public getAllMeetingUsers(options?: any) {
-          const headers = this.createHeaders();
-          const url = this.url + '/meeting_user';
-          const params: URLSearchParams = new URLSearchParams();
-          if (options !== undefined) {
-               if (options.mid !== undefined) {
-                    params.set('mid', options.mid);
-               }
-               if (options.username !== undefined) {
-                    params.set('username', options.username);
-               }
-               if (options.tookPart !== undefined) {
-                    params.set('tookPart', options.tookPart);
-               }
-          }
-          return this.http.get(url, {search: params, headers: headers}).map(res => res.json());
+     public getAllAttendingUsers(mid: string){
+        const headers = this.createHeaders();
+        const url = this.url + '/attending-users/'+mid;
+        const params: URLSearchParams = new URLSearchParams();
+
+        return this.http.get(url, {search: params, headers: headers}).map(res => res.json());
      }
 
-     public getMeeting_UserByMIdAndUsername(mid: number, username: string) {
-          const headers = this.createHeaders();
-          const url = this.url + '/meeting_user/' + mid + '/' + username;
-          return this.http.get(url, {headers: headers}).map(res => res.json());
+     public getMyMeetings(username: string){
+        const headers = this.createHeaders();
+        const url = this.url + '/my-meetings/'+username;
+        const params: URLSearchParams = new URLSearchParams();
+
+        return this.http.get(url, {search: params, headers: headers}).map(res => res.json());
      }
 
      public createMeeting_User(meeting_user: MeetingUser) {
