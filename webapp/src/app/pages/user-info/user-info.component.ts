@@ -36,7 +36,7 @@ export class UserInfoComponent implements OnInit {
                });
           }
 
-          this.client.getAllMeetingUsers({'username': this.client.getLoggedInUsername(), 'tookPart': true}).subscribe( (result) => {
+          this.client.getMyMeetings(this.client.getLoggedInUsername()).subscribe( (result) => {
             const meeting_user_list = result;
             if (meeting_user_list) {
               for (const meeting_user of meeting_user_list){

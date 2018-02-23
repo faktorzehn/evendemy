@@ -208,9 +208,26 @@ module.exports = {
         });
     },
 
-    getUsersForMid: function(mid){
+    getAttendingUsersForMid: function(mid){
         var MeetingUser = require('../models/meeting_user');
-        return MeetingUser.find({mid: mid}).where('deleted').eq(false).exec();
+        var _ = require('underscore');
+        mid = mid*1;
+        return MeetingUser.aggregate([
+            { $match: {mid: mid, deleted: false}},
+            {
+                $lookup:{
+                    from: 'users',
+                    localField: 'username',
+                    foreignField: 'username',
+                    as: 'user'
+                }
+            }
+         ]).exec().then(function(meeting_users){
+             return _.map(meeting_users, function(m) { 
+                 m.user = m.user[0];
+                 return m;
+            });
+         });
     },
 
     getMeetingsForUser: function(username){
@@ -221,12 +238,15 @@ module.exports = {
     attendingToMeeting: function(mid, username){
         var MeetingUser = require('../models/meeting_user');
 
-        var meeting_user = new MeetingUser();
-        meeting_user.mid = mid;
-        meeting_user.username = username;
-        meeting_user.tookPart = false;
+        var m = {
+            mid: mid,
+            username: username,
+            lastUpdate: new Date(),
+            tookPart: false,
+            deleted: false
+        }
 
-        return meeting_user.save();
+        return MeetingUser.update({mid: mid, username: username}, m, {upsert: true, setDefaultsOnInsert: true});
     },
 
     notAttendingToMeeting: function(mid, username){

@@ -37,7 +37,7 @@
     "addCommentMail":{
         "header": "Evendemy - Ein neues Kommentar zu {{meeting.title}}",
         "title": "Evendemy: Es gibt ein neues Kommentar zu {{meeting.title}}",
-        "body": "Hi!\n Bei dem Meeting '{{meeting.title}}' schreibt {{comment.author}}:\n {{comment.text}}",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} schreibt bei '{{meeting.title}}':\n {{comment}}",
         "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
         "button_label": "Meeting ansehen",
         "foot": "Evendemy"

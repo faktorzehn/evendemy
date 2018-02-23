@@ -10,6 +10,8 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../appState';
 import { Subscription } from 'rxjs/Subscription';
+import { User } from '../../model/user';
+import { AttendingUser } from '../../model/AttendingUser';
 
 @Component({
   selector: 'app-meeting',
@@ -21,7 +23,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   isNew: boolean;
   subscribe: Subscription;
   meeting: Meeting;
-  potentialAttendees: MeetingUser[] = new Array<MeetingUser>();
+  potentialAttendees: AttendingUser[] = new Array<AttendingUser>();
   isEditable = false;
   userHasAccepted = false;
   userHasFinished = false;
@@ -127,7 +129,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.userHasAccepted = false;
     this.userHasFinished = false;
 
-    this.client.getAllMeetingUsers({ 'mid': mid }).subscribe((result) => {
+    this.client.getAllAttendingUsers(mid).subscribe((result) => {
       this.potentialAttendees = result;
       const attendee = this.potentialAttendees.find(a => a.username === this.client.getLoggedInUsername());
       if (attendee) {
@@ -186,8 +188,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onAcceptMeeting() {
-    const m_u = new MeetingUser(this.meeting.mid, this.client.getLoggedInUsername(), false);
-    this.client.createMeeting_User(m_u).subscribe((result) => {
+    this.client.attendMeeting(this.meeting.mid, this.client.getLoggedInUsername()).subscribe((result) => {
       this.userHasAccepted = true;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
@@ -195,17 +196,17 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onRejectMeeting() {
-    this.client.deleteMeeting_UserByMIdAndUsername(this.meeting.mid, this.client.getLoggedInUsername()).subscribe((result) => {
+    this.client.rejectAttendingMeeting(this.meeting.mid, this.client.getLoggedInUsername()).subscribe((result) => {
       this.userHasAccepted = false;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
     });
   }
 
-  onHasTakenPart(attendee: MeetingUser) {
+  onHasTakenPart(attendee: AttendingUser) {
     if (attendee && !attendee.tookPart) {
       attendee.tookPart = true;
-      this.client.updateMeeting_User(attendee).subscribe((result) => { });
+      this.client.confirmAttendeeToMeeting(this.meeting.mid, attendee.username).subscribe((result) => { });
     }
   }
 

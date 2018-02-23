@@ -87,7 +87,7 @@ export class MeetingService {
 
     public addComment(mid: number, comment: Comment) {
       const headers = this.createHeaders();
-      const url = this.url + '/addComment/' + mid;
+      const url = this.url + '/comment/' + mid;
       return this.http.post(url, comment, {headers: headers}).
         map(res => res.json()).
         do( (res: any) => {

@@ -3,7 +3,7 @@
 }
 
 .comment-row{
-  margin-top: 15px;
+  padding: 5px;
 }
 .comment-row:nth-child(even){
   background-color:#dddddd;

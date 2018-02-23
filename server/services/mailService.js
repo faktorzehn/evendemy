@@ -55,18 +55,18 @@ module.exports = {
 
         });
     }, 
-    renderAllTemplates: function(template, meeting, user){
+    renderAllTemplates: function(template, meeting, user, comment){
         return {
-            header: this.renderTemplate(template.header, meeting, user),
-            title:  this.renderTemplate(template.title, meeting, user),
-            body:  this.renderTemplate(template.body, meeting, user),
-            button_href:  this.renderTemplate(template.button_href, meeting, user),
-            button_label: this.renderTemplate(template.button_label, meeting, user),
-            foot: this.renderTemplate(template.foot, meeting, user)
+            header: this.renderTemplate(template.header, meeting, user, comment),
+            title:  this.renderTemplate(template.title, meeting, user, comment),
+            body:  this.renderTemplate(template.body, meeting, user, comment),
+            button_href:  this.renderTemplate(template.button_href, meeting, user, comment),
+            button_label: this.renderTemplate(template.button_label, meeting, user, comment),
+            foot: this.renderTemplate(template.foot, meeting, user, comment)
         };
     },
-    renderTemplate: function(template, meeting, user){
+    renderTemplate: function(template, meeting, user, comment){
         var mustache = require('mustache');
-        return mustache.render(template, { meeting, user });
+        return mustache.render(template, { meeting, user, comment });
     }
 }
