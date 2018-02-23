@@ -140,7 +140,8 @@
                     <!--Attenees-List-->
                     <div>
                         <div class="row" style="margin-top: 50px;">
-                          <h3>People who want to participate...</h3>
+                          <h3 class="col-md-10">People who want to participate...</h3>
+                          <a class="col-md-2 meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
                         </div>
                         <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px;">
                             <p class="col-md-3">{{attendee.user.firstname}} {{attendee.user.lastname}}</p>

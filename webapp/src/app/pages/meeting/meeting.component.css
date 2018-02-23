@@ -19,3 +19,9 @@
 .meeting-image > img {
   width: 100%;
 }
+
+.meeting-csv-link{
+  margin-top: 30px;
+  padding-right: 0px;
+  text-align: right;
+}

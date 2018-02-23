@@ -12,6 +12,8 @@ import { AppState } from '../../appState';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../model/user';
 import { AttendingUser } from '../../model/AttendingUser';
+import * as toCSV from 'array-to-csv';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-meeting',
@@ -218,5 +220,18 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meetingService.addComment(this.meeting.mid, comment).subscribe((result) => {
         this.commentbox = '';
     });
+  }
+
+  downloadCSV(){
+    const headerCSV = [['Firstname', 'Lastname', 'email', 'has taken part']];
+
+    const bodyCSV = this.potentialAttendees.map( a => [a.user.firstname, a.user.lastname, a.user.email, a.tookPart.toString()]);
+
+    const csv = toCSV(headerCSV.concat(bodyCSV));
+
+    var blob = new Blob([csv], { type: 'text/csv' });
+    FileSaver.saveAs(blob, "attendees-for-meeting-"+this.meeting.mid+".csv");
+
+    console.log(csv);
   }
 }
