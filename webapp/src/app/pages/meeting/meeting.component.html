@@ -143,8 +143,8 @@
                           <h3>People who want to participate...</h3>
                         </div>
                         <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px;">
-                            <p class="col-md-2">{{attendee.username}}</p>
-                            <button class="btn btn-success col-md-2" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart">
+                            <p class="col-md-3">{{attendee.user.firstname}} {{attendee.user.lastname}}</p>
+                            <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart">
                               <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
                               has taken part
                             </button>
