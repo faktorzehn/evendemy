@@ -12,6 +12,7 @@ module.exports = function (server, config, production_mode) {
     var meetingService = require('../services/meetingService');
     var mailService = require('../services/mailService');
     var calendarService = require('../services/calendarService');
+    var diffService = require('../services/diffService');
 
     var mailConfig = require('../assets/mail-config.de');
 
@@ -124,75 +125,12 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
-    function diffBetweenJSON(oldMeeting, meeting) {
-        var result = {};
-
-        const keys = Object.keys(oldMeeting);
-
-        keys.forEach(key => {
-            if(oldMeeting[key] instanceof Date ){//property is a date
-                const oDate = moment(oldMeeting[key]);
-                const mDate =moment(meeting[key]);
-                if(oDate.diff(mDate) !== 0){
-                    result[key] = [oldMeeting[key], meeting[key]];
-                }
-            }
-            else{
-                if(oldMeeting[key] !== meeting[key]){
-                    result[key] = [oldMeeting[key], meeting[key]];
-                }
-            }
-        });
-
-        return result;
-    }
-
-    function createICalAttachment(meeting){
-        var attachment;
-
-        if (meeting.date && meeting.startTime && meeting.endTime) {
-
-            var startDate = moment(meeting.date);
-            var time = meeting.startTime.split(':');
-            startDate.hour(time[0]);
-            startDate.minute(time[1]);
-
-            var endDate = moment(meeting.date);
-            time = meeting.endTime.split(':');
-            endDate.hour(time[0]);
-            endDate.minute(time[1]);
-
-            if (config.calendar !== null) {
-
-                var evendemy_event = {
-                    start: startDate.toDate(),
-                    end: endDate.toDate(),
-                    timestamp: new Date(),
-                    summary: 'Evendemy:' + meeting.title,
-                    organizer: config.calendar.organizer
-                };
-
-                if (meeting.location) {
-                    evendemy_event.location = meeting.location;
-                }
-
-                var txt = calendarService.createEvent(config.calendar, evendemy_event);
-                attachment = {
-                    "filename": "ical.ics",
-                    "content": txt
-                };
-            }
-        }
-
-        return attachment;
-    }
-
     server.put('/meeting/:mid', function (req, res, next) {
 
         if (req.params.mid !== undefined) {
             meetingService.getMeeting(req.params.mid).then(function(oldMeeting){
                 meetingService.updateMeeting(req.params.mid, req.params).then(function (meeting) {
-                    var diffResult = diffBetweenJSON(oldMeeting.toJSON(), meeting.toJSON());
+                    var diffResult = diffService.diff(oldMeeting.toJSON(), meeting.toJSON());
                     if(diffResult['startTime']!= null || diffResult['endTime'] || diffResult['date']){
                         //something important changed
                         let text = '';
@@ -204,7 +142,7 @@ module.exports = function (server, config, production_mode) {
                             text += moment(meeting.date).format("MM.DD.YYYY");
                         }
                         
-                        const iCal = createICalAttachment(meeting);
+                        const iCal = calendarService.createICalAttachment(config, meeting);
                         notifyAllAttendingUsers(meeting, mailConfig.dateChangedMail, text, iCal);
                     }
                     res.send(meeting);
@@ -359,7 +297,7 @@ module.exports = function (server, config, production_mode) {
 
         var sendTo = user.email;
 
-        const attachment = createICalAttachment(meeting);
+        const attachment = calendarService.createICalAttachment(config, meeting);
         
         mailService.sendMail(config, sendTo, view, attachment, production_mode);
     }
