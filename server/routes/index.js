@@ -102,16 +102,20 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
+    function notifyAllAttendingUsers(meeting, templates, text, iCal){
+        meetingService.getAttendingUsersForMid(meeting.mid).then(function (users){
+            mappedUsers = _.map(users, function(user){ return user.user});
+            userService.getUserByUsername(meeting.author).then(function(user){
+                var view = mailService.renderAllTemplates(templates, meeting, user, text);
+                var sendTo = getMailAdresses(mappedUsers);
+                mailService.sendMail(config, sendTo, view, iCal, production_mode);
+            });
+        });
+    }
+
     server.post('/comment/:mid', function (req, res, next) {
         meetingService.addComment(req.params.mid, req.params).then(function (meeting) {
-            meetingService.getAttendingUsersForMid(req.params.mid).then(function (users){
-                mappedUsers = _.map(users, function(user){ return user.user});
-                userService.getUserByUsername(req.params.author).then(function(user){
-                    var view = mailService.renderAllTemplates(mailConfig.addCommentMail, meeting, user, req.params.text);
-                    var sendTo = getMailAdresses(mappedUsers);
-                    mailService.sendMail(config, sendTo, view, null, production_mode);
-                });
-            });
+            notifyAllAttendingUsers(meeting, mailConfig.addCommentMail, req.params.text, null);
             res.send(meeting);
         }, function (err) {
             res.send(500, { error: err });
@@ -120,11 +124,93 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
+    function diffBetweenJSON(oldMeeting, meeting) {
+        var result = {};
+
+        const keys = Object.keys(oldMeeting);
+
+        keys.forEach(key => {
+            if(oldMeeting[key] instanceof Date ){//property is a date
+                const oDate = moment(oldMeeting[key]);
+                const mDate =moment(meeting[key]);
+                if(oDate.diff(mDate) !== 0){
+                    result[key] = [oldMeeting[key], meeting[key]];
+                }
+            }
+            else{
+                if(oldMeeting[key] !== meeting[key]){
+                    result[key] = [oldMeeting[key], meeting[key]];
+                }
+            }
+        });
+
+        return result;
+    }
+
+    function createICalAttachment(meeting){
+        var attachment;
+
+        if (meeting.date && meeting.startTime && meeting.endTime) {
+
+            var startDate = moment(meeting.date);
+            var time = meeting.startTime.split(':');
+            startDate.hour(time[0]);
+            startDate.minute(time[1]);
+
+            var endDate = moment(meeting.date);
+            time = meeting.endTime.split(':');
+            endDate.hour(time[0]);
+            endDate.minute(time[1]);
+
+            if (config.calendar !== null) {
+
+                var evendemy_event = {
+                    start: startDate.toDate(),
+                    end: endDate.toDate(),
+                    timestamp: new Date(),
+                    summary: 'Evendemy:' + meeting.title,
+                    organizer: config.calendar.organizer
+                };
+
+                if (meeting.location) {
+                    evendemy_event.location = meeting.location;
+                }
+
+                var txt = calendarService.createEvent(config.calendar, evendemy_event);
+                attachment = {
+                    "filename": "ical.ics",
+                    "content": txt
+                };
+            }
+        }
+
+        return attachment;
+    }
+
     server.put('/meeting/:mid', function (req, res, next) {
 
         if (req.params.mid !== undefined) {
-            meetingService.updateMeeting(req.params.mid, req.params).then(function (meeting) {
-                res.send(meeting);
+            meetingService.getMeeting(req.params.mid).then(function(oldMeeting){
+                meetingService.updateMeeting(req.params.mid, req.params).then(function (meeting) {
+                    var diffResult = diffBetweenJSON(oldMeeting.toJSON(), meeting.toJSON());
+                    if(diffResult['startTime']!= null || diffResult['endTime'] || diffResult['date']){
+                        //something important changed
+                        let text = '';
+                        if(meeting.startTime && meeting.endTime){
+                            text = meeting.startTime + '-' + meeting.endTime + ' - ';
+                        }
+
+                        if(meeting.date){
+                            text += moment(meeting.date).format("MM.DD.YYYY");
+                        }
+                        
+                        const iCal = createICalAttachment(meeting);
+                        notifyAllAttendingUsers(meeting, mailConfig.dateChangedMail, text, iCal);
+                    }
+                    res.send(meeting);
+                }, function (err) {
+                    return res.send(500, { error: err });
+                });
             }, function (err) {
                 return res.send(500, { error: err });
             });
@@ -273,42 +359,7 @@ module.exports = function (server, config, production_mode) {
 
         var sendTo = user.email;
 
-        //create cal attachment
-        var attachment;
-
-        if (meeting.date && meeting.startTime && meeting.endTime) {
-
-            var startDate = moment(meeting.date);
-            var time = meeting.startTime.split(':');
-            startDate.hour(time[0]);
-            startDate.minute(time[1]);
-
-            var endDate = moment(meeting.date);
-            time = meeting.endTime.split(':');
-            endDate.hour(time[0]);
-            endDate.minute(time[1]);
-
-            if (config.calendar !== null) {
-
-                var evendemy_event = {
-                    start: startDate.toDate(),
-                    end: endDate.toDate(),
-                    timestamp: new Date(),
-                    summary: 'Evendemy:' + meeting.title,
-                    organizer: config.calendar.organizer
-                };
-
-                if (meeting.location) {
-                    evendemy_event.location = meeting.location;
-                }
-
-                var txt = calendarService.createEvent(config.calendar, evendemy_event);
-                attachment = {
-                    "filename": "ical.ics",
-                    "content": txt
-                };
-            }
-        }
+        const attachment = createICalAttachment(meeting);
         
         mailService.sendMail(config, sendTo, view, attachment, production_mode);
     }

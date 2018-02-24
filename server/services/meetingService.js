@@ -157,7 +157,7 @@ module.exports = {
             updateMeeting.date = request.date;
         }
 
-        return Meeting.update({ mid: mid }, { $set: updateMeeting }, { upsert: true });
+        return Meeting.findOneAndUpdate({ mid: mid }, { $set: updateMeeting }, { upsert: true, new:true });
     },
 
     addComment: function (mid, request) {
