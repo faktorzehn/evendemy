@@ -112,13 +112,17 @@ module.exports = function (server, config, production_mode) {
     });
 
     server.del('/meeting/:mid', function (req, res, next) {
+        meetingService.getMeeting(req.params.mid).then(function (meeting) {
+            notifyAllAttendingUsers(meeting, mailConfig.meetingDeleted, null, null);
 
-        meetingService.deleteMeeting(req.params.mid).then(function (meeting) {
-            res.send(meeting);
-        }, function (err) {
-            return res.send(500, { error: err });
+            meetingService.deleteMeeting(req.params.mid).then(function (meeting) {
+                res.send(meeting);
+            }, function (err) {
+                return res.send(500, { error: err });
+            });
+            
         });
-
+    
         return next();
     });
 

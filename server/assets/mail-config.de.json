@@ -49,5 +49,13 @@
         "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
         "button_label": "Meeting ansehen",
         "foot": "Evendemy"
+    },
+    "meetingDeleted":{
+        "header": "Evendemy - Das Meeting {{meeting.title}} findet nicht statt!",
+        "title": "Evendemy: Das Meeting {{meeting.title}} findet nicht statt",
+        "body": "Hi!\n leider findet '{{meeting.title}}' nicht statt. Vielleicht findest du ein anderes spannendes Meeting.",
+        "button_href": "https://your-evendemy-app",
+        "button_label": "Zur Evendemy",
+        "foot": "Evendemy"
     }
 }
