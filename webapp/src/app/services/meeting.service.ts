@@ -31,7 +31,7 @@ export class MeetingService {
     }) {
         const headers = this.createHeaders();
         const randomizedNumber = Math.floor(Math.random() * 10000);
-        const url = this.url + '/meeting?r=' + randomizedNumber;
+        const url = this.url + '/meetings?r=' + randomizedNumber;
         const params: URLSearchParams = new URLSearchParams();
         if (options) {
             if (options.username !== undefined) {
@@ -87,7 +87,7 @@ export class MeetingService {
 
     public addComment(mid: number, comment: Comment) {
       const headers = this.createHeaders();
-      const url = this.url + '/comment/' + mid;
+      const url = this.url + '/meeting/' + mid + '/comment';
       return this.http.post(url, comment, {headers: headers}).
         map(res => res.json()).
         do( (res: any) => {
@@ -97,7 +97,7 @@ export class MeetingService {
 
     public addImage(mid: number, data: any) {
       const headers = this.createHeaders();
-      const url = this.url + '/image/' + mid;
+      const url = this.url + '/meeting/' + mid + '/image';
       return this.http.post(url, data, {headers: headers}).map(res => res.json());
     }
 

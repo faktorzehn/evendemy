@@ -86,7 +86,7 @@ export class Client {
 
     public getMyMeetings(username: string) {
         const headers = this.createHeaders();
-        const url = this.url + '/my-meetings/' + username;
+        const url = this.url + '/meetings/my/' + username;
         const params: URLSearchParams = new URLSearchParams();
 
         return this.http.get(url, { search: params, headers: headers }).map(res => res.json());
