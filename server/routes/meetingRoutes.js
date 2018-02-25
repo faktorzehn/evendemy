@@ -4,7 +4,6 @@ module.exports = function (server, config, production_mode) {
 
     var Comment = require('../models/comment');
     var Meeting = require('../models/meeting');
-    var MeetingUser = require('../models/meeting_user');
 
     var imageService = require('../services/imageService');
     var userService = require('../services/userService');
