@@ -23,7 +23,7 @@ export class MeetingService {
 
     public getAllMeetings(options?: {
         username?: string;
-        courseOrEvent?: boolean;
+        courseOrEvent?: string;
         isFreetime?: boolean;
         showNew?: boolean;
         showOld?: boolean;

@@ -14,6 +14,7 @@ import { User } from '../../model/user';
 import { AttendingUser } from '../../model/AttendingUser';
 import * as toCSV from 'array-to-csv';
 import * as FileSaver from 'file-saver';
+import { ConfigService } from 'ng2-config';
 
 @Component({
   selector: 'app-meeting',
@@ -36,8 +37,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
 
+  private imageFolder = this.config.getSettings().image_folder;
+
   constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute,
-    private router: Router, private store: Store<AppState>) { }
+    private router: Router, private store: Store<AppState>, private config: ConfigService) { }
 
   ngOnInit() {
     this.subscribe = this.route.params.subscribe(params => {
@@ -180,6 +183,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onDeleteMeeting() {
+    console.log('delete meeting');
     this.meetingService.deleteMeeting(this.meeting.mid).subscribe((result) => {
       this.router.navigate(['/meeting-list/' + this.type]);
     });

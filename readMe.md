@@ -1,16 +1,22 @@
 # Evendemy 
 
 ## What is Evendemy...
-It is a community app for your company. 
+Evendemy is a open-source community webapp for your company!  
 Create appointments for your trainings, meetings or for anything worth celebrating.
+With Evendemy this possibility is just a few clicks far away. 
+Evendemy is a plattform where you can manage all these meetings and invite everyone to be part of. 
+            
 
-Note: At the moment Evendemy is in an early version available. We use it at our company and have made great events with it - but maybe we will make some breaking changes in future as long as we are in beta ;-)  
+![sketch of evendemy](https://raw.githubusercontent.com/ConVista-FaktorZehn-GmbH/evendemy/master/docs/assets/sketch_of_evendemy.png "Sketch of Evendemy")  
 
-## What is inside...
-Evendemy consists of two parts: the [backend](server/) and the [frontend](webapp/).
-For more detailed information see the readme of the server and webapp folder.
+To learn more about Evendemy and how it works: visit our micro site: [https://convista-faktorzehn-gmbh.github.io/evendemy/](https://convista-faktorzehn-gmbh.github.io/evendemy/)
+
+## How to install
+Evendemy consists of two parts: the [backend](server/) and the [frontend](webapp/). You have to deploy/run both parts.
+For more detailed information see the readme of the [backend](server/) and [frontend](webapp/).
 
 
  ## License
 
 Evendemy is under the [GPLv3](./LICENSE)
+

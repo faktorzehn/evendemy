@@ -7,7 +7,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ConfigModule, ConfigLoader, ConfigStaticLoader } from 'ng2-config';
 
 import { AppComponent } from './app.component';
-import { MeetingListComponent } from './pages/meeting-list/meeting-list.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { UserInfoComponent } from './pages/user-info/user-info.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -21,10 +20,14 @@ import { MeetingService } from './services/meeting.service';
 import { selectMeetingReducer } from './reducers/selectMeeting.reducer';
 import { ErrorComponent } from './pages/error/error.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { EventsOrCoursesComponent } from './pages/events-or-courses/events-or-courses.component';
+import { MeetingListComponent } from './components/meeting-list/meeting-list.component';
+
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'meeting-list/:type', component: MeetingListComponent, canActivate: [LoggedInGuardService]},
+  { path: 'meeting-list/:type', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/new/:type', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
@@ -39,14 +42,16 @@ export function configFactory() {
 @NgModule({
   declarations: [
     AppComponent,
-    MeetingListComponent,
     MenuComponent,
     UserInfoComponent,
     LoginComponent,
     MeetingComponent,
     EditorComponent,
     ErrorComponent,
-    FooterComponent
+    FooterComponent,
+    ConfirmDialogComponent,
+    EventsOrCoursesComponent,
+    MeetingListComponent
   ],
   imports: [
     BrowserModule,

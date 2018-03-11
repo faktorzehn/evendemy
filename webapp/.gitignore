@@ -8,6 +8,9 @@
 /node_modules
 /bower_components
 
+#image folder
+/src/assets/images/*
+
 # IDEs and editors
 /.idea
 /.vscode

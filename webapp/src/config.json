@@ -1,3 +1,4 @@
 {
-  "backend_url": "http://localhost:40274"
+  "backend_url": "http://localhost:40274",
+  "image_folder": "assets/images"
 }

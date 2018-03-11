@@ -8,7 +8,7 @@
 
                     <!--Image-->
                     <div class="row meeting-image">
-                        <img src="images/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'"/>
+                        <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'"/>
                     </div>
 
 
@@ -181,9 +181,16 @@
                       <!--EDITOR-MODE-->
                       <button *ngIf="isNew" class="btn btn-info" (click)="onCreateMeeting()" [disabled]="!form.form.valid">Create</button>
                       <button *ngIf="!isNew && isEditable" class="btn btn-info" (click)="onUpdateMeeting()" [disabled]="!form.form.valid">Update</button>
-                      <button *ngIf="!isNew && isEditable" class="btn btn-info" (click)="onDeleteMeeting()">Delete</button>
+                      <button *ngIf="!isNew && isEditable" class="btn btn-info" data-toggle="modal" data-target="#confirmDialog">Delete</button>
                     </div>
 
                 </form>
+
+                <app-confirm-dialog title="Do you really want to delete?" (onConfirm)="onDeleteMeeting()" dialog_id="confirmDialog">
+                        You can not revert this action. The attendees will be informed that the meeting will not take place. 
+                        <br/>
+                        <br/>
+                        Do you really want to delete this meeting?
+                </app-confirm-dialog>
     </div>
 </div>
