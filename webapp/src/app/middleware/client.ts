@@ -11,7 +11,6 @@ import { AppState } from '../appState';
 import { InitMeetings, AddMeeting } from '../actions/meetings.actions';
 import { AttendingUser } from '../model/AttendingUser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as config from '../../assets/config.json';
 import { ConfigService } from '@ngx-config/core';
 
 

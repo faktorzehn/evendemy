@@ -8,12 +8,12 @@
             </div>
 
             <!--Image-->
-            <div class="row meeting-image" *ngIf="!imgData?.image">
+            <div class="row meeting-image" *ngIf="!tmpImgData?.image">
                     <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'" />
             </div>
 
-            <div class="row meeting-image" *ngIf="imgData?.image">
-                <img [src]="imgData.image">
+            <div class="row meeting-image" *ngIf="tmpImgData?.image">
+                <img [src]="tmpImgData.image">
             </div>
 
             <div style="text-align: right;">

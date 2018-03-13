@@ -39,7 +39,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   private imageFolder = this.config.getSettings().image_folder;
 
-  private imgData: any;
+  private tmpImgData: any;
 
   constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute,
     private router: Router, private store: Store<AppState>, private config: ConfigService) { 
@@ -167,10 +167,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   uploadImage(mid: number) {
-    if (this.imgData) {
+    if (this.tmpImgData) {
       const result = {
         mid: mid,
-        data: this.imgData.image
+        data: this.tmpImgData.image
       };
       this.meetingService.addImage(mid, result).subscribe((img_result) => {
         console.log(img_result);
@@ -236,6 +236,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   setTemporaryImage(img: any) {
-    this.imgData = img;
+    this.tmpImgData = img;
   }
 }
