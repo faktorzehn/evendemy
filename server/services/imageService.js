@@ -4,8 +4,8 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             var fs = require('fs');
 
-            var bitmap = new Buffer(data, 'base64');
-            var options = { "encoding": "utf-8", "flag": "w+" };
+            let bitmap = data.split(';base64,').pop();
+            var options = { "encoding": "base64", "flag": "w+" };
             
             fs.writeFile(config.imageFolder + "/" + mid + ".jpg", bitmap, options, function(error){
                 if (error) {

@@ -1,10 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ConfigModule, ConfigLoader, ConfigStaticLoader } from 'ng2-config';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -23,7 +22,10 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { EventsOrCoursesComponent } from './pages/events-or-courses/events-or-courses.component';
 import { MeetingListComponent } from './components/meeting-list/meeting-list.component';
-
+import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
+import { ImageCropperComponent } from 'ngx-img-cropper';
+import { ConfigModule, ConfigLoader,  } from '@ngx-config/core';
+import { ConfigHttpLoader } from '@ngx-config/http-loader';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -35,8 +37,8 @@ const appRoutes: Routes = [
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
 
-export function configFactory() {
-    return new ConfigStaticLoader('/config.json'); // PATH || API ENDPOINT
+export function configFactory(http: HttpClient): ConfigLoader {
+  return new ConfigHttpLoader(http, './config.json');
 }
 
 @NgModule({
@@ -51,24 +53,27 @@ export function configFactory() {
     FooterComponent,
     ConfirmDialogComponent,
     EventsOrCoursesComponent,
-    MeetingListComponent
+    MeetingListComponent,
+    ImageUploadDialogComponent,
+    ImageCropperComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    ConfigModule.forRoot({
-      provide: ConfigLoader,
-      useFactory: (configFactory)
-    }),
     StoreModule.forRoot({
       meetings: meetingsReducer,
       selectMeeting: selectMeetingReducer
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25
-    })
+    }),
+    ConfigModule.forRoot({
+      provide: ConfigLoader,
+      useFactory: (configFactory),
+      deps: [HttpClient]
+    }),
   ],
   providers: [ LoggedInGuardService, Client, MeetingService],
   bootstrap: [AppComponent]

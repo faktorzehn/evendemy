@@ -29,18 +29,18 @@ export class UserInfoComponent implements OnInit {
           this.username = this.client.getLoggedInUsername();
 
           if (this.username !== undefined) {
-               this.client.getUserByUsername(this.username).subscribe( (result) => {
+               this.client.getUserByUsername(this.username).subscribe( (result: User) => {
                     this.user = result;
                     const random = Math.floor(Math.random() * (this.possibleGreetings.length));
                     this.greeting = this.possibleGreetings[random].replace('USER', this.user.firstname);
                });
           }
 
-          this.client.getMyMeetings(this.client.getLoggedInUsername()).subscribe( (result) => {
+          this.client.getMyMeetings(this.client.getLoggedInUsername()).subscribe( (result: Meeting[]) => {
             const meeting_user_list = result;
             if (meeting_user_list) {
               for (const meeting_user of meeting_user_list){
-                this.client.getMeetingByMId(meeting_user.mid).subscribe((meeting_result) => {
+                this.client.getMeetingByMId(meeting_user.mid).subscribe((meeting_result: Meeting) => {
                   const meeting: Meeting = meeting_result;
                   if (meeting) {
                     if (meeting.courseOrEvent === 'course') {
