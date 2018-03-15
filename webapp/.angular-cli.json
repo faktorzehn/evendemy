@@ -21,7 +21,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css",
+        "styles.scss",
         "../node_modules/bootflat/css/site.min.css",
         "../node_modules/quill/dist/quill.snow.css",
         "../node_modules/font-awesome/css/font-awesome.min.css"
@@ -59,7 +59,7 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
+    "styleExt": "scss",
     "component": {}
   }
 }

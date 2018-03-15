@@ -1,0 +1,22 @@
+<app-menu></app-menu>
+<div>
+  <!-- filter bar -->
+  <div class="tool-bar">
+    <div class="filter-label">
+        show:
+    </div>
+    <div class="filter-checkbox">
+        <input type="checkbox" class="icheckbox_flat"  name="not announced"  [(ngModel)]="showNotAnnounced" (change)="onCheckboxClick()"> not announced
+    </div>
+    <div class="filter-checkbox">
+        <input type="checkbox" name="old" class="icheckbox_flat" [(ngModel)]="showOld" (change)="onCheckboxClick()"> old
+    </div>
+    <div class="filter-checkbox">
+        <input type="checkbox" name="new" class="icheckbox_flat"  [(ngModel)]="showNew" (change)="onCheckboxClick()"> new
+    </div>
+  </div>
+
+  <!-- meetings -->
+  <app-meeting-list [meetings]="meetings"></app-meeting-list>
+
+</div>

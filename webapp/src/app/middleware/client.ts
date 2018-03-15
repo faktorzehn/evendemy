@@ -6,39 +6,43 @@ import { MeetingUser } from './../model/meeting_user';
 import { Comment } from './../model/comment';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
-import { ConfigService } from 'ng2-config';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
 import { InitMeetings, AddMeeting } from '../actions/meetings.actions';
 import { AttendingUser } from '../model/AttendingUser';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ConfigService } from '@ngx-config/core';
 
 
 @Injectable()
 export class Client {
     private url = this.config.getSettings().backend_url;
 
-    constructor(private http: Http, private config: ConfigService, private store: Store<AppState>) { }
+    constructor(private http: HttpClient, private config: ConfigService, private store: Store<AppState>) { 
+    }
 
-    private createHeaders(): Headers {
-        const headers = new Headers();
-        headers.append('Authorization', localStorage.getItem('token'));
-        headers.append('Content-Type', 'application/json');
+    private createHeaders(): HttpHeaders {
+        const headers = new HttpHeaders({
+            'Authorization': localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+        });
         return headers;
     }
 
     public ping() {
         const headers = this.createHeaders();
         const url = this.url + '/ping';
-        return this.http.get(url, { headers: headers }).map(res => res.json());
+        return this.http.get(url, { headers: headers });
     }
 
     public loginUser(username: string, password: string) {
         const token = 'Basic ' + window.btoa(username + ':' + password);
-        const headers = new Headers();
-        headers.append('Authorization', token);
-        headers.append('Content-Type', 'application/json');
+        const headers = new HttpHeaders({
+            'Authorization': token,
+            'Content-Type': 'application/json'
+        });
         const url = this.url + '/auth';
-        return this.http.post(url, {}, { headers: headers }).map(res => res.json()).map((res) => {
+        return this.http.post(url, {}, { headers: headers }).map((res) => {
             localStorage.setItem('token', token);
             localStorage.setItem('username', username);
             return res;
@@ -61,19 +65,19 @@ export class Client {
     public getLoggedInLdapUser() {
         const headers = this.createHeaders();
         const url = this.url + '/auth';
-        return this.http.get(url, { headers: headers }).map(res => res.json());
+        return this.http.get(url, { headers: headers });
     }
 
     public getMeetingByMId(mid: number) {
         const headers = this.createHeaders();
         const url = this.url + '/meeting/' + mid;
-        return this.http.get(url, { headers: headers }).map(res => res.json());
+        return this.http.get(url, { headers: headers });
     }
 
     public getUserByUsername(username: string) {
         const headers = this.createHeaders();
         const url = this.url + '/user/' + username;
-        return this.http.get(url, { headers: headers }).map(res => res.json());
+        return this.http.get(url, { headers: headers });
     }
 
     public getAllAttendingUsers(mid: string): Observable<AttendingUser[]> {
@@ -81,22 +85,22 @@ export class Client {
         const url = this.url + '/meeting/' + mid + '/attendees';
         const params: URLSearchParams = new URLSearchParams();
 
-        return this.http.get(url, { search: params, headers: headers }).map(res => res.json());
+        return this.http.get(url, { headers: headers }) as Observable<AttendingUser[]>;
     }
 
     public getMyMeetings(username: string) {
         const headers = this.createHeaders();
-        const url = this.url + '/my-meetings/' + username;
+        const url = this.url + '/meetings/my/' + username;
         const params: URLSearchParams = new URLSearchParams();
 
-        return this.http.get(url, { search: params, headers: headers }).map(res => res.json());
+        return this.http.get(url, { headers: headers });
     }
 
     public attendMeeting(mid: number, username: String) {
         const headers = this.createHeaders();
         if (mid !== undefined && username !== undefined) {
             const url = this.url + '/meeting/' + mid + '/attendee/' + username + '/attend';
-            return this.http.put(url, {}, { headers: headers }).map(res => res.json());
+            return this.http.put(url, {}, { headers: headers });
         }
         return null;
     }
@@ -105,7 +109,7 @@ export class Client {
         const headers = this.createHeaders();
         if (mid !== undefined && username !== undefined) {
             const url = this.url + '/meeting/' + mid + '/attendee/' + username + '/attend';
-            return this.http.delete(url, { headers: headers }).map(res => res.json());
+            return this.http.delete(url, { headers: headers });
         }
         return null;
     }
@@ -114,7 +118,7 @@ export class Client {
         const headers = this.createHeaders();
         if (mid !== undefined && username !== undefined) {
             const url = this.url + '/meeting/' + mid + '/attendee/' + username + '/confirm';
-            return this.http.put(url, {}, { headers: headers }).map(res => res.json());
+            return this.http.put(url, {}, { headers: headers });
         }
         return null;
     }

@@ -27,3 +27,19 @@
     border-width: 1px;
     overflow: hidden;
   }
+
+  .medium-table{
+    width: 40%;
+  }
+
+  @media(max-width: 550px){
+    .medium-table{
+      width: 100%;
+    }
+  }
+
+  .modal-close{
+    position: absolute;
+    top: 5px;
+    right: 7px;
+  }

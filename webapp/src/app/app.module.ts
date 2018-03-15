@@ -1,13 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ConfigModule, ConfigLoader, ConfigStaticLoader } from 'ng2-config';
 
 import { AppComponent } from './app.component';
-import { MeetingListComponent } from './pages/meeting-list/meeting-list.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { UserInfoComponent } from './pages/user-info/user-info.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -21,10 +19,17 @@ import { MeetingService } from './services/meeting.service';
 import { selectMeetingReducer } from './reducers/selectMeeting.reducer';
 import { ErrorComponent } from './pages/error/error.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { EventsOrCoursesComponent } from './pages/events-or-courses/events-or-courses.component';
+import { MeetingListComponent } from './components/meeting-list/meeting-list.component';
+import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
+import { ImageCropperComponent } from 'ngx-img-cropper';
+import { ConfigModule, ConfigLoader,  } from '@ngx-config/core';
+import { ConfigHttpLoader } from '@ngx-config/http-loader';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'meeting-list/:type', component: MeetingListComponent, canActivate: [LoggedInGuardService]},
+  { path: 'meeting-list/:type', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/new/:type', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
@@ -32,38 +37,43 @@ const appRoutes: Routes = [
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
 
-export function configFactory() {
-    return new ConfigStaticLoader('/config.json'); // PATH || API ENDPOINT
+export function configFactory(http: HttpClient): ConfigLoader {
+  return new ConfigHttpLoader(http, './config.json');
 }
 
 @NgModule({
   declarations: [
     AppComponent,
-    MeetingListComponent,
     MenuComponent,
     UserInfoComponent,
     LoginComponent,
     MeetingComponent,
     EditorComponent,
     ErrorComponent,
-    FooterComponent
+    FooterComponent,
+    ConfirmDialogComponent,
+    EventsOrCoursesComponent,
+    MeetingListComponent,
+    ImageUploadDialogComponent,
+    ImageCropperComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    ConfigModule.forRoot({
-      provide: ConfigLoader,
-      useFactory: (configFactory)
-    }),
     StoreModule.forRoot({
       meetings: meetingsReducer,
       selectMeeting: selectMeetingReducer
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25
-    })
+    }),
+    ConfigModule.forRoot({
+      provide: ConfigLoader,
+      useFactory: (configFactory),
+      deps: [HttpClient]
+    }),
   ],
   providers: [ LoggedInGuardService, Client, MeetingService],
   bootstrap: [AppComponent]

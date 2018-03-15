@@ -37,9 +37,25 @@
     "addCommentMail":{
         "header": "Evendemy - Ein neues Kommentar zu {{meeting.title}}",
         "title": "Evendemy: Es gibt ein neues Kommentar zu {{meeting.title}}",
-        "body": "Hi!\n {{user.firstname}} {{user.lastname}} schreibt bei '{{meeting.title}}':\n {{comment}}",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} schreibt bei '{{meeting.title}}':\n {{text}}",
         "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
         "button_label": "Meeting ansehen",
+        "foot": "Evendemy"
+    },
+    "dateChangedMail":{
+        "header": "Evendemy - Der Zeitpunkt für {{meeting.title}} wurde geändert",
+        "title": "Evendemy: Der Zeitpunkt für {{meeting.title}} wurde geändert",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat den Termin für '{{meeting.title}}' geändert:\n {{text}}. Falls der Termin bekannt ist, schicken wir dir sicherheitshalber nochmals den Kalendareintrag.",
+        "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
+        "button_label": "Meeting ansehen",
+        "foot": "Evendemy"
+    },
+    "meetingDeleted":{
+        "header": "Evendemy - Das Meeting {{meeting.title}} findet nicht statt!",
+        "title": "Evendemy: Das Meeting {{meeting.title}} findet nicht statt",
+        "body": "Hi!\n leider findet '{{meeting.title}}' nicht statt. Vielleicht findest du ein anderes spannendes Meeting.",
+        "button_href": "https://your-evendemy-app",
+        "button_label": "Zur Evendemy",
         "foot": "Evendemy"
     }
 }

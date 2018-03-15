@@ -12,6 +12,9 @@ import { AppState } from '../../appState';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../model/user';
 import { AttendingUser } from '../../model/AttendingUser';
+import * as toCSV from 'array-to-csv';
+import * as FileSaver from 'file-saver';
+import { ConfigService } from '@ngx-config/core';
 
 @Component({
   selector: 'app-meeting',
@@ -34,8 +37,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
 
+  private imageFolder = this.config.getSettings().image_folder;
+
+  private tmpImgData: any;
+
   constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute,
-    private router: Router, private store: Store<AppState>) { }
+    private router: Router, private store: Store<AppState>, private config: ConfigService) { 
+  }
 
   ngOnInit() {
     this.subscribe = this.route.params.subscribe(params => {
@@ -51,7 +59,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.select('selectMeeting').subscribe( res => {
+    this.store.select('selectMeeting').subscribe(res => {
       this.meeting = res;
     });
   }
@@ -142,7 +150,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   onCreateMeeting() {
     this.meeting.description = this.editor.getValue();
     this.meeting.date = this.convertStringToDate(this.inputDate);
-    this.meetingService.createMeeting(this.meeting).subscribe((result) => {
+    this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
       this.router.navigate(['/meeting-list/' + this.type]);
@@ -159,25 +167,19 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   uploadImage(mid: number) {
-    const x = document.forms['form']['file-upload'].files[0];
-    const reader = new FileReader();
-    reader.addEventListener('load', function () {
-      const image = reader.result.replace('data:image/jpeg;base64,', '');
+    if (this.tmpImgData) {
       const result = {
         mid: mid,
-        data: image
+        data: this.tmpImgData.image
       };
       this.meetingService.addImage(mid, result).subscribe((img_result) => {
         console.log(img_result);
       });
-    }.bind(this), false);
-
-    if (x) {
-      reader.readAsDataURL(x);
     }
   }
 
   onDeleteMeeting() {
+    console.log('delete meeting');
     this.meetingService.deleteMeeting(this.meeting.mid).subscribe((result) => {
       this.router.navigate(['/meeting-list/' + this.type]);
     });
@@ -216,7 +218,24 @@ export class MeetingComponent implements OnInit, OnDestroy {
     comment.text = this.commentbox;
 
     this.meetingService.addComment(this.meeting.mid, comment).subscribe((result) => {
-        this.commentbox = '';
+      this.commentbox = '';
     });
+  }
+
+  downloadCSV() {
+    const headerCSV = [['Firstname', 'Lastname', 'email', 'has taken part']];
+
+    const bodyCSV = this.potentialAttendees.map(a => [a.user.firstname, a.user.lastname, a.user.email, a.tookPart.toString()]);
+
+    const csv = toCSV(headerCSV.concat(bodyCSV));
+
+    var blob = new Blob([csv], { type: 'text/csv' });
+    FileSaver.saveAs(blob, "attendees-for-meeting-" + this.meeting.mid + ".csv");
+
+    console.log(csv);
+  }
+
+  setTemporaryImage(img: any) {
+    this.tmpImgData = img;
   }
 }
