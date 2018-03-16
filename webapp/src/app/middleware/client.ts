@@ -90,7 +90,15 @@ export class Client {
 
     public getMyMeetings(username: string) {
         const headers = this.createHeaders();
-        const url = this.url + '/meetings/my/' + username;
+        const url = this.url + '/meetings/attendee/' + username;
+        const params: URLSearchParams = new URLSearchParams();
+
+        return this.http.get(url, { headers: headers });
+    }
+
+    public getMeetingsFromAuthor(username: string) {
+        const headers = this.createHeaders();
+        const url = this.url + '/meetings/author/' + username;
         const params: URLSearchParams = new URLSearchParams();
 
         return this.http.get(url, { headers: headers });

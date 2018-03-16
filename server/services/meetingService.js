@@ -235,6 +235,11 @@ module.exports = {
         return MeetingUser.find({username: username, tookPart: true}).where('deleted').eq(false).exec();
     },
 
+    getMeetingsFromAuthor: function(username){
+        var Meeting = require('../models/meeting');
+        return Meeting.find({ username: username }).where('deleted').eq(false).exec();
+    },
+
     attendingToMeeting: function(mid, username){
         var MeetingUser = require('../models/meeting_user');
 
