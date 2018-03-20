@@ -57,7 +57,7 @@ module.exports = function (server, config, production_mode) {
     function notifyAllAttendingUsers(meeting, templates, text, iCal){
         meetingService.getAttendingUsersForMid(meeting.mid).then(function (users){
             mappedUsers = _.map(users, function(user){ return user.user});
-            userService.getUserByUsername(meeting.author).then(function(user){
+            userService.getUserByUsername(meeting.username).then(function(user){
                 var view = mailService.renderAllTemplates(templates, meeting, user, text);
                 var sendTo = getMailAdresses(mappedUsers);
                 mailService.sendMail(config, sendTo, view, iCal, production_mode);
