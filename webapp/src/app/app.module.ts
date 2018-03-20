@@ -26,6 +26,11 @@ import { ImageUploadDialogComponent } from './components/image-upload-dialog/ima
 import { ImageCropperComponent } from 'ngx-img-cropper';
 import { ConfigModule, ConfigLoader,  } from '@ngx-config/core';
 import { ConfigHttpLoader } from '@ngx-config/http-loader';
+import { UsersService } from './services/users.service';
+import { usersReducer } from './reducers/users.reducer';
+import { UserPipe } from './pipes/user.pipe';
+import { FirstnamePipe } from './pipes/firstname.pipe';
+import { LastnamePipe } from './pipes/lastname.pipe';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -55,7 +60,10 @@ export function configFactory(http: HttpClient): ConfigLoader {
     EventsOrCoursesComponent,
     MeetingListComponent,
     ImageUploadDialogComponent,
-    ImageCropperComponent
+    ImageCropperComponent,
+    UserPipe,
+    FirstnamePipe,
+    LastnamePipe
   ],
   imports: [
     BrowserModule,
@@ -64,7 +72,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     RouterModule.forRoot(appRoutes),
     StoreModule.forRoot({
       meetings: meetingsReducer,
-      selectMeeting: selectMeetingReducer
+      selectMeeting: selectMeetingReducer,
+      users: usersReducer
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25
@@ -75,7 +84,7 @@ export function configFactory(http: HttpClient): ConfigLoader {
       deps: [HttpClient]
     }),
   ],
-  providers: [ LoggedInGuardService, Client, MeetingService],
+  providers: [ LoggedInGuardService, Client, MeetingService, UsersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

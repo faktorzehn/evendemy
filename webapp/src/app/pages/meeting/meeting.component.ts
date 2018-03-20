@@ -11,10 +11,10 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../appState';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../model/user';
-import { AttendingUser } from '../../model/AttendingUser';
 import * as toCSV from 'array-to-csv';
 import * as FileSaver from 'file-saver';
 import { ConfigService } from '@ngx-config/core';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-meeting',
@@ -26,7 +26,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   isNew: boolean;
   subscribe: Subscription;
   meeting: Meeting;
-  potentialAttendees: AttendingUser[] = new Array<AttendingUser>();
+  potentialAttendees: MeetingUser[] = new Array<MeetingUser>();
   isEditable = false;
   userHasAccepted = false;
   userHasFinished = false;
@@ -40,6 +40,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
   private imageFolder = this.config.getSettings().image_folder;
 
   private tmpImgData: any;
+
+  private users: User[] = [];
 
   constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute,
     private router: Router, private store: Store<AppState>, private config: ConfigService) { 
@@ -62,6 +64,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.store.select('selectMeeting').subscribe(res => {
       this.meeting = res;
     });
+
+    this.store.select('users').subscribe( res => this.users = res);
   }
 
   private initForCreation(type: string) {
@@ -205,7 +209,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  onHasTakenPart(attendee: AttendingUser) {
+  onHasTakenPart(attendee: MeetingUser) {
     if (attendee && !attendee.tookPart) {
       attendee.tookPart = true;
       this.client.confirmAttendeeToMeeting(this.meeting.mid, attendee.username).subscribe((result) => { });
@@ -225,7 +229,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
   downloadCSV() {
     const headerCSV = [['Firstname', 'Lastname', 'email', 'has taken part']];
 
-    const bodyCSV = this.potentialAttendees.map(a => [a.user.firstname, a.user.lastname, a.user.email, a.tookPart.toString()]);
+    const bodyCSV = this.potentialAttendees.map(a => {
+      const user = this.users.find( u => u.username === a.username);
+      if(user){
+        return [user.firstname, user.lastname, user.email, a.tookPart.toString()]
+      }
+    });
 
     const csv = toCSV(headerCSV.concat(bodyCSV));
 
