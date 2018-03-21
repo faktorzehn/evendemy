@@ -10,8 +10,17 @@ module.exports = function (config) {
         callback(undefined, {
           uid: 'admin',
           mail: 'your.email@evendemy.com',
-          givenName: 'firstname',
-          sn: 'lastname'
+          givenName: 'Max',
+          sn: 'Mustermann'
+        });
+      }
+
+      if (name === 'john') {
+        callback(undefined, {
+          uid: 'john',
+          mail: 'john@evendemy.com',
+          givenName: 'John',
+          sn: 'Doe'
         });
       }
     }

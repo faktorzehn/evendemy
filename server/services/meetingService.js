@@ -212,22 +212,7 @@ module.exports = {
         var MeetingUser = require('../models/meeting_user');
         var _ = require('underscore');
         mid = mid*1;
-        return MeetingUser.aggregate([
-            { $match: {mid: mid, deleted: false}},
-            {
-                $lookup:{
-                    from: 'users',
-                    localField: 'username',
-                    foreignField: 'username',
-                    as: 'user'
-                }
-            }
-         ]).exec().then(function(meeting_users){
-             return _.map(meeting_users, function(m) { 
-                 m.user = m.user[0];
-                 return m;
-            });
-         });
+        return MeetingUser.find({mid: mid, deleted: false}).exec();
     },
 
     getMeetingsForUser: function(username){
