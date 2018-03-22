@@ -8,7 +8,7 @@ module.exports = function (config) {
 
       if (name === 'admin') {
         callback(undefined, {
-          uid: 'admin',
+          uid: 'Admin',
           mail: 'your.email@evendemy.com',
           givenName: 'Max',
           sn: 'Mustermann'
@@ -17,7 +17,7 @@ module.exports = function (config) {
 
       if (name === 'john') {
         callback(undefined, {
-          uid: 'john',
+          uid: 'John',
           mail: 'john@evendemy.com',
           givenName: 'John',
           sn: 'Doe'
@@ -29,7 +29,7 @@ module.exports = function (config) {
   //TODO replace this mapper for your needs
   var map = function (user) {
     return {
-      uid: user.uid,
+      uid: user.uid.toLowerCase(), // important - otherwise inconsistent can happen
       mail: user.mail,
       firstname: user.givenName,
       lastname: user.sn

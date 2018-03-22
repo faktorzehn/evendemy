@@ -19,7 +19,7 @@ export class UserPipe implements PipeTransform {
   }
   
   transform(value: String, args?: any): User {
-    return this.users.find(user => user.username.toLowerCase() === value.toLowerCase());
+    return this.users.find(user => user.username ? user.username.toLowerCase() === value.toLowerCase(): false);
   }
 
 }

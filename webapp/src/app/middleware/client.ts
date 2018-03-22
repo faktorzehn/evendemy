@@ -58,7 +58,7 @@ export class Client {
     }
 
     public getLoggedInUsername() {
-        return localStorage.getItem('username');
+        return localStorage.getItem('username').toLowerCase();
     }
 
     public getLoggedInLdapUser() {
