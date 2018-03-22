@@ -6,6 +6,7 @@ module.exports = {
 
     getUserByUsername: function(username) {
         var User = require('../models/user');
+        username = username.toLowerCase();
         return User.findOne({ username: username }).where('deleted').eq(false).exec();
     },
 
