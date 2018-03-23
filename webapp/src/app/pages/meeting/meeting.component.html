@@ -138,7 +138,7 @@
                     <h3 class="col-md-10 meeting-header-label">People who want to participate...</h3>
                     <a class="col-md-2 meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
                 </div>
-                <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px; height: 35px;">
+                <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px;">
                     <p class="col-md-3">{{attendee.username | user | firstname}} {{attendee.username | user | lastname}}</p>
                     <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
