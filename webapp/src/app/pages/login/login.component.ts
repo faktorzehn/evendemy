@@ -11,6 +11,7 @@ import { UsersService } from '../../services/users.service';
 export class LoginComponent implements OnInit {
 
   private returnLink = '';
+  private invalidLogin = false;
 
   constructor(private router: Router, private route: ActivatedRoute, private client: Client, private userService: UsersService) { }
 
@@ -29,7 +30,12 @@ export class LoginComponent implements OnInit {
 
         // login successful
         this.router.navigate([this.returnLink]);
+      }else{
+        this.invalidLogin = true;
       }
+    }, error => {
+      console.error(error);
+      this.invalidLogin = true;
     });
   }
 

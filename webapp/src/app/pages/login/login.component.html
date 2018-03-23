@@ -1,4 +1,4 @@
-<form style="padding-top: 200px;">
+<form style="padding-top: 50px;">
   <div class="row" style="margin-top: 50px;">
     <div style="text-align: center; font-size: 100px;">Evendemy</div>
   </div>
@@ -19,6 +19,11 @@
           <p class="col-md-3">Password</p>
           <div class="col-md-9">
             <input class="form-control" #password type="password" />
+          </div>
+      </div>
+      <div class="row" *ngIf="invalidLogin">
+          <div class="evendemy-invalid-info">
+              Your username or password is invalid! Please try again.
           </div>
       </div>
       <div class="row" style="margin-bottom: 15px;">

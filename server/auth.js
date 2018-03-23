@@ -13,6 +13,8 @@ module.exports = function (config) {
           givenName: 'Max',
           sn: 'Mustermann'
         });
+
+        return;
       }
 
       if (name === 'john') {
@@ -22,7 +24,12 @@ module.exports = function (config) {
           givenName: 'John',
           sn: 'Doe'
         });
+
+        return;
       }
+
+      callback('ERROR', undefined);
+      
     }
   };
 

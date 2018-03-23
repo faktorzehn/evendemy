@@ -11,6 +11,6 @@ export class AppComponent {
   constructor(userService : UsersService){
     try{
       userService.loadAllUsers().subscribe( res => res);
-    }catch(e){console.error(e);}
+    }catch(e){}
   }
 }
