@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Client } from './../../middleware/client';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -9,18 +10,27 @@ import { Client } from './../../middleware/client';
 })
 export class LoginComponent implements OnInit {
 
-     constructor(private router: Router, private client: Client) { }
+  private returnLink = '';
 
-     ngOnInit() {
-     }
+  constructor(private router: Router, private route: ActivatedRoute, private client: Client, private userService: UsersService) { }
 
-     login(username: string, password: string) {
-          this.client.loginUser(username, password).subscribe( (result) => {
-                if (result === true) {
-                    // login successful
-                    this.router.navigate(['/meeting-list/course']);
-                }
-          });
-     }
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => this.returnLink = params['return'] || '/meeting-list/course');
+  }
+
+  login(username: string, password: string) {
+    this.client.loginUser(username, password).subscribe((result) => {
+      if (result === true) {
+
+        //load users again - because first time (not logged in) will not be permitted
+        try {
+          this.userService.loadAllUsers().subscribe(res => res);
+        } catch (e) { console.error(e); }
+
+        // login successful
+        this.router.navigate([this.returnLink]);
+      }
+    });
+  }
 
 }
