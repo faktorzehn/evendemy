@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
@@ -24,13 +24,11 @@ import { EventsOrCoursesComponent } from './pages/events-or-courses/events-or-co
 import { MeetingListComponent } from './components/meeting-list/meeting-list.component';
 import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
 import { ImageCropperComponent } from 'ngx-img-cropper';
-import { ConfigModule, ConfigLoader,  } from '@ngx-config/core';
+import { ConfigModule, ConfigLoader, ConfigService,  } from '@ngx-config/core';
 import { ConfigHttpLoader } from '@ngx-config/http-loader';
 import { UsersService } from './services/users.service';
 import { usersReducer } from './reducers/users.reducer';
-import { UserPipe } from './pipes/user.pipe';
-import { FirstnamePipe } from './pipes/firstname.pipe';
-import { LastnamePipe } from './pipes/lastname.pipe';
+import { NamePipe } from './pipes/name.pipe';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -61,9 +59,7 @@ export function configFactory(http: HttpClient): ConfigLoader {
     MeetingListComponent,
     ImageUploadDialogComponent,
     ImageCropperComponent,
-    UserPipe,
-    FirstnamePipe,
-    LastnamePipe
+    NamePipe
   ],
   imports: [
     BrowserModule,
@@ -84,7 +80,12 @@ export function configFactory(http: HttpClient): ConfigLoader {
       deps: [HttpClient]
     }),
   ],
-  providers: [ LoggedInGuardService, Client, MeetingService, UsersService],
+  providers: [ 
+    LoggedInGuardService, 
+    Client, 
+    MeetingService, 
+    UsersService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

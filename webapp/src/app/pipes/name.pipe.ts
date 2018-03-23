@@ -4,13 +4,13 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
 
 @Pipe({
-  name: 'firstname'
+  name: 'name'
 })
-export class FirstnamePipe implements PipeTransform {
+export class NamePipe implements PipeTransform {
   
   transform(value: User, args?: any): String {
-    if(value){
-      return value.firstname;
+    if(value && value.firstname && value.lastname){
+      return value.firstname + ' ' +value.lastname;
     }
     return '';
   }

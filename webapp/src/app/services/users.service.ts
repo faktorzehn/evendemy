@@ -25,10 +25,10 @@ export class UsersService {
         return headers;
     }
 
-    public getAllUsers() {
+    public loadAllUsers() {
       const headers = this.createHeaders();
       const url = this.url + '/users';
-      return this.http.get(url, {headers: headers}).do( (res : User[]) => {
+      return this.http.get(url, {headers: headers}).retry(5).do( (res : User[]) => {
         this.setUsers(res);
       });
     }

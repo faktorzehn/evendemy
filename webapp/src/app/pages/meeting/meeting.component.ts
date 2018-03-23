@@ -247,4 +247,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
   setTemporaryImage(img: any) {
     this.tmpImgData = img;
   }
+
+  getUser(username: string){
+    const res = this.users.find( user => user.username === username);
+    return res ? res : username;
+  }
 }

@@ -125,7 +125,7 @@
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Author</div>
-                <div class="col-md-8">{{meeting.username | user | firstname}} {{meeting.username | user | lastname}}</div>
+                <div class="col-md-8">{{getUser(meeting.username) | name}}</div>
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Creation-Date</div>
@@ -139,7 +139,7 @@
                     <a class="col-md-2 meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
                 </div>
                 <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px; height: 35px;">
-                    <p class="col-md-3">{{attendee.username | user | firstname}} {{attendee.username | user | lastname}}</p>
+                    <p class="col-md-3">{{getUser(attendee.username) | name}}</p>
                     <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
                         has taken part
@@ -166,7 +166,7 @@
                 <h5>Comments</h5>
             </div>
             <div *ngFor="let comment of meeting.comments" class="row comment-row">
-                <div class="col-md-3">{{comment.author | user | firstname}} {{comment.author | user | lastname}}</div>
+                <div class="col-md-3">{{getUser(comment.author) | name}}</div>
                 <div class="col-md-9 comment">{{comment.text}}</div>
             </div>
             <div class="row">
