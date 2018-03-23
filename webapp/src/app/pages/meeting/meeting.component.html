@@ -50,7 +50,6 @@
                 <h3>More Information</h3>
             </div>
 
-            <!--TABLE-->
             <div class="row form-row">
                 <div class="col-md-4">Short Description</div>
                 <div class="col-md-8">
@@ -59,6 +58,7 @@
                     <div *ngIf="!isEditable">{{meeting.shortDescription}}</div>
                 </div>
             </div>
+            
             <div class="row form-row">
                 <div class="col-md-4">Date</div>
                 <div *ngIf="isEditable" class="col-md-8">
