@@ -21,6 +21,8 @@ export class UserInfoComponent implements OnInit {
      ];
      courses: Meeting[] = [];
      events: Meeting[] = [];
+     courses_from_author: Meeting[] = [];
+     events_from_author: Meeting[] = [];
 
      constructor(private client: Client) {
      }
@@ -52,6 +54,19 @@ export class UserInfoComponent implements OnInit {
                 });
               }
             }
+          });
+
+          this.client.getMeetingsFromAuthor(this.client.getLoggedInUsername()).subscribe( (result: Meeting[]) => {
+            result.forEach( meeting => {
+              if (meeting) {
+                if (meeting.courseOrEvent === 'course') {
+                  this.courses_from_author.push(meeting);
+                } else {
+                  this.events_from_author.push(meeting);
+                }
+              }
+            });
+
           });
 
      }

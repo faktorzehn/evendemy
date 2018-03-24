@@ -10,7 +10,7 @@ module.exports = {
         var filter = {};
 
         if (options.username !== undefined) {
-            filter.username = options.username;
+            filter.username = options.username.toLowerCase();
         }
         if (options.courseOrEvent !== undefined) {
             filter.courseOrEvent = options.courseOrEvent;
@@ -117,7 +117,9 @@ module.exports = {
             meeting.date = request.date;
         }
 
-        meeting.username = username;
+        if(username){
+            meeting.username = username.toLowerCase();   
+        }
 
         return meeting.save();
     },
@@ -178,7 +180,7 @@ module.exports = {
 
             var comment = new Comment();
             comment.text = request.text;
-            comment.author = request.author;
+            comment.author = request.author.toLowerCase();
             if (!meeting.comments) {
                 meeting.comments = [];
             }
@@ -212,32 +214,25 @@ module.exports = {
         var MeetingUser = require('../models/meeting_user');
         var _ = require('underscore');
         mid = mid*1;
-        return MeetingUser.aggregate([
-            { $match: {mid: mid, deleted: false}},
-            {
-                $lookup:{
-                    from: 'users',
-                    localField: 'username',
-                    foreignField: 'username',
-                    as: 'user'
-                }
-            }
-         ]).exec().then(function(meeting_users){
-             return _.map(meeting_users, function(m) { 
-                 m.user = m.user[0];
-                 return m;
-            });
-         });
+        return MeetingUser.find({mid: mid, deleted: false}).exec();
     },
 
     getMeetingsForUser: function(username){
         var MeetingUser = require('../models/meeting_user');
+        username = username.toLowerCase();
         return MeetingUser.find({username: username, tookPart: true}).where('deleted').eq(false).exec();
+    },
+
+    getMeetingsFromAuthor: function(username){
+        var Meeting = require('../models/meeting');
+        username = username.toLowerCase();
+        return Meeting.find({ username: username }).where('deleted').eq(false).exec();
     },
 
     attendingToMeeting: function(mid, username){
         var MeetingUser = require('../models/meeting_user');
 
+        username = username.toLowerCase();
         var m = {
             mid: mid,
             username: username,
@@ -251,16 +246,19 @@ module.exports = {
 
     notAttendingToMeeting: function(mid, username){
         var MeetingUser = require('../models/meeting_user');
+        username = username.toLowerCase();
         return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: { deleted: true } }, { upsert: true });
     }, 
 
     confirmUserForMeeting: function(mid, username){
         var MeetingUser = require('../models/meeting_user');
+        username = username.toLowerCase();
         return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: {tookPart: true} }, { upsert: true });
     },
 
     rejectUserFromMeeting: function(mid, username){
         var MeetingUser = require('../models/meeting_user');
+        username = username.toLowerCase();
         return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: {tookPart: false} }, { upsert: true });
     }
 }

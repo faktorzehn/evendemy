@@ -55,12 +55,17 @@ module.exports = function (server, config, production_mode) {
     });
 
     function notifyAllAttendingUsers(meeting, templates, text, iCal){
-        meetingService.getAttendingUsersForMid(meeting.mid).then(function (users){
-            mappedUsers = _.map(users, function(user){ return user.user});
-            userService.getUserByUsername(meeting.author).then(function(user){
-                var view = mailService.renderAllTemplates(templates, meeting, user, text);
-                var sendTo = getMailAdresses(mappedUsers);
-                mailService.sendMail(config, sendTo, view, iCal, production_mode);
+        meetingService.getAttendingUsersForMid(meeting.mid).then(function (meeting_users){
+            promises = _.map(meeting_users, function(mu){ 
+                return userService.getUserByUsername(mu.username);
+            });
+
+            Promise.all(promises).then(function(mappedUsers){
+                userService.getUserByUsername(meeting.username).then(function(user){
+                    var view = mailService.renderAllTemplates(templates, meeting, user, text);
+                    var sendTo = getMailAdresses(mappedUsers);
+                    mailService.sendMail(config, sendTo, view, iCal, production_mode);
+                });
             });
         });
     }
@@ -128,8 +133,8 @@ module.exports = function (server, config, production_mode) {
 
     server.get('/meeting/:mid/attendees', function (req, res, next) {
         if (req.params.mid !== undefined) {
-            meetingService.getAttendingUsersForMid(req.params.mid).then(function (users) {
-                res.send(users);
+            meetingService.getAttendingUsersForMid(req.params.mid).then(function (meeting_users) {
+                res.send(meeting_users);
             }, function (err) {
                 res.send(500, { error: err });
             });

@@ -38,4 +38,12 @@
   <p *ngIf="events.length==0">Nothing here at the moment...</p>
   <app-meeting-list [meetings]="events"></app-meeting-list>
 
+  <h3 style="padding-top:20px;">{{courses_from_author.length}} created Courses</h3>
+  <p *ngIf="courses_from_author.length==0">Nothing here at the moment...</p>
+  <app-meeting-list [meetings]="courses_from_author"></app-meeting-list>
+
+  <h3 style="padding-top:20px;">{{events_from_author.length}} created Events</h3>
+  <p *ngIf="events_from_author.length==0">Nothing here at the moment...</p>
+  <app-meeting-list [meetings]="events_from_author"></app-meeting-list>
+
 </div>

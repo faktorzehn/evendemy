@@ -6,13 +6,14 @@ module.exports = {
 
     getUserByUsername: function(username) {
         var User = require('../models/user');
+        username = username.toLowerCase();
         return User.findOne({ username: username }).where('deleted').eq(false).exec();
     },
 
     saveUser: function(user){
         var User = require('../models/user');
         var newUser = new User();
-        newUser.username = user.uid;
+        newUser.username = user.uid.toLowerCase();
         newUser.email =user.mail;
         newUser.firstname = user.firstname;
         newUser.lastname = user.lastname;

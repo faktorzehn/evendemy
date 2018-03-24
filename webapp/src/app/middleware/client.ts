@@ -9,7 +9,6 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
 import { InitMeetings, AddMeeting } from '../actions/meetings.actions';
-import { AttendingUser } from '../model/AttendingUser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConfigService } from '@ngx-config/core';
 
@@ -59,7 +58,7 @@ export class Client {
     }
 
     public getLoggedInUsername() {
-        return localStorage.getItem('username');
+        return localStorage.getItem('username').toLowerCase();
     }
 
     public getLoggedInLdapUser() {
@@ -80,17 +79,25 @@ export class Client {
         return this.http.get(url, { headers: headers });
     }
 
-    public getAllAttendingUsers(mid: string): Observable<AttendingUser[]> {
+    public getAllAttendingUsers(mid: string): Observable<MeetingUser[]> {
         const headers = this.createHeaders();
         const url = this.url + '/meeting/' + mid + '/attendees';
         const params: URLSearchParams = new URLSearchParams();
 
-        return this.http.get(url, { headers: headers }) as Observable<AttendingUser[]>;
+        return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
     }
 
     public getMyMeetings(username: string) {
         const headers = this.createHeaders();
-        const url = this.url + '/meetings/my/' + username;
+        const url = this.url + '/meetings/attendee/' + username;
+        const params: URLSearchParams = new URLSearchParams();
+
+        return this.http.get(url, { headers: headers });
+    }
+
+    public getMeetingsFromAuthor(username: string) {
+        const headers = this.createHeaders();
+        const url = this.url + '/meetings/author/' + username;
         const params: URLSearchParams = new URLSearchParams();
 
         return this.http.get(url, { headers: headers });

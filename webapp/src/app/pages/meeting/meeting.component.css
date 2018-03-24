@@ -29,3 +29,12 @@
 .meeting-header-label{
   padding-left: 0px;
 }
+
+.meeting-tag{
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 20px;
+  border-color: #48cfad;
+  color: #48cfad;
+  padding: 0px 10px 0px 10px;
+}
