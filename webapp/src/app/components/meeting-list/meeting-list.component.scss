@@ -36,6 +36,10 @@
   
   .meeting-title{
     padding-top: 15px;
+    width: 200px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
   }
   
   .meeting-more-button{

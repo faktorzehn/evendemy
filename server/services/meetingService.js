@@ -43,7 +43,7 @@ module.exports = {
             if (!showNew && !showNotAnnounced && !showOld) {
                 resolve([]);
             } else {
-                Meeting.find(filter).where('deleted').eq(false).sort('date').exec(function (err, meetings) {
+                Meeting.find(filter).where('deleted').eq(false).sort({ date: 'asc', startTime: 'asc'}).exec(function (err, meetings) {
                     if (err) {
                         reject(err);
                         return;
