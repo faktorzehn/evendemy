@@ -66,7 +66,7 @@
                         [(ngModel)]="inputDate" placeholder="dd.MM.yyyy" #date="ngModel">
                     <div *ngIf="date.errors && (date.dirty || date.touched)" class="alert alert-danger">
                         <div [hidden]="!date.errors.pattern">
-                            Date has to be a valid date: dd.MM.yyyy. For example 1.1.2017
+                            <i class="fa fa-close fa-lg"></i> Date has to be a valid date: dd.MM.yyyy. For example 24.12.2020
                         </div>
                     </div>
                     <div *ngIf="!inputDate" class="alert alert-warning">
