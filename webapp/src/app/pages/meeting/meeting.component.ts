@@ -15,6 +15,7 @@ import * as toCSV from 'array-to-csv';
 import * as FileSaver from 'file-saver';
 import { ConfigService } from '@ngx-config/core';
 import { UsersService } from '../../services/users.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-meeting',
@@ -44,7 +45,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   private users: User[] = [];
 
   constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute,
-    private router: Router, private store: Store<AppState>, private config: ConfigService) { 
+    private router: Router, private store: Store<AppState>, private config: ConfigService) {
   }
 
   ngOnInit() {
@@ -212,6 +213,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
   onHasTakenPart(attendee: MeetingUser) {
     if (attendee && !attendee.tookPart) {
       attendee.tookPart = true;
+      if(attendee.username === this.client.getLoggedInUsername()){
+        this.userHasFinished = true;
+      }
       this.client.confirmAttendeeToMeeting(this.meeting.mid, attendee.username).subscribe((result) => { });
     }
   }
@@ -251,5 +255,27 @@ export class MeetingComponent implements OnInit, OnDestroy {
   getUser(username: string){
     const res = this.users.find( user => user.username === username);
     return res ? res : username;
+  }
+
+  getAttendedNumber() {
+    return this.potentialAttendees.filter( p => p.tookPart === true).length;
+  }
+
+  getNotAttendedNumber() {
+    return this.potentialAttendees.filter( p => p.tookPart !== true).length;
+  }
+
+  isInThePast() {
+    const now = moment();
+    return moment(this.meeting.date).isBefore(now, 'day');
+  }
+
+  isInThePastOrToday() {
+    const now = moment();
+    return moment(this.meeting.date).isSameOrBefore(now, 'day');
+  }
+
+  hasEveryoneTookPart() {
+    return this.potentialAttendees.length == this.getAttendedNumber();
   }
 }

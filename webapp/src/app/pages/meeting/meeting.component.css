@@ -30,6 +30,12 @@
   padding-left: 0px;
 }
 
+.meeting-participants-info{
+  text-align: center;
+  padding-top: 10px;
+  color: grey;
+}
+
 .meeting-tag{
   border-width: 1px;
   border-style: solid;
@@ -37,4 +43,8 @@
   border-color: #48cfad;
   color: #48cfad;
   padding: 0px 10px 0px 10px;
+}
+
+.alert{
+  margin-top: 5px;
 }
