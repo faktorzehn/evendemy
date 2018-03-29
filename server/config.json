@@ -1,7 +1,4 @@
 {
-	"db": {
-		"url": "mongodb://localhost/mydb"
-	},
 	"imageFolder":"./../webapp/src/assets/images",
 	"mail":{
 		"enableMail": false,

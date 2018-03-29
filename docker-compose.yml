@@ -1,0 +1,17 @@
+version: '3'
+services:
+  server:
+    build: ./server
+    command: npm start
+    volumes:
+     - ./server:/usr/app/
+    ports:
+     - "40274:40274"
+    depends_on:
+     - mongo
+    environment:
+     DATABASE_URL: mongodb://mongo/mydb
+  mongo:
+    image: "mongo"
+    volumes:
+     - ./.mongoData:/data/db

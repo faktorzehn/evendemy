@@ -27,7 +27,7 @@ var cors = corsMiddleware({
 });
 
 //init mongo db
-var db = mongoose.connect(config.db.url);
+var db = mongoose.connect(process.env.DATABASE_URL);
 autoIncrement.initialize(db);
 
 //config for restify server

@@ -16,6 +16,14 @@ Evendemy consists of two parts: the [backend](server/) and the [frontend](webapp
 For more detailed information see the readme of the [backend](server/) and [frontend](webapp/).
 
 
+##  Development
+
+ The server part can be started with docker-compose up in this directory. At the moment an npm install in the server directory has to be done manually.
+
+ With the docker-compose the mongo db and the nodejs server will be started.
+
+ It is encouraged to use linux as operating system!
+
  ## License
 
 Evendemy is under the [GPLv3](./LICENSE)
