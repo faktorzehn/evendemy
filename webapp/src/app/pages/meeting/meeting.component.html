@@ -143,7 +143,7 @@
                 </div>
                 <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px;">
                     <p class="col-md-3">{{getUser(attendee.username) | name}}</p>
-                    <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart && meeting.date">
+                    <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart && meeting.date" [disabled]="!isInThePastOrToday()">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
                         has taken part
                     </button>

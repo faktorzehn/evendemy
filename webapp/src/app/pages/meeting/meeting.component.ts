@@ -267,11 +267,15 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   isInThePast() {
     const now = moment();
-    const meetingDate = moment(this.meeting.date);
-    return meetingDate.isBefore(now, 'day');
+    return moment(this.meeting.date).isBefore(now, 'day');
   }
 
-  hasEveryoneTookPart(){
+  isInThePastOrToday() {
+    const now = moment();
+    return moment(this.meeting.date).isSameOrBefore(now, 'day');
+  }
+
+  hasEveryoneTookPart() {
     return this.potentialAttendees.length == this.getAttendedNumber();
   }
 }
