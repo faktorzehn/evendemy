@@ -45,6 +45,10 @@
   padding: 0px 10px 0px 10px;
 }
 
+.meeting-checkbox{
+  margin-left: 15px;
+}
+
 .alert{
   margin-top: 5px;
 }

@@ -123,8 +123,7 @@
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Is in freetime</div>
-                <input type="checkbox" class="icheckbox_flat" [(ngModel)]="meeting.isFreetime" [disabled]="!isEditable" style="margin-left: 15px;"
-                    name="isFreetime">
+                <app-evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="meeting.isFreetime = $event" [value]="meeting.isFreetime" [disabled]="!isEditable"></app-evendemy-checkbox>
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Author</div>

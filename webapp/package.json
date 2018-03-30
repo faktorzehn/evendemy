@@ -1,6 +1,6 @@
 {
   "name": "evendemy-webapp",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "GNU General Public License v3.0",
   "scripts": {
     "ng": "ng",
@@ -33,6 +33,7 @@
     "font-awesome": "^4.7.0",
     "moment": "^2.21.0",
     "ngx-img-cropper": "^0.9.7",
+    "pretty-checkbox": "^3.0.3",
     "quill": "^1.1.9",
     "rxjs": "^5.0.1",
     "ts-helpers": "^1.1.1",
