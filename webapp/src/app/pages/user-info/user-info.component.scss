@@ -30,3 +30,12 @@
 .event-label a{
   color: rgb(67, 74, 84);
 }
+
+.user-info-row{
+  margin: -15px;
+  padding: 0px 15px 15px 15px;
+}
+
+.user-info-row:nth-child(even){
+  background-color:#dddddd;
+}
