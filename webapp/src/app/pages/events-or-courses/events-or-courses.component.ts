@@ -52,7 +52,18 @@ export class EventsOrCoursesComponent implements OnInit {
     this.meetingService.getAllMeetings(options);
   }
 
-  onCheckboxClick() {
+  onShowNotAnnounced(state: boolean) {
+    this.showNotAnnounced = state;
+    this.loadMeetings();
+  }
+
+  onShowNew(state: boolean) {
+    this.showNew = state;
+    this.loadMeetings();
+  }
+
+  onShowOld(state: boolean) {
+    this.showOld = state;
     this.loadMeetings();
   }
 

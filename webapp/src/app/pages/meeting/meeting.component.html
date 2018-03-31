@@ -123,8 +123,7 @@
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Is in freetime</div>
-                <input type="checkbox" class="icheckbox_flat" [(ngModel)]="meeting.isFreetime" [disabled]="!isEditable" style="margin-left: 15px;"
-                    name="isFreetime">
+                <app-evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="meeting.isFreetime = $event" [value]="meeting.isFreetime" [disabled]="!isEditable"></app-evendemy-checkbox>
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Author</div>
@@ -175,7 +174,7 @@
 
             <!--COMMENTS-->
             <div class="row" style="margin-top: 50px;">
-                <h5>Comments</h5>
+                <h3>Comments</h3>
             </div>
             <div *ngFor="let comment of meeting.comments" class="row comment-row">
                 <div class="col-md-3">{{getUser(comment.author) | name}}</div>

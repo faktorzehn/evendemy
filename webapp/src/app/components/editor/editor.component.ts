@@ -18,7 +18,17 @@ export class EditorComponent implements OnInit {
   ngOnInit() {
     if (this.editable) {
       this.quill = new Quill('#editor', {
-        theme: 'snow'
+        theme: 'snow',
+        modules:{
+          toolbar: [
+            [{ 'header': [2, 3, 4, false]}], 
+            ['bold', 'italic', 'underline', 'strike'],
+            ['link'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['code-block'],
+            ['clean']  
+          ]
+        }
       });
     }
     if (!this.value) {

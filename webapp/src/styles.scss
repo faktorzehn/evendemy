@@ -1,4 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@import "variables";
+
+body{
+  background-color: $evendemy-background !important;
+}
 
 .component-content{
     padding: 0px 10px 10px 10px;
@@ -21,11 +25,20 @@
   .form-row:nth-child(odd){
     background-color:#f1f1f1;
   }
-  .form-table{
-    border-color: #dddddd;
+
+  %form-table-basis{
     border-style: solid;
     border-width: 1px;
     overflow: hidden;
+  }
+  .form-table{
+    border-color: #dddddd;
+    @extend %form-table-basis;
+  }
+
+  .form-table-white-border{
+    border-color:white;
+    @extend %form-table-basis;
   }
 
   .medium-table{

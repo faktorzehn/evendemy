@@ -29,6 +29,7 @@ import { ConfigHttpLoader } from '@ngx-config/http-loader';
 import { UsersService } from './services/users.service';
 import { usersReducer } from './reducers/users.reducer';
 import { NamePipe } from './pipes/name.pipe';
+import { EvendemyCheckboxComponent } from './components/evendemy-checkbox/evendemy-checkbox.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -59,7 +60,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     MeetingListComponent,
     ImageUploadDialogComponent,
     ImageCropperComponent,
-    NamePipe
+    NamePipe,
+    EvendemyCheckboxComponent
   ],
   imports: [
     BrowserModule,
