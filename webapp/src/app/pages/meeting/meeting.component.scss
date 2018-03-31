@@ -1,3 +1,5 @@
+@import './../../../variables';
+
 .comment{
   white-space: pre-wrap;
 }
@@ -40,8 +42,8 @@
   border-width: 1px;
   border-style: solid;
   border-radius: 20px;
-  border-color: #48cfad;
-  color: #48cfad;
+  border-color: $evendemy-primary;
+  color: $evendemy-primary;
   padding: 0px 10px 0px 10px;
 }
 

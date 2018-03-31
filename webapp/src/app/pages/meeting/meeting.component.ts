@@ -20,7 +20,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-meeting',
   templateUrl: './meeting.component.html',
-  styleUrls: ['./meeting.component.css']
+  styleUrls: ['./meeting.component.scss']
 })
 export class MeetingComponent implements OnInit, OnDestroy {
   type: string;

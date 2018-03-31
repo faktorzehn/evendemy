@@ -1,4 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@import "variables";
+
+body{
+  background-color: $evendemy-background !important;
+}
+
 .component-content{
     padding: 0px 10px 10px 10px;
   }
