@@ -190,8 +190,8 @@
             <!--Tools-->
             <div class="row meeting-tools" *ngIf="isEditable" style="padding-right: 0px; margin-top: 20px; text-align: right;">
                 <!--EDITOR-MODE-->
-                <button *ngIf="isNew" class="btn btn-info" (click)="onCreateMeeting()" [disabled]="!form.form.valid">Save</button>
-                <button *ngIf="!isNew && isEditable" class="btn btn-info" (click)="onUpdateMeeting()" [disabled]="!form.form.valid">Save</button>
+                <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()" [disabled]="!form.form.valid">Save</button>
+                <button *ngIf="!isNew && isEditable" class="btn btn-info" data-toggle="modal" data-target="#copyDialog">Copy</button>
                 <button *ngIf="!isNew && isEditable" class="btn btn-info" data-toggle="modal" data-target="#confirmDialog">Delete</button>
             </div>
 
@@ -201,6 +201,12 @@
             You can not revert this action. The attendees will be informed that the meeting will not take place.
             <br/>
             <br/> Do you really want to delete this meeting?
+        </app-confirm-dialog>
+
+        <app-confirm-dialog title="Do you really want to copy this meeting?" (onConfirm)="onCopyMeeting()" dialog_id="copyDialog">
+        With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
+            <br/>
+            <br/> Do you really want to copy this meeting?
         </app-confirm-dialog>
 
         <app-image-upload-dialog (data)="setTemporaryImage($event)"></app-image-upload-dialog>
