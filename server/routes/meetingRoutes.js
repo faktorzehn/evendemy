@@ -54,14 +54,14 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
-    function notifyAllAttendingUsers(meeting, templates, text, iCal){
+    function notifyAllAttendingUsers(meeting, username, templates, text, iCal){
         meetingService.getAttendingUsersForMid(meeting.mid).then(function (meeting_users){
             promises = _.map(meeting_users, function(mu){ 
                 return userService.getUserByUsername(mu.username);
             });
 
             Promise.all(promises).then(function(mappedUsers){
-                userService.getUserByUsername(meeting.username).then(function(user){
+                userService.getUserByUsername(username).then(function(user){
                     var view = mailService.renderAllTemplates(templates, meeting, user, text);
                     var sendTo = getMailAdresses(mappedUsers);
                     mailService.sendMail(config, sendTo, view, iCal, production_mode);
@@ -72,7 +72,7 @@ module.exports = function (server, config, production_mode) {
 
     server.post('/meeting/:mid/comment', function (req, res, next) {
         meetingService.addComment(req.params.mid, req.params).then(function (meeting) {
-            notifyAllAttendingUsers(meeting, mailConfig.addCommentMail, req.params.text, null);
+            notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.addCommentMail, req.params.text, null);
             res.send(meeting);
         }, function (err) {
             res.send(500, { error: err });
@@ -99,7 +99,7 @@ module.exports = function (server, config, production_mode) {
                         }
                         
                         const iCal = calendarService.createICalAttachment(config, meeting);
-                        notifyAllAttendingUsers(meeting, mailConfig.dateChangedMail, text, iCal);
+                        notifyAllAttendingUsers(meeting, meeting.username, mailConfig.dateChangedMail, text, iCal);
                     }
                     res.send(meeting);
                 }, function (err) {
@@ -118,7 +118,7 @@ module.exports = function (server, config, production_mode) {
 
     server.del('/meeting/:mid', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
-            notifyAllAttendingUsers(meeting, mailConfig.meetingDeleted, null, null);
+            notifyAllAttendingUsers(meeting, meeting.username, mailConfig.meetingDeleted, null, null);
 
             meetingService.deleteMeeting(req.params.mid).then(function (meeting) {
                 res.send(meeting);
