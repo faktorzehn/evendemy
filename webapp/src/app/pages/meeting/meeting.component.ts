@@ -33,6 +33,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   userHasFinished = false;
   commentbox = '';
   inputDate = '';
+  dateFormat = 'DD.MM.YYYY';
   randomizedNumber = Math.floor(Math.random() * 10000);
 
   @ViewChild(EditorComponent)
@@ -117,23 +118,16 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  convertDateToString(value: Date) {
+  convertDateToString(value: Date) : string{
     if (value) {
-      const day = value.getDate();
-      const month = value.getMonth() + 1;
-      const year = value.getFullYear();
-      return day + '.' + month + '.' + year;
+      return moment(value).format(this.dateFormat);
     }
     return '';
   }
 
-  convertStringToDate(value: string) {
+  convertStringToDate(value: string) : Date{
     if (value) {
-      const valueArray = value.split('.');
-      const day = parseInt(valueArray[0], 10);
-      const month = parseInt(valueArray[1], 10) - 1;
-      const year = parseInt(valueArray[2], 10);
-      return new Date(year, month, day);
+      return moment(value, this.dateFormat).toDate();
     }
     return null;
   }
@@ -152,7 +146,15 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCreateMeeting() {
+  onSaveMeeting() {
+    if(this.meeting.mid){
+      this.updateMeeting();
+    }else{
+      this.createMeeting();
+    }
+  }
+
+  createMeeting() {
     this.meeting.description = this.editor.getValue();
     this.meeting.date = this.convertStringToDate(this.inputDate);
     this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
@@ -162,7 +164,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  onUpdateMeeting() {
+  updateMeeting() {
     this.uploadImage(this.meeting.mid);
     this.meeting.description = this.editor.getValue();
     this.meeting.date = this.convertStringToDate(this.inputDate);
@@ -177,21 +179,24 @@ export class MeetingComponent implements OnInit, OnDestroy {
         mid: mid,
         data: this.tmpImgData.image
       };
-      this.meetingService.addImage(mid, result).subscribe((img_result) => {
-        console.log(img_result);
-      });
+      this.meetingService.addImage(mid, result).subscribe((img_result) => {});
     }
   }
 
   onDeleteMeeting() {
-    console.log('delete meeting');
     this.meetingService.deleteMeeting(this.meeting.mid).subscribe((result) => {
       this.router.navigate(['/meeting-list/' + this.type]);
     });
   }
 
-  openInNewView() {
-    this.router.navigate(['/meeting/' + this.meeting.mid]);
+  onCopyMeeting(){
+    const meeting = { ... this.meeting }
+    meeting.mid = null;
+    meeting.comments = [];
+    meeting.creationDate = null;
+    meeting.username = null;
+    this.potentialAttendees = [];
+    this.meetingService.selectMeeting(meeting);
   }
 
   onAcceptMeeting() {
