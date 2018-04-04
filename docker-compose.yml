@@ -10,7 +10,7 @@ services:
     depends_on:
      - mongo
     environment:
-     DATABASE_URL: mongodb://mongo/mydb
+     EVENDEMY_DATABASE_URL: mongodb://mongo/mydb
   mongo:
     image: "mongo"
     volumes:

@@ -26,8 +26,15 @@ var cors = corsMiddleware({
 	allowHeaders: ['Authorization']
 });
 
+var databaseUrl = process.env.EVENDEMY_DATABASE_URL;
+
+if(!databaseUrl) {
+	console.error("ERROR: DatabaseUrl undefined");
+	process.exit(155);
+}
+
 //init mongo db
-var db = mongoose.connect(process.env.DATABASE_URL);
+var db = mongoose.connect(databaseUrl);
 autoIncrement.initialize(db);
 
 //config for restify server
