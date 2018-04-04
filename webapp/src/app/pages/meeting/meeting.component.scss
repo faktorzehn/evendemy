@@ -32,6 +32,17 @@
   padding-left: 0px;
 }
 
+.meeting-info-box{
+  background-color: #dddddd; 
+  border-radius: 5px; 
+  padding: 10px;
+
+  .meeting-info-box-buttons{
+    float: right; 
+    padding-top: 10px;
+  }
+}
+
 .meeting-participants-info{
   text-align: center;
   padding-top: 10px;
@@ -53,4 +64,5 @@
 
 .alert{
   margin-top: 5px;
+  margin-bottom: 5px;
 }

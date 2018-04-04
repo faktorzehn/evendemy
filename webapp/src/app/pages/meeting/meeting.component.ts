@@ -199,7 +199,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.isNew = true;
     this.userHasAccepted= false;
     this.userHasFinished = false;
-    
+
     this.meetingService.selectMeeting(meeting);
   }
 
@@ -257,6 +257,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
     console.log(csv);
   }
 
+  onGetCalendar() {
+    this.meetingService.getCalendar(this.meeting.mid).subscribe( (cal: any) => {
+      var blob = new Blob([cal.content], { type: 'text/calendar;charset=utf-8' });
+      FileSaver.saveAs(blob, "calendar-for-meeting-" + this.meeting.mid + ".ics");
+
+    });
+  }
+
   setTemporaryImage(img: any) {
     this.tmpImgData = img;
   }
@@ -274,12 +282,22 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return this.potentialAttendees.filter( p => p.tookPart !== true).length;
   }
 
+  hasValidDate(){
+    return this.meeting.startTime && this.meeting.endTime && this.meeting.date;
+  }
+
   isInThePast() {
+    if(!this.hasValidDate()){
+      return false;
+    }
     const now = moment();
     return moment(this.meeting.date).isBefore(now, 'day');
   }
 
   isInThePastOrToday() {
+    if(!this.hasValidDate()){
+      return false;
+    }
     const now = moment();
     return moment(this.meeting.date).isSameOrBefore(now, 'day');
   }
