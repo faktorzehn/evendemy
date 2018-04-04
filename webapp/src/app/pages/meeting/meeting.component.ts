@@ -196,6 +196,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
     meeting.creationDate = null;
     meeting.username = null;
     this.potentialAttendees = [];
+    this.isNew = true;
+    this.userHasAccepted= false;
+    this.userHasFinished = false;
+    
     this.meetingService.selectMeeting(meeting);
   }
 
