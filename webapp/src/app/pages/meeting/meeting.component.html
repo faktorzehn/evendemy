@@ -9,7 +9,7 @@
 
             <!--Image-->
             <div class="row meeting-image" *ngIf="!tmpImgData?.image">
-                    <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'" />
+                <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'" />
             </div>
 
             <div class="row meeting-image" *ngIf="tmpImgData?.image">
@@ -17,7 +17,7 @@
             </div>
 
             <div style="text-align: right;">
-                    <button *ngIf="isEditable" class="btn btn-info meeting-image-button" data-toggle="modal" data-target="#evendemy-image-upload-dialog">change</button>
+                <button *ngIf="isEditable" class="btn btn-info meeting-image-button" data-toggle="modal" data-target="#evendemy-image-upload-dialog">change</button>
             </div>
 
 
@@ -25,7 +25,7 @@
             <div class="row form-row" *ngIf="isEditable">
                 <div class="col-md-4">Title</div>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.title" name="title"/>
+                    <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.title" name="title" />
                 </div>
             </div>
 
@@ -87,6 +87,9 @@
                             <i class="fa fa-close fa-lg"></i> Time has to be like HH:MM. For example 12:00
                         </div>
                     </div>
+                    <div *ngIf="!meeting.startTime" class="alert alert-warning">
+                        <i class="fa fa-info-circle fa-lg"></i> Without a start time participants will not receive a calendar invitation. You can't confirm any participant.
+                    </div>
                 </div>
                 <div *ngIf="!isEditable" class="col-md-8">
                     {{meeting.startTime}}
@@ -102,6 +105,9 @@
                             <i class="fa fa-close fa-lg"></i> Time has to be like HH:MM. For example 12:00
                         </div>
                     </div>
+                    <div *ngIf="!meeting.endTime" class="alert alert-warning">
+                            <i class="fa fa-info-circle fa-lg"></i> Without an end time participants will not receive a calendar invitation. You can't confirm any participant.
+                        </div>
                 </div>
                 <div *ngIf="!isEditable" class="col-md-8">
                     {{meeting.endTime}}
@@ -123,7 +129,8 @@
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Is in freetime</div>
-                <app-evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="meeting.isFreetime = $event" [value]="meeting.isFreetime" [disabled]="!isEditable"></app-evendemy-checkbox>
+                <app-evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="meeting.isFreetime = $event" [value]="meeting.isFreetime"
+                    [disabled]="!isEditable"></app-evendemy-checkbox>
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Author</div>
@@ -142,7 +149,8 @@
                 </div>
                 <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px;">
                     <p class="col-md-3">{{getUser(attendee.username) | name}}</p>
-                    <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart && meeting.date" [disabled]="!isInThePastOrToday()">
+                    <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart && meeting.date"
+                        [disabled]="!isInThePastOrToday()">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
                         has taken part
                     </button>
@@ -152,24 +160,43 @@
                 </div>
             </div>
 
-            <div class="row"  *ngIf="isInThePast()">
+            <div class="meeting-tools" style="margin-top: 20px; text-align: center;">
+                <button *ngIf="(isNew == false) && !userHasAccepted" class="btn btn-info" (click)="onAcceptMeeting()">
+                    I want to participate
+                </button>
+            </div>
+
+            <div class="row meeting-info-box" *ngIf="(isNew == false) && userHasAccepted && !userHasFinished">
+                <h4>Have a great time!</h4>
+                <p>You registered for the event and can take part. Your host and you will get a mail. If something will change,
+                    you will be informed. Enjoy your meeting!</p>
+                <div class="meeting-info-box-buttons">
+                    <button class="btn btn-danger" (click)="onRejectMeeting()">
+                        I cannot participate anymore
+                    </button>
+                    <button class="btn btn-info" (click)="onGetCalendar()" [disabled]="!hasValidDate()">
+                        <i class="fa fa-calendar fa-lg"></i> Calendar
+                    </button>
+                </div>
+            </div>
+
+            <div class="row meeting-info-box" *ngIf="(isNew == false) && userHasFinished">
+                <h4>Thank you for taking part!</h4>
+                <p>You have been confirmed that you have participated.</p>
+                <div class="meeting-info-box-buttons">
+                    <button class="btn btn-info" (click)="onGetCalendar()" [disabled]="!hasValidDate()">
+                        <i class="fa fa-calendar fa-lg"></i> Calendar
+                    </button>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="isInThePast()">
                 <p class="col-md-12 meeting-participants-info" *ngIf="hasEveryoneTookPart()">
                     <i class="fa fa-info-circle fa-lg"></i> {{getAttendedNumber()}} took part.
                 </p>
                 <p class="col-md-12 meeting-participants-info" *ngIf="!hasEveryoneTookPart()">
                     <i class="fa fa-info-circle fa-lg"></i> {{getAttendedNumber()}} took part and {{getNotAttendedNumber()}} didn´t showed up.
                 </p>
-            </div>
-
-            <!--Tools-->
-            <div class="meeting-tools" style="margin-top: 20px; text-align: center;">
-                <!--READ-ONLY-VIEW-->
-                <button *ngIf="(isNew == false) && !userHasAccepted" class="btn btn-info" (click)="onAcceptMeeting()">
-                    I want to participate
-                </button>
-                <button *ngIf="(isNew == false) && userHasAccepted && !userHasFinished" class="btn btn-danger" (click)="onRejectMeeting()">
-                    I cannot participate anymore
-                </button>
             </div>
 
             <!--COMMENTS-->
@@ -204,7 +231,7 @@
         </app-confirm-dialog>
 
         <app-confirm-dialog title="Do you really want to copy this meeting?" (onConfirm)="onCopyMeeting()" dialog_id="copyDialog">
-        With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
+            With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
             <br/>
             <br/> Do you really want to copy this meeting?
         </app-confirm-dialog>

@@ -94,6 +94,12 @@ export class MeetingService {
         });
     }
 
+    public getCalendar(mid: number) {
+        const headers = this.createHeaders();
+        const url = this.url + '/meeting/' + mid + '/calendar';
+        return this.http.get(url, {headers: headers}); 
+    }
+
     public addImage(mid: number, data: any) {
       const headers = this.createHeaders();
       const url = this.url + '/meeting/' + mid + '/image';

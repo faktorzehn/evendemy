@@ -27,6 +27,20 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
+    server.get('/meeting/:mid/calendar', function (req, res, next) {
+        meetingService.getMeeting(req.params.mid).then(function (meeting) {
+            const attachment =  calendarService.createICalAttachment(config, meeting);
+            res.send(attachment);
+        }, function (err) {
+            if (err === '404') {
+                return res.send(404, { error: 'No meeting found.' });
+            }
+            return res.send(500, { error: err });
+        });
+
+        return next();
+    });
+
     function getMailAdresses(dbUsers) {
         if (!dbUsers) {
             return [];
