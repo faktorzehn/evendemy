@@ -1,6 +1,20 @@
+.evendemy-title{
+    text-align: center; font-size: 100px;
+}
+
+@media(max-width: 768px){
+    .evendemy-title{
+        font-size: 4em;
+    }
+}
+
 .evendemy-invalid-info{
     margin: 10px;
     padding: 10px;
     background-color: rgb(197, 197, 197);
+    width: 100%;
+}
+
+.evendemy-login-button{
     width: 100%;
 }

@@ -1,7 +1,7 @@
 <app-menu>
 </app-menu>
 <div class="component-content">
-    <div style="padding: 10px 25% 10px 25%;">
+    <div class="meeting-card">
         <form #form="ngForm" *ngIf="meeting != undefined" name="form">
             <div *ngIf="isEditable" class="row">
                 <h3>Meeting Information</h3>
@@ -200,18 +200,16 @@
             </div>
 
             <!--COMMENTS-->
-            <div class="row" style="margin-top: 50px;">
+            <div class="row" style="margin-top: 50px;" *ngIf="!isNew">
                 <h3>Comments</h3>
             </div>
-            <div *ngFor="let comment of meeting.comments" class="row comment-row">
+            <div *ngFor="let comment of meeting.comments" class="row comment-row" >
                 <div class="col-md-3">{{getUser(comment.author) | name}}</div>
                 <div class="col-md-9 comment">{{comment.text}}</div>
             </div>
-            <div class="row">
-                <textarea class="col-md-12" [(ngModel)]="commentbox" name="commentbox" style="margin-top: 10px;"></textarea>
-                <div class="col-md-offset-9 col-md-3" style=" padding-right: 0px; padding-top: 5px;">
-                    <button class="btn btn-info" (click)="onAddComment()" style="float: right;">Add Comment</button>
-                </div>
+            <div class="row"  *ngIf="!isNew">
+                <textarea class="col-xs-12 commentbox" [(ngModel)]="commentbox" name="commentbox"></textarea>
+                <button class="btn btn-info col-md-offset-9 col-md-3" (click)="onAddComment()" style="float: right;">Add Comment</button>
             </div>
 
             <!--Tools-->
