@@ -2,51 +2,57 @@
     margin: 5px;
     width: 230px;
     height: 350px;
+}
+
+.meeting-image > img{
+  width: 200px;
+  height: 150px;
+}
+
+.meeting-list{
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  -webkit-flex-wrap: wrap; /* Safari */
+  flex-wrap: wrap;
+  -webkit-flex-direction: row; /* Safari */
+  flex-direction: row;
+}
+
+@media(max-width:500px){
+  .meeting-list{
+    justify-content: center;
   }
+}
   
-  .thumbnail-container{
+.thumbnail-container{
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
-  }
-  
-  .meeting-list{
-    display: -webkit-flex; /* Safari */
-    display: flex;
-    -webkit-flex-wrap: wrap; /* Safari */
-    flex-wrap: wrap;
-    -webkit-flex-direction: row; /* Safari */
-    flex-direction: row;
-  }
-  
-  .meeting-image > img{
-    width: 200px;
-    height: 150px;
-  }
-  
-  .meeting-shortdescription{
-    width: 200px;
-    height: 35px;
-    margin-top: 5px;
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow: ellipsis;
-  }
-  
-  .meeting-title{
-    padding-top: 15px;
-    width: 200px;
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow: ellipsis;
-  }
-  
-  .meeting-more-button{
-    margin-top: auto;
-  }
-  
-  .will-be-announced-label{
-    display: inline-block;
-  }
+}
+
+.meeting-shortdescription{
+  width: 200px;
+  height: 35px;
+  margin-top: 5px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+}
+
+.meeting-title{
+  padding-top: 15px;
+  width: 200px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+}
+
+.meeting-more-button{
+  margin-top: auto;
+}
+
+.will-be-announced-label{
+  display: inline-block;
+}
   

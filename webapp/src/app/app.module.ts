@@ -80,7 +80,7 @@ export function configFactory(http: HttpClient): ConfigLoader {
       provide: ConfigLoader,
       useFactory: (configFactory),
       deps: [HttpClient]
-    }),
+    })
   ],
   providers: [ 
     LoggedInGuardService, 
