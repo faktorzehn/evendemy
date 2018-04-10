@@ -30,7 +30,6 @@ import { UsersService } from './services/users.service';
 import { usersReducer } from './reducers/users.reducer';
 import { NamePipe } from './pipes/name.pipe';
 import { EvendemyCheckboxComponent } from './components/evendemy-checkbox/evendemy-checkbox.component';
-import { SidebarModule } from 'ng-sidebar';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -81,8 +80,7 @@ export function configFactory(http: HttpClient): ConfigLoader {
       provide: ConfigLoader,
       useFactory: (configFactory),
       deps: [HttpClient]
-    }),
-    SidebarModule.forRoot()
+    })
   ],
   providers: [ 
     LoggedInGuardService, 
