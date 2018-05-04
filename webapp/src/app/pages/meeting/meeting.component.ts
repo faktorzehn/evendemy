@@ -39,7 +39,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
 
-  private imageFolder = this.config.getSettings().image_folder;
+  private imageFolder = this.config.getSettings().meeting_image_folder;
 
   private tmpImgData: any;
 

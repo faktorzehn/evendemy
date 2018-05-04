@@ -1,36 +1,18 @@
 <app-menu></app-menu>
 <div class="component-content meeting-user-info">
-  <h1>{{greeting}}</h1>
 
-  <div class="user-info-row">
-  <h3 style="padding-top:20px;">Account Information</h3>
-  <div *ngIf="user != undefined" class="form-table-white-border medium-table">
-    <div class="row form-row">
-      <div class="col-md-4">
-        Username
-      </div>
-      <div class="col-md-8">
-        {{user.username}}
-      </div>
+  <div class="user-info-row" style="text-align: center; margin: 50px;">
+    <div class="img-tools">
+        <app-user-image editable="true" style="width: 200px;"></app-user-image>
+        <div class="edit-buttons">
+            <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#evendemy-image-upload-dialog"></i>
+            <i class="fa fa-trash fa-lg"  data-toggle="modal" data-target="#deleteImageDialog"></i>
+        </div>
     </div>
-    <div class="row form-row">
-      <div class="col-md-4">
-        eMail
-      </div>
-      <div class="col-md-8">
-        {{user.email}}
-      </div>
-    </div>
-    <div class="row form-row">
-      <div class="col-md-4">
-        Name
-      </div>
-      <div class="col-md-8">
-        {{user.firstname}} {{user.lastname}}
-      </div>
-    </div>
+
+    <p class="meeting-user-fullname" >{{user.firstname}} {{user.lastname}}</p>
+    <p><i class="fa fa-envelope-o fa-lg"></i> {{user.email}}, <i class="fa fa-address-card-o fa-lg"></i> {{user.username}}</p>
   </div>
-</div>
 
   <div class="user-info-row">
     <h3 style="padding-top:20px;">{{courses.length}} attended Courses</h3>
@@ -55,5 +37,11 @@
   <p *ngIf="events_from_author.length==0">Nothing here at the moment...</p>
   <app-meeting-list [meetings]="events_from_author"></app-meeting-list>
 </div>
+
+<app-image-upload-dialog [forMeeting]='false' (data)="uploadImage($event)"></app-image-upload-dialog>
+
+<app-confirm-dialog title="Do you really want to delete your account image?" (onConfirm)="deleteImage()" dialog_id="deleteImageDialog">
+  Are you surce that you want to delete your account image?
+</app-confirm-dialog>
 
 </div>

@@ -30,6 +30,8 @@ import { UsersService } from './services/users.service';
 import { usersReducer } from './reducers/users.reducer';
 import { NamePipe } from './pipes/name.pipe';
 import { EvendemyCheckboxComponent } from './components/evendemy-checkbox/evendemy-checkbox.component';
+import { UserImageComponent } from './components/user-image/user-image.component';
+import { UserService } from './services/user.service';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -61,7 +63,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     ImageUploadDialogComponent,
     ImageCropperComponent,
     NamePipe,
-    EvendemyCheckboxComponent
+    EvendemyCheckboxComponent,
+    UserImageComponent
   ],
   imports: [
     BrowserModule,
@@ -82,10 +85,11 @@ export function configFactory(http: HttpClient): ConfigLoader {
       deps: [HttpClient]
     })
   ],
-  providers: [ 
-    LoggedInGuardService, 
-    Client, 
-    MeetingService, 
+  providers: [
+    LoggedInGuardService,
+    Client,
+    MeetingService,
+    UserService,
     UsersService
   ],
   bootstrap: [AppComponent]

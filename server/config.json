@@ -2,7 +2,8 @@
 	"db": {
 		"url": "mongodb://localhost/mydb"
 	},
-	"imageFolder":"./../webapp/src/assets/images",
+	"meetingImageFolder":"./../webapp/src/assets/meeting_images",
+	"userImageFolder":"./../webapp/src/assets/user_images",
 	"mail":{
 		"enableMail": false,
 		"user": "",

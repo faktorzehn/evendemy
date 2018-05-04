@@ -1,5 +1,33 @@
+@import './../../../variables';
+
 .meeting-user-info{
   padding: 15px;
+}
+
+.img-tools .edit-buttons {
+  opacity: 0;
+  margin-top: -100px;
+  padding-bottom: 100px;
+}
+
+.img-tools .edit-buttons .fa {
+  padding: 5px;
+}
+
+.img-tools .edit-buttons .fa:hover {
+  padding: 5px;
+  background-color: $evendemy-primary;
+  border-radius: 50%;
+}
+
+.img-tools:hover .edit-buttons {
+  opacity: 1;
+}
+
+.meeting-user-fullname{
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 2em;
 }
 .meeting-label{
   border-radius: 10px;

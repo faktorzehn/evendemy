@@ -1,5 +1,5 @@
 module.exports = {
-    save: function (mid, data, config, callback) {
+    save: function (name, data, folder, callback) {
 
         return new Promise(function (resolve, reject) {
             var fs = require('fs');
@@ -7,7 +7,22 @@ module.exports = {
             let bitmap = data.split(';base64,').pop();
             var options = { "encoding": "base64", "flag": "w+" };
             
-            fs.writeFile(config.imageFolder + "/" + mid + ".jpg", bitmap, options, function(error){
+            fs.writeFile(folder + "/" + name + ".jpg", bitmap, options, function(error){
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve();
+            });
+        })
+    },
+
+    delete: function (name, folder, callback) {
+
+        return new Promise(function (resolve, reject) {
+            var fs = require('fs');
+            
+            fs.unlink(folder + "/" + name + ".jpg", function(error){
                 if (error) {
                     reject(error);
                     return;

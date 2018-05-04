@@ -3,6 +3,7 @@ import { Client } from '../../middleware/client';
 import { User } from '../../model/user';
 import { MeetingUser } from '../../model/meeting_user';
 import { Meeting } from '../../model/meeting';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-info',
@@ -24,7 +25,7 @@ export class UserInfoComponent implements OnInit {
      courses_from_author: Meeting[] = [];
      events_from_author: Meeting[] = [];
 
-     constructor(private client: Client) {
+     constructor(private client: Client, private userService: UserService) {
      }
 
      ngOnInit() {
@@ -71,4 +72,15 @@ export class UserInfoComponent implements OnInit {
 
      }
 
+     uploadImage(data) {
+      const postData = {
+        username: this.client.getLoggedInUsername(),
+        data: data.image
+      }
+      this.userService.addImage(this.client.getLoggedInUsername(), postData).subscribe((img_result) => {});
+     }
+
+     deleteImage() {
+      this.userService.deleteImage(this.client.getLoggedInUsername()).subscribe((img_result) => {});
+     }
 }

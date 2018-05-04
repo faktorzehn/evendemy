@@ -23,7 +23,7 @@ export class MeetingListComponent implements OnInit {
   }
 
   private randomizedNumber = Math.floor(Math.random() * 10000);
-  private imageFolder = this.config.getSettings().image_folder;
+  private imageFolder = this.config.getSettings().meeting_image_folder;
 
   constructor(private config: ConfigService) { 
   }

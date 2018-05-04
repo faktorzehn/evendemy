@@ -290,7 +290,7 @@ module.exports = function (server, config, production_mode) {
             return res.send(500, { error: 'No image' });
         }
 
-        imageService.save(req.params.mid, req.params.data, config).then(function () {
+        imageService.save(req.params.mid, req.params.data, config.meetingImageFolder).then(function () {
             res.send(req.params.data);
         }).catch(function (err) {
             console.log(err);
