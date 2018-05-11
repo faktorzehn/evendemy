@@ -1,4 +1,20 @@
 
-<div class="img-tools">
-  <img src="{{folder}}/{{username}}.jpg" onError="this.src='assets/no-image-user.png'" />
+<div class="img-tools"
+[style.width.px]="width"
+[style.height.px]="height">
+  <img *ngIf="!error" src="{{folder}}/{{username}}.jpg" (error)="error=true" />
+
+  <div *ngIf="error">
+    <div style="display:flex;justify-content: center; border-radius: 50%; background-color:blue;" [style.width.px]="width"
+      [style.height.px]="height">
+      <div style="text-align: center; align-self: center; color: white;" [style.fontSize.px]="width/2">
+        {{initials}}
+      </div>
+    </div>
+  </div>
+
+  <!-- <svg [attr.width.px]="width" [attr.height.px]="height"*ngIf="error">
+    <circle [attr.cx]="width/2" [attr.cy]="height/2" [attr.r]="(width/2)" fill="red" />
+    <text [attr.x]="width/2" [attr.y]="(height/2)" dy="10" font-family="sans-serif" font-size="15px" fill="black" text-anchor="middle">{{initials}}</text>
+  </svg> -->
 </div>
