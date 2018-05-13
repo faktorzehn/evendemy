@@ -203,9 +203,15 @@
             <div class="row" style="margin-top: 50px;" *ngIf="!isNew">
                 <h3>Comments</h3>
             </div>
-            <div *ngFor="let comment of meeting.comments" class="row comment-row" >
-                <div class="col-md-3">{{getUser(comment.author) | name}}</div>
-                <div class="col-md-9 comment">{{comment.text}}</div>
+            <div *ngFor="let comment of meeting.comments" class="comment-row" >
+                <div class="comment-header">
+                  <app-user-image [username]="comment.author" width="50" height="50" ></app-user-image>
+                  <div>{{getUser(comment.author) | name}}</div>
+                </div>
+                <div class="comment-message">
+                  <span class="comment-message-arrow"></span>
+                  <div class="comment-message-body">{{comment.text}}</div>
+                </div>
             </div>
             <div class="row"  *ngIf="!isNew">
                 <textarea class="col-xs-12 commentbox" [(ngModel)]="commentbox" name="commentbox"></textarea>

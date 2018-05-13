@@ -5,9 +5,9 @@
   <img *ngIf="!error" src="{{folder}}/{{username}}.jpg" (error)="error=true" />
 
   <div *ngIf="error">
-    <div style="display:flex;justify-content: center; border-radius: 50%; background-color:blue;" [style.width.px]="width"
-      [style.height.px]="height">
-      <div style="text-align: center; align-self: center; color: white;" [style.fontSize.px]="width/2">
+    <div style="display:flex;justify-content: center; border-radius: 50%" [style.width.px]="width"
+      [style.height.px]="height" [style.background-color]="background_color">
+      <div style="text-align: center; align-self: center;" [style.fontSize.px]="width/2" [style.color]="color">
         {{initials}}
       </div>
     </div>

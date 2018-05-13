@@ -32,6 +32,8 @@ import { NamePipe } from './pipes/name.pipe';
 import { EvendemyCheckboxComponent } from './components/evendemy-checkbox/evendemy-checkbox.component';
 import { UserImageComponent } from './components/user-image/user-image.component';
 import { UserService } from './services/user.service';
+import { UsersComponent } from './pages/users/users.component';
+import { UserCardComponent } from './components/user-card/user-card.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -39,6 +41,7 @@ const appRoutes: Routes = [
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/new/:type', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
+  { path: 'users', component: UsersComponent, canActivate: [LoggedInGuardService]},
   { path: '', redirectTo: '/meeting-list/course', pathMatch: 'full' },
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
@@ -64,7 +67,9 @@ export function configFactory(http: HttpClient): ConfigLoader {
     ImageCropperComponent,
     NamePipe,
     EvendemyCheckboxComponent,
-    UserImageComponent
+    UserImageComponent,
+    UsersComponent,
+    UserCardComponent
   ],
   imports: [
     BrowserModule,

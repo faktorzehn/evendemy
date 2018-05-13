@@ -1,22 +1,43 @@
 @import './../../../variables';
 
-.comment{
+.comment-message{
+  position: relative;
+  width: 100%;
+}
+.comment-message-body{
   white-space: pre-wrap;
+  background-color:#dadada;
+  width: 100%;
+  padding: 10px;
+  margin-left: 13px;
+}
+
+.comment-message-arrow {
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  background: transparent;
+  border: 7px solid #dadada;
+  top: 0px;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.comment-header{
+  text-align: center;
+  flex-basis: 100px;
 }
 
 .comment-row{
-  padding: 5px;
-}
-.comment-row:nth-child(even){
-  background-color:#dddddd;
-}
-.comment-row:nth-child(odd){
-  background-color:#f1f1f1;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
 }
 
 .commentbox{
   margin-top: 10px;
   margin-bottom: 10px;
+  height: 100px;
 }
 
 .meeting-card {
@@ -48,12 +69,12 @@
 }
 
 .meeting-info-box{
-  background-color: #dddddd; 
-  border-radius: 5px; 
+  background-color: #dddddd;
+  border-radius: 5px;
   padding: 10px;
 
   .meeting-info-box-buttons{
-    float: right; 
+    float: right;
     padding-top: 10px;
   }
 }
