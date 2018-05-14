@@ -221,11 +221,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   onHasTakenPart(attendee: MeetingUser) {
     if (attendee && !attendee.tookPart) {
-      attendee.tookPart = true;
-      if(attendee.username === this.client.getLoggedInUsername()){
+      const foundedAttendee = this.potentialAttendees.find(p => p.username === attendee.username);
+      foundedAttendee.tookPart = true;
+      if(foundedAttendee.username === this.client.getLoggedInUsername()){
         this.userHasFinished = true;
       }
-      this.client.confirmAttendeeToMeeting(this.meeting.mid, attendee.username).subscribe((result) => { });
+      this.client.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).subscribe((result) => { });
     }
   }
 
@@ -295,7 +296,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   isInThePastOrToday() {
-    if(!this.hasValidDate()){
+    if(!this.hasValidDate()) {
       return false;
     }
     const now = moment();
@@ -303,6 +304,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   hasEveryoneTookPart() {
-    return this.potentialAttendees.length == this.getAttendedNumber();
+    return this.potentialAttendees.length === this.getAttendedNumber();
+  }
+
+  trackByFn (user: User) {
+    return user.username;
   }
 }

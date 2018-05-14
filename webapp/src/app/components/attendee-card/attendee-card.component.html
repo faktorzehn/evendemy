@@ -1,0 +1,16 @@
+<div class="thumbnail">
+  <div class="caption text-center thumbnail-container">
+    <div style="position:relative;">
+      <app-user-image [username]="user.username" width="100" height="100"></app-user-image>
+      <div class="attendee-additional-badge" *ngIf="additional_attendees>0">+{{additional_attendees}}</div>
+    </div>
+    <h3 class="meeting-title">{{user.firstname}} {{user.lastname}}</h3>
+
+    <span class="meeting-tag" *ngIf="tookPart">confirmed</span>
+    <button class="btn btn-success" (click)="onClickTakePartButton()" *ngIf="showTakePartButton"
+      [disabled]="disableTakePartButton">
+      <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
+      has taken part
+    </button>
+  </div>
+</div>

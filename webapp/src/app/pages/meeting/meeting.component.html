@@ -147,16 +147,17 @@
                     <h3 class="col-md-10 meeting-header-label">{{potentialAttendees.length}} Participants</h3>
                     <a class="col-md-2 meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
                 </div>
-                <div class="row" *ngFor="let attendee of potentialAttendees" style="margin-bottom: 5px;">
-                    <p class="col-md-3">{{getUser(attendee.username) | name}}</p>
-                    <button class="btn btn-success col-md-3" (click)="onHasTakenPart(attendee)" *ngIf="isEditable && !attendee.tookPart && meeting.date"
-                        [disabled]="!isInThePastOrToday()">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
-                        has taken part
-                    </button>
-                    <div class="col-md-2">
-                        <span class="meeting-tag" *ngIf="attendee.tookPart">confirmed</span>
-                    </div>
+                <div style="display: flex; margin-left:-20px; margin-right:-20px">
+                  <div *ngFor="let attendee of potentialAttendees; trackBy: trackByFn">
+                      <app-attendee-card
+                      [additional_attendees]="0"
+                      [tookPart]="attendee.tookPart"
+                      [user]="getUser(attendee.username)"
+                      [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date"
+                      [disableTakePartButton]="!isInThePastOrToday()"
+                      (clickTakePartButton)="onHasTakenPart($event)">
+                    </app-attendee-card>
+                  </div>
                 </div>
             </div>
 
