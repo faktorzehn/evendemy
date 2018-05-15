@@ -6,6 +6,7 @@ const MeetingUserSchema = mongoose.Schema({
     username: {type: String, required: true},
     tookPart: {type: Boolean, default: false},
     lastUpdate: {type: Date, default: Date.now},
+    externals: { type: [String], default: [] },
     deleted: {type: Boolean, default: false}
 });
 MeetingUserSchema.plugin(autoIncrement.plugin, 'Meeting_User');

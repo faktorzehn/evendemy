@@ -77,6 +77,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
     const meeting = new Meeting();
     meeting.courseOrEvent = this.type;
+    meeting.numberOfAllowedExternals = 0;
     this.meetingService.selectMeeting(meeting);
 
     this.isEditable = true;
@@ -203,8 +204,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meetingService.selectMeeting(meeting);
   }
 
-  onAcceptMeeting() {
-    this.client.attendMeeting(this.meeting.mid, this.client.getLoggedInUsername()).subscribe((result) => {
+  onAcceptMeeting(external) {
+    this.client.attendMeeting(this.meeting.mid, this.client.getLoggedInUsername(), external).subscribe((result) => {
       this.userHasAccepted = true;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
@@ -309,5 +310,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   trackByFn (user: User) {
     return user.username;
+  }
+
+  onCheckboxChange() {
+    this.meeting.numberOfAllowedExternals === 0 ? this.meeting.numberOfAllowedExternals = 1 : this.meeting.numberOfAllowedExternals = 0;
   }
 }
