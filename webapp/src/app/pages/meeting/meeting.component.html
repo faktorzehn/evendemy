@@ -167,11 +167,11 @@
             </div>
 
             <div class="meeting-tools" style="margin-top: 20px; text-align: center;">
-                <button *ngIf="(isNew == false) && !userHasAccepted && meeting.numberOfAllowedExternals > 0" class="btn btn-info" data-toggle="modal" data-target="#externalDialog">
-                    I want to participate
+                <button *ngIf="(isNew == false) && !userHasAccepted" class="btn btn-info" (click)="onAcceptMeeting()">
+                  <i class="fa fa-user fa-lg"></i> I want to participate
                 </button>
-                <button *ngIf="(isNew == false) && !userHasAccepted && meeting.numberOfAllowedExternals === 0" class="btn btn-info" (click)="onAcceptMeeting()">
-                    I want to participate
+                <button *ngIf="(isNew == false) && !userHasAccepted && meeting.numberOfAllowedExternals > 0" class="btn" data-toggle="modal" data-target="#externalDialog">
+                  <i class="fa fa-user-plus fa-lg"></i> I want to participate with a friend
                 </button>
             </div>
 
@@ -231,8 +231,8 @@
             <div class="row meeting-tools" *ngIf="isEditable" style="padding-right: 0px; margin-top: 20px; text-align: right;">
                 <!--EDITOR-MODE-->
                 <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()" [disabled]="!form.form.valid">Save</button>
-                <button *ngIf="!isNew && isEditable" class="btn btn-info" data-toggle="modal" data-target="#copyDialog">Copy</button>
-                <button *ngIf="!isNew && isEditable" class="btn btn-info" data-toggle="modal" data-target="#confirmDialog">Delete</button>
+                <button *ngIf="!isNew && isEditable" class="btn" data-toggle="modal" data-target="#copyDialog">Copy</button>
+                <button *ngIf="!isNew && isEditable" class="btn" data-toggle="modal" data-target="#confirmDialog">Delete</button>
             </div>
 
         </form>
@@ -250,7 +250,7 @@
         </app-confirm-dialog>
 
         <app-confirm-dialog title="Do you want to take some friend with you?" (onConfirm)="onAcceptMeeting(external)" dialog_id="externalDialog">
-            This meeting allows you to take some friend to this meeting. If you want, please enter a name.
+            This meeting allows you to take some friend with you. If you want, please enter a name.
             <br/>
             <input type="text" class="form-control" [(ngModel)]="external" style="margin-top:10px;"/>
         </app-confirm-dialog>
