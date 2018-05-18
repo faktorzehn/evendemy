@@ -52,7 +52,7 @@ export class UserImageComponent implements OnInit {
 
   get background_color() {
     if (this.user) {
-      const key = this.user.lastname[0].charCodeAt(0) + this.user.lastname[0].charCodeAt(0);
+      const key = this.user.lastname[0].charCodeAt(0) + this.user.lastname[1].charCodeAt(0) + this.user.lastname[2].charCodeAt(0)+1;
       return this.palette[key % 5];
     }
     return this.palette[0];

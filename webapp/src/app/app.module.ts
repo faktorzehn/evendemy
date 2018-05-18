@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {TooltipModule} from 'ngx-tooltip';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -90,7 +91,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
       provide: ConfigLoader,
       useFactory: (configFactory),
       deps: [HttpClient]
-    })
+    }),
+    TooltipModule
   ],
   providers: [
     LoggedInGuardService,
