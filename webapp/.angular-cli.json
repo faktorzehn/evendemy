@@ -27,7 +27,7 @@
         "../node_modules/font-awesome/css/font-awesome.min.css",
         "../node_modules/pretty-checkbox/src/pretty-checkbox.scss"
       ],
-      "scripts": ["../node_modules/bootflat/js/site.min.js", "../node_modules/ngx-tooltip/index.js"],
+      "scripts": ["../node_modules/bootflat/js/site.min.js"],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
