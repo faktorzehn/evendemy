@@ -14,7 +14,7 @@
     <p><i class="fa fa-envelope-o fa-lg"></i> {{user?.email}}, <i class="fa fa-address-card-o fa-lg"></i> {{user?.username}}</p>
   </div>
 
-  <div class="user-info-row" *ngIf="user?.options">
+  <div class="user-info-row" *ngIf="user?.options && editable">
       <h3 style="padding-top:20px;">Settings</h3>
 
       <div>
