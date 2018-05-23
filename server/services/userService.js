@@ -19,5 +19,21 @@ module.exports = {
         newUser.lastname = user.lastname;
 
         return newUser.save();
+    },
+
+    saveSettings: function(username, options){
+        var User = require('../models/user');
+        var updateAttributes = {};
+
+        if(options.additional_info_visible!==null){
+            updateAttributes['additional_info_visible'] = options.additional_info_visible;
+        }
+
+        if(options.summary_of_meetings_visible !== null) {
+            updateAttributes['summary_of_meetings_visible'] = options.summary_of_meetings_visible;
+        }
+
+        return User.update({username: username }, { $set: {options: updateAttributes} }, { upsert: true });
     }
+
 }

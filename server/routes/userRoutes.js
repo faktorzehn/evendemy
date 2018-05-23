@@ -42,6 +42,23 @@ module.exports = function (server, config, production_mode) {
         return next();
     });
 
+    server.put('/user/:username/settings', function (req, res, next) {
+        if (!req.params.username) {
+            return res.send(500, { error: 'No username' });
+        }
+
+        if (req.params.username !== req.user.uid) {
+            return res.send(500, { error: 'Not allowed' });
+        }
+
+        userService.saveSettings(req.user.uid, req.params).then(function (user) {
+            res.send(user);
+        }, function (err) {
+            console.log(err);
+            res.send(500, { error: 'Settings could not be saved.' });
+        });
+    });
+
     server.del('/user/:username/image', function (req, res, next) {
         if (!req.params.username) {
             return res.send(500, { error: 'No username' });

@@ -29,4 +29,13 @@ export class UserService {
     const url = this.url + '/user/' + username + '/image';
     return this.http.delete(url, {headers: headers});
   }
+
+  public updateSettings(username: string, options: {
+    additional_info_visible: boolean,
+    summary_of_meetings_visible: boolean
+  }) {
+    const headers = this.createHeaders();
+    const url = this.url + '/user/' + username + '/settings';
+    return this.http.put(url, options, {headers: headers});
+  }
 }

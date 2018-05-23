@@ -4,6 +4,7 @@ import { User } from '../../model/user';
 import { MeetingUser } from '../../model/meeting_user';
 import { Meeting } from '../../model/meeting';
 import { UserService } from '../../services/user.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-info',
@@ -12,34 +13,32 @@ import { UserService } from '../../services/user.service';
 })
 export class UserInfoComponent implements OnInit {
      username: string;
+     editable = false;
      user: User;
-     greeting = '...';
-     private possibleGreetings = [
-       'Welcome back USER',
-       'Hi USER',
-       'Nice to see you, USER',
-       'Hello USER',
-     ];
      courses: Meeting[] = [];
      events: Meeting[] = [];
      courses_from_author: Meeting[] = [];
      events_from_author: Meeting[] = [];
 
-     constructor(private client: Client, private userService: UserService) {
+     constructor(private client: Client, private userService: UserService, private route: ActivatedRoute) {
      }
 
      ngOnInit() {
+      const subscribe = this.route.params.subscribe(params => {
+        if (params['username']){
+          this.username = params['username'];
+        } else {
           this.username = this.client.getLoggedInUsername();
+          this.editable = true;
+        }
 
           if (this.username !== undefined) {
                this.client.getUserByUsername(this.username).subscribe( (result: User) => {
                     this.user = result;
-                    const random = Math.floor(Math.random() * (this.possibleGreetings.length));
-                    this.greeting = this.possibleGreetings[random].replace('USER', this.user.firstname);
                });
           }
 
-          this.client.getMyMeetings(this.client.getLoggedInUsername()).subscribe( (result: Meeting[]) => {
+          this.client.getMyMeetings(this.username).subscribe( (result: Meeting[]) => {
             const meeting_user_list = result;
             if (meeting_user_list) {
               for (const meeting_user of meeting_user_list){
@@ -57,7 +56,7 @@ export class UserInfoComponent implements OnInit {
             }
           });
 
-          this.client.getMeetingsFromAuthor(this.client.getLoggedInUsername()).subscribe( (result: Meeting[]) => {
+          this.client.getMeetingsFromAuthor(this.username).subscribe( (result: Meeting[]) => {
             result.forEach( meeting => {
               if (meeting) {
                 if (meeting.courseOrEvent === 'course') {
@@ -69,7 +68,7 @@ export class UserInfoComponent implements OnInit {
             });
 
           });
-
+        });
      }
 
      uploadImage(data) {
@@ -82,5 +81,9 @@ export class UserInfoComponent implements OnInit {
 
      deleteImage() {
       this.userService.deleteImage(this.client.getLoggedInUsername()).subscribe((img_result) => {});
+     }
+
+     onUpdateSettings() {
+      this.userService.updateSettings(this.client.getLoggedInUsername(), this.user.options).subscribe( o => {});
      }
 }

@@ -43,6 +43,7 @@ const appRoutes: Routes = [
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/new/:type', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
+  { path: 'user-info/:username', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
   { path: 'users', component: UsersComponent, canActivate: [LoggedInGuardService]},
   { path: '', redirectTo: '/meeting-list/course', pathMatch: 'full' },
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
