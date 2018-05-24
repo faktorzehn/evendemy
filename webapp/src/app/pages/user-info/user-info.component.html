@@ -39,12 +39,12 @@
 
   </div>
 
-  <div class="user-info-row no-summary-row" *ngIf="!user.options.summary_of_meetings_visible">
+  <div class="user-info-row no-summary-row" *ngIf="!editable && !user.options.summary_of_meetings_visible">
     <i class="fa fa-low-vision fa-2x no-summary-icon"></i>
     <p>The user decided to not show his/her meetings as a summary.</p>
   </div>
 
-  <div *ngIf="user.options.summary_of_meetings_visible">
+  <div *ngIf="editable || user.options.summary_of_meetings_visible">
     <div class="user-info-row">
       <h3 style="padding-top:20px;">{{courses.length}} attended Courses</h3>
       <p *ngIf="courses.length==0">Nothing here at the moment...</p>

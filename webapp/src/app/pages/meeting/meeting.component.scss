@@ -3,6 +3,7 @@
 .comment-message{
   position: relative;
   width: 100%;
+  margin-top: 5px;
 }
 .comment-message-body{
   white-space: pre-wrap;
@@ -25,7 +26,7 @@
 
 .comment-header{
   text-align: center;
-  flex-basis: 100px;
+  flex-basis: 120px;
 }
 
 .comment-row{

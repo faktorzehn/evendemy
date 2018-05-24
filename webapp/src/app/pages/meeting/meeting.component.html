@@ -213,10 +213,10 @@
                 <h3>Comments</h3>
             </div>
             <div *ngFor="let comment of meeting.comments" class="comment-row" >
-                <div class="comment-header">
+                <a class="comment-header" routerLink="/user-info/{{comment.author}}">
                   <app-user-image [username]="comment.author" width="50" height="50" ></app-user-image>
-                  <div>{{getUser(comment.author) | name}}</div>
-                </div>
+                  <div style="color:black;">{{getUser(comment.author) | name}}</div>
+                </a>
                 <div class="comment-message">
                   <span class="comment-message-arrow"></span>
                   <div class="comment-message-body">{{comment.text}}</div>

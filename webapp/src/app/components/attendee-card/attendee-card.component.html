@@ -1,4 +1,4 @@
-<div class="thumbnail">
+<a class="thumbnail" routerLink="/user-info/{{user.username}}">
   <div class="caption text-center thumbnail-container">
     <div style="position:relative;">
       <app-user-image [username]="user.username" width="100" height="100"></app-user-image>
@@ -13,4 +13,4 @@
       has taken part
     </button>
   </div>
-</div>
+</a>
