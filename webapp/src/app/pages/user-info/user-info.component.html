@@ -3,69 +3,78 @@
 
   <div class="user-info-row" style="text-align: center; margin: 50px;">
     <div class="img-tools">
-        <app-user-image width="200" height="200" [username]="username"></app-user-image>
-        <div class="edit-buttons" *ngIf="editable">
-            <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#evendemy-image-upload-dialog"></i>
-            <i class="fa fa-trash fa-lg"  data-toggle="modal" data-target="#deleteImageDialog"></i>
-        </div>
+      <app-user-image width="200" height="200" [username]="username"></app-user-image>
+      <div class="edit-buttons" *ngIf="editable">
+        <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#evendemy-image-upload-dialog"></i>
+        <i class="fa fa-trash fa-lg" data-toggle="modal" data-target="#deleteImageDialog"></i>
+      </div>
     </div>
 
-    <p class="meeting-user-fullname" >{{user?.firstname}} {{user?.lastname}}</p>
-    <p><i class="fa fa-envelope-o fa-lg"></i> {{user?.email}}, <i class="fa fa-address-card-o fa-lg"></i> {{user?.username}}</p>
+    <p class="meeting-user-fullname">{{user?.firstname}} {{user?.lastname}}</p>
+    <p>
+      <i class="fa fa-envelope-o fa-lg"></i> {{user?.email}},
+      <i class="fa fa-address-card-o fa-lg"></i> {{user?.username}}</p>
   </div>
 
   <div class="user-info-row" *ngIf="user?.options && editable">
-      <h3 style="padding-top:20px;">Settings</h3>
+    <h3 style="padding-top:20px;">Settings</h3>
 
-      <div>
-          <div class="pretty p-switch p-fill p-primary">
-              <input type="checkbox" (change)="onUpdateSettings()" [(ngModel)]="user.options.additional_info_visible"/>
-              <div class="state">
-                  <label>Additional Information visible</label>
-              </div>
-          </div>
+    <div>
+      <div class="pretty p-switch p-fill p-primary">
+        <input type="checkbox" (change)="onUpdateSettings()" [(ngModel)]="user.options.additional_info_visible" />
+        <div class="state">
+          <label>Additional Information visible</label>
+        </div>
       </div>
+    </div>
 
-      <div>
-          <div class="pretty p-switch p-fill p-primary">
-              <input type="checkbox" (change)="onUpdateSettings()" [(ngModel)]="user.options.summary_of_meetings_visible"/>
-              <div class="state">
-                  <label>Created and Attended Meetings visible</label>
-              </div>
-          </div>
+    <div>
+      <div class="pretty p-switch p-fill p-primary">
+        <input type="checkbox" (change)="onUpdateSettings()" [(ngModel)]="user.options.summary_of_meetings_visible" />
+        <div class="state">
+          <label>Created and Attended Meetings visible</label>
+        </div>
       </div>
-
+    </div>
 
   </div>
 
-  <div class="user-info-row">
-    <h3 style="padding-top:20px;">{{courses.length}} attended Courses</h3>
-    <p *ngIf="courses.length==0">Nothing here at the moment...</p>
-    <app-meeting-list [meetings]="courses"></app-meeting-list>
+  <div class="user-info-row no-summary-row" *ngIf="!user.options.summary_of_meetings_visible">
+    <i class="fa fa-low-vision fa-2x no-summary-icon"></i>
+    <p>The user decided to not show his/her meetings as a summary.</p>
   </div>
 
-  <div class="user-info-row">
-  <h3 style="padding-top:20px;">{{events.length}} attended Events</h3>
-  <p *ngIf="events.length==0">Nothing here at the moment...</p>
-  <app-meeting-list [meetings]="events"></app-meeting-list>
-</div>
+  <div *ngIf="user.options.summary_of_meetings_visible">
+    <div class="user-info-row">
+      <h3 style="padding-top:20px;">{{courses.length}} attended Courses</h3>
+      <p *ngIf="courses.length==0">Nothing here at the moment...</p>
+      <app-meeting-list [meetings]="courses"></app-meeting-list>
+    </div>
 
-  <div class="user-info-row">
-  <h3 style="padding-top:20px;">{{courses_from_author.length}} created Courses</h3>
-  <p *ngIf="courses_from_author.length==0">Nothing here at the moment...</p>
-  <app-meeting-list [meetings]="courses_from_author"></app-meeting-list>
-</div>
+    <div class="user-info-row">
+      <h3 style="padding-top:20px;">{{events.length}} attended Events</h3>
+      <p *ngIf="events.length==0">Nothing here at the moment...</p>
+      <app-meeting-list [meetings]="events"></app-meeting-list>
+    </div>
 
-  <div class="user-info-row">
-  <h3 style="padding-top:20px;">{{events_from_author.length}} created Events</h3>
-  <p *ngIf="events_from_author.length==0">Nothing here at the moment...</p>
-  <app-meeting-list [meetings]="events_from_author"></app-meeting-list>
-</div>
+    <div class="user-info-row">
+      <h3 style="padding-top:20px;">{{courses_from_author.length}} created Courses</h3>
+      <p *ngIf="courses_from_author.length==0">Nothing here at the moment...</p>
+      <app-meeting-list [meetings]="courses_from_author"></app-meeting-list>
+    </div>
 
-<app-image-upload-dialog [forMeeting]='false' (data)="uploadImage($event)"></app-image-upload-dialog>
+    <div class="user-info-row">
+      <h3 style="padding-top:20px;">{{events_from_author.length}} created Events</h3>
+      <p *ngIf="events_from_author.length==0">Nothing here at the moment...</p>
+      <app-meeting-list [meetings]="events_from_author"></app-meeting-list>
+    </div>
+  </div>
 
-<app-confirm-dialog title="Do you really want to delete your account image?" (onConfirm)="deleteImage()" dialog_id="deleteImageDialog">
-  Are you surce that you want to delete your account image?
-</app-confirm-dialog>
+
+  <app-image-upload-dialog [forMeeting]='false' (data)="uploadImage($event)"></app-image-upload-dialog>
+
+  <app-confirm-dialog title="Do you really want to delete your account image?" (onConfirm)="deleteImage()" dialog_id="deleteImageDialog">
+    Are you surce that you want to delete your account image?
+  </app-confirm-dialog>
 
 </div>
