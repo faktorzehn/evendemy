@@ -10,6 +10,9 @@ const UserSchema = mongoose.Schema({
     options: {
         additional_info_visible: {type: Boolean, default: false},
         summary_of_meetings_visible: {type: Boolean, default: false}
+    },
+    additional_info: {
+        job_title: {type: String, default: ''}
     }
 });
 

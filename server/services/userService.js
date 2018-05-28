@@ -34,6 +34,18 @@ module.exports = {
         }
 
         return User.update({username: username }, { $set: {options: updateAttributes} }, { upsert: true });
+    },
+
+    saveAdditionalInfo: function(username, info){
+        var User = require('../models/user');
+        var updateAttributes = {};
+
+        if(info.job_title!==null){
+            updateAttributes['job_title'] = info.job_title;
+        }
+
+
+        return User.update({username: username }, { $set: {additional_info: updateAttributes} }, { upsert: true });
     }
 
 }
