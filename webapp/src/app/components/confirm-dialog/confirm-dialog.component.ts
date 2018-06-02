@@ -21,7 +21,7 @@ export class ConfirmDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  confirmWasClicked(){
+  confirmWasClicked() {
     this.onConfirm.emit();
   }
 

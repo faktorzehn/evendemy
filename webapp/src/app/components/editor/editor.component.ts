@@ -19,7 +19,7 @@ export class EditorComponent implements OnInit {
     if (this.editable) {
       this.quill = new Quill('#editor', {
         theme: 'snow',
-        modules:{
+        modules: {
           toolbar: [
             [{ 'header': [2, 3, 4, false]}],
             ['bold', 'italic', 'underline', 'strike'],

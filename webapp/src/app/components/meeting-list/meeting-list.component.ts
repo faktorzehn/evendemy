@@ -25,14 +25,14 @@ export class MeetingListComponent implements OnInit {
   private randomizedNumber = Math.floor(Math.random() * 10000);
   private imageFolder = this.config.getSettings().meeting_image_folder;
 
-  constructor(private config: ConfigService) { 
+  constructor(private config: ConfigService) {
   }
 
   ngOnInit() {
   }
 
   getImage(mid: number) {
-    if(!this.imageFolder){
+    if (!this.imageFolder) {
       return;
     }
     return this.imageFolder + '/' + mid + '.jpg' + '?r=' + this.randomizedNumber;

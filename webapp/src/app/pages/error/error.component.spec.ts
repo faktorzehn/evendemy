@@ -22,8 +22,8 @@ describe('ErrorComponent', () => {
   let fixture: ComponentFixture<ErrorComponent>;
 
   beforeEach(async(() => {
-    let configStub = {
-      getSettings: function(){
+    const configStub = {
+      getSettings: function() {
         return { backend_url: ''}
       }
     };

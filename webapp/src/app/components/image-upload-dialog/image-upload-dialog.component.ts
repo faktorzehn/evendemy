@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { ImageCropperComponent, CropperSettings } from "ngx-img-cropper";
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 
 @Component({
   selector: 'evendemy-image-upload-dialog',
@@ -48,10 +48,10 @@ export class ImageUploadDialogComponent implements OnInit {
   }
 
   fileChangeListener($event) {
-    var image: any = new Image();
-    var file: File = $event.target.files[0];
-    var myReader: FileReader = new FileReader();
-    var that = this;
+    let image: any = new Image();
+    let file: File = $event.target.files[0];
+    let myReader: FileReader = new FileReader();
+    let that = this;
     myReader.onloadend = function (loadEvent: any) {
       image.src = loadEvent.target.result;
       that.cropper.setImage(image);

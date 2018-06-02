@@ -12,7 +12,7 @@ import { ConfigService } from '@ngx-config/core';
 export class MeetingService {
     private url = this.config.getSettings().backend_url;
 
-    constructor(private http: HttpClient, private store: Store<AppState>, private config: ConfigService) { 
+    constructor(private http: HttpClient, private store: Store<AppState>, private config: ConfigService) {
     }
 
     private createHeaders(): HttpHeaders {
@@ -55,7 +55,7 @@ export class MeetingService {
                 params = params.append('showNotAnnounced', options.showNotAnnounced.toString());
             }
         }
-        this.http.get(url, { params: params, headers: headers }).subscribe((result:Meeting[]) => {
+        this.http.get(url, { params: params, headers: headers }).subscribe((result: Meeting[]) => {
             this.store.dispatch(new InitMeetings(result));
         });
     }
@@ -63,7 +63,7 @@ export class MeetingService {
     public createMeeting(meeting: Meeting) {
         const headers = this.createHeaders();
         const url = this.url + '/meeting';
-        return this.http.post(url, meeting, { headers: headers }).do((result:Meeting) => {
+        return this.http.post(url, meeting, { headers: headers }).do((result: Meeting) => {
             this.store.dispatch(new AddMeeting(result));
         });
     }
@@ -97,7 +97,7 @@ export class MeetingService {
     public getCalendar(mid: number) {
         const headers = this.createHeaders();
         const url = this.url + '/meeting/' + mid + '/calendar';
-        return this.http.get(url, {headers: headers}); 
+        return this.http.get(url, {headers: headers});
     }
 
     public addImage(mid: number, data: any) {
@@ -109,7 +109,7 @@ export class MeetingService {
     public loadMeeting(mid: number) {
       const headers = this.createHeaders();
       const url = this.url + '/meeting/' + mid;
-      return this.http.get(url, {headers: headers}).do( (res : Meeting) => {
+      return this.http.get(url, {headers: headers}).do( (res: Meeting) => {
         this.selectMeeting(res);
       });
     }

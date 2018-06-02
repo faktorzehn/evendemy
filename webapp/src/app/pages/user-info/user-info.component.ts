@@ -1,15 +1,15 @@
-import { Component, OnInit } from "@angular/core";
-import { Client } from "../../middleware/client";
-import { User } from "../../model/user";
-import { MeetingUser } from "../../model/meeting_user";
-import { Meeting } from "../../model/meeting";
-import { UserService } from "../../services/user.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Client } from '../../middleware/client';
+import { User } from '../../model/user';
+import { MeetingUser } from '../../model/meeting_user';
+import { Meeting } from '../../model/meeting';
+import { UserService } from '../../services/user.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: "evendemy-user-info",
-  templateUrl: "./user-info.component.html",
-  styleUrls: ["./user-info.component.scss"]
+  selector: 'evendemy-user-info',
+  templateUrl: './user-info.component.html',
+  styleUrls: ['./user-info.component.scss']
 })
 export class UserInfoComponent implements OnInit {
   username: string;
@@ -54,7 +54,7 @@ export class UserInfoComponent implements OnInit {
                 .subscribe((meeting_result: Meeting) => {
                   const meeting: Meeting = meeting_result;
                   if (meeting) {
-                    if (meeting.courseOrEvent === "course") {
+                    if (meeting.courseOrEvent === 'course') {
                       this.courses.push(meeting);
                     } else {
                       this.events.push(meeting);
@@ -70,7 +70,7 @@ export class UserInfoComponent implements OnInit {
         .subscribe((result: Meeting[]) => {
           result.forEach(meeting => {
             if (meeting) {
-              if (meeting.courseOrEvent === "course") {
+              if (meeting.courseOrEvent === 'course') {
                 this.courses_from_author.push(meeting);
               } else {
                 this.events_from_author.push(meeting);

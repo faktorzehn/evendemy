@@ -8,9 +8,9 @@ import { UsersService } from './services/users.service';
 })
 export class AppComponent {
 
-  constructor(userService : UsersService){
-    try{
+  constructor(userService: UsersService) {
+    try {
       userService.loadAllUsers().subscribe( res => res);
-    }catch(e){}
+    } catch (e) {}
   }
 }
