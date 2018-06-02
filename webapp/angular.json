@@ -136,11 +136,11 @@
   "defaultProject": "evendemy",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "app",
+      "prefix": "evendemy",
       "styleext": "scss"
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
+      "prefix": "evendemy"
     }
   }
 }

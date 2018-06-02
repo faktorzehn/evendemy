@@ -102,4 +102,10 @@ export class UserInfoComponent implements OnInit {
       .updateSettings(this.client.getLoggedInUsername(), this.user.options)
       .subscribe(o => {});
   }
+
+  saveAdditionalInfo() {
+    this.userService
+      .updateAdditionalInfo(this.client.getLoggedInUsername(), this.user.additional_info)
+      .subscribe(o => {});
+  }
 }

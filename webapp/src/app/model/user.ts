@@ -7,6 +7,10 @@ export class User {
     public options?: {
       additional_info_visible: boolean,
       summary_of_meetings_visible: boolean
+    },
+    public additional_info?: {
+      job_title: string
     }
   ) {  }
 }
+

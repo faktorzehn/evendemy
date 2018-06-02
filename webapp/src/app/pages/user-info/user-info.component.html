@@ -39,35 +39,45 @@
 
   </div>
 
+  <div class="user-info-row">
+    <h3 style="margin-top:20px;">Additional Information</h3>
+    <div class="row">
+      <div class="col-md-2">Job Title</div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" *ngIf="editable" [(ngModel)]="user.additional_info.job_title" (blur)="saveAdditionalInfo()"
+          name="jobTitle" />
+        <div *ngIf="!editable">{{user.additional_info.job_title}}</div>
+      </div>
+    </div>
+  </div>
+
   <div class="user-info-row no-summary-row" *ngIf="!editable && !user.options.summary_of_meetings_visible">
     <i class="fa fa-low-vision fa-2x no-summary-icon"></i>
     <p>The user decided to not show his/her meetings as a summary.</p>
   </div>
 
-  <div *ngIf="editable || user.options.summary_of_meetings_visible">
-    <div class="user-info-row">
-      <h3 style="padding-top:20px;">{{courses.length}} attended Courses</h3>
-      <p *ngIf="courses.length==0">Nothing here at the moment...</p>
-      <app-meeting-list [meetings]="courses"></app-meeting-list>
-    </div>
+  <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
+    <h3 style="padding-top:20px;">{{courses.length}} attended Courses</h3>
+    <p *ngIf="courses.length==0">Nothing here at the moment...</p>
+    <app-meeting-list [meetings]="courses"></app-meeting-list>
+  </div>
 
-    <div class="user-info-row">
-      <h3 style="padding-top:20px;">{{events.length}} attended Events</h3>
-      <p *ngIf="events.length==0">Nothing here at the moment...</p>
-      <app-meeting-list [meetings]="events"></app-meeting-list>
-    </div>
+  <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
+    <h3 style="padding-top:20px;">{{events.length}} attended Events</h3>
+    <p *ngIf="events.length==0">Nothing here at the moment...</p>
+    <app-meeting-list [meetings]="events"></app-meeting-list>
+  </div>
 
-    <div class="user-info-row">
-      <h3 style="padding-top:20px;">{{courses_from_author.length}} created Courses</h3>
-      <p *ngIf="courses_from_author.length==0">Nothing here at the moment...</p>
-      <app-meeting-list [meetings]="courses_from_author"></app-meeting-list>
-    </div>
+  <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
+    <h3 style="padding-top:20px;">{{courses_from_author.length}} created Courses</h3>
+    <p *ngIf="courses_from_author.length==0">Nothing here at the moment...</p>
+    <app-meeting-list [meetings]="courses_from_author"></app-meeting-list>
+  </div>
 
-    <div class="user-info-row">
-      <h3 style="padding-top:20px;">{{events_from_author.length}} created Events</h3>
-      <p *ngIf="events_from_author.length==0">Nothing here at the moment...</p>
-      <app-meeting-list [meetings]="events_from_author"></app-meeting-list>
-    </div>
+  <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
+    <h3 style="padding-top:20px;">{{events_from_author.length}} created Events</h3>
+    <p *ngIf="events_from_author.length==0">Nothing here at the moment...</p>
+    <app-meeting-list [meetings]="events_from_author"></app-meeting-list>
   </div>
 
 
