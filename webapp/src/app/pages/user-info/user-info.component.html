@@ -1,9 +1,9 @@
-<app-menu></app-menu>
+<evendemy-menu></evendemy-menu>
 <div class="component-content meeting-user-info">
 
   <div class="user-info-row" style="text-align: center; margin: 50px;">
     <div class="img-tools">
-      <app-user-image width="200" height="200" [username]="username"></app-user-image>
+      <evendemy-user-image width="200" height="200" [username]="username"></evendemy-user-image>
       <div class="edit-buttons" *ngIf="editable">
         <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#evendemy-image-upload-dialog"></i>
         <i class="fa fa-trash fa-lg" data-toggle="modal" data-target="#deleteImageDialog"></i>
@@ -59,32 +59,32 @@
   <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
     <h3 style="padding-top:20px;">{{courses.length}} attended Courses</h3>
     <p *ngIf="courses.length==0">Nothing here at the moment...</p>
-    <app-meeting-list [meetings]="courses"></app-meeting-list>
+    <evendemy-meeting-list [meetings]="courses"></evendemy-meeting-list>
   </div>
 
   <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
     <h3 style="padding-top:20px;">{{events.length}} attended Events</h3>
     <p *ngIf="events.length==0">Nothing here at the moment...</p>
-    <app-meeting-list [meetings]="events"></app-meeting-list>
+    <evendemy-meeting-list [meetings]="events"></evendemy-meeting-list>
   </div>
 
   <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
     <h3 style="padding-top:20px;">{{courses_from_author.length}} created Courses</h3>
     <p *ngIf="courses_from_author.length==0">Nothing here at the moment...</p>
-    <app-meeting-list [meetings]="courses_from_author"></app-meeting-list>
+    <evendemy-meeting-list [meetings]="courses_from_author"></evendemy-meeting-list>
   </div>
 
   <div class="user-info-row" *ngIf="editable || user.options.summary_of_meetings_visible">
     <h3 style="padding-top:20px;">{{events_from_author.length}} created Events</h3>
     <p *ngIf="events_from_author.length==0">Nothing here at the moment...</p>
-    <app-meeting-list [meetings]="events_from_author"></app-meeting-list>
+    <evendemy-meeting-list [meetings]="events_from_author"></evendemy-meeting-list>
   </div>
 
 
-  <app-image-upload-dialog [forMeeting]='false' (data)="uploadImage($event)"></app-image-upload-dialog>
+  <evendemy-image-upload-dialog [forMeeting]='false' (data)="uploadImage($event)"></evendemy-image-upload-dialog>
 
-  <app-confirm-dialog title="Do you really want to delete your account image?" (onConfirm)="deleteImage()" dialog_id="deleteImageDialog">
+  <evendemy-confirm-dialog title="Do you really want to delete your account image?" (onConfirm)="deleteImage()" dialog_id="deleteImageDialog">
     Are you surce that you want to delete your account image?
-  </app-confirm-dialog>
+  </evendemy-confirm-dialog>
 
 </div>

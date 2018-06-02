@@ -1,5 +1,5 @@
-<app-menu>
-</app-menu>
+<evendemy-menu>
+</evendemy-menu>
 <div class="component-content">
     <div class="meeting-card">
         <form #form="ngForm" *ngIf="meeting != undefined" name="form">
@@ -37,12 +37,12 @@
             <div class="row form-row" *ngIf="isEditable">
                 <div class="col-md-4">Description</div>
                 <div class="col-md-8">
-                    <app-editor [value]="meeting?.description" [editable]="isEditable"></app-editor>
+                    <evendemy-editor [value]="meeting?.description" [editable]="isEditable"></evendemy-editor>
                 </div>
             </div>
             <div class="row" *ngIf="!isEditable">
                 <div class="col-md-12">
-                    <app-editor [value]="meeting?.description" [editable]="isEditable"></app-editor>
+                    <evendemy-editor [value]="meeting?.description" [editable]="isEditable"></evendemy-editor>
                 </div>
             </div>
 
@@ -129,13 +129,13 @@
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Is in freetime</div>
-                <app-evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="meeting.isFreetime = $event" [value]="meeting.isFreetime"
-                    [disabled]="!isEditable"></app-evendemy-checkbox>
+                <evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="meeting.isFreetime = $event" [value]="meeting.isFreetime"
+                    [disabled]="!isEditable"></evendemy-checkbox>
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Are externals allowed</div>
-                <app-evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="onCheckboxChange()" [value]="meeting.numberOfAllowedExternals>0"
-                    [disabled]="!isEditable"></app-evendemy-checkbox>
+                <evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="onCheckboxChange()" [value]="meeting.numberOfAllowedExternals>0"
+                    [disabled]="!isEditable"></evendemy-checkbox>
             </div>
             <div class="row form-row">
                 <div class="col-md-4">Author</div>
@@ -154,14 +154,14 @@
                 </div>
                 <div style="display: flex; margin-left:-20px; margin-right:-20px">
                   <div *ngFor="let attendee of potentialAttendees; trackBy: trackByFn">
-                      <app-attendee-card
+                      <evendemy-attendee-card
                       [additional_attendees]="attendee.externals[0]"
                       [tookPart]="attendee.tookPart"
                       [user]="getUser(attendee.username)"
                       [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date"
                       [disableTakePartButton]="!isInThePastOrToday()"
                       (clickTakePartButton)="onHasTakenPart($event)">
-                    </app-attendee-card>
+                    </evendemy-attendee-card>
                   </div>
                 </div>
             </div>
@@ -214,7 +214,7 @@
             </div>
             <div *ngFor="let comment of meeting.comments" class="comment-row" >
                 <a class="comment-header" routerLink="/user-info/{{comment.author}}">
-                  <app-user-image [username]="comment.author" width="50" height="50" ></app-user-image>
+                  <evendemy-user-image [username]="comment.author" width="50" height="50" ></evendemy-user-image>
                   <div style="color:black;">{{getUser(comment.author) | name}}</div>
                 </a>
                 <div class="comment-message">
@@ -237,24 +237,24 @@
 
         </form>
 
-        <app-confirm-dialog title="Do you really want to delete?" (onConfirm)="onDeleteMeeting()" dialog_id="confirmDialog">
+        <evendemy-confirm-dialog title="Do you really want to delete?" (onConfirm)="onDeleteMeeting()" dialog_id="confirmDialog">
             You can not revert this action. The attendees will be informed that the meeting will not take place.
             <br/>
             <br/> Do you really want to delete this meeting?
-        </app-confirm-dialog>
+        </evendemy-confirm-dialog>
 
-        <app-confirm-dialog title="Do you really want to copy this meeting?" (onConfirm)="onCopyMeeting()" dialog_id="copyDialog">
+        <evendemy-confirm-dialog title="Do you really want to copy this meeting?" (onConfirm)="onCopyMeeting()" dialog_id="copyDialog">
             With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
             <br/>
             <br/> Do you really want to copy this meeting?
-        </app-confirm-dialog>
+        </evendemy-confirm-dialog>
 
-        <app-confirm-dialog title="Do you want to take some friend with you?" (onConfirm)="onAcceptMeeting(external)" dialog_id="externalDialog">
+        <evendemy-confirm-dialog title="Do you want to take some friend with you?" (onConfirm)="onAcceptMeeting(external)" dialog_id="externalDialog">
             This meeting allows you to take some friend with you. If you want, please enter a name.
             <br/>
             <input type="text" class="form-control" [(ngModel)]="external" style="margin-top:10px;"/>
-        </app-confirm-dialog>
+        </evendemy-confirm-dialog>
 
-        <app-image-upload-dialog (data)="setTemporaryImage($event)"></app-image-upload-dialog>
+        <evendemy-image-upload-dialog (data)="setTemporaryImage($event)"></evendemy-image-upload-dialog>
     </div>
 </div>

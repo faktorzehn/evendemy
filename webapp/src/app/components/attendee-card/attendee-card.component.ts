@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
 import { User } from '../../model/user';
 
 @Component({
-  selector: 'app-attendee-card',
+  selector: 'evendemy-attendee-card',
   templateUrl: './attendee-card.component.html',
   styleUrls: ['./attendee-card.component.scss']
 })

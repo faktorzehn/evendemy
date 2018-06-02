@@ -4,7 +4,7 @@ import { Client } from './../../middleware/client';
 import { UsersService } from '../../services/users.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'evendemy-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

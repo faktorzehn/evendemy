@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angu
 import { ImageCropperComponent, CropperSettings } from "ngx-img-cropper";
 
 @Component({
-  selector: 'app-image-upload-dialog',
+  selector: 'evendemy-image-upload-dialog',
   templateUrl: './image-upload-dialog.component.html',
   styleUrls: ['./image-upload-dialog.component.scss']
 })

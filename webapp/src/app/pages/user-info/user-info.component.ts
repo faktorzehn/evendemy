@@ -7,7 +7,7 @@ import { UserService } from "../../services/user.service";
 import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: "app-user-info",
+  selector: "evendemy-user-info",
   templateUrl: "./user-info.component.html",
   styleUrls: ["./user-info.component.scss"]
 })

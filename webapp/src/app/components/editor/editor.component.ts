@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import * as Quill from 'quill';
 
 @Component({
-  selector: 'app-editor',
+  selector: 'evendemy-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
@@ -21,12 +21,12 @@ export class EditorComponent implements OnInit {
         theme: 'snow',
         modules:{
           toolbar: [
-            [{ 'header': [2, 3, 4, false]}], 
+            [{ 'header': [2, 3, 4, false]}],
             ['bold', 'italic', 'underline', 'strike'],
             ['link'],
             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
             ['code-block'],
-            ['clean']  
+            ['clean']
           ]
         }
       });

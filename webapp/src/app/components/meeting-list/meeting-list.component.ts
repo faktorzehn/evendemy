@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConfigService } from '@ngx-config/core';
 
 @Component({
-  selector: 'app-meeting-list',
+  selector: 'evendemy-meeting-list',
   templateUrl: './meeting-list.component.html',
   styleUrls: ['./meeting-list.component.scss']
 })

@@ -18,7 +18,7 @@ import { UsersService } from '../../services/users.service';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-meeting',
+  selector: 'evendemy-meeting',
   templateUrl: './meeting.component.html',
   styleUrls: ['./meeting.component.scss']
 })

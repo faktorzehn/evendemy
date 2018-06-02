@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../appState";
 
 @Component({
-  selector: "app-user-image",
+  selector: "evendemy-user-image",
   templateUrl: './user-image.component.html',
   styleUrls: ['./user-image.component.scss']
 })

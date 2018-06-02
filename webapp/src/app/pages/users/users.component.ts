@@ -4,7 +4,7 @@ import { AppState } from '../../appState';
 import { User } from '../../model/user';
 
 @Component({
-  selector: 'app-users',
+  selector: 'evendemy-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })

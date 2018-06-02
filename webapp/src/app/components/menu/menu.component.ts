@@ -4,7 +4,7 @@ import { Client } from './../../middleware/client';
 import { User } from '../../model/user';
 
 @Component({
-  selector: 'app-menu',
+  selector: 'evendemy-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })

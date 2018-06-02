@@ -1,19 +1,19 @@
-<app-menu></app-menu>
+<evendemy-menu></evendemy-menu>
 <div class="event-or-course">
   <!-- filter bar -->
   <div class="tool-bar">
     <div class="filter-label hidden-xs">
         Meetings:
     </div>
-    <app-evendemy-checkbox [label]="'not announced'" (onCheckboxChange)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></app-evendemy-checkbox>
-    <app-evendemy-checkbox [label]="'old'" (onCheckboxChange)="onShowOld($event)" [value]="showOld"></app-evendemy-checkbox>
-    <app-evendemy-checkbox [label]="'new'" (onCheckboxChange)="onShowNew($event)" [value]="showNew"></app-evendemy-checkbox>
+    <evendemy-checkbox [label]="'not announced'" (onCheckboxChange)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
+    <evendemy-checkbox [label]="'old'" (onCheckboxChange)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
+    <evendemy-checkbox [label]="'new'" (onCheckboxChange)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
 
   </div>
 
   <!-- meetings -->
   <div  class="event-or-course-meetings">
-    <app-meeting-list [meetings]="meetings"></app-meeting-list>
+    <evendemy-meeting-list [meetings]="meetings"></evendemy-meeting-list>
   </div>
 
 </div>

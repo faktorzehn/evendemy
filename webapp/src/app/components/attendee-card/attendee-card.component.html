@@ -1,7 +1,7 @@
 <a class="thumbnail" routerLink="/user-info/{{user.username}}">
   <div class="caption text-center thumbnail-container">
     <div style="position:relative;">
-      <app-user-image [username]="user.username" width="100" height="100"></app-user-image>
+      <evendemy-user-image [username]="user.username" width="100" height="100"></evendemy-user-image>
       <div class="attendee-additional-badge" *ngIf="additional_attendees" [tooltip]="additional_attendees" [tooltipDisabled]="false"
         [tooltipAnimation]="true" tooltipPlacement="right">+1</div>
     </div>
