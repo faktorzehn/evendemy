@@ -39,9 +39,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
 
-  private imageFolder = this.config.getSettings().meeting_image_folder;
-
-  private tmpImgData: any;
+  imageFolder = this.config.getSettings().meeting_image_folder;
+  tmpImgData: any;
 
   private users: User[] = [];
 
@@ -253,7 +252,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
     const csv = toCSV(headerCSV.concat(bodyCSV));
 
-    let blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: 'text/csv' });
     FileSaver.saveAs(blob, 'attendees-for-meeting-' + this.meeting.mid + '.csv');
 
     console.log(csv);
@@ -261,7 +260,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   onGetCalendar() {
     this.meetingService.getCalendar(this.meeting.mid).subscribe( (cal: any) => {
-      let blob = new Blob([cal.content], { type: 'text/calendar;charset=utf-8' });
+      const blob = new Blob([cal.content], { type: 'text/calendar;charset=utf-8' });
       FileSaver.saveAs(blob, 'calendar-for-meeting-' + this.meeting.mid + '.ics');
 
     });
