@@ -9,7 +9,12 @@ export class User {
       summary_of_meetings_visible: boolean
     },
     public additional_info?: {
-      job_title: string
+      job_title: string,
+      description: string,
+      instagram_username: string,
+      facebook_username: string,
+      twitter_username: string,
+      birthday: Date
     }
   ) {  }
 }

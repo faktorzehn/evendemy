@@ -44,6 +44,25 @@ module.exports = {
             updateAttributes['job_title'] = info.job_title;
         }
 
+        if(info.description!==null){
+            updateAttributes['description'] = info.description;
+        }
+
+        if(info.instagram_username!==null){
+            updateAttributes['instagram_username'] = info.instagram_username;
+        }
+
+        if(info.facebook_username!==null){
+            updateAttributes['facebook_username'] = info.facebook_username;
+        }
+
+        if(info.twitter_username!==null){
+            updateAttributes['twitter_username'] = info.twitter_username;
+        }
+
+        if(info.birthday!==null){
+            updateAttributes['birthday'] = info.birthday;
+        }
 
         return User.update({username: username }, { $set: {additional_info: updateAttributes} }, { upsert: true });
     }

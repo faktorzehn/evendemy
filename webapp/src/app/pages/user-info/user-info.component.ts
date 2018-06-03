@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Client } from '../../middleware/client';
 import { User } from '../../model/user';
 import { MeetingUser } from '../../model/meeting_user';
 import { Meeting } from '../../model/meeting';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { EditorComponent } from '../../components/editor/editor.component';
 
 @Component({
   selector: 'evendemy-user-info',
@@ -19,6 +20,9 @@ export class UserInfoComponent implements OnInit {
   events: Meeting[] = [];
   courses_from_author: Meeting[] = [];
   events_from_author: Meeting[] = [];
+
+  @ViewChild(EditorComponent)
+  private editor: EditorComponent;
 
   constructor(
     private client: Client,
@@ -40,6 +44,10 @@ export class UserInfoComponent implements OnInit {
           .getUserByUsername(this.username)
           .subscribe((result: User) => {
             this.user = result;
+
+            if (this.user && this.user.additional_info && this.editor ) {
+                this.editor.setValue(this.user.additional_info.description);
+            }
           });
       }
 
@@ -104,6 +112,7 @@ export class UserInfoComponent implements OnInit {
   }
 
   saveAdditionalInfo() {
+    this.user.additional_info.description = this.editor.getValue();
     this.userService
       .updateAdditionalInfo(this.client.getLoggedInUsername(), this.user.additional_info)
       .subscribe(o => {});

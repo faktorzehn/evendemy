@@ -6,12 +6,17 @@ module.exports = function (server, config, production_mode) {
     server.get('/user/:username', function (req, res, next) {
 
         userService.getUserByUsername(req.params.username).then(function (user) {
-            if (user !== null) {
-                res.send(user);
+            if (!user) {
+                return res.send(404, { error: "No user found" });
             }
-            else {
-                res.send(404, { error: "No user found" });
+
+            if (req.params.username !== req.user.uid) {
+                if(user.options && !user.options.additional_info_visible){
+                    user.additional_info = null;
+                }
             }
+
+            res.send(user);
         }, function (err) {
             return res.send(500, { error: err });
         });

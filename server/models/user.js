@@ -12,7 +12,12 @@ const UserSchema = mongoose.Schema({
         summary_of_meetings_visible: {type: Boolean, default: false}
     },
     additional_info: {
-        job_title: {type: String, default: ''}
+        job_title: {type: String, default: ''},
+        description:  {type: String, default: ''},
+        instagram_username: {type: String, default: ''},
+        facebook_username: {type: String, default: ''},
+        twitter_username: {type: String, default: ''},
+        birthday: { type: Date, default: Date.now }
     }
 });
 
