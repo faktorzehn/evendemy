@@ -1,7 +1,22 @@
 @import './../../../variables';
 
-.meeting-user-info{
-  padding: 15px;
+.info-row{
+  padding: 10px;
+}
+
+.social-media-icons{
+  display:flex;
+  justify-content: center;
+  a{
+    padding: 5px;
+    color: black;
+  }
+}
+
+.border-line{
+  width: 100%;
+  padding: 10px 0px;
+  border-bottom: 1px solid $evendemy-background;
 }
 
 .img-tools .edit-buttons {
