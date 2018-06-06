@@ -36,6 +36,7 @@ import { UserService } from './services/user.service';
 import { UsersComponent } from './pages/users/users.component';
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { AttendeeCardComponent } from './components/attendee-card/attendee-card.component';
+import { CommentsComponent } from './components/comments/comments.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -73,7 +74,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     UserImageComponent,
     UsersComponent,
     UserCardComponent,
-    AttendeeCardComponent
+    AttendeeCardComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,

@@ -31,7 +31,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
   isEditable = false;
   userHasAccepted = false;
   userHasFinished = false;
-  commentbox = '';
   inputDate = '';
   dateFormat = 'DD.MM.YYYY';
   randomizedNumber = Math.floor(Math.random() * 10000);
@@ -230,14 +229,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
     }
   }
 
-  onAddComment() {
-    const comment = new Comment();
-    comment.author = this.client.getLoggedInUsername();
-    comment.text = this.commentbox;
-
-    this.meetingService.addComment(this.meeting.mid, comment).subscribe((result) => {
-      this.commentbox = '';
-    });
+  onAddComment(comment: Comment) {
+    this.meetingService.addComment(this.meeting.mid, comment).subscribe((result) => {});
   }
 
   downloadCSV() {

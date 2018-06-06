@@ -1,46 +1,5 @@
 @import './../../../variables';
 
-.comment-message{
-  position: relative;
-  width: 100%;
-  margin-top: 5px;
-}
-.comment-message-body{
-  white-space: pre-wrap;
-  background-color:#dadada;
-  width: 100%;
-  padding: 10px;
-  margin-left: 13px;
-}
-
-.comment-message-arrow {
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  background: transparent;
-  border: 7px solid #dadada;
-  top: 0px;
-  border-left-color: transparent;
-  border-bottom-color: transparent;
-}
-
-.comment-header{
-  text-align: center;
-  flex-basis: 120px;
-}
-
-.comment-row{
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-}
-
-.commentbox{
-  margin-top: 10px;
-  margin-bottom: 10px;
-  height: 100px;
-}
-
 .meeting-card {
   padding: 10px 25% 10px 25%;
 }

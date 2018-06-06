@@ -149,7 +149,7 @@
             <!--Attenees-List-->
             <div>
                 <div class="row" style="margin-top: 50px;">
-                    <h3 class="col-md-10 meeting-header-label">{{potentialAttendees.length}} Participants</h3>
+                    <h3 class="col-md-10 meeting-header-label" *ngIf="meeting.numberOfAllowedExternals">{{potentialAttendees.length}} Participants</h3>
                     <a class="col-md-2 meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
                 </div>
                 <div style="display: flex; margin-left:-20px; margin-right:-20px">
@@ -210,22 +210,9 @@
 
             <!--COMMENTS-->
             <div class="row" style="margin-top: 50px;" *ngIf="!isNew">
-                <h3>Comments</h3>
+              <h3>Comments</h3>
             </div>
-            <div *ngFor="let comment of meeting.comments" class="comment-row" >
-                <a class="comment-header" routerLink="/user-info/{{comment.author}}">
-                  <evendemy-user-image [username]="comment.author" width="50" height="50" ></evendemy-user-image>
-                  <div style="color:black;">{{getUser(comment.author) | name}}</div>
-                </a>
-                <div class="comment-message">
-                  <span class="comment-message-arrow"></span>
-                  <div class="comment-message-body">{{comment.text}}</div>
-                </div>
-            </div>
-            <div class="row"  *ngIf="!isNew">
-                <textarea class="col-xs-12 commentbox" [(ngModel)]="commentbox" name="commentbox"></textarea>
-                <button class="btn btn-info col-md-offset-9 col-md-3" (click)="onAddComment()" style="float: right;">Add Comment</button>
-            </div>
+            <evendemy-comments [comments]="meeting.comments" (addComment)="onAddComment($event)" [users]="users"></evendemy-comments>
 
             <!--Tools-->
             <div class="row meeting-tools" *ngIf="isEditable" style="padding-right: 0px; margin-top: 20px; text-align: right;">
