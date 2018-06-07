@@ -9,6 +9,7 @@ import * as Quill from 'quill';
 export class EditorComponent implements OnInit {
   @Input() value: String = '';
   @Input() editable: false;
+  @Input() headlines = true;
 
   quill: any;
 
@@ -17,11 +18,17 @@ export class EditorComponent implements OnInit {
 
   ngOnInit() {
     if (this.editable) {
+      let headlineOptions = [2, 3, 4, false];
+
+      if (!this.headlines) {
+        headlineOptions = [false];
+      }
+
       this.quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
           toolbar: [
-            [{ 'header': [2, 3, 4, false]}],
+            [{ 'header': headlineOptions}],
             ['bold', 'italic', 'underline', 'strike'],
             ['link'],
             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
