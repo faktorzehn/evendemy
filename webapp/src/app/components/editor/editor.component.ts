@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import * as Quill from 'quill';
 
 @Component({
@@ -10,6 +10,7 @@ export class EditorComponent implements OnInit {
   @Input() value: String = '';
   @Input() editable: false;
   @Input() headlines = true;
+  @Output() change = new EventEmitter<string>();
 
   quill: any;
 
@@ -35,6 +36,12 @@ export class EditorComponent implements OnInit {
             ['code-block'],
             ['clean']
           ]
+        }
+      });
+
+      this.quill.on('text-change', (delta, oldDelta, source) => {
+        if (source === 'user') {
+          this.change.emit(this.getValue());
         }
       });
     }

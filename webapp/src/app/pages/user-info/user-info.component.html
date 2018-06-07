@@ -51,42 +51,39 @@
       <h3 style="margin-top:20px;">Additional Information</h3>
       <div class="row info-row">
         <div class="col-md-2">Job Title</div>
-        <div class="col-md-5">
-          <input type="text" class="form-control" [(ngModel)]="user.additional_info.job_title" name="jobTitle" />
+        <div class="col-md-6">
+          <input type="text" class="form-control" [(ngModel)]="user.additional_info.job_title" name="jobTitle" (blur)="saveAdditionalInfo()" />
         </div>
       </div>
 
       <div class="row info-row">
         <div class="col-md-2">Facebook</div>
-        <div class="col-md-5">
-          <input type="text" class="form-control" [(ngModel)]="user.additional_info.facebook_username" name="facebook_username" />
+        <div class="col-md-6">
+          <input type="text" class="form-control" [(ngModel)]="user.additional_info.facebook_username" name="facebook_username" (blur)="saveAdditionalInfo()" />
         </div>
       </div>
 
       <div class="row info-row">
         <div class="col-md-2">Instagram</div>
-        <div class="col-md-5">
-          <input type="text" class="form-control" [(ngModel)]="user.additional_info.instagram_username" name="instagram_username" />
+        <div class="col-md-6">
+          <input type="text" class="form-control" [(ngModel)]="user.additional_info.instagram_username" name="instagram_username"  (blur)="saveAdditionalInfo()"/>
         </div>
       </div>
 
       <div class="row info-row">
         <div class="col-md-2">Twitter</div>
-        <div class="col-md-5">
-          <input type="text" class="form-control" [(ngModel)]="user.additional_info.twitter_username" name="twitter_username" />
+        <div class="col-md-6">
+          <input type="text" class="form-control" [(ngModel)]="user.additional_info.twitter_username" name="twitter_username" (blur)="saveAdditionalInfo()" />
         </div>
       </div>
 
       <div class="row info-row">
         <div class="col-md-2">Description</div>
-        <div class="col-md-5">
-          <evendemy-editor [value]="user.additional_info.description" [editable]="editable" [headlines]="false" ></evendemy-editor>
+        <div class="col-md-6">
+          <evendemy-editor [value]="user.additional_info.description" [editable]="editable" [headlines]="false" (change)="saveAdditionalInfo()"></evendemy-editor>
         </div>
       </div>
 
-      <div class="row info-row">
-        <button *ngIf="editable" class="btn btn-info col-md-1" (click)="saveAdditionalInfo()">Save</button>
-      </div>
     </div>
 
     <div *ngIf="user.additional_info && !editable && user.options.additional_info_visible">
