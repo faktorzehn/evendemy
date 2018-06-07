@@ -38,6 +38,7 @@ import { UserCardComponent } from './components/user-card/user-card.component';
 import { AttendeeCardComponent } from './components/attendee-card/attendee-card.component';
 import { CommentsComponent } from './components/comments/comments.component';
 import { PageComponent } from './components/page/page.component';
+import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -77,7 +78,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     UserCardComponent,
     AttendeeCardComponent,
     CommentsComponent,
-    PageComponent
+    PageComponent,
+    SummaryCoursesEventsComponent
   ],
   imports: [
     BrowserModule,
