@@ -1,58 +1,66 @@
 @import "variables";
 
-body{
+body {
   background-color: $evendemy-background !important;
 }
 
-.component-content{
-    padding: 0px 10px 10px 10px;
-  }
-  .tool-bar{
-    padding: 5px 15px 10px 0px;
-    margin-bottom: 5px;
-    text-align: right;
-    background-color: #dddddd;
-  }
-  .tool-bar > *{
-    display: inline-block;
-  }
-  .form-row{
-    padding: 10px;
-  }
-  .form-row:nth-child(even){
-    background-color:#dddddd;
-  }
-  .form-row:nth-child(odd){
-    background-color:#f1f1f1;
-  }
+.evendemy-badge {
+  background-color: white;
+  margin: 5px;
+  border-radius: 20px;
+  color: $evendemy-primary;
+  padding: 0px 10px 0px 10px;
+}
 
-  %form-table-basis{
-    border-style: solid;
-    border-width: 1px;
-    overflow: hidden;
-  }
-  .form-table{
-    border-color: #dddddd;
-    @extend %form-table-basis;
-  }
+.component-content {
+  padding: 0px 10px 10px 10px;
+}
+.tool-bar {
+  padding: 5px 15px 10px 0px;
+  margin-bottom: 5px;
+  text-align: right;
+  background-color: #dddddd;
+}
+.tool-bar > * {
+  display: inline-block;
+}
+.form-row {
+  padding: 10px;
+}
+.form-row:nth-child(even) {
+  background-color: #dddddd;
+}
+.form-row:nth-child(odd) {
+  background-color: #f1f1f1;
+}
 
-  .form-table-white-border{
-    border-color:white;
-    @extend %form-table-basis;
-  }
+%form-table-basis {
+  border-style: solid;
+  border-width: 1px;
+  overflow: hidden;
+}
+.form-table {
+  border-color: #dddddd;
+  @extend %form-table-basis;
+}
 
-  .medium-table{
-    width: 40%;
-  }
+.form-table-white-border {
+  border-color: white;
+  @extend %form-table-basis;
+}
 
-  @media(max-width: 550px){
-    .medium-table{
-      width: 100%;
-    }
-  }
+.medium-table {
+  width: 40%;
+}
 
-  .modal-close{
-    position: absolute;
-    top: 5px;
-    right: 7px;
+@media (max-width: 550px) {
+  .medium-table {
+    width: 100%;
   }
+}
+
+.modal-close {
+  position: absolute;
+  top: 5px;
+  right: 7px;
+}

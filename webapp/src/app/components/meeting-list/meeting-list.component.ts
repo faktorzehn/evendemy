@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Meeting } from '../../model/meeting';
 import { BehaviorSubject } from 'rxjs';
 import { ConfigService } from '@ngx-config/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'evendemy-meeting-list',
@@ -36,6 +37,11 @@ export class MeetingListComponent implements OnInit {
       return;
     }
     return this.imageFolder + '/' + mid + '.jpg' + '?r=' + this.randomizedNumber;
+  }
+
+  isMeetingNew(meeting: Meeting) {
+    const now = moment();
+    return moment(meeting.creationDate).isSame(now, 'day');
   }
 
 }

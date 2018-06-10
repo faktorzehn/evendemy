@@ -4,7 +4,8 @@
 
       <!-- picture -->
       <div class="meeting-image">
-          <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
+        <div class="evendemy-badge" *ngIf="isMeetingNew(meeting)" >new</div>
+        <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
       </div>
 
       <!-- title -->
