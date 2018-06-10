@@ -1,7 +1,7 @@
 module.exports = {
     getAllUsers: function() {
         var User = require('../models/user');
-        return User.find({}).where('deleted').eq(false).exec();
+        return User.find({}).where('deleted').sort({lastname: 1, firstname: 1}).eq(false).exec();
     },
 
     getUserByUsername: function(username) {
