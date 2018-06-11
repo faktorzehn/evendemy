@@ -35,3 +35,43 @@ h3 {
   color: $evendemy-primary;
   padding: 0px 10px 0px 10px;
 }
+
+/* TOOLTIP */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  opacity: 1;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  position: absolute;
+  width: fit-content;
+  max-width: 110px;
+}
+
+.tooltip > .right{
+  top: -5px;
+  left: 100%;
+  margin-left: 15px;
+}
+
+.tooltip > .right::after{
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}

@@ -33,7 +33,6 @@
     "font-awesome": "^4.7.0",
     "moment": "^2.21.0",
     "ngx-img-cropper": "^0.10.4",
-    "ngx-tooltip": "0.0.9",
     "pretty-checkbox": "^3.0.3",
     "quill": "^1.1.9",
     "rxjs": "^6.2.0",

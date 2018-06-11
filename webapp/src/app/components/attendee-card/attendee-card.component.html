@@ -2,8 +2,11 @@
   <div class="caption text-center thumbnail-container">
     <div style="position:relative;">
       <evendemy-user-image [username]="user.username" width="100" height="100" routerLink="/user-info/{{user.username}}"></evendemy-user-image>
-      <div class="attendee-additional-badge" *ngIf="additional_attendees" [tooltip]="additional_attendees" [tooltipDisabled]="false"
-        [tooltipAnimation]="true" tooltipPlacement="right">+1</div>
+      <div class="attendee-additional-badge">
+        <div class="tooltip" *ngIf="additional_attendees">+1
+          <span class="tooltip-text right">{{additional_attendees}}</span>
+        </div>
+      </div>
     </div>
     <h3 class="meeting-title">{{user.firstname}} {{user.lastname}}</h3>
 
@@ -14,3 +17,5 @@
     </button>
   </div>
 </div>
+
+
