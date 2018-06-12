@@ -149,7 +149,7 @@
             <!--Attenees-List-->
             <div>
                 <div class="row" style="margin-top: 50px;">
-                    <h3 class="col-md-10 meeting-header-label" *ngIf="meeting.numberOfAllowedExternals">{{potentialAttendees.length}} Participants</h3>
+                    <h3 class="col-md-10 meeting-header-label" *ngIf="meeting.numberOfAllowedExternals">{{numberOfParticipants()}} Participants</h3>
                     <a class="col-md-2 meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
                 </div>
                 <div style="display: flex; margin-left:-20px; margin-right:-20px">
