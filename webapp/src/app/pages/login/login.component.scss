@@ -1,5 +1,8 @@
+@import './../../../variables';
+
 .evendemy-title{
-    text-align: center; font-size: 100px;
+    text-align: center; font-size: 80px;
+    color: $evendemy-primary;
 }
 
 @media(max-width: 768px){
