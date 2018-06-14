@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { ConfigService } from '@ngx-config/core';
+
+import { AppState } from '../../appState';
 import { Client } from '../../middleware/client';
 import { User } from '../../model/user';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../appState';
 
 @Component({
   selector: 'evendemy-user-image',
@@ -25,7 +26,7 @@ export class UserImageComponent implements OnInit {
     private config: ConfigService,
     private client: Client,
     private store: Store<AppState>
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.store.select('users').subscribe(res => (this.users = res));
@@ -52,7 +53,7 @@ export class UserImageComponent implements OnInit {
 
   get background_color() {
     if (this.user) {
-      const key = this.user.lastname[0].charCodeAt(0) + this.user.lastname[1].charCodeAt(0) + this.user.lastname[2].charCodeAt(0) + 1;
+      const key = this.user.lastname[0].charCodeAt(0) + this.user.lastname[1].charCodeAt(0);
       return this.palette[key % 5];
     }
     return this.palette[0];
