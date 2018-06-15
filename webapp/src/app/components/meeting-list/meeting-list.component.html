@@ -4,7 +4,8 @@
 
       <!-- picture -->
       <div class="meeting-image">
-          <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
+        <div class="evendemy-badge" *ngIf="isMeetingNew(meeting)" >new</div>
+        <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
       </div>
 
       <!-- title -->
@@ -22,7 +23,7 @@
       </div>
 
       <!-- more-button -->
-      <button type="button" class="btn btn-default meeting-more-button" routerLink="/meeting/{{meeting.mid}}">more</button>
+      <a type="button" class="btn btn-default meeting-more-button" routerLink="/meeting/{{meeting.mid}}">more</a>
 
     </div>
   </div>

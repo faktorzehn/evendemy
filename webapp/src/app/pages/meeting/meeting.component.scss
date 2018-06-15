@@ -1,32 +1,7 @@
 @import './../../../variables';
 
-.comment{
-  white-space: pre-wrap;
-}
-
-.comment-row{
-  padding: 5px;
-}
-.comment-row:nth-child(even){
-  background-color:#dddddd;
-}
-.comment-row:nth-child(odd){
-  background-color:#f1f1f1;
-}
-
-.commentbox{
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.meeting-card {
-  padding: 10px 25% 10px 25%;
-}
-
-@media(max-width: 768px){
-  .meeting-card{
-    padding: 10px;
-  }
+.meeting-card{
+  padding: 20px 0px;
 }
 
 .meeting-image > img {
@@ -41,6 +16,7 @@
   margin-top: 30px;
   padding-right: 0px;
   text-align: right;
+  cursor: pointer;
 }
 
 .meeting-header-label{
@@ -48,12 +24,12 @@
 }
 
 .meeting-info-box{
-  background-color: #dddddd; 
-  border-radius: 5px; 
+  background-color: #dddddd;
+  border-radius: 5px;
   padding: 10px;
 
   .meeting-info-box-buttons{
-    float: right; 
+    float: right;
     padding-top: 10px;
   }
 }
@@ -71,6 +47,12 @@
   border-color: $evendemy-primary;
   color: $evendemy-primary;
   padding: 0px 10px 0px 10px;
+}
+
+.meeting-tools{
+  .btn{
+    margin: 5px;
+  }
 }
 
 .meeting-checkbox{

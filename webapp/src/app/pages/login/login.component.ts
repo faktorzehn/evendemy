@@ -4,9 +4,9 @@ import { Client } from './../../middleware/client';
 import { UsersService } from '../../services/users.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'evendemy-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
@@ -23,14 +23,14 @@ export class LoginComponent implements OnInit {
     this.client.loginUser(username, password).subscribe((result) => {
       if (result === true) {
 
-        //load users again - because first time (not logged in) will not be permitted
+        // load users again - because first time (not logged in) will not be permitted
         try {
           this.userService.loadAllUsers().subscribe(res => res);
         } catch (e) { console.error(e); }
 
         // login successful
         this.router.navigate([this.returnLink]);
-      }else{
+      } else {
         this.invalidLogin = true;
       }
     }, error => {

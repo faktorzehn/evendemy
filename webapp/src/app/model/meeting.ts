@@ -14,6 +14,7 @@ export class Meeting {
   public creationDate: Date;
   public mid: number;
   public username: string;
+  public numberOfAllowedExternals: number;
   public comments: Comment[];
   public static sortByDate = (a: Meeting, b: Meeting) => {
     const dateA = a.date ? new Date(a.date).getTime() : 0;

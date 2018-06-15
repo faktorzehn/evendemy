@@ -166,7 +166,7 @@ module.exports = function (server, config, production_mode) {
             return res.send(500, { error: 'no mid or username' });
         }
 
-        meetingService.attendingToMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
+        meetingService.attendingToMeeting(req.params.mid, req.params.username, req.params.externals).then(function (meeting_user) {
             //send mail to the new attendee
             meetingService.getMeeting(req.params.mid).then(function (meeting) {
                 if (meeting !== null) {
@@ -290,7 +290,7 @@ module.exports = function (server, config, production_mode) {
             return res.send(500, { error: 'No image' });
         }
 
-        imageService.save(req.params.mid, req.params.data, config).then(function () {
+        imageService.save(req.params.mid, req.params.data, config.meetingImageFolder).then(function () {
             res.send(req.params.data);
         }).catch(function (err) {
             console.log(err);

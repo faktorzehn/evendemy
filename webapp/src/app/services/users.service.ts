@@ -14,7 +14,7 @@ import { InitUsers } from '../actions/users.actions';
 export class UsersService {
     private url = this.config.getSettings().backend_url;
 
-    constructor(private http: HttpClient, private store: Store<AppState>, private config: ConfigService) { 
+    constructor(private http: HttpClient, private store: Store<AppState>, private config: ConfigService) {
     }
 
     private createHeaders(): HttpHeaders {
@@ -28,7 +28,7 @@ export class UsersService {
     public loadAllUsers() {
       const headers = this.createHeaders();
       const url = this.url + '/users';
-      return this.http.get(url, {headers: headers}).retry(5).do( (res : User[]) => {
+      return this.http.get(url, {headers: headers}).retry(5).do( (res: User[]) => {
         this.setUsers(res);
       });
     }

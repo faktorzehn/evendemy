@@ -1,19 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-confirm-dialog',
+  selector: 'evendemy-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss']
 })
 export class ConfirmDialogComponent implements OnInit {
 
   @Input()
-  private title= "";
+  private title = '';
 
   @Input()
-  private dialog_id = "";
+  private dialog_id = '';
 
-  @Output() 
+  @Output()
   private onConfirm: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
@@ -21,7 +21,7 @@ export class ConfirmDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  confirmWasClicked(){
+  confirmWasClicked() {
     this.onConfirm.emit();
   }
 

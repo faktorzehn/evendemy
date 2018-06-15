@@ -29,7 +29,15 @@ import { ConfigHttpLoader } from '@ngx-config/http-loader';
 import { UsersService } from './services/users.service';
 import { usersReducer } from './reducers/users.reducer';
 import { NamePipe } from './pipes/name.pipe';
-import { EvendemyCheckboxComponent } from './components/evendemy-checkbox/evendemy-checkbox.component';
+import { EvendemyCheckboxComponent } from './components/checkbox/evendemy-checkbox.component';
+import { UserImageComponent } from './components/user-image/user-image.component';
+import { UserService } from './services/user.service';
+import { UsersComponent } from './pages/users/users.component';
+import { UserCardComponent } from './components/user-card/user-card.component';
+import { AttendeeCardComponent } from './components/attendee-card/attendee-card.component';
+import { CommentsComponent } from './components/comments/comments.component';
+import { PageComponent } from './components/page/page.component';
+import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -37,6 +45,8 @@ const appRoutes: Routes = [
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/new/:type', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
+  { path: 'user-info/:username', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
+  { path: 'users', component: UsersComponent, canActivate: [LoggedInGuardService]},
   { path: '', redirectTo: '/meeting-list/course', pathMatch: 'full' },
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
@@ -61,7 +71,14 @@ export function configFactory(http: HttpClient): ConfigLoader {
     ImageUploadDialogComponent,
     ImageCropperComponent,
     NamePipe,
-    EvendemyCheckboxComponent
+    EvendemyCheckboxComponent,
+    UserImageComponent,
+    UsersComponent,
+    UserCardComponent,
+    AttendeeCardComponent,
+    CommentsComponent,
+    PageComponent,
+    SummaryCoursesEventsComponent
   ],
   imports: [
     BrowserModule,
@@ -82,10 +99,11 @@ export function configFactory(http: HttpClient): ConfigLoader {
       deps: [HttpClient]
     })
   ],
-  providers: [ 
-    LoggedInGuardService, 
-    Client, 
-    MeetingService, 
+  providers: [
+    LoggedInGuardService,
+    Client,
+    MeetingService,
+    UserService,
     UsersService
   ],
   bootstrap: [AppComponent]

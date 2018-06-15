@@ -17,7 +17,7 @@ import { ConfigService } from '@ngx-config/core';
 export class Client {
     private url = this.config.getSettings().backend_url;
 
-    constructor(private http: HttpClient, private config: ConfigService, private store: Store<AppState>) { 
+    constructor(private http: HttpClient, private config: ConfigService, private store: Store<AppState>) {
     }
 
     private createHeaders(): HttpHeaders {
@@ -103,11 +103,12 @@ export class Client {
         return this.http.get(url, { headers: headers });
     }
 
-    public attendMeeting(mid: number, username: String) {
+    public attendMeeting(mid: number, username: String, external: String) {
         const headers = this.createHeaders();
+        const external_array = external ? [external] :  [];
         if (mid !== undefined && username !== undefined) {
             const url = this.url + '/meeting/' + mid + '/attendee/' + username + '/attend';
-            return this.http.put(url, {}, { headers: headers });
+            return this.http.put(url, {mid: mid, username: username, externals: external_array}, { headers: headers });
         }
         return null;
     }

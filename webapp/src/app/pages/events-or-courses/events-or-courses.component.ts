@@ -9,7 +9,7 @@ import { MeetingService } from '../../services/meeting.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-events',
+  selector: 'evendemy-events',
   templateUrl: './events-or-courses.component.html',
   styleUrls: ['./events-or-courses.component.scss']
 })

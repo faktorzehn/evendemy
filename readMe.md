@@ -7,7 +7,7 @@ With Evendemy this possibility is just a few clicks far away.
 Evendemy is a plattform where you can manage all these meetings and invite everyone to be part of. 
             
 
-![sketch of evendemy](https://raw.githubusercontent.com/ConVista-FaktorZehn-GmbH/evendemy/master/docs/assets/sketch_of_evendemy.png "Sketch of Evendemy")  
+![sketch of evendemy](https://raw.githubusercontent.com/ConVista-FaktorZehn-GmbH/evendemy/master/docs/assets/evendemy_events.png "Evendemy preview")  
 
 To learn more about Evendemy and how it works: visit our micro site: [https://convista-faktorzehn-gmbh.github.io/evendemy/](https://convista-faktorzehn-gmbh.github.io/evendemy/)
 

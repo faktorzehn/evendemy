@@ -1,4 +1,5 @@
 {
   "backend_url": "http://localhost:40274",
-  "image_folder": "assets/images"
+  "meeting_image_folder": "assets/meeting_images",
+  "user_image_folder": "assets/user_images"
 }

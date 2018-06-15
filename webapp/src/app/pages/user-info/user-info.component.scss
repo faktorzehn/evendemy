@@ -1,5 +1,48 @@
-.meeting-user-info{
-  padding: 15px;
+@import './../../../variables';
+
+.info-row{
+  padding: 10px;
+}
+
+.social-media-icons{
+  display:flex;
+  justify-content: center;
+  a{
+    padding: 5px;
+    color: black;
+  }
+}
+
+.border-line{
+  width: 100%;
+  margin: 20px 0px;
+  border-bottom: 1px solid $evendemy-background;
+}
+
+.img-tools .edit-buttons {
+  opacity: 0;
+  margin-top: -100px;
+  padding-bottom: 100px;
+}
+
+.img-tools .edit-buttons .fa {
+  padding: 5px;
+}
+
+.img-tools .edit-buttons .fa:hover {
+  padding: 5px;
+  background-color: $evendemy-primary;
+  border-radius: 50%;
+}
+
+.img-tools:hover .edit-buttons {
+  opacity: 1;
+}
+
+.meeting-user-fullname{
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 2em;
 }
 .meeting-label{
   border-radius: 10px;
@@ -32,10 +75,19 @@
 }
 
 .user-info-row{
-  margin: -15px;
+  margin: 0px -15px 0px -15px;
   padding: 0px 15px 15px 15px;
 }
 
 .user-info-row:nth-child(even){
   background-color:#dddddd;
+}
+
+.no-summary-row{
+  text-align: center;
+  padding: 40px;
+}
+
+.no-summary-icon{
+  margin: 10px;
 }

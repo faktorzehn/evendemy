@@ -18,7 +18,7 @@ import { UsersService } from '../../services/users.service';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-meeting',
+  selector: 'evendemy-meeting',
   templateUrl: './meeting.component.html',
   styleUrls: ['./meeting.component.scss']
 })
@@ -31,7 +31,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
   isEditable = false;
   userHasAccepted = false;
   userHasFinished = false;
-  commentbox = '';
   inputDate = '';
   dateFormat = 'DD.MM.YYYY';
   randomizedNumber = Math.floor(Math.random() * 10000);
@@ -39,9 +38,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
 
-  private imageFolder = this.config.getSettings().image_folder;
-
-  private tmpImgData: any;
+  imageFolder = this.config.getSettings().meeting_image_folder;
+  tmpImgData: any;
 
   private users: User[] = [];
 
@@ -77,6 +75,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
     const meeting = new Meeting();
     meeting.courseOrEvent = this.type;
+    meeting.numberOfAllowedExternals = 0;
     this.meetingService.selectMeeting(meeting);
 
     this.isEditable = true;
@@ -118,14 +117,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  convertDateToString(value: Date) : string{
+  convertDateToString(value: Date): string {
     if (value) {
       return moment(value).format(this.dateFormat);
     }
     return '';
   }
 
-  convertStringToDate(value: string) : Date{
+  convertStringToDate(value: string): Date {
     if (value) {
       return moment(value, this.dateFormat).toDate();
     }
@@ -147,9 +146,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onSaveMeeting() {
-    if(this.meeting.mid){
+    if (this.meeting.mid) {
       this.updateMeeting();
-    }else{
+    } else {
       this.createMeeting();
     }
   }
@@ -189,7 +188,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCopyMeeting(){
+  onCopyMeeting() {
     const meeting = { ... this.meeting }
     meeting.mid = null;
     meeting.comments = [];
@@ -197,14 +196,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
     meeting.username = null;
     this.potentialAttendees = [];
     this.isNew = true;
-    this.userHasAccepted= false;
+    this.userHasAccepted = false;
     this.userHasFinished = false;
 
     this.meetingService.selectMeeting(meeting);
   }
 
-  onAcceptMeeting() {
-    this.client.attendMeeting(this.meeting.mid, this.client.getLoggedInUsername()).subscribe((result) => {
+  onAcceptMeeting(external) {
+    this.client.attendMeeting(this.meeting.mid, this.client.getLoggedInUsername(), external).subscribe((result) => {
       this.userHasAccepted = true;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
@@ -221,22 +220,17 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   onHasTakenPart(attendee: MeetingUser) {
     if (attendee && !attendee.tookPart) {
-      attendee.tookPart = true;
-      if(attendee.username === this.client.getLoggedInUsername()){
+      const foundedAttendee = this.potentialAttendees.find(p => p.username === attendee.username);
+      foundedAttendee.tookPart = true;
+      if (foundedAttendee.username === this.client.getLoggedInUsername()) {
         this.userHasFinished = true;
       }
-      this.client.confirmAttendeeToMeeting(this.meeting.mid, attendee.username).subscribe((result) => { });
+      this.client.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).subscribe((result) => { });
     }
   }
 
-  onAddComment() {
-    const comment = new Comment();
-    comment.author = this.client.getLoggedInUsername();
-    comment.text = this.commentbox;
-
-    this.meetingService.addComment(this.meeting.mid, comment).subscribe((result) => {
-      this.commentbox = '';
-    });
+  onAddComment(comment: Comment) {
+    this.meetingService.addComment(this.meeting.mid, comment).subscribe((result) => {});
   }
 
   downloadCSV() {
@@ -244,23 +238,23 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
     const bodyCSV = this.potentialAttendees.map(a => {
       const user = this.users.find( u => u.username === a.username);
-      if(user){
+      if (user) {
         return [user.firstname, user.lastname, user.email, a.tookPart.toString()]
       }
     });
 
     const csv = toCSV(headerCSV.concat(bodyCSV));
 
-    var blob = new Blob([csv], { type: 'text/csv' });
-    FileSaver.saveAs(blob, "attendees-for-meeting-" + this.meeting.mid + ".csv");
+    const blob = new Blob([csv], { type: 'text/csv' });
+    FileSaver.saveAs(blob, 'attendees-for-meeting-' + this.meeting.mid + '.csv');
 
     console.log(csv);
   }
 
   onGetCalendar() {
     this.meetingService.getCalendar(this.meeting.mid).subscribe( (cal: any) => {
-      var blob = new Blob([cal.content], { type: 'text/calendar;charset=utf-8' });
-      FileSaver.saveAs(blob, "calendar-for-meeting-" + this.meeting.mid + ".ics");
+      const blob = new Blob([cal.content], { type: 'text/calendar;charset=utf-8' });
+      FileSaver.saveAs(blob, 'calendar-for-meeting-' + this.meeting.mid + '.ics');
 
     });
   }
@@ -269,7 +263,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.tmpImgData = img;
   }
 
-  getUser(username: string){
+  getUser(username: string) {
     const res = this.users.find( user => user.username === username);
     return res ? res : username;
   }
@@ -282,12 +276,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return this.potentialAttendees.filter( p => p.tookPart !== true).length;
   }
 
-  hasValidDate(){
+  hasValidDate() {
     return this.meeting.startTime && this.meeting.endTime && this.meeting.date;
   }
 
   isInThePast() {
-    if(!this.hasValidDate()){
+    if (!this.hasValidDate()) {
       return false;
     }
     const now = moment();
@@ -295,7 +289,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   isInThePastOrToday() {
-    if(!this.hasValidDate()){
+    if (!this.hasValidDate()) {
       return false;
     }
     const now = moment();
@@ -303,6 +297,19 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   hasEveryoneTookPart() {
-    return this.potentialAttendees.length == this.getAttendedNumber();
+    return this.potentialAttendees.length === this.getAttendedNumber();
+  }
+
+  trackByFn (user: User) {
+    return user.username;
+  }
+
+  onCheckboxChange() {
+    this.meeting.numberOfAllowedExternals === 0 ? this.meeting.numberOfAllowedExternals = 1 : this.meeting.numberOfAllowedExternals = 0;
+  }
+
+  numberOfParticipants () {
+    const externals = this.potentialAttendees.filter(p => p.externals.length > 0);
+    return this.potentialAttendees.length + externals.length;
   }
 }

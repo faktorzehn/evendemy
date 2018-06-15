@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment.prod';
 declare var require: any;
 
 @Component({
-  selector: 'app-footer',
+  selector: 'evendemy-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })

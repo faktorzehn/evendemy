@@ -6,7 +6,19 @@ const UserSchema = mongoose.Schema({
     firstname: {type: String, default: ''},
     lastname: {type: String, default: ''},
     email: {type: String, default: ''},
-    deleted: {type: Boolean, default: false}
+    deleted: {type: Boolean, default: false},
+    options: {
+        additional_info_visible: {type: Boolean, default: false},
+        summary_of_meetings_visible: {type: Boolean, default: false}
+    },
+    additional_info: {
+        job_title: {type: String, default: ''},
+        description:  {type: String, default: ''},
+        instagram_username: {type: String, default: ''},
+        facebook_username: {type: String, default: ''},
+        twitter_username: {type: String, default: ''},
+        birthday: { type: Date, default: Date.now }
+    }
 });
 
 UserSchema.plugin(autoIncrement.plugin, 'User');

@@ -9,7 +9,8 @@
 /bower_components
 
 #image folder
-/src/assets/images/*
+/src/assets/meeting_images/*
+/src/assets/user_images/*
 
 # IDEs and editors
 /.idea

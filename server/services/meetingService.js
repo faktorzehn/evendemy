@@ -116,6 +116,9 @@ module.exports = {
         if (request.date !== undefined) {
             meeting.date = request.date;
         }
+        if (request.numberOfAllowedExternals !== undefined) {
+            meeting.numberOfAllowedExternals = request.numberOfAllowedExternals;
+        }
 
         if(username){
             meeting.username = username.toLowerCase();   
@@ -157,6 +160,9 @@ module.exports = {
         }
         if (request.date !== undefined) {
             updateMeeting.date = request.date;
+        }
+        if (request.numberOfAllowedExternals !== undefined) {
+            updateMeeting.numberOfAllowedExternals = request.numberOfAllowedExternals;
         }
 
         return Meeting.findOneAndUpdate({ mid: mid }, { $set: updateMeeting }, { upsert: true, new:true });
@@ -229,7 +235,7 @@ module.exports = {
         return Meeting.find({ username: username }).where('deleted').eq(false).exec();
     },
 
-    attendingToMeeting: function(mid, username){
+    attendingToMeeting: function(mid, username, externals){
         var MeetingUser = require('../models/meeting_user');
 
         username = username.toLowerCase();
@@ -238,8 +244,11 @@ module.exports = {
             username: username,
             lastUpdate: new Date(),
             tookPart: false,
+            externals: externals ? externals : [],
             deleted: false
         }
+
+        console.log(m.externals);
 
         return MeetingUser.update({mid: mid, username: username}, m, {upsert: true, setDefaultsOnInsert: true});
     },

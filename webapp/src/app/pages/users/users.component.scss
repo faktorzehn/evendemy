@@ -1,0 +1,13 @@
+.user-list{
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  -webkit-flex-wrap: wrap; /* Safari */
+  flex-wrap: wrap;
+  -webkit-flex-direction: row; /* Safari */
+  flex-direction: row;
+  padding: 15px;
+}
+
+.user-card{
+
+}
