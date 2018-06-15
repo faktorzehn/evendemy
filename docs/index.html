@@ -1,118 +1,155 @@
 <html>
-    <head>
 
-        <style>
-            body{
-                background-color: #FFF6D5;
-                font-family: Arial, Helvetica, sans-serif;
-                display: flex;
-                flex-direction: column;
-                line-height: 1.6;
+<head>
+
+    <style>
+        body {
+            background-color: #48CFAE;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        .card {
+            padding: 50px 200px 50px 200px;
+        }
+
+        .row-with-image {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .head {
+            background-color: white;
+            margin: -8px;
+            padding: 100px 200px 0px 200px;
+            text-align: center;
+        }
+
+        .button{
+            background-color: #019983;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .button:hover{
+            background-color: #21af9a;
+        }
+
+        .head>h2 {
+            padding: 0px;
+            color: grey;
+        }
+
+        h2 {
+            padding-top: 40px;
+        }
+
+        @media screen and (max-width: 700px) {
+            .head {
+                padding: 100px 10px 0px 10px;
             }
 
-            .card{
-                padding: 50px 200px 50px 200px;
+            .card {
+                padding: 50px 10px 50px 10px;
             }
+        }
+    </style>
+</head>
 
-            .head{
-                background-color: #37BC9B;
-                margin: -8px;
-                padding: 100px 200px 0px 200px;
-                display: flex;
-                flex-direction: row;
-                align-items: flex-end;
-                justify-content: space-between;
-            }
+<body>
+    <div class="head">
+        <a href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">
+            <img src="assets/evendemy_logo.jpg" style="width: 350px;" />
+        </a>
+        <h3>Your open-source community webapp!</h3>
+    </div>
 
-            h3{
-                padding-top: 40px;
-            }
+    <div class="card">
+        <a href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">
+            <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+                alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">
+        </a>
 
-            @media screen and  (max-width : 700px) {
-                .head{
-                    padding: 100px 10px 0px 10px;
-                }
-
-                .card{
-                    padding: 50px 10px 50px 10px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="head">
-            <div style="float: left">
-                <h1>Evendemy</h1>
-                <h2>Your open-source community webapp!</h2>
-            </div>
-            <div style="text-align: right; padding-bottom: 20px;">
-                    <img src="assets/evendemy_logo.png"/>
-            </div>
+        <div class="row-with-image">
+                <div style="flex-grow: 1; padding: 5px;">
+                    <img src="assets/evendemy_events.png" style="width: 100%;" />
+                </div>
+                
+                <div style="flex-grow: 1; padding: 5px;">
+                    <img src="assets/evendemy_avatar.png" style="width: 100%;" />
+                </div>
         </div>
 
-        <div class="card">
-            <a href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+        <h2>What is Evendemy?</h2>
+        <p>Evendemy is a open-source community webapp for your company! Create appointments for your trainings, meetings
+                or for anything worth celebrating. With Evendemy this possibility is just a few clicks far away. Evendemy
+                is a plattform where you can manage all these meetings and invite everyone to be part of. </p>
 
-            <h3>What is Evendemy?</h3>
-            <p>Evendemy is a open-source community webapp for your company! 
-            Create appointments for your trainings, meetings or for anything worth celebrating.
-            With Evendemy this possibility is just a few clicks far away. 
-            Evendemy is a plattform where you can manage all these meetings and invite everyone to be part of. </p>
-            
-            <div style="text-align: center;">
-                <img src="assets/sketch_of_evendemy.png" style="width: 100%; max-width: 500px;"/>
-            </div>
+        <h2>An example how Evendemy works</h2>
+        <p>Let's say, you want to go to the cinema with colleagues. Evendemy can help you. It is really easy to use Evendemy.</p>
+        <p>
+            <ul>
+                <li>First step: create a meeting. Every information is optional - but better information will help you for a
+                    more successfull meeting.</li>
+                <li>Evendemy notifies everyone about the new meeting.</li>
+                <li>Interested people can participate. They get a mail with a calendar entry and you will also be notified.</li>
+                <li>Have a great time!</li>
+                <li>After having a wonderful time: you can confirm who participated and the confirmed attendees will see that.</li>
+            </ul>
+        </p>
+        <p>An easy but powerful way to manage and share some wonderful moments.</p>
 
+        <h2>Advantages compared to a simple calendar invitations</h2>
+        <p>You maybe ask yourself what is the benefit compared to simple calendar invitations or other solutions? Evendemy can
+            help you in so many ways! Here are some advantages compared to other solutions:</p>
+        <p>
+            <ul>
+                <li>One place where all meetings will be collected</li>
+                <li>Every Meeting has the same structure</li>
+                <li>You see which events are upcoming</li>
+                <li>Everyone is invited to participate to the meetings</li>
+                <li>Everyone can see who want to participate</li>
+                <li>Meetings can be commented - every attendee will be informed</li>
+                <li>You can easily add some of your friends with a "+1" option</li>
+                <li>You can see each meeting where you took part</li>
+            </ul>
+        </p>
 
-            <h3>How Evendemy works</h3>
-            <p>Let's say, you want to go to the cinema with colleagues. Evendemy can help you. It is really easy to use Evendemy.</p>
+        <h2>Award</h2>
+        <div>
             <p>
-                <ul>
-                    <li>First step: create a meeting. Every information is optional - but better information will help you for a more successfull meeting.</li>
-                    <li>Evendemy notifies everyone about the new meeting.</li>
-                    <li>Interested people can participate. They get a mail with a calendar entry and you will also be notified.</li>
-                    <li>Have a great time!</li>
-                    <li>After having a wonderful time: you can confirm who participated and the confirmed attendees will see that.</li>
-                </ul>
+                Evendemy won Convista's Innovation Award 2018! A great honor and a nice sign of how important such a project can be.
             </p>
-            <p>An easy but powerful way to manage and share some wonderful moments.</p>
-            <div style="text-align: center; padding: 50px 50px 0px 50px;">
-                    <img src="assets/workflow_of_evendemy.png" style="width: 100%; max-width: 700px;"/>
+            <p>
+                Read more on our blog: <a href="https://blog.faktorzehn.de/?p=990" style="color:white;">https://blog.faktorzehn.de/?p=990</a>
+            </p>
+            <div style="text-align: center;">
+                <img src="./assets/evendemy_innovation_award.png" style="width: 500px;" />
             </div>
-
-            <h3>Advantages and disadvantages compared to simple calendar invitations</h3>
-            <p>You maybe ask yourself what is the benefit compared to simple calendar invitations or other solutions. Here is some help.</p>
-            <div style="display: flex; justify-content: center;">
-                    <div style="flex-basis: 50%;">
-                        Advantages of Evendemy
-                        <ul>
-                            <li>One place where all meetings will be collected</li>
-                            <li>Every Meeting has the same structure</li>
-                            <li>You see which events are upcoming</li>
-                            <li>Everyone is invited to participate to the meetings</li>
-                            <li>Everyone can see who want to participate</li>
-                            <li>Meetings can be commented - every attendee will be informed</li>
-                            <li>You can see each meeting where you took part</li>
-                        </ul>
-                    </div>
-                    <div style="flex-basis: 50%;">
-                        Disadvantages of Evendemy
-                        <ul>
-                            <li>Attendees will receive a mail with a calendar entry (even for each relevant change) - but you have to accept or delete it manually by yourself.</li>
-                        </ul>
-                    </div>
-            </div>
-            <p>Most of the advantages can not be achieved with a simple calendar invitation. That is why Evendemy is such a great solution for the problem.</p>
-
-            <h3>How can I use it?</h3>
-            <p>It is really easy to use. Just see the <a href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">documentation</a> for details.</p>
-            
-            <h3>How can I contribute?</h3>
-            <p>You want to help to make Evendemy even a better software and great tool for everyone? There are a lot of work and it would be great if you help us!  
-            <a href="mailto:thomas.wruss@faktorzehn.at">Just contact me!</a>
-            We can work together via the <a href="https://github.com/Roshanjossey/first-contributions/blob/master/README.md">pull-request method</a>.
-            If you use Evendemy at your company it would also be great to here from you too!</p>
-
         </div>
-    </body>
+
+        <h2>How can I use it?</h2>
+        <p>It is really easy to use. Just see the
+            <a href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">documentation</a> for details.</p>
+
+        <h2>How can I contribute?</h2>
+        <p>You want to help to make Evendemy even a better software and great tool for everyone? There are a lot of work and
+            it would be great if you help us!
+            <a href="mailto:thomas.wruss@faktorzehn.at">Just contact me!</a>
+            We can work together via the
+            <a href="https://github.com/Roshanjossey/first-contributions/blob/master/README.md">pull-request method</a>. If you use Evendemy at your company it would also be great to here from you too!</p>
+
+
+        <div style="text-align: center; margin-top: 100px;">
+            <a class="button" href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">Explore Evendemy!</a>
+        </div>
+    </div>
+</body>
+
 </html>
