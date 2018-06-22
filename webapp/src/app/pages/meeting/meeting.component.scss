@@ -31,6 +31,10 @@
   .meeting-info-box-buttons{
     float: right;
     padding-top: 10px;
+
+    > .btn {
+      margin-right: 5px;
+    }
   }
 }
 

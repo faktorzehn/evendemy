@@ -7,6 +7,13 @@
   padding:10px;
 }
 
+.thumbnail-container{
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
 h3{
   padding-top: 5px;
 }

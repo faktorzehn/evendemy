@@ -3,12 +3,20 @@
 .thumbnail {
   margin: 5px;
   width: 180px;
-  height: 200px;
+  height: 240px;
   padding: 10px;
+}
+
+.thumbnail-small {
+  height: 210px;
 }
 
 .thumbnail-container {
   text-align: center;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .attendee-additional-badge {

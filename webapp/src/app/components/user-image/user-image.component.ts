@@ -12,13 +12,16 @@ import { User } from '../../model/user';
   styleUrls: ['./user-image.component.scss']
 })
 export class UserImageComponent implements OnInit {
-  @Input() username: string;
+  @Input() set username(name: string) {
+    this.client
+        .getUserByUsername(name)
+        .subscribe((u: User) => (this.user = u));
+  }
   @Input() width: number;
   @Input() height: number;
 
   error = false;
   folder = this.config.getSettings().user_image_folder;
-  users: User[];
   user: User;
   palette = ['#5da5e2', '#e87f7f', '#f9d44c', '#c6e96e', '#8375b5'];
 
@@ -29,13 +32,6 @@ export class UserImageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.store.select('users').subscribe(res => (this.users = res));
-    if (!this.username) {
-      this.username = this.client.getLoggedInUsername();
-    }
-    this.client
-      .getUserByUsername(this.username)
-      .subscribe((u: User) => (this.user = u));
   }
 
   get initials() {
