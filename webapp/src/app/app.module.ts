@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -38,6 +39,7 @@ import { AttendeeCardComponent } from './components/attendee-card/attendee-card.
 import { CommentsComponent } from './components/comments/comments.component';
 import { PageComponent } from './components/page/page.component';
 import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
+import { AttendeeTableComponent } from './components/attendee-table/attendee-table.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -78,7 +80,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     AttendeeCardComponent,
     CommentsComponent,
     PageComponent,
-    SummaryCoursesEventsComponent
+    SummaryCoursesEventsComponent,
+    AttendeeTableComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +100,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
       provide: ConfigLoader,
       useFactory: (configFactory),
       deps: [HttpClient]
-    })
+    }),
+    NgxDatatableModule
   ],
   providers: [
     LoggedInGuardService,

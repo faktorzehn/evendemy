@@ -1,0 +1,31 @@
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { MeetingUser } from '../../model/meeting_user';
+import { User } from '../../model/user';
+
+@Component({
+  selector: 'evendemy-attendee-table',
+  templateUrl: './attendee-table.component.html',
+  styleUrls: ['./attendee-table.component.scss']
+})
+export class AttendeeTableComponent implements OnInit {
+
+  @Input() attendees: MeetingUser[] = [];
+  @Input() users: User[] = [];
+  @Input() editable = false;
+  @Input() disableTakePartButton = true;
+  @Output() clickTakePartButton = new EventEmitter<MeetingUser>();
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  getUser(username: string) {
+    const res = this.users.find( user => user.username === username);
+    return res ? res : username;
+  }
+
+  onClickTakeParteButton(attendee: MeetingUser) {
+    this.clickTakePartButton.emit(attendee);
+  }
+}

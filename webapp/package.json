@@ -26,6 +26,7 @@
     "@ngrx/store-devtools": "^6.0.0",
     "@ngx-config/core": "^6.0.0-rc.1",
     "@ngx-config/http-loader": "^6.0.0-rc.1",
+    "@swimlane/ngx-datatable": "^13.0.1",
     "array-to-csv": "^1.0.1",
     "bootflat": "^2.0.4",
     "core-js": "^2.4.1",
@@ -36,9 +37,9 @@
     "pretty-checkbox": "^3.0.3",
     "quill": "^1.1.9",
     "rxjs": "^6.2.0",
+    "rxjs-compat": "^6.0.0-rc.0",
     "ts-helpers": "^1.1.1",
-    "zone.js": "^0.8.26",
-    "rxjs-compat": "^6.0.0-rc.0"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@angular/cli": "^6.0.5",

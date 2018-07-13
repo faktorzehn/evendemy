@@ -1,0 +1,39 @@
+<ngx-datatable
+        #myTable
+        class='bootstrap ngx-datatable'
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="0"
+        [rowHeight]="50"
+        [rows]='attendees'>
+        <ngx-datatable-column name="Name">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{getUser(row.username) | name}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="External" prop="externals"></ngx-datatable-column>
+        <ngx-datatable-column name="State">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div *ngIf="row.tookPart">
+              <span class="meeting-tag">confirmed</span>
+            </div>
+            <div *ngIf="!row.tookPart">
+              takes part
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Date of Registration">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{row.dateOfRegistration | date:'dd.MM.yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Action" *ngIf="editable">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <button class="btn btn-success" (click)="onClickTakeParteButton(row)" [disabled]="disableTakePartButton" *ngIf="!row.tookPart">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
+              has taken part
+            </button>
+          </ng-template>
+        </ngx-datatable-column>
+
+</ngx-datatable>

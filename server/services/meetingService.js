@@ -242,13 +242,11 @@ module.exports = {
         var m = {
             mid: mid,
             username: username,
-            lastUpdate: new Date(),
+            dateOfRegistration: new Date(),
             tookPart: false,
             externals: externals ? externals : [],
             deleted: false
         }
-
-        console.log(m.externals);
 
         return MeetingUser.update({mid: mid, username: username}, m, {upsert: true, setDefaultsOnInsert: true});
     },
@@ -262,7 +260,7 @@ module.exports = {
     confirmUserForMeeting: function(mid, username){
         var MeetingUser = require('../models/meeting_user');
         username = username.toLowerCase();
-        return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: {tookPart: true} }, { upsert: true });
+        return MeetingUser.update({ $and: [{ mid: mid }, { username: username }, { deleted: false }] }, { $set: {tookPart: true, dateOfConfirmation: new Date()} }, { upsert: true });
     },
 
     rejectUserFromMeeting: function(mid, username){

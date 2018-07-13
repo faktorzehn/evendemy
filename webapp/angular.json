@@ -84,7 +84,8 @@
               "node_modules/bootflat/css/site.min.css",
               "node_modules/quill/dist/quill.snow.css",
               "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/pretty-checkbox/src/pretty-checkbox.scss"
+              "node_modules/pretty-checkbox/src/pretty-checkbox.scss",
+              "node_modules/@swimlane/ngx-datatable/release/themes/bootstrap.css"
             ],
             "assets": [
               "src/assets",

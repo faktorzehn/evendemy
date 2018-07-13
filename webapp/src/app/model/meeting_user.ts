@@ -3,6 +3,8 @@ export class MeetingUser {
      public mid: number,
      public username: string,
      public externals: [string],
-     public tookPart?: boolean
+     public tookPart?: boolean,
+     public dateOfRegistration?: Date,
+     public dateOfConfirmation?: Date
      ) {  }
 }

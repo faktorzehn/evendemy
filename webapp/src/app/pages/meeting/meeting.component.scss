@@ -23,6 +23,21 @@
   padding-left: 0px;
 }
 
+.meeting-header-actions{
+  text-align: right;
+  margin-top:30px;
+
+  > a {
+    padding: 2px;
+    color: $evendemy-primary;
+  }
+
+  .not-active-link{
+    color: #c9c9c9;
+  }
+}
+
+
 .meeting-info-box{
   background-color: #dddddd;
   border-radius: 5px;

@@ -5,7 +5,8 @@ const MeetingUserSchema = mongoose.Schema({
     mid: {type: Number, required: true}, //meeting id
     username: {type: String, required: true},
     tookPart: {type: Boolean, default: false},
-    lastUpdate: {type: Date, default: Date.now},
+    dateOfRegistration: {type: Date},
+    dateOfConfirmation: {type: Date},
     externals: { type: [String], default: [] },
     deleted: {type: Boolean, default: false}
 });

@@ -34,6 +34,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   inputDate = '';
   dateFormat = 'DD.MM.YYYY';
   randomizedNumber = Math.floor(Math.random() * 10000);
+  listView = false;
 
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
@@ -41,7 +42,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   imageFolder = this.config.getSettings().meeting_image_folder;
   tmpImgData: any;
 
-  private users: User[] = [];
+  users: User[] = [];
 
   constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute,
     private router: Router, private store: Store<AppState>, private config: ConfigService) {
