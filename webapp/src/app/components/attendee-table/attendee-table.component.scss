@@ -1,0 +1,22 @@
+@import './../../../variables';
+
+::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-row.datatable-row-even {
+  background-color: $evendemy-background-alternate;
+}
+
+::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-row {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #d1d4d7;
+}
+
+::ng-deep  .ngx-datatable.bootstrap .datatable-header-cell {
+  vertical-align: bottom;
+  padding: 0.75rem;
+  border-bottom: 4px solid #d1d4d7;
+}
+
+::ng-deep  .ngx-datatable.bootstrap .datatable-header{
+  height: unset !important;
+}
+
