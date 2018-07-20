@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EvendemyCheckboxComponent } from './evendemy-checkbox.component';
+import { FormsModule } from '@angular/forms';
 
 describe('EvendemyCheckboxComponent', () => {
   let component: EvendemyCheckboxComponent;
@@ -8,7 +9,8 @@ describe('EvendemyCheckboxComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EvendemyCheckboxComponent ]
+      declarations: [ EvendemyCheckboxComponent ],
+      imports:[FormsModule]
     })
     .compileComponents();
   }));
@@ -22,4 +24,5 @@ describe('EvendemyCheckboxComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });
