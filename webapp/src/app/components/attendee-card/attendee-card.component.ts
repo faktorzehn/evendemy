@@ -8,18 +8,18 @@ import { User } from '../../model/user';
 })
 export class AttendeeCardComponent implements OnInit {
   @Input() user: User;
-  @Input() additional_attendees = 0;
+  @Input() additionalAttendees = 0;
   @Input() tookPart = false;
   @Input() showTakePartButton = false;
   @Input() disableTakePartButton = true;
   @Input() small = true;
-  @Output() clickTakePartButton: EventEmitter<User> = new EventEmitter<User>();
+  @Output() tookPartClicked: EventEmitter<User> = new EventEmitter<User>();
 
   constructor() {}
 
   ngOnInit() {}
 
   onClickTakePartButton() {
-    this.clickTakePartButton.emit(this.user);
+    this.tookPartClicked.emit(this.user);
   }
 }

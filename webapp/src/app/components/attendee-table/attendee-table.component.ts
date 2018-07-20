@@ -13,7 +13,7 @@ export class AttendeeTableComponent implements OnInit {
   @Input() users: User[] = [];
   @Input() editable = false;
   @Input() disableTakePartButton = true;
-  @Output() clickTakePartButton = new EventEmitter<MeetingUser>();
+  @Output() tookPartClicked = new EventEmitter<MeetingUser>();
 
   constructor() { }
 
@@ -26,6 +26,6 @@ export class AttendeeTableComponent implements OnInit {
   }
 
   onClickTakeParteButton(attendee: MeetingUser) {
-    this.clickTakePartButton.emit(attendee);
+    this.tookPartClicked.emit(attendee);
   }
 }
