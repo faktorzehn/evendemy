@@ -9,6 +9,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from '@ngx-config/core';
 import { User } from '../model/user';
 import { InitUsers } from '../actions/users.actions';
+import 'rxjs/add/operator/retry';
 
 @Injectable()
 export class UsersService {

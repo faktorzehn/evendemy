@@ -17,7 +17,7 @@ export class MeetingListComponent implements OnInit {
   @Input()
   set meetings(value) {
     this._meetings.next(value);
-  };
+  }
 
   get meetings(): Meeting[] {
     return this._meetings.getValue();

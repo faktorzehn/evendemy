@@ -17,7 +17,7 @@ export function meetingsReducer(state: Meeting[] = [], action: MeetingsActions) 
         return newState;
       }
     case REMOVE_MEETING:
-      return state.filter( m => m.mid !== action.payload)
+      return state.filter( m => m.mid !== action.payload);
     default:
       return state;
   }

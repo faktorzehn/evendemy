@@ -3,6 +3,7 @@ import { Meeting } from './../model/meeting';
 import { Comment } from './../model/comment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
+import 'rxjs/add/operator/do';
 import { InitMeetings, AddMeeting, RemoveMeeting, UpdateMeeting } from '../actions/meetings.actions';
 import { SelectMeeting, UnselectMeeting, UpdateComments } from '../actions/selectMeeting.actions';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -90,7 +91,7 @@ export class MeetingService {
       const url = this.url + '/meeting/' + mid + '/comment';
       return this.http.post(url, comment, {headers: headers}).
         do( (res: any) => {
-          this.store.dispatch(new UpdateComments({mid: mid, comments: res.comments}))
+          this.store.dispatch(new UpdateComments({mid: mid, comments: res.comments}));
         });
     }
 

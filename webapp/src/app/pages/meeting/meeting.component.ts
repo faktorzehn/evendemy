@@ -54,7 +54,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       const mid = params['mid'];
       if (mid === 'new') {
         console.error('Routing has some error! mid should not be new');
-      };
+      }
       if (type) {
         this.initForCreation(type);
       } else if (mid) {
@@ -142,7 +142,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       if (attendee) {
         this.userHasAccepted = true;
         this.userHasFinished = attendee.tookPart;
-      };
+      }
     });
   }
 
@@ -190,7 +190,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onCopyMeeting() {
-    const meeting = { ... this.meeting }
+    const meeting = { ... this.meeting };
     meeting.mid = null;
     meeting.comments = [];
     meeting.creationDate = null;
@@ -240,7 +240,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     const bodyCSV = this.potentialAttendees.map(a => {
       const user = this.users.find( u => u.username === a.username);
       if (user) {
-        return [user.firstname, user.lastname, user.email, a.tookPart.toString()]
+        return [user.firstname, user.lastname, user.email, a.tookPart.toString()];
       }
     });
 
