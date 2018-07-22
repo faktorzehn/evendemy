@@ -305,7 +305,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return user.username;
   }
 
-  onCheckboxChange() {
+  checkboxChanged() {
     this.meeting.numberOfAllowedExternals === 0 ? this.meeting.numberOfAllowedExternals = 1 : this.meeting.numberOfAllowedExternals = 0;
   }
 

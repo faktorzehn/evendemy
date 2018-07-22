@@ -30,7 +30,7 @@ import { ConfigHttpLoader } from '@ngx-config/http-loader';
 import { UsersService } from './services/users.service';
 import { usersReducer } from './reducers/users.reducer';
 import { NamePipe } from './pipes/name.pipe';
-import { EvendemyCheckboxComponent } from './components/checkbox/evendemy-checkbox.component';
+import { EvendemyCheckboxComponent } from './components/checkbox/checkbox.component';
 import { UserImageComponent } from './components/user-image/user-image.component';
 import { UserService } from './services/user.service';
 import { UsersComponent } from './pages/users/users.component';

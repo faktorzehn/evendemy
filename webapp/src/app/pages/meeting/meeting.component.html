@@ -129,12 +129,12 @@
       </div>
       <div class="row form-row">
         <div class="col-md-4">Is in freetime</div>
-        <evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="meeting.isFreetime = $event" [value]="meeting.isFreetime"
+        <evendemy-checkbox class="meeting-checkbox" (checkboxChanged)="meeting.isFreetime = $event" [value]="meeting.isFreetime"
           [disabled]="!isEditable"></evendemy-checkbox>
       </div>
       <div class="row form-row">
         <div class="col-md-4">Are externals allowed</div>
-        <evendemy-checkbox class="meeting-checkbox" (onCheckboxChange)="onCheckboxChange()" [value]="meeting.numberOfAllowedExternals>0"
+        <evendemy-checkbox class="meeting-checkbox" (checkboxChanged)="checkboxChanged()" [value]="meeting.numberOfAllowedExternals>0"
           [disabled]="!isEditable"></evendemy-checkbox>
       </div>
       <div class="row form-row">

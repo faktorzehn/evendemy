@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EvendemyCheckboxComponent } from './evendemy-checkbox.component';
+import { EvendemyCheckboxComponent } from './checkbox.component';
 import { FormsModule } from '@angular/forms';
 
 describe('EvendemyCheckboxComponent', () => {
@@ -44,7 +44,7 @@ describe('EvendemyCheckboxComponent', () => {
 
   it('should return true', () => {
     const checkbox: HTMLInputElement = getCheckbox();
-    component.onCheckboxChange.subscribe(x => {
+    component.checkboxChanged.subscribe(x => {
       expect(x).toBeTruthy();
     });
     checkbox.click();
@@ -54,7 +54,7 @@ describe('EvendemyCheckboxComponent', () => {
     const checkbox: HTMLInputElement = getCheckbox();
     checkbox.click();
 
-    component.onCheckboxChange.subscribe(x => {
+    component.checkboxChanged.subscribe(x => {
       expect(x).toBeFalsy();
     });
     checkbox.click();

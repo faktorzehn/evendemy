@@ -5,9 +5,9 @@
     <div class="filter-label hidden-xs">
         Meetings:
     </div>
-    <evendemy-checkbox [label]="'not announced'" (onCheckboxChange)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
-    <evendemy-checkbox [label]="'old'" (onCheckboxChange)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
-    <evendemy-checkbox [label]="'new'" (onCheckboxChange)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
+    <evendemy-checkbox [label]="'not announced'" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
+    <evendemy-checkbox [label]="'old'" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
+    <evendemy-checkbox [label]="'new'" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
 
   </div>
 

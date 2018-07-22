@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'evendemy-checkbox',
-  templateUrl: './evendemy-checkbox.component.html',
-  styleUrls: ['./evendemy-checkbox.component.scss']
+  templateUrl: './checkbox.component.html',
+  styleUrls: ['./checkbox.component.scss']
 })
 export class EvendemyCheckboxComponent implements OnInit {
   @Input()
@@ -16,7 +16,7 @@ export class EvendemyCheckboxComponent implements OnInit {
   public disabled = false;
 
   @Output()
-  public onCheckboxChange: EventEmitter<boolean> = new EventEmitter();
+  public checkboxChanged: EventEmitter<boolean> = new EventEmitter();
 
   constructor() { }
 
@@ -24,7 +24,7 @@ export class EvendemyCheckboxComponent implements OnInit {
   }
 
   onCheckboxChangeInternal() {
-    this.onCheckboxChange.emit(this.value);
+    this.checkboxChanged.emit(this.value);
   }
 
 }
