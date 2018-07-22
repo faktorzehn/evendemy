@@ -8,7 +8,7 @@ import { User } from '../../model/user';
 })
 export class AttendeeCardComponent implements OnInit {
   @Input() user: User;
-  @Input() additionalAttendees = 0;
+  @Input() additionalAttendee: String;
   @Input() tookPart = false;
   @Input() showTakePartButton = false;
   @Input() disableTakePartButton = true;
