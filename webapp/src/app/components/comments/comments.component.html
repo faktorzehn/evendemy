@@ -9,7 +9,7 @@
           <div class="comment-message-body">{{comment.text}}</div>
         </div>
     </div>
-    <div class="row"  *ngIf="!isNew">
+    <div class="row">
         <textarea class="col-xs-12 commentbox" [(ngModel)]="commentbox" name="commentbox"></textarea>
         <button class="btn btn-info col-md-offset-9 col-md-3" (click)="onAddComment()" style="float: right;">Add Comment</button>
     </div>
