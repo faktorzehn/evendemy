@@ -8,13 +8,13 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ConfirmDialogComponent implements OnInit {
 
   @Input()
-  private title = '';
+  public title = '';
 
   @Input()
-  private dialog_id = '';
+  public dialogID = '';
 
   @Output()
-  private onConfirm: EventEmitter<any> = new EventEmitter();
+  public confirm: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -22,7 +22,7 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   confirmWasClicked() {
-    this.onConfirm.emit();
+    this.confirm.emit();
   }
 
 }

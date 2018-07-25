@@ -231,19 +231,19 @@
 
     </form>
 
-    <evendemy-confirm-dialog title="Do you really want to delete?" (onConfirm)="onDeleteMeeting()" dialog_id="confirmDialog">
+    <evendemy-confirm-dialog title="Do you really want to delete?" (confirm)="onDeleteMeeting()" dialogID="confirmDialog">
       You can not revert this action. The attendees will be informed that the meeting will not take place.
       <br/>
       <br/> Do you really want to delete this meeting?
     </evendemy-confirm-dialog>
 
-    <evendemy-confirm-dialog title="Do you really want to copy this meeting?" (onConfirm)="onCopyMeeting()" dialog_id="copyDialog">
+    <evendemy-confirm-dialog title="Do you really want to copy this meeting?" (confirm)="onCopyMeeting()" dialogID="copyDialog">
       With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
       <br/>
       <br/> Do you really want to copy this meeting?
     </evendemy-confirm-dialog>
 
-    <evendemy-confirm-dialog title="Do you want to take some friend with you?" (onConfirm)="onAcceptMeeting(external)" dialog_id="externalDialog">
+    <evendemy-confirm-dialog title="Do you want to take some friend with you?" (confirm)="onAcceptMeeting(external)" dialogID="externalDialog">
       This meeting allows you to take some friend with you. If you want, please enter a name.
       <br/>
       <input type="text" class="form-control" [(ngModel)]="external" style="margin-top:10px;" />

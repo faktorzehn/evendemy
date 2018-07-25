@@ -1,4 +1,4 @@
-<div class="modal fade" id="{{dialog_id}}" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{dialogID}}" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -11,7 +11,7 @@
           <ng-content></ng-content>
         </div>
         <div class="modal-footer">
-        <button type="button" class="btn btn-info" (click)="confirmWasClicked()" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-info confirm-button" (click)="confirmWasClicked()" data-dismiss="modal">Yes</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
     </div>
