@@ -8,10 +8,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SummaryCoursesEventsComponent implements OnInit {
 
   @Input()
-  number_of_created_meetings = 0;
+  numberOfCreatedMeetings = 0;
 
   @Input()
-  number_of_attended_meetings = 0;
+  numberOfAttendedMeetings = 0;
 
   constructor() { }
 

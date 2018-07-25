@@ -111,7 +111,7 @@
     <!--Summary of created and attended meetings-->
     <div *ngIf="user.options.summary_of_meetings_visible || editable">
       <div class="border-line"></div>
-      <evendemy-summary-courses-events [number_of_attended_meetings]="events.length + courses.length" [number_of_created_meetings]="events_from_author.length + courses_from_author.length">
+      <evendemy-summary-courses-events [numberOfAttendedMeetings]="events.length + courses.length" [numberOfCreatedMeetings]="events_from_author.length + courses_from_author.length">
       </evendemy-summary-courses-events>
     </div>
 
