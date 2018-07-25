@@ -27,8 +27,7 @@ export class UserImageComponent implements OnInit {
 
   constructor(
     private config: ConfigService,
-    private client: Client,
-    private store: Store<AppState>
+    private client: Client
   ) { }
 
   ngOnInit() {
