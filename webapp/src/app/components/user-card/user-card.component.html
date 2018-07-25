@@ -1,10 +1,10 @@
 <a class="thumbnail">
   <div class="caption text-center thumbnail-container">
     <div>
-        <evendemy-user-image [username]="user.username"  width="100" height="100"></evendemy-user-image>
-        <h3 class="meeting-title">{{user.firstname}} {{user.lastname}}</h3>
+        <evendemy-user-image [username]="user?.username"  width="100" height="100"></evendemy-user-image>
+        <h3 class="meeting-title">{{user?.firstname}} {{user?.lastname}}</h3>
     </div>
 
-    <a type="button" class="btn btn-default user-more-button"  routerLink="/user-info/{{user.username}}">more</a>
+    <a type="button" class="btn btn-default user-more-button"  routerLink="/user-info/{{user?.username}}">more</a>
   </div>
 </a>
