@@ -1,5 +1,3 @@
-import { Action } from '@ngrx/store';
-
 import { Meeting } from '../model/meeting';
 import {MeetingsActions, ADD_MEETING, UPDATE_MEETING, REMOVE_MEETING, INIT_MEETINGS} from '../actions/meetings.actions';
 
