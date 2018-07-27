@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Meeting } from '../../model/meeting';
@@ -13,16 +13,16 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './events-or-courses.component.html',
   styleUrls: ['./events-or-courses.component.scss']
 })
-export class EventsOrCoursesComponent implements OnInit {
+export class EventsOrCoursesComponent implements OnInit, OnDestroy {
 
-  private meetings: Meeting[] = [];
+  public meetings: Meeting[] = [];
   public showNotAnnounced = true;
   public showOld = false;
   public showNew = true;
   private paramSubscription: Subscription;
   private type: string;
 
-  constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute, private router: Router,
+  constructor( private meetingService: MeetingService, private route: ActivatedRoute, private router: Router,
     private store: Store<AppState>) {
     store.select('meetings').subscribe( res => this.meetings = res);
   }
