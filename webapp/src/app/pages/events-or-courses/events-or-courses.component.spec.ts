@@ -13,7 +13,8 @@ import { of } from 'rxjs/internal/observable/of';
 describe('EventsOrCoursesComponent', () => {
   let component: EventsOrCoursesComponent;
   let fixture: ComponentFixture<EventsOrCoursesComponent>;
-  let activatedRouteSpy;
+  let activatedRoute;
+  let routerSpy;
 
   @Component({selector: 'evendemy-menu', template: ''})
   class EvendemyMenuStubComponent {
@@ -26,18 +27,19 @@ describe('EventsOrCoursesComponent', () => {
   }
 
   beforeEach(async(() => {
-    const meetingsSpy = jasmine.createSpyObj('MeetingService', ['getAllMeetings']);
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    const storeSpy = jasmine.createSpyObj('Store', ['select']);
-    storeSpy.select.and.returnValue(of([]));
+    const _meetingsSpy = jasmine.createSpyObj('MeetingService', ['getAllMeetings']);
+    const _routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const _storeSpy = jasmine.createSpyObj('Store', ['select']);
+    _storeSpy.select.and.returnValue(of([]));
 
     TestBed.configureTestingModule({
       declarations: [ EventsOrCoursesComponent, EvendemyMenuStubComponent, EvendemyCheckboxComponent, EvendemyMeetungListStubComponent ],
       imports: [FormsModule],
-      providers: [{provide: MeetingService, useValue: meetingsSpy }, {provide: ActivatedRoute,
-        useValue: { params: of({type: 'course'})}}, {provide: Router, useValue: routerSpy}, {provide: Store, useValue: storeSpy}]
+      providers: [{provide: MeetingService, useValue: _meetingsSpy }, {provide: ActivatedRoute,
+        useValue: { params: of({type: 'course'})}}, {provide: Router, useValue: _routerSpy}, {provide: Store, useValue: _storeSpy}]
     });
-    activatedRouteSpy = TestBed.get(ActivatedRoute);
+    activatedRoute = TestBed.get(ActivatedRoute);
+    routerSpy = TestBed.get(Router);
     TestBed.compileComponents();
   }));
 
@@ -51,6 +53,12 @@ describe('EventsOrCoursesComponent', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
     expect(component.loadMeetings).toHaveBeenCalled();
+  });
+
+  it('should redirect to error page', () => {
+    activatedRoute.params = of({type: 'not-valid'});
+    fixture.detectChanges();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/error']);
   });
 
   it('onShowNotAnnounced should change state to true', () => {

@@ -22,7 +22,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   private paramSubscription: Subscription;
   private type: string;
 
-  constructor( private meetingService: MeetingService, private route: ActivatedRoute, private router: Router,
+  constructor(private meetingService: MeetingService, private route: ActivatedRoute, private router: Router,
     private store: Store<AppState>) {
     store.select('meetings').subscribe( res => this.meetings = res);
   }
@@ -66,6 +66,5 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.showOld = state;
     this.loadMeetings();
   }
-
 
 }
