@@ -39,7 +39,7 @@ describe ('UsersService', () => {
       done();
     });
 
-    //mock http call
+    // mock http call
     const req = httpTestingController.expectOne('/users');
     expect(req.request.method).toEqual('GET');
     req.flush(users);
