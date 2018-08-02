@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserImageComponent } from './user-image.component';
 import { ConfigService } from '@ngx-config/core';
 import { Client } from '../../middleware/client';
-import { of } from 'rxjs/internal/observable/of';
+import { of } from 'rxjs';
 
 describe('PageComponent', () => {
   let component: UserImageComponent;

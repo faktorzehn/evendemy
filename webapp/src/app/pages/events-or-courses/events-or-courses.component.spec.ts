@@ -8,7 +8,7 @@ import { MeetingService } from '../../services/meeting.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/observable/of';
 import { Store } from '@ngrx/store';
-import { of } from 'rxjs/internal/observable/of';
+import { of } from 'rxjs';
 
 describe('EventsOrCoursesComponent', () => {
   let component: EventsOrCoursesComponent;
