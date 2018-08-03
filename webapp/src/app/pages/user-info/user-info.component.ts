@@ -6,6 +6,7 @@ import { Meeting } from '../../model/meeting';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EditorComponent } from '../../components/editor/editor.component';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'evendemy-user-info',
@@ -26,6 +27,7 @@ export class UserInfoComponent implements OnInit {
 
   constructor(
     private client: Client,
+    private authService: AuthenticationService,
     private userService: UserService,
     private route: ActivatedRoute
   ) {}
@@ -35,7 +37,7 @@ export class UserInfoComponent implements OnInit {
       if (params['username']) {
         this.username = params['username'];
       } else {
-        this.username = this.client.getLoggedInUsername();
+        this.username = this.authService.getLoggedInUsername();
         this.editable = true;
       }
 
@@ -91,30 +93,30 @@ export class UserInfoComponent implements OnInit {
 
   uploadImage(data) {
     const postData = {
-      username: this.client.getLoggedInUsername(),
+      username: this.authService.getLoggedInUsername(),
       data: data.image
     };
     this.userService
-      .addImage(this.client.getLoggedInUsername(), postData)
+      .addImage(this.authService.getLoggedInUsername(), postData)
       .subscribe(img_result => {});
   }
 
   deleteImage() {
     this.userService
-      .deleteImage(this.client.getLoggedInUsername())
+      .deleteImage(this.authService.getLoggedInUsername())
       .subscribe(img_result => {});
   }
 
   onUpdateSettings() {
     this.userService
-      .updateSettings(this.client.getLoggedInUsername(), this.user.options)
+      .updateSettings(this.authService.getLoggedInUsername(), this.user.options)
       .subscribe(o => {});
   }
 
   saveAdditionalInfo() {
     this.user.additional_info.description = this.editor.getValue();
     this.userService
-      .updateAdditionalInfo(this.client.getLoggedInUsername(), this.user.additional_info)
+      .updateAdditionalInfo(this.authService.getLoggedInUsername(), this.user.additional_info)
       .subscribe(o => {});
   }
 }

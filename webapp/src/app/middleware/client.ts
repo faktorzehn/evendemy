@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Request, Response, URLSearchParams } from '@angular/http';
-import { User } from './../model/user';
-import { Meeting } from './../model/meeting';
-import { MeetingUser } from './../model/meeting_user';
-import { Comment } from './../model/comment';
+import { User } from '../model/user';
+import { Meeting } from '../model/meeting';
+import { MeetingUser } from '../model/meeting_user';
+import { Comment } from '../model/comment';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Store } from '@ngrx/store';
@@ -34,39 +34,6 @@ export class Client {
         return this.http.get(url, { headers: headers });
     }
 
-    public loginUser(username: string, password: string) {
-        const token = 'Basic ' + window.btoa(username + ':' + password);
-        const headers = new HttpHeaders({
-            'Authorization': token,
-            'Content-Type': 'application/json'
-        });
-        const url = this.url + '/auth';
-        return this.http.post(url, {}, { headers: headers }).map((res) => {
-            localStorage.setItem('token', token);
-            localStorage.setItem('username', username);
-            return res;
-        });
-    }
-
-    public logoutUser() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-    }
-
-    public isLoggedIn() {
-        return localStorage.getItem('token') !== undefined && localStorage.getItem('token') !== null;
-    }
-
-    public getLoggedInUsername() {
-        return localStorage.getItem('username').toLowerCase();
-    }
-
-    public getLoggedInLdapUser() {
-        const headers = this.createHeaders();
-        const url = this.url + '/auth';
-        return this.http.get(url, { headers: headers });
-    }
-
     public getMeetingByMId(mid: number) {
         const headers = this.createHeaders();
         const url = this.url + '/meeting/' + mid;
@@ -82,7 +49,6 @@ export class Client {
     public getAllAttendingUsers(mid: string): Observable<MeetingUser[]> {
         const headers = this.createHeaders();
         const url = this.url + '/meeting/' + mid + '/attendees';
-        const params: URLSearchParams = new URLSearchParams();
 
         return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
     }
@@ -90,7 +56,6 @@ export class Client {
     public getMyMeetings(username: string) {
         const headers = this.createHeaders();
         const url = this.url + '/meetings/attendee/' + username;
-        const params: URLSearchParams = new URLSearchParams();
 
         return this.http.get(url, { headers: headers });
     }
@@ -98,7 +63,6 @@ export class Client {
     public getMeetingsFromAuthor(username: string) {
         const headers = this.createHeaders();
         const url = this.url + '/meetings/author/' + username;
-        const params: URLSearchParams = new URLSearchParams();
 
         return this.http.get(url, { headers: headers });
     }

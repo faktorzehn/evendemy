@@ -28,7 +28,7 @@ export class MeetingUtil {
     return 'course';
   }
 
-  public static generateCSV(attendees: MeetingUser[], users: User[]):any {
+  public static generateCSV(attendees: MeetingUser[], users: User[]): any {
     const headerCSV = [['Firstname', 'Lastname', 'email', 'has taken part']];
 
     const bodyCSV = attendees.map(a => {

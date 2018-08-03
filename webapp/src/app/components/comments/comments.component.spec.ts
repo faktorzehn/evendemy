@@ -7,15 +7,16 @@ import { NamePipe } from '../../pipes/name.pipe';
 import { FormsModule } from '@angular/forms';
 import { UsersService } from '../../services/users.service';
 import { Client } from '../../middleware/client';
+import { AuthenticationServiceTestBuilder } from '../../test-utils/authentication-service-test-builder';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 describe('CommentsComponent', () => {
   let component: CommentsComponent;
   let fixture: ComponentFixture<CommentsComponent>;
-  let clientSpy: jasmine.SpyObj<Client>;
   const users = [
     {username: 'a'}, {username: 'b'}
-  ]
+  ];
 
   @Component({selector: 'evendemy-user-image', template: ''})
   class UserImageStubComponent {
@@ -23,15 +24,13 @@ describe('CommentsComponent', () => {
   }
 
   beforeEach(async(() => {
-    const spy = jasmine.createSpyObj('Client', ['getLoggedInUsername']);
-    spy.getLoggedInUsername.and.returnValue('john');
+    const spy = new AuthenticationServiceTestBuilder().username('john').build();
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, FormsModule],
       declarations: [ CommentsComponent, UserImageStubComponent, NamePipe ],
-      providers: [{ provide: Client , useValue: spy }]
+      providers: [{ provide: AuthenticationService , useValue: spy }]
     });
-    clientSpy = TestBed.get(Client);
     TestBed.compileComponents();
   }));
 

@@ -40,6 +40,7 @@ import { CommentsComponent } from './components/comments/comments.component';
 import { PageComponent } from './components/page/page.component';
 import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 import { AttendeeTableComponent } from './components/attendee-table/attendee-table.component';
+import { AuthenticationService } from './services/authentication.service';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -108,7 +109,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     Client,
     MeetingService,
     UserService,
-    UsersService
+    UsersService,
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

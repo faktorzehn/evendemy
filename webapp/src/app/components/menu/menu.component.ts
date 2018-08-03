@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, Event} from '@angular/router';
-import { Client } from './../../middleware/client';
+import { Client } from '../../middleware/client';
 import { User } from '../../model/user';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'evendemy-menu',
@@ -13,14 +14,14 @@ export class MenuComponent implements OnInit, OnDestroy {
   type: string;
   user: User;
 
-  constructor(private route: ActivatedRoute, private client: Client) { }
+  constructor(private route: ActivatedRoute, private client: Client, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.type = params['type'];
     });
 
-    this.client.getUserByUsername( this.client.getLoggedInUsername()).subscribe( (user: User) => {
+    this.client.getUserByUsername( this.authService.getLoggedInUsername()).subscribe( (user: User) => {
       this.user = user;
  });
   }
@@ -30,6 +31,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.client.logoutUser();
+    this.authService.logoutUser();
   }
 }

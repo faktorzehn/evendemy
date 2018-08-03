@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { User } from '../../model/user';
 import { Comment } from '../../model/comment';
-import { Client } from '../../middleware/client';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'evendemy-comments',
@@ -21,7 +21,7 @@ export class CommentsComponent implements OnInit {
 
   commentbox = '';
 
-  constructor(private client: Client) { }
+  constructor(private authService: AuthenticationService) { }
 
   ngOnInit() {
   }
@@ -33,7 +33,7 @@ export class CommentsComponent implements OnInit {
 
   onAddComment() {
     const comment = new Comment();
-    comment.author = this.client.getLoggedInUsername();
+    comment.author = this.authService.getLoggedInUsername();
     comment.text = this.commentbox;
 
     this.addComment.emit(comment);

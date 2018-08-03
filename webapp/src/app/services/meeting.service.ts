@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Meeting } from './../model/meeting';
-import { Comment } from './../model/comment';
+import { Meeting } from '../model/meeting';
+import { Comment } from '../model/comment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
 import 'rxjs/add/operator/do';

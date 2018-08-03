@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Client } from './../../middleware/client';
 import { UsersService } from '../../services/users.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'evendemy-login',
@@ -13,14 +13,17 @@ export class LoginComponent implements OnInit {
   private returnLink = '';
   public invalidLogin = false;
 
-  constructor(private router: Router, private route: ActivatedRoute, private client: Client, private userService: UsersService) { }
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthenticationService,
+    private userService: UsersService) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => this.returnLink = params['return'] || '/meeting-list/course');
   }
 
   login(username: string, password: string) {
-    this.client.loginUser(username, password).subscribe((result) => {
+    this.authService.loginUser(username, password).subscribe((result) => {
       if (result === true) {
 
         // load users again - because first time (not logged in) will not be permitted

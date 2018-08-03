@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Client } from './../../middleware/client';
-import { Meeting } from './../../model/meeting';
-import { Comment } from './../../model/comment';
-import { MeetingUser } from './../../model/meeting_user';
+import { Client } from '../../middleware/client';
+import { Meeting } from '../../model/meeting';
+import { Comment } from '../../model/comment';
+import { MeetingUser } from '../../model/meeting_user';
 import { EditorComponent } from '../../components/editor/editor.component';
 import { MeetingService } from '../../services/meeting.service';
 import { Observable } from 'rxjs/Observable';
@@ -16,6 +16,7 @@ import { ConfigService } from '@ngx-config/core';
 import { UsersService } from '../../services/users.service';
 import * as moment from 'moment';
 import { MeetingUtil } from './meeting.util';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'evendemy-meeting',
@@ -43,8 +44,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   users: User[] = [];
 
-  constructor(private client: Client, private meetingService: MeetingService, private route: ActivatedRoute,
-    private router: Router, private store: Store<AppState>, private config: ConfigService) {
+  constructor(private client: Client,
+    private authService: AuthenticationService,
+     private meetingService: MeetingService,
+     private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<AppState>,
+    private config: ConfigService) {
   }
 
   ngOnInit() {
@@ -102,7 +108,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       if (this.editor) {
         this.editor.setValue(this.meeting.description);
       }
-      this.isEditable = this.client.getLoggedInUsername() === this.meeting.username;
+      this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
       if (this.meeting.date) {
         this.meeting.date = new Date(this.meeting.date);
         this.inputDate = MeetingUtil.dateToString(this.meeting.date);
@@ -116,7 +122,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
     this.client.getAllAttendingUsers(mid).subscribe((result) => {
       this.potentialAttendees = result;
-      const attendee = this.potentialAttendees.find(a => a.username === this.client.getLoggedInUsername());
+      const attendee = this.potentialAttendees.find(a => a.username === this.authService.getLoggedInUsername());
       if (attendee) {
         this.userHasAccepted = true;
         this.userHasFinished = attendee.tookPart;
@@ -182,7 +188,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onAcceptMeeting(external) {
-    this.client.attendMeeting(this.meeting.mid, this.client.getLoggedInUsername(), external).subscribe((result) => {
+    this.client.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external).subscribe((result) => {
       this.userHasAccepted = true;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
@@ -190,7 +196,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onRejectMeeting() {
-    this.client.rejectAttendingMeeting(this.meeting.mid, this.client.getLoggedInUsername()).subscribe((result) => {
+    this.client.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername()).subscribe((result) => {
       this.userHasAccepted = false;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
@@ -201,7 +207,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (attendee && !attendee.tookPart) {
       const foundedAttendee = this.potentialAttendees.find(p => p.username === attendee.username);
       foundedAttendee.tookPart = true;
-      if (foundedAttendee.username === this.client.getLoggedInUsername()) {
+      if (foundedAttendee.username === this.authService.getLoggedInUsername()) {
         this.userHasFinished = true;
       }
       this.client.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).subscribe((result) => { });
