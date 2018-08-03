@@ -11,11 +11,11 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../appState';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../model/user';
-import * as toCSV from 'array-to-csv';
 import * as FileSaver from 'file-saver';
 import { ConfigService } from '@ngx-config/core';
 import { UsersService } from '../../services/users.service';
 import * as moment from 'moment';
+import { MeetingUtil } from './meeting.util';
 
 @Component({
   selector: 'evendemy-meeting',
@@ -32,7 +32,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
   userHasAccepted = false;
   userHasFinished = false;
   inputDate = '';
-  dateFormat = 'DD.MM.YYYY';
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
 
@@ -72,7 +71,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   private initForCreation(type: string) {
     this.type = type;
     this.isNew = true;
-    this.type = this.mapType(this.type);
+    this.type = MeetingUtil.mapType(this.type);
 
     const meeting = new Meeting();
     meeting.courseOrEvent = this.type;
@@ -92,13 +91,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.loadPotentialAttendees(mid);
   }
 
-  mapType(type: string) {
-    if (type === 'course' || type === 'event') {
-      return type;
-    }
-    return 'course';
-  }
-
   ngOnDestroy() {
     this.meetingService.unloadMeeting();
     this.subscribe.unsubscribe();
@@ -113,23 +105,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
       this.isEditable = this.client.getLoggedInUsername() === this.meeting.username;
       if (this.meeting.date) {
         this.meeting.date = new Date(this.meeting.date);
-        this.inputDate = this.convertDateToString(this.meeting.date);
+        this.inputDate = MeetingUtil.dateToString(this.meeting.date);
       }
     });
-  }
-
-  convertDateToString(value: Date): string {
-    if (value) {
-      return moment(value).format(this.dateFormat);
-    }
-    return '';
-  }
-
-  convertStringToDate(value: string): Date {
-    if (value) {
-      return moment(value, this.dateFormat).toDate();
-    }
-    return null;
   }
 
   loadPotentialAttendees(mid) {
@@ -156,7 +134,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   createMeeting() {
     this.meeting.description = this.editor.getValue();
-    this.meeting.date = this.convertStringToDate(this.inputDate);
+    this.meeting.date = MeetingUtil.stringToDate(this.inputDate);
     this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
@@ -167,7 +145,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   updateMeeting() {
     this.uploadImage(this.meeting.mid);
     this.meeting.description = this.editor.getValue();
-    this.meeting.date = this.convertStringToDate(this.inputDate);
+    this.meeting.date = MeetingUtil.stringToDate(this.inputDate);
     this.meetingService.updateMeeting(this.meeting).subscribe((result) => {
       this.router.navigate(['/meeting-list/' + this.type]);
     });
@@ -235,16 +213,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   downloadCSV() {
-    const headerCSV = [['Firstname', 'Lastname', 'email', 'has taken part']];
-
-    const bodyCSV = this.potentialAttendees.map(a => {
-      const user = this.users.find( u => u.username === a.username);
-      if (user) {
-        return [user.firstname, user.lastname, user.email, a.tookPart.toString()];
-      }
-    });
-
-    const csv = toCSV(headerCSV.concat(bodyCSV));
+    const csv = MeetingUtil.generateCSV(this.potentialAttendees, this.users);
 
     const blob = new Blob([csv], { type: 'text/csv' });
     FileSaver.saveAs(blob, 'attendees-for-meeting-' + this.meeting.mid + '.csv');
