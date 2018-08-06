@@ -83,6 +83,14 @@ describe ('meetingsReducer', () => {
       expect(meetingsReducer([meeting1, meeting2, meeting3], new UpdateMeeting(updatedMeeting))) //
       .toEqual([meeting1, meeting2, updatedMeeting]);
     });
+
+  });
+
+  it('default should return state', () => {
+    const meeting1 = createMeeting(1, 'Test-Meeting-1', 'john');
+    const meeting2 = createMeeting(2, 'Test-Meeting-2', 'admin');
+    expect(meetingsReducer([meeting1, meeting2], { type: 'NOT_SUPPORTED' } as any)) //
+    .toEqual([meeting1, meeting2]);
   });
 
 });

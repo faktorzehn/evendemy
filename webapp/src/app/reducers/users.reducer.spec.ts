@@ -12,4 +12,13 @@ describe ('usersReducer', () => {
     expect(usersReducer([], new InitUsers(users))).toEqual(users);
   });
 
+  it('default should return state', () => {
+    const users = [
+      new User('john', 'mail', 'John', 'Doe'),
+      new User('admin', 'mail2', 'Admin', 'Doe')
+    ];
+    expect(usersReducer(users, { type: 'NOT_SUPPORTED' } as any)) //
+    .toEqual(users);
+  });
+
 });

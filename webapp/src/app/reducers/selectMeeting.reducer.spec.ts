@@ -42,4 +42,10 @@ describe ('selectMeetingReducer', () => {
     });
   });
 
+  it('default should return state', () => {
+    const meeting1 = createMeeting(1, 'Test-Meeting-1', 'john');
+    expect(selectMeetingReducer(meeting1, { type: 'NOT_SUPPORTED' } as any)) //
+    .toEqual(meeting1);
+  });
+
 });
