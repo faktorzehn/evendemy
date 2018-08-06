@@ -6,20 +6,13 @@ import { ConfigService } from '@ngx-config/core';
 import { User } from '../model/user';
 import { InitUsers } from '../actions/users.actions';
 import 'rxjs/add/operator/retry';
+import { BaseService } from './base.service';
 
 @Injectable()
-export class UsersService {
-    private url = this.config.getSettings().backend_url;
+export class UsersService extends BaseService {
 
-    constructor(private http: HttpClient, private store: Store<AppState>, private config: ConfigService) {
-    }
-
-    private createHeaders(): HttpHeaders {
-        const headers = new HttpHeaders({
-            'Authorization': localStorage.getItem('token'),
-            'Content-Type': 'application/json'
-        });
-        return headers;
+    constructor(private http: HttpClient, private store: Store<AppState>, config: ConfigService) {
+      super(config);
     }
 
     public loadAllUsers() {

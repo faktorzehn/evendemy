@@ -14,14 +14,6 @@ export class AuthenticationService {
     private store: Store<AppState>
   ) {}
 
-  private createHeaders(): HttpHeaders {
-    const headers = new HttpHeaders({
-      Authorization: localStorage.getItem('token'),
-      'Content-Type': 'application/json'
-    });
-    return headers;
-  }
-
   public loginUser(username: string, password: string) {
     const token = 'Basic ' + window.btoa(username + ':' + password);
     const headers = new HttpHeaders({

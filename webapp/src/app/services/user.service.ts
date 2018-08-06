@@ -1,21 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConfigService } from '@ngx-config/core';
+import { BaseService } from './base.service';
 
 @Injectable()
-export class UserService {
+export class UserService extends BaseService {
 
-  private url = this.config.getSettings().backend_url;
-
-  constructor(private http: HttpClient, private config: ConfigService) {
-  }
-
-  private createHeaders(): HttpHeaders {
-      const headers = new HttpHeaders({
-          'Authorization': localStorage.getItem('token'),
-          'Content-Type': 'application/json'
-      });
-      return headers;
+  constructor(private http: HttpClient, config: ConfigService) {
+    super(config);
   }
 
   public addImage(username: string, data: any) {
