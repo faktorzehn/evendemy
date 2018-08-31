@@ -3,8 +3,9 @@ import { UserImageComponent } from './user-image.component';
 import { ConfigService } from '@ngx-config/core';
 import { Client } from '../../middleware/client';
 import { of } from 'rxjs';
+import { SimpleChange } from '@angular/core';
 
-describe('PageComponent', () => {
+describe('UserImageComponent', () => {
   let component: UserImageComponent;
   let fixture: ComponentFixture<UserImageComponent>;
   let clientSpy;
@@ -52,7 +53,10 @@ describe('PageComponent', () => {
   });
 
   it('setting username should trigger Client service to find user', () => {
-    component.username = 'john';
+    component.ngOnChanges({
+      username: new SimpleChange(null, 'john', true)
+    });
+    fixture.detectChanges();
     expect(clientSpy.getUserByUsername.calls.count()).toBe(
       1,
       'client was called once'
@@ -60,7 +64,9 @@ describe('PageComponent', () => {
   });
 
   it('get initials', () => {
-    component.username = 'john';
+    component.ngOnChanges({
+      username: new SimpleChange(null, 'john', true)
+    });
     expect(component.initials).toBe('JD');
   });
 
@@ -69,12 +75,16 @@ describe('PageComponent', () => {
   });
 
   it('get background color for John Doe', () => {
-    component.username = 'john';
+    component.ngOnChanges({
+      username: new SimpleChange(null, 'john', true)
+    });
     expect(component.background_color).toBe('#8375b5');
   });
 
   it('get background color for Max Mustermann', () => {
-    component.username = 'max';
+    component.ngOnChanges({
+      username: new SimpleChange(null, 'max', true)
+    });
     expect(component.background_color).toBe('#5da5e2');
   });
 });

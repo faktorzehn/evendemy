@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfigService } from '@ngx-config/core';
 
@@ -11,12 +11,8 @@ import { User } from '../../model/user';
   templateUrl: './user-image.component.html',
   styleUrls: ['./user-image.component.scss']
 })
-export class UserImageComponent implements OnInit {
-  @Input() set username(name: string) {
-    this.client
-        .getUserByUsername(name)
-        .subscribe((u: User) => (this.user = u));
-  }
+export class UserImageComponent implements OnInit, OnChanges {
+  @Input() username: string;
   @Input() width: number;
   @Input() height: number;
 
@@ -31,6 +27,14 @@ export class UserImageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.username) {
+      this.client
+        .getUserByUsername(changes.username.currentValue)
+        .subscribe((u: User) => (this.user = u));
+    }
   }
 
   get initials() {

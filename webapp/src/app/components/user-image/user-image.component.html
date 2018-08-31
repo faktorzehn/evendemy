@@ -1,7 +1,7 @@
 
 <div class="img-tools"
 [style.width.px]="width"
-[style.height.px]="height">
+[style.height.px]="height" *ngIf="username">
   <img *ngIf="!error" src="{{folder}}/{{username}}.jpg" (error)="error=true" />
 
   <div *ngIf="error">
