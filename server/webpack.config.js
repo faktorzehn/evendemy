@@ -16,7 +16,7 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  entry: './server.js',
+  entry: './src/server.js',
   target: 'node',
   output: {
     path: path.join(__dirname, 'dist'),

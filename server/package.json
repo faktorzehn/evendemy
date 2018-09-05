@@ -5,11 +5,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "npm run build-core && npm run build-default-files",
-    "build-core": "webpack --c webpack.config.js && cp package.json dist/package.json && cp package-lock.json dist/package-lock.json",
-    "build-default-files": "cp -R assets dist && cp config.json dist/config.json && cp -R plugins dist"
+    "test": "karma start",
+    "build": "npm run build-for-upgrade && npm run build-default-files",
+    "build-for-upgrade": "webpack --c webpack.config.js && cp package.json dist/package.json && cp package-lock.json dist/package-lock.json",
+    "build-default-files": "cp -R src/assets dist && cp src/config.json dist/config.json && cp -R src/plugins dist"
   },
   "author": "",
   "devDependencies": {
