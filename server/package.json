@@ -6,13 +6,16 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "karma start",
+    "test": "jasmine --config=jasmine.json",
     "build": "npm run build-for-upgrade && npm run build-default-files",
     "build-for-upgrade": "webpack --c webpack.config.js && cp package.json dist/package.json && cp package-lock.json dist/package-lock.json",
     "build-default-files": "cp -R src/assets dist && cp src/config.json dist/config.json && cp -R src/plugins dist"
   },
   "author": "",
   "devDependencies": {
+    "jasmine": "^3.2.0",
+    "rewiremock": "^3.7.7",
+    "sinon": "^6.2.0",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0"
   },
