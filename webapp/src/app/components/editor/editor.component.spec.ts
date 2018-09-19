@@ -11,9 +11,8 @@ describe('EditorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditorComponent ]
-    })
-    .compileComponents();
+      declarations: [EditorComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -24,5 +23,39 @@ describe('EditorComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('getValue returns value if not editable', () => {
+    component.editable = false;
+    component.value = 'xyz';
+
+    expect(component.getValue()).toBe('xyz');
+  });
+
+  it('getValue returns value if editable and quill is set', () => {
+    component.editable = true;
+    component.value = 'should not be called';
+    component.quill = {
+      root: {
+        innerHTML: 'xyz'
+      }
+    };
+
+    expect(component.getValue()).toBe('xyz');
+  });
+
+  it('setValue should set quill if editabel', () => {
+    component.editable = true;
+    component.quill = {
+      root: {
+        innerHTML: '___'
+      },
+      update: jasmine.createSpy('update')
+    };
+
+    component.setValue('xyz');
+
+    expect(component.quill.root.innerHTML).toBe('xyz');
+    expect(component.quill.update).toHaveBeenCalled();
   });
 });
