@@ -23,7 +23,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     this.client.getUserByUsername( this.authService.getLoggedInUsername()).subscribe( (user: User) => {
       this.user = user;
- });
+    });
   }
 
   ngOnDestroy() {
