@@ -1,10 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
 import { Meeting } from '../../model/meeting';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../appState';
-import { Client } from '../../middleware/client';
 import { MeetingService } from '../../services/meeting.service';
 import { ActivatedRoute, Router } from '@angular/router';
 

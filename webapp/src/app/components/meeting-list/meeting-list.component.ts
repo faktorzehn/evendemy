@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Meeting } from '../../model/meeting';
-import { BehaviorSubject } from 'rxjs';
 import { ConfigService } from '@ngx-config/core';
 import * as moment from 'moment';
 
@@ -12,16 +10,8 @@ import * as moment from 'moment';
 })
 export class MeetingListComponent implements OnInit {
 
-  private _meetings = new BehaviorSubject<Meeting[]>([]);
-
   @Input()
-  set meetings(value) {
-    this._meetings.next(value);
-  }
-
-  get meetings(): Meeting[] {
-    return this._meetings.getValue();
-  }
+  public meetings: Meeting[] = [];
 
   private randomizedNumber = Math.floor(Math.random() * 10000);
   private imageFolder = this.config.getSettings().meeting_image_folder;
