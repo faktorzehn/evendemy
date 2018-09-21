@@ -7,6 +7,8 @@ import { InitMeetings, AddMeeting, RemoveMeeting, UpdateMeeting } from '../actio
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from '@ngx-config/core';
 import { BaseService } from './base.service';
+import { Observable } from 'rxjs';
+import { MeetingUser } from '../model/meeting_user';
 
 @Injectable()
 export class MeetingsService extends BaseService {
@@ -52,17 +54,17 @@ export class MeetingsService extends BaseService {
         });
     }
 
-    public getMyMeetings(username: string) {
+    public getMyMeetings(username: string): Observable<MeetingUser[]> {
       const headers = this.createHeaders();
       const url = this.url + '/meetings/attendee/' + username;
 
-      return this.http.get(url, { headers: headers });
+      return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
   }
 
-  public getMeetingsFromAuthor(username: string) {
+  public getMeetingsFromAuthor(username: string): Observable<Meeting[]> {
       const headers = this.createHeaders();
       const url = this.url + '/meetings/author/' + username;
 
-      return this.http.get(url, { headers: headers });
+      return this.http.get(url, { headers: headers }) as Observable<Meeting[]>;
   }
 }

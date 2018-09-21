@@ -20,9 +20,9 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   private paramSubscription: Subscription;
   private type: string;
 
-  constructor(private meetingService: MeetingService, private route: ActivatedRoute, private router: Router,
+  constructor(private meetingsService: MeetingService, private route: ActivatedRoute, private router: Router,
     private store: Store<AppState>) {
-    store.select('meetings').subscribe( res => this.meetings = res);
+    this.store.select('meetings').subscribe( res => this.meetings = res);
   }
 
   ngOnInit() {
@@ -47,7 +47,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
       showOld: this.showOld,
       showNotAnnounced: this.showNotAnnounced
     };
-    this.meetingService.getAllMeetings(options);
+    this.meetingsService.getAllMeetings(options);
   }
 
   onShowNotAnnounced(state: boolean) {

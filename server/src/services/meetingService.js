@@ -223,7 +223,7 @@ module.exports = {
         return MeetingUser.find({mid: mid, deleted: false}).exec();
     },
 
-    getMeetingsForUser: function(username){
+    getMeetingUserForUser: function(username){
         var MeetingUser = require('../models/meeting_user');
         username = username.toLowerCase();
         return MeetingUser.find({username: username, tookPart: true}).where('deleted').eq(false).exec();
