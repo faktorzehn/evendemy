@@ -10,6 +10,12 @@ export class UserService extends BaseService {
     super(config);
   }
 
+  public getUserByUsername(username: string) {
+      const headers = this.createHeaders();
+      const url = this.url + '/user/' + username;
+      return this.http.get(url, { headers: headers });
+  }
+
   public addImage(username: string, data: any) {
     const headers = this.createHeaders();
     const url = this.url + '/user/' + username + '/image';

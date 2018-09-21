@@ -12,7 +12,6 @@ import { UserInfoComponent } from './pages/user-info/user-info.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MeetingComponent } from './pages/meeting/meeting.component';
 import {LoggedInGuardService} from './services/logged-in-guard.service';
-import { Client } from './middleware/client';
 import { EditorComponent } from './components/editor/editor.component';
 import { StoreModule } from '@ngrx/store';
 import { meetingsReducer } from './reducers/meetings.reducer';
@@ -24,8 +23,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { EventsOrCoursesComponent } from './pages/events-or-courses/events-or-courses.component';
 import { MeetingListComponent } from './components/meeting-list/meeting-list.component';
 import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
-import { ImageCropperComponent } from 'ngx-img-cropper';
-import { ConfigModule, ConfigLoader, ConfigService,  } from '@ngx-config/core';
+import { ImageCropperModule } from 'ngx-img-cropper';
+import { ConfigModule, ConfigLoader } from '@ngx-config/core';
 import { ConfigHttpLoader } from '@ngx-config/http-loader';
 import { UsersService } from './services/users.service';
 import { usersReducer } from './reducers/users.reducer';
@@ -41,6 +40,7 @@ import { PageComponent } from './components/page/page.component';
 import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 import { AttendeeTableComponent } from './components/attendee-table/attendee-table.component';
 import { AuthenticationService } from './services/authentication.service';
+import { MeetingsService } from './services/meetings.service.';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -72,7 +72,6 @@ export function configFactory(http: HttpClient): ConfigLoader {
     EventsOrCoursesComponent,
     MeetingListComponent,
     ImageUploadDialogComponent,
-    ImageCropperComponent,
     NamePipe,
     EvendemyCheckboxComponent,
     UserImageComponent,
@@ -102,12 +101,13 @@ export function configFactory(http: HttpClient): ConfigLoader {
       useFactory: (configFactory),
       deps: [HttpClient]
     }),
-    NgxDatatableModule
+    NgxDatatableModule,
+    ImageCropperModule
   ],
   providers: [
     LoggedInGuardService,
-    Client,
     MeetingService,
+    MeetingsService,
     UserService,
     UsersService,
     AuthenticationService

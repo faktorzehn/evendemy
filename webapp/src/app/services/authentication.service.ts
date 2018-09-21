@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConfigService } from '@ngx-config/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationService {
@@ -21,11 +22,11 @@ export class AuthenticationService {
       'Content-Type': 'application/json'
     });
     const url = this.url + '/auth';
-    return this.http.post(url, {}, { headers: headers }).map(res => {
+    return this.http.post(url, {}, { headers: headers }).pipe(map(res => {
       localStorage.setItem('token', token);
       localStorage.setItem('username', username);
       return res;
-    });
+    }));
   }
 
   public logoutUser() {

@@ -4,11 +4,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MenuComponent } from './menu.component';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { Client } from '../../middleware/client';
 import { AuthenticationService } from '../../services/authentication.service';
 import { User } from '../../model/user';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component, Input } from '@angular/core';
+import { UserService } from '../../services/user.service';
 
 describe('MenuComponent', () => {
   let component: MenuComponent;
@@ -16,8 +16,8 @@ describe('MenuComponent', () => {
   let authService;
 
   beforeEach(async(() => {
-    const clientMock = jasmine.createSpyObj('Client', ['getUserByUsername']);
-    clientMock.getUserByUsername.and.returnValue(of(new User('john')));
+    const userServiceMock = jasmine.createSpyObj('UserSerive', ['getUserByUsername']);
+    userServiceMock.getUserByUsername.and.returnValue(of(new User('john')));
 
     const authServiceMock = jasmine.createSpyObj('authService', ['getLoggedInUsername', 'logoutUser']);
     authServiceMock.getLoggedInUsername.and.returnValue('john');
@@ -34,7 +34,7 @@ describe('MenuComponent', () => {
       declarations: [MenuComponent, UserImageStubComponent],
       providers: [
         {provide: ActivatedRoute, useValue: { params: of({type: 'course'})}},
-        {provide: Client, useValue: clientMock},
+        {provide: UserService, useValue: userServiceMock},
         {provide: AuthenticationService, useValue: authServiceMock}]
     }).compileComponents();
 

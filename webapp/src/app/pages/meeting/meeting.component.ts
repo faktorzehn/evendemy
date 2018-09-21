@@ -1,19 +1,16 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Client } from '../../middleware/client';
 import { Meeting } from '../../model/meeting';
 import { Comment } from '../../model/comment';
 import { MeetingUser } from '../../model/meeting_user';
 import { EditorComponent } from '../../components/editor/editor.component';
 import { MeetingService } from '../../services/meeting.service';
-import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../appState';
 import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../model/user';
 import * as FileSaver from 'file-saver';
 import { ConfigService } from '@ngx-config/core';
-import { UsersService } from '../../services/users.service';
 import * as moment from 'moment';
 import { MeetingUtil } from './meeting.util';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -44,7 +41,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   users: User[] = [];
 
-  constructor(private client: Client,
+  constructor(
     private authService: AuthenticationService,
      private meetingService: MeetingService,
      private route: ActivatedRoute,
@@ -103,7 +100,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   loadMeeting(mid) {
-    this.meetingService.loadMeeting(mid).subscribe((result) => {
+    this.meetingService.getMeetingAndSelect(mid).subscribe((result) => {
       this.type = this.meeting.courseOrEvent;
       if (this.editor) {
         this.editor.setValue(this.meeting.description);
@@ -120,7 +117,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.userHasAccepted = false;
     this.userHasFinished = false;
 
-    this.client.getAllAttendingUsers(mid).subscribe((result) => {
+    this.meetingService.getAllAttendingUsers(mid).subscribe((result) => {
       this.potentialAttendees = result;
       const attendee = this.potentialAttendees.find(a => a.username === this.authService.getLoggedInUsername());
       if (attendee) {
@@ -188,7 +185,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onAcceptMeeting(external) {
-    this.client.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external).subscribe((result) => {
+    this.meetingService.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external).subscribe((result) => {
       this.userHasAccepted = true;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
@@ -196,7 +193,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onRejectMeeting() {
-    this.client.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername()).subscribe((result) => {
+    this.meetingService.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername()).subscribe((result) => {
       this.userHasAccepted = false;
       this.userHasFinished = false;
       this.loadPotentialAttendees(this.meeting.mid);
@@ -210,7 +207,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       if (foundedAttendee.username === this.authService.getLoggedInUsername()) {
         this.userHasFinished = true;
       }
-      this.client.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).subscribe((result) => { });
+      this.meetingService.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).subscribe((result) => { });
     }
   }
 

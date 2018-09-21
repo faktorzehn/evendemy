@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Client } from '../../middleware/client';
 import { User } from '../../model/user';
-import { MeetingUser } from '../../model/meeting_user';
 import { Meeting } from '../../model/meeting';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EditorComponent } from '../../components/editor/editor.component';
 import { AuthenticationService } from '../../services/authentication.service';
+import { MeetingService } from '../../services/meeting.service';
+import { MeetingsService } from '../../services/meetings.service.';
 
 @Component({
   selector: 'evendemy-user-info',
@@ -26,10 +26,11 @@ export class UserInfoComponent implements OnInit {
   private editor: EditorComponent;
 
   constructor(
-    private client: Client,
     private authService: AuthenticationService,
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private meetingService: MeetingService,
+    private meetingsService: MeetingsService
   ) {}
 
   ngOnInit() {
@@ -42,7 +43,7 @@ export class UserInfoComponent implements OnInit {
       }
 
       if (this.username !== undefined) {
-        this.client
+        this.userService
           .getUserByUsername(this.username)
           .subscribe((result: User) => {
             this.user = result;
@@ -53,14 +54,13 @@ export class UserInfoComponent implements OnInit {
           });
       }
 
-      this.client
+      this.meetingsService
         .getMyMeetings(this.username)
         .subscribe((result: Meeting[]) => {
           const meeting_user_list = result;
           if (meeting_user_list) {
             for (const meeting_user of meeting_user_list) {
-              this.client
-                .getMeetingByMId(meeting_user.mid)
+              this.meetingService.getMeeting(meeting_user.mid)
                 .subscribe((meeting_result: Meeting) => {
                   const meeting: Meeting = meeting_result;
                   if (meeting) {
@@ -75,7 +75,7 @@ export class UserInfoComponent implements OnInit {
           }
         });
 
-      this.client
+      this.meetingsService
         .getMeetingsFromAuthor(this.username)
         .subscribe((result: Meeting[]) => {
           result.forEach(meeting => {
