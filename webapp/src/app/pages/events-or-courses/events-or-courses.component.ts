@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs';
 import { Meeting } from '../../model/meeting';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../appState';
-import { MeetingService } from '../../services/meeting.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MeetingsService } from '../../services/meetings.service.';
 
 @Component({
   selector: 'evendemy-events',
@@ -20,7 +20,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   private paramSubscription: Subscription;
   private type: string;
 
-  constructor(private meetingsService: MeetingService, private route: ActivatedRoute, private router: Router,
+  constructor(private meetingsService: MeetingsService, private route: ActivatedRoute, private router: Router,
     private store: Store<AppState>) {
     this.store.select('meetings').subscribe( res => this.meetings = res);
   }
