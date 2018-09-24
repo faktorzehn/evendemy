@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Client } from '../../middleware/client';
 import { User } from '../../model/user';
-import { MeetingUser } from '../../model/meeting_user';
 import { Meeting } from '../../model/meeting';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EditorComponent } from '../../components/editor/editor.component';
 import { AuthenticationService } from '../../services/authentication.service';
+import { MeetingService } from '../../services/meeting.service';
+import { MeetingsService } from '../../services/meetings.service.';
+import { tap, first } from 'rxjs/operators';
+import { MeetingUser } from '../../model/meeting_user';
 
 @Component({
   selector: 'evendemy-user-info',
@@ -26,14 +28,15 @@ export class UserInfoComponent implements OnInit {
   private editor: EditorComponent;
 
   constructor(
-    private client: Client,
     private authService: AuthenticationService,
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private meetingService: MeetingService,
+    private meetingsService: MeetingsService
   ) {}
 
   ngOnInit() {
-    const subscribe = this.route.params.subscribe(params => {
+    this.route.params.pipe(first()).subscribe(params => {
       if (params['username']) {
         this.username = params['username'];
       } else {
@@ -41,53 +44,52 @@ export class UserInfoComponent implements OnInit {
         this.editable = true;
       }
 
-      if (this.username !== undefined) {
-        this.client
-          .getUserByUsername(this.username)
-          .subscribe((result: User) => {
-            this.user = result;
+      this.loadUser(this.username);
+      this.loadMeetings(this.username);
+    });
 
-            if (this.user && this.user.additional_info && this.editor ) {
-                this.editor.setValue(this.user.additional_info.description);
-            }
-          });
-      }
+  }
 
-      this.client
-        .getMyMeetings(this.username)
-        .subscribe((result: Meeting[]) => {
-          const meeting_user_list = result;
-          if (meeting_user_list) {
-            for (const meeting_user of meeting_user_list) {
-              this.client
-                .getMeetingByMId(meeting_user.mid)
-                .subscribe((meeting_result: Meeting) => {
-                  const meeting: Meeting = meeting_result;
-                  if (meeting) {
-                    if (meeting.courseOrEvent === 'course') {
-                      this.courses.push(meeting);
-                    } else {
-                      this.events.push(meeting);
-                    }
-                  }
-                });
-            }
+  private loadUser(username) {
+    if (username !== undefined) {
+      this.userService
+        .getUserByUsername(username)
+        .subscribe((result: User) => {
+          this.user = result;
+
+          if (this.user && this.user.additional_info && this.editor ) {
+              this.editor.setValue(this.user.additional_info.description);
           }
         });
+    }
+  }
 
-      this.client
-        .getMeetingsFromAuthor(this.username)
-        .subscribe((result: Meeting[]) => {
-          result.forEach(meeting => {
-            if (meeting) {
-              if (meeting.courseOrEvent === 'course') {
-                this.courses_from_author.push(meeting);
-              } else {
-                this.events_from_author.push(meeting);
+  private loadMeetings(username) {
+    this.meetingsService
+    .getMyMeetings(username)
+    .subscribe((meeting_user_list: MeetingUser[]) => {
+      if (meeting_user_list) {
+        for (const meeting_user of meeting_user_list) {
+          this.meetingService.getMeeting(meeting_user.mid)
+            .subscribe((meeting_result: Meeting) => {
+              const meeting: Meeting = meeting_result;
+              if (meeting) {
+                if (meeting.courseOrEvent === 'course') {
+                  this.courses.push(meeting);
+                } else {
+                  this.events.push(meeting);
+                }
               }
-            }
-          });
-        });
+            });
+        }
+      }
+    });
+
+  this.meetingsService
+    .getMeetingsFromAuthor(this.username)
+    .subscribe((result: Meeting[]) => {
+      this.courses_from_author = result.filter(meeting => meeting.courseOrEvent === 'course');
+      this.events_from_author = result.filter(meeting => meeting.courseOrEvent === 'event');
     });
   }
 

@@ -8,7 +8,7 @@ import * as Quill from 'quill';
 })
 export class EditorComponent implements OnInit {
   @Input() value: String = '';
-  @Input() editable: false;
+  @Input() editable = false;
   @Input() headlines = true;
   @Output() change = new EventEmitter<string>();
 

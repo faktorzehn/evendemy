@@ -4,7 +4,7 @@ var fs = require('fs');
 var corsMiddleware = require('restify-cors-middleware');
 var autoIncrement = require('mongoose-auto-increment');
 var config = require('./config');
-var auth = require('./auth.js');
+var auth = require('./plugins/auth.js');
 
 var production_mode = true;
 

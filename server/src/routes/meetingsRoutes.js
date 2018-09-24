@@ -25,7 +25,7 @@ module.exports = function (server, config, production_mode) {
                 }
                 throw Error('Not allowed');
             })
-            .then(meetingService.getMeetingsForUser)
+            .then(meetingService.getMeetingUserForUser)
             .then( meetings => res.send(meetings))
             .catch( err => res.send(500, { error: err })); 
         } else {

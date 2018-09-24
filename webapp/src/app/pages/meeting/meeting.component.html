@@ -243,10 +243,10 @@
       <br/> Do you really want to copy this meeting?
     </evendemy-confirm-dialog>
 
-    <evendemy-confirm-dialog title="Do you want to take some friend with you?" (confirm)="onAcceptMeeting(external)" dialogID="externalDialog">
+    <evendemy-confirm-dialog title="Do you want to take some friend with you?" (confirm)="onAcceptMeeting(external.value)" dialogID="externalDialog">
       This meeting allows you to take some friend with you. If you want, please enter a name.
       <br/>
-      <input type="text" class="form-control" [(ngModel)]="external" style="margin-top:10px;" />
+      <input type="text" class="form-control" #external style="margin-top:10px;" />
     </evendemy-confirm-dialog>
 
     <evendemy-image-upload-dialog (data)="setTemporaryImage($event)"></evendemy-image-upload-dialog>

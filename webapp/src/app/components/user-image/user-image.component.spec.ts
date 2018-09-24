@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserImageComponent } from './user-image.component';
 import { ConfigService } from '@ngx-config/core';
-import { Client } from '../../middleware/client';
 import { of } from 'rxjs';
 import { SimpleChange } from '@angular/core';
+import { UserService } from '../../services/user.service';
 
 describe('UserImageComponent', () => {
   let component: UserImageComponent;
   let fixture: ComponentFixture<UserImageComponent>;
-  let clientSpy;
+  let userService;
 
   beforeEach(async(() => {
-    const _clientSpy = jasmine.createSpyObj('Client', ['getUserByUsername']);
+    const userServiceMock = jasmine.createSpyObj('UserService', ['getUserByUsername']);
     const configSpy = jasmine.createSpyObj('ConfigService', ['getSettings']);
-    _clientSpy.getUserByUsername.and.callFake(username => {
+    userServiceMock.getUserByUsername.and.callFake(username => {
       if (username === 'max') {
         return of({
           username: 'max',
@@ -34,11 +34,11 @@ describe('UserImageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [UserImageComponent],
       providers: [
-        { provide: Client, useValue: _clientSpy },
+        { provide: UserService, useValue: userServiceMock },
         { provide: ConfigService, useValue: configSpy }
       ]
     });
-    clientSpy = TestBed.get(Client);
+    userService = TestBed.get(UserService);
     TestBed.compileComponents();
   }));
 
@@ -57,7 +57,7 @@ describe('UserImageComponent', () => {
       username: new SimpleChange(null, 'john', true)
     });
     fixture.detectChanges();
-    expect(clientSpy.getUserByUsername.calls.count()).toBe(
+    expect(userService.getUserByUsername.calls.count()).toBe(
       1,
       'client was called once'
     );

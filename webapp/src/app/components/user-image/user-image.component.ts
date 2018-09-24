@@ -1,10 +1,7 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { ConfigService } from '@ngx-config/core';
-
-import { AppState } from '../../appState';
-import { Client } from '../../middleware/client';
 import { User } from '../../model/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'evendemy-user-image',
@@ -23,7 +20,7 @@ export class UserImageComponent implements OnInit, OnChanges {
 
   constructor(
     private config: ConfigService,
-    private client: Client
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -31,7 +28,7 @@ export class UserImageComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.username) {
-      this.client
+      this.userService
         .getUserByUsername(changes.username.currentValue)
         .subscribe((u: User) => (this.user = u));
     }

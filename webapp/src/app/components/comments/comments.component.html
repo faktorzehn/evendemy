@@ -5,8 +5,11 @@
           <div style="color:black;">{{getUser(comment.author) | name}}</div>
         </a>
         <div class="comment-message">
-          <span class="comment-message-arrow"></span>
-          <div class="comment-message-body">{{comment.text}}</div>
+          <div>
+            <span class="comment-message-arrow"></span>
+            <div class="comment-message-body">{{comment.text}}</div>
+          </div>
+          <div class="comment-message-date">{{comment.creationDate  | date:'HH:mm dd.MM.yyyy'}}</div>
         </div>
     </div>
     <div class="row">
