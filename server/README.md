@@ -6,18 +6,16 @@
 ## How to execute locally
 * start mongodb "path/of/my/mongod.exe" --dbpath="where/to/store/your/mongodb"
 * be sure, that you have a "C:/images" folder (defined in server/developer-config.json)
-* start server: node server.js
+* start server: node src/server.js
 
 ## What you should do for production
-At the current state, the server part is configured for development. If you like to use it in production:
-* delete developer-config.json
-* configure config.json
-* and implement auth.json for your authentification (e.g. ldap)
+If you like to use it in production be sure that developer-config is removed and everything is configured in config.json.
+Be sure that you implemented plugins/auth.js!
+Run 'npm run build' and begin to configure config.json and plugins/auth.js
 
 ## How to update from an existing installation
 Be sure that you make a backup before updating to a new version!
+We create a task for an easier upgrade of the backend. Run 'npm run build-for-upgrade'. This will build the server.js but don't copy plugins/auth, assets or config.
 * save config.json, auth.js
-* if you changed something in the assets folder: save it
-* remove and update all other files from the server (don't forget to remove the developers-config.json)
-* replace saved files
+* replace server.js, package-kson and package-lock.json
 * run 'npm install' again
