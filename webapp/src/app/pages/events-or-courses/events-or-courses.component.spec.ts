@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/observable/of';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
+import { MeetingsService } from '../../services/meetings.service.';
 
 describe('EventsOrCoursesComponent', () => {
   let component: EventsOrCoursesComponent;
@@ -27,7 +28,7 @@ describe('EventsOrCoursesComponent', () => {
   }
 
   beforeEach(async(() => {
-    const _meetingsSpy = jasmine.createSpyObj('MeetingService', ['getAllMeetings']);
+    const _meetingsSpy = jasmine.createSpyObj('MeetingsService', ['getAllMeetings']);
     const _routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     const _storeSpy = jasmine.createSpyObj('Store', ['select']);
     _storeSpy.select.and.returnValue(of([]));
@@ -35,7 +36,7 @@ describe('EventsOrCoursesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ EventsOrCoursesComponent, EvendemyMenuStubComponent, EvendemyCheckboxComponent, EvendemyMeetungListStubComponent ],
       imports: [FormsModule],
-      providers: [{provide: MeetingService, useValue: _meetingsSpy }, {provide: ActivatedRoute,
+      providers: [{provide: MeetingsService, useValue: _meetingsSpy }, {provide: ActivatedRoute,
         useValue: { params: of({type: 'course'})}}, {provide: Router, useValue: _routerSpy}, {provide: Store, useValue: _storeSpy}]
     });
     activatedRoute = TestBed.get(ActivatedRoute);
