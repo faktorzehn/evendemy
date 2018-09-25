@@ -2,9 +2,6 @@ module.exports = function (server, config, production_mode) {
     var _ = require('underscore');
     var moment = require('moment');
 
-    var Comment = require('../models/comment');
-    var Meeting = require('../models/meeting');
-
     var imageService = require('../services/imageService');
     var userService = require('../services/userService');
     var meetingService = require('../services/meetingService');
@@ -12,7 +9,7 @@ module.exports = function (server, config, production_mode) {
     var calendarService = require('../services/calendarService');
     var diffService = require('../services/diffService');
 
-    var mailConfig = require('../assets/mail-config.de');
+    var mailConfig = config.mail.config;
 
     server.get('/meeting/:mid', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
