@@ -5,7 +5,8 @@ var fs = require('fs');
 var nodeModulesAndConfig = {
   './developer-config': 'commonjs ./developer-config',
   './config': 'commonjs ./config',
-  './plugins/auth.js': 'commonjs ./plugins/auth.js'
+  './plugins/auth.js': 'commonjs ./plugins/auth.js',
+  './assets/mail.json': 'commonjs ./assets/mail.json'
 };
 fs.readdirSync('node_modules')
   .filter(function(x) {

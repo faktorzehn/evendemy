@@ -11,7 +11,7 @@
 		"address": "",
 		"host": "",
 		"port": "",
-		"htmlFilePath": "./assets/mail.de.htm"
+		"htmlFilePath": "./src/assets/mail.htm"
 	},
 	"serverconfig":{},
 	"calendar":{

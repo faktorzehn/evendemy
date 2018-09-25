@@ -21,6 +21,9 @@ try {
 	console.warn('No developer config found. Production mode!');
 }
 
+var mailConfig = require('./assets/mail.json');
+config.mail.config = mailConfig;
+
 //set cors
 var cors = corsMiddleware({
 	allowHeaders: ['Authorization']
