@@ -62,9 +62,17 @@
       <div class="row form-row">
         <div class="col-md-4">Tags</div>
         <div class="col-md-8">
-          <tag-input [(ngModel)]="meeting.tags" name="tag" [hideForm]="!isEditable" [removable]="isEditable" [modelAsStrings]="true"></tag-input>
+          <tag-input [(ngModel)]="meeting.tags" name="tag"
+          [hideForm]="!isEditable"
+          [removable]="isEditable"
+          [modelAsStrings]="true">
+          <tag-input-dropdown [autocompleteItems]="allTags">
+          </tag-input-dropdown>
+        </tag-input>
         </div>
       </div>
+
+      {{allTags}}
 
 
       <div class="row form-row">

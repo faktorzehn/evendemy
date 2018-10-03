@@ -14,6 +14,7 @@ import { ConfigService } from '@ngx-config/core';
 import * as moment from 'moment';
 import { MeetingUtil } from './meeting.util';
 import { AuthenticationService } from '../../services/authentication.service';
+import { TagsService } from '../../services/tags.service';
 
 @Component({
   selector: 'evendemy-meeting',
@@ -32,6 +33,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   inputDate = '';
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
+  allTags = [];
 
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
@@ -47,7 +49,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
      private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>,
-    private config: ConfigService) {
+    private config: ConfigService,
+    private tagsSercie: TagsService) {
   }
 
   ngOnInit() {
@@ -69,6 +72,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
 
     this.store.select('users').subscribe( res => this.users = res);
+
+    this.tagsSercie.getAllTags().subscribe((tags: string[]) => {
+      this.allTags = tags;
+    });
   }
 
   private initForCreation(type: string) {
