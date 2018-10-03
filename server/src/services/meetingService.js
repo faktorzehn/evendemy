@@ -119,6 +119,9 @@ module.exports = {
         if (request.numberOfAllowedExternals !== undefined) {
             meeting.numberOfAllowedExternals = request.numberOfAllowedExternals;
         }
+        if (request.tags !== undefined) {
+            meeting.tags = request.tags;
+        }
 
         if(username){
             meeting.username = username.toLowerCase();   
@@ -163,6 +166,9 @@ module.exports = {
         }
         if (request.numberOfAllowedExternals !== undefined) {
             updateMeeting.numberOfAllowedExternals = request.numberOfAllowedExternals;
+        }
+        if (request.tags !== undefined) {
+            updateMeeting.tags = request.tags;
         }
 
         return Meeting.findOneAndUpdate({ mid: mid }, { $set: updateMeeting }, { upsert: true, new:true });

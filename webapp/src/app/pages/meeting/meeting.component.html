@@ -60,6 +60,14 @@
       </div>
 
       <div class="row form-row">
+        <div class="col-md-4">Tags</div>
+        <div class="col-md-8">
+          <tag-input [(ngModel)]="meeting.tags" name="tag" [hideForm]="!isEditable" [removable]="isEditable" [modelAsStrings]="true"></tag-input>
+        </div>
+      </div>
+
+
+      <div class="row form-row">
         <div class="col-md-4">Date</div>
         <div *ngIf="isEditable" class="col-md-8">
           <input type="text" id="date" class="form-control" pattern="(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[012]).(19|20)\d\d" name="date"

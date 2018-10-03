@@ -3,8 +3,10 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { TagInputModule } from 'ngx-chips';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -84,7 +86,7 @@ export function configFactory(http: HttpClient): ConfigLoader {
     AttendeeTableComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
@@ -102,7 +104,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
       deps: [HttpClient]
     }),
     NgxDatatableModule,
-    ImageCropperModule
+    ImageCropperModule,
+    TagInputModule
   ],
   providers: [
     LoggedInGuardService,

@@ -18,6 +18,7 @@ const MeetingSchema = mongoose.Schema({
     username: { type: String, required: true },
     comments: { type: [Comment.schema], default: [] },
     numberOfAllowedExternals: { type: Number, default: 0},
+    tags: {type:[String], default:[]},
     deleted: { type: Boolean, default: false }
 });
 
