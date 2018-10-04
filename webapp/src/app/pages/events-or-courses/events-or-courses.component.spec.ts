@@ -4,12 +4,11 @@ import { EventsOrCoursesComponent } from './events-or-courses.component';
 import { Component, Input } from '@angular/core';
 import { EvendemyCheckboxComponent } from '../../components/checkbox/checkbox.component';
 import { FormsModule } from '@angular/forms';
-import { MeetingService } from '../../services/meeting.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/observable/of';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { MeetingsService } from '../../services/meetings.service.';
+import { MeetingsService } from '../../services/meetings.service';
 
 describe('EventsOrCoursesComponent', () => {
   let component: EventsOrCoursesComponent;

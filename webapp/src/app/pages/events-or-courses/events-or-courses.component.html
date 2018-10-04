@@ -1,14 +1,24 @@
 <evendemy-menu></evendemy-menu>
 <div class="event-or-course">
   <!-- filter bar -->
-  <div class="tool-bar">
-    <div class="filter-label hidden-xs">
-        Meetings:
+  <div class="tool-bar row">
+    <div class="col-xs-12 col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-4 col-lg-6 col-lg-offset-6">
+      <div class="filter-label">
+            Meetings:
+      </div>
+      <evendemy-checkbox [label]="'not announced'" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
+      <evendemy-checkbox [label]="'old'" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
+      <evendemy-checkbox [label]="'new'" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
+      <tag-input [(ngModel)]="selectedTags" name="tag" [modelAsStrings]="true"
+        [onlyFromAutocomplete]="true"
+        [placeholder]="'+tags'"
+        [secondaryPlaceholder]="'tags to be shown'"
+        [maxItems]="5" (onAdd)="onTagsChanged()" (onRemove)="onTagsChanged()"
+        class="tag-input">
+        <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
+        </tag-input-dropdown>
+      </tag-input>
     </div>
-    <evendemy-checkbox [label]="'not announced'" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
-    <evendemy-checkbox [label]="'old'" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
-    <evendemy-checkbox [label]="'new'" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
-
   </div>
 
   <!-- meetings -->

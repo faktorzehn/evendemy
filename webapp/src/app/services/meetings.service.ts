@@ -24,6 +24,7 @@ export class MeetingsService extends BaseService {
         showNew?: boolean;
         showOld?: boolean;
         showNotAnnounced?: boolean;
+        tags?: string[];
     }) {
         const headers = this.createHeaders();
         const randomizedNumber = Math.floor(Math.random() * 10000);
@@ -47,6 +48,9 @@ export class MeetingsService extends BaseService {
             }
             if (options.showNotAnnounced !== undefined) {
                 params = params.append('showNotAnnounced', options.showNotAnnounced.toString());
+            }
+            if (options.tags !== undefined && options.tags.length > 0 ) {
+              params = params.append('tags', options.tags.toString());
             }
         }
         this.http.get(url, { params: params, headers: headers }).subscribe((result: Meeting[]) => {

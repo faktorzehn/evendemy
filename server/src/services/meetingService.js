@@ -18,6 +18,10 @@ module.exports = {
         if (options.isFreetime !== undefined) {
             filter.isFreetime = (options.isFreetime === 'true');
         }
+        if (options.tags !== undefined) {
+            const tagArray = options.tags.split(',');
+            filter.tags = {$in: tagArray};
+        }
 
         if (showNew || showOld || showNotAnnounced) {
             filter['$or'] = [];

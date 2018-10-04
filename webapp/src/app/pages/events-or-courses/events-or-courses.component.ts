@@ -4,7 +4,8 @@ import { Meeting } from '../../model/meeting';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../appState';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MeetingsService } from '../../services/meetings.service.';
+import { MeetingsService } from '../../services/meetings.service';
+import { TagsService } from '../../services/tags.service';
 
 @Component({
   selector: 'evendemy-events',
@@ -17,11 +18,14 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public showNotAnnounced = true;
   public showOld = false;
   public showNew = true;
+  public selectedTags = [];
+  public allTags = [];
   private paramSubscription: Subscription;
   private type: string;
 
+
   constructor(private meetingsService: MeetingsService, private route: ActivatedRoute, private router: Router,
-    private store: Store<AppState>) {
+    private store: Store<AppState>, private tagsService: TagsService) {
     this.store.select('meetings').subscribe( res => this.meetings = res);
   }
 
@@ -32,6 +36,9 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
         this.router.navigate(['/error']);
       }
       this.loadMeetings();
+      this.tagsService.getAllTags().subscribe((tags: string[]) => {
+        this.allTags = tags;
+      });
     });
     this.loadMeetings();
   }
@@ -45,23 +52,28 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
       courseOrEvent: this.type,
       showNew: this.showNew,
       showOld: this.showOld,
-      showNotAnnounced: this.showNotAnnounced
+      showNotAnnounced: this.showNotAnnounced,
+      tags: this.selectedTags
     };
     this.meetingsService.getAllMeetings(options);
   }
 
-  onShowNotAnnounced(state: boolean) {
+  public onShowNotAnnounced(state: boolean) {
     this.showNotAnnounced = state;
     this.loadMeetings();
   }
 
-  onShowNew(state: boolean) {
+  public onShowNew(state: boolean) {
     this.showNew = state;
     this.loadMeetings();
   }
 
-  onShowOld(state: boolean) {
+  public onShowOld(state: boolean) {
     this.showOld = state;
+    this.loadMeetings();
+  }
+
+  public onTagsChanged() {
     this.loadMeetings();
   }
 

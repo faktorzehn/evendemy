@@ -42,7 +42,7 @@ import { PageComponent } from './components/page/page.component';
 import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 import { AttendeeTableComponent } from './components/attendee-table/attendee-table.component';
 import { AuthenticationService } from './services/authentication.service';
-import { MeetingsService } from './services/meetings.service.';
+import { MeetingsService } from './services/meetings.service';
 import { TagsService } from './services/tags.service';
 
 const appRoutes: Routes = [

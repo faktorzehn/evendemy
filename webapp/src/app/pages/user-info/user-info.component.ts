@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EditorComponent } from '../../components/editor/editor.component';
 import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingService } from '../../services/meeting.service';
-import { MeetingsService } from '../../services/meetings.service.';
+import { MeetingsService } from '../../services/meetings.service';
 import { tap, first } from 'rxjs/operators';
 import { MeetingUser } from '../../model/meeting_user';
 

@@ -50,7 +50,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store<AppState>,
     private config: ConfigService,
-    private tagsSercie: TagsService) {
+    private tagsService: TagsService) {
   }
 
   ngOnInit() {
@@ -73,7 +73,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
     this.store.select('users').subscribe( res => this.users = res);
 
-    this.tagsSercie.getAllTags().subscribe((tags: string[]) => {
+    this.tagsService.getAllTags().subscribe((tags: string[]) => {
       this.allTags = tags;
     });
   }
