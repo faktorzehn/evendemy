@@ -36,7 +36,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
         this.router.navigate(['/error']);
       }
 
-      if(params['tags']) {
+      if (params['tags']) {
         this.selectedTags = params['tags'].split(',');
       }
       this.loadMeetings();
