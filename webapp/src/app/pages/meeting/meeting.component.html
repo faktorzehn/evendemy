@@ -61,19 +61,20 @@
 
       <div class="row form-row">
         <div class="col-md-4">Tags</div>
-        <div class="col-md-8">
+        <div class="col-md-8" *ngIf="isEditable">
           <tag-input [(ngModel)]="meeting.tags" name="tag"
-          [hideForm]="!isEditable"
           [removable]="isEditable"
-          [modelAsStrings]="true">
+          [modelAsStrings]="true"
+          (onSelect)="onTagSelect($event)"
+          >
           <tag-input-dropdown [autocompleteItems]="allTags">
           </tag-input-dropdown>
         </tag-input>
         </div>
+        <div class="col-md-8" *ngIf="!isEditable">
+            <a [routerLink]="['/meeting-list/', type, {tags: tag}]"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
+        </div>
       </div>
-
-      {{allTags}}
-
 
       <div class="row form-row">
         <div class="col-md-4">Date</div>

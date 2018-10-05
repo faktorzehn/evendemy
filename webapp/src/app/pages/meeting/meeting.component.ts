@@ -288,8 +288,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meeting.numberOfAllowedExternals === 0 ? this.meeting.numberOfAllowedExternals = 1 : this.meeting.numberOfAllowedExternals = 0;
   }
 
-  numberOfParticipants () {
+  numberOfParticipants() {
     const externals = this.potentialAttendees.filter(p => p.externals.length > 0);
     return this.potentialAttendees.length + externals.length;
+  }
+
+  onTagSelect(tag: string) {
+    this.router.navigate(['/meeting-list/', this.type, {tags: tag}]);
   }
 }
