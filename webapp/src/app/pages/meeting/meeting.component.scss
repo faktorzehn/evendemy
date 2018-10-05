@@ -82,3 +82,12 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+@import '~pretty-checkbox/src/scss/variables';
+@import './../../../variables';
+
+$pretty--colors:(
+  primary: $evendemy-primary,
+);
+
+@import '~pretty-checkbox/src/pretty-checkbox.scss';

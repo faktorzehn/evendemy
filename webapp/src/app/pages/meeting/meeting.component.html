@@ -60,6 +60,25 @@
       </div>
 
       <div class="row form-row">
+        <div class="col-md-4">Type</div>
+        <div class="col-md-8" *ngIf="!isEditable">{{meeting.courseOrEvent}}</div>
+        <div class="col-md-8" *ngIf="isEditable">
+          <div class="pretty p-default p-round">
+              <input type="radio" value="course" name="type" [(ngModel)]="meeting.courseOrEvent">
+              <div class="state p-primary">
+                  <label>Course</label>
+              </div>
+          </div>
+          <div class="pretty p-default p-round">
+              <input type="radio" value="event" name="type" [(ngModel)]="meeting.courseOrEvent">
+              <div class="state p-primary">
+                  <label>Event</label>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-row">
         <div class="col-md-4">Tags</div>
         <div class="col-md-8" *ngIf="isEditable">
           <tag-input [(ngModel)]="meeting.tags" name="tag"
