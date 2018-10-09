@@ -14,6 +14,10 @@ import { ConfigService } from '@ngx-config/core';
 import * as moment from 'moment';
 import { MeetingUtil } from './meeting.util';
 import { AuthenticationService } from '../../services/authentication.service';
+import { TagsService } from '../../services/tags.service';
+import { Observable } from 'rxjs';
+import { TagModel } from 'ngx-chips/core/accessor';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'evendemy-meeting',
@@ -32,6 +36,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   inputDate = '';
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
+  allTags = [];
 
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
@@ -47,7 +52,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
      private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>,
-    private config: ConfigService) {
+    private config: ConfigService,
+    private tagsService: TagsService) {
   }
 
   ngOnInit() {
@@ -69,6 +75,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
 
     this.store.select('users').subscribe( res => this.users = res);
+
+    this.tagsService.getAllTags().subscribe((tags: string[]) => {
+      this.allTags = tags;
+    });
   }
 
   private initForCreation(type: string) {
@@ -281,8 +291,16 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meeting.numberOfAllowedExternals === 0 ? this.meeting.numberOfAllowedExternals = 1 : this.meeting.numberOfAllowedExternals = 0;
   }
 
-  numberOfParticipants () {
+  numberOfParticipants() {
     const externals = this.potentialAttendees.filter(p => p.externals.length > 0);
     return this.potentialAttendees.length + externals.length;
+  }
+
+  onTagSelect(tag: string) {
+    this.router.navigate(['/meeting-list/', this.type, {tags: tag}]);
+  }
+
+  onAddingTag() {
+    this.meeting.tags = this.meeting.tags.map(tag => tag.toLowerCase()).map(tag => tag.replace(/ /g, '-'));
   }
 }

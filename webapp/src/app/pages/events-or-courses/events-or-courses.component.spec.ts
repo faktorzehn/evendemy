@@ -1,15 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EventsOrCoursesComponent } from './events-or-courses.component';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { EvendemyCheckboxComponent } from '../../components/checkbox/checkbox.component';
 import { FormsModule } from '@angular/forms';
-import { MeetingService } from '../../services/meeting.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/observable/of';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { MeetingsService } from '../../services/meetings.service.';
+import { MeetingsService } from '../../services/meetings.service';
+import { TagInputModule } from 'ngx-chips';
+import { TagsService } from '../../services/tags.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('EventsOrCoursesComponent', () => {
   let component: EventsOrCoursesComponent;
@@ -31,13 +33,21 @@ describe('EventsOrCoursesComponent', () => {
     const _meetingsSpy = jasmine.createSpyObj('MeetingsService', ['getAllMeetings']);
     const _routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     const _storeSpy = jasmine.createSpyObj('Store', ['select']);
+    const _tagsServiceSpy = jasmine.createSpyObj('TagsService', ['getAllTags']);
+
     _storeSpy.select.and.returnValue(of([]));
+    _tagsServiceSpy.getAllTags.and.returnValue(of([]));
 
     TestBed.configureTestingModule({
-      declarations: [ EventsOrCoursesComponent, EvendemyMenuStubComponent, EvendemyCheckboxComponent, EvendemyMeetungListStubComponent ],
-      imports: [FormsModule],
-      providers: [{provide: MeetingsService, useValue: _meetingsSpy }, {provide: ActivatedRoute,
-        useValue: { params: of({type: 'course'})}}, {provide: Router, useValue: _routerSpy}, {provide: Store, useValue: _storeSpy}]
+      declarations: [ EventsOrCoursesComponent, EvendemyMenuStubComponent,
+      EvendemyCheckboxComponent, EvendemyMeetungListStubComponent],
+      imports: [BrowserAnimationsModule, FormsModule, TagInputModule],
+      providers: [{provide: MeetingsService, useValue: _meetingsSpy },
+        {provide: ActivatedRoute,
+        useValue: { params: of({type: 'course'})}},
+        {provide: Router, useValue: _routerSpy},
+        {provide: Store, useValue: _storeSpy},
+        {provide: TagsService, useValue: _tagsServiceSpy}]
     });
     activatedRoute = TestBed.get(ActivatedRoute);
     routerSpy = TestBed.get(Router);

@@ -60,6 +60,45 @@
       </div>
 
       <div class="row form-row">
+        <div class="col-md-4">Type</div>
+        <div class="col-md-8" *ngIf="!isEditable">{{meeting.courseOrEvent}}</div>
+        <div class="col-md-8" *ngIf="isEditable">
+          <div class="pretty p-default p-round">
+              <input type="radio" value="course" name="type" [(ngModel)]="meeting.courseOrEvent">
+              <div class="state p-primary">
+                  <label>Course</label>
+              </div>
+          </div>
+          <div class="pretty p-default p-round">
+              <input type="radio" value="event" name="type" [(ngModel)]="meeting.courseOrEvent">
+              <div class="state p-primary">
+                  <label>Event</label>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-row">
+        <div class="col-md-4">Tags</div>
+        <div class="col-md-8" *ngIf="isEditable">
+          <tag-input [(ngModel)]="meeting.tags" name="tag"
+          [removable]="isEditable"
+          [modelAsStrings]="true"
+          (onSelect)="onTagSelect($event)"
+          (onAdd)="onAddingTag($event)"
+          [validators]="tagValidators"
+          [errorMessages]="tagErrorMessages"
+          >
+          <tag-input-dropdown [autocompleteItems]="allTags">
+          </tag-input-dropdown>
+        </tag-input>
+        </div>
+        <div class="col-md-8" *ngIf="!isEditable">
+            <a [routerLink]="['/meeting-list/', type, {tags: tag}]"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
+        </div>
+      </div>
+
+      <div class="row form-row">
         <div class="col-md-4">Date</div>
         <div *ngIf="isEditable" class="col-md-8">
           <input type="text" id="date" class="form-control" pattern="(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[012]).(19|20)\d\d" name="date"

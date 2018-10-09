@@ -3,8 +3,10 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { TagInputModule } from 'ngx-chips';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -40,7 +42,8 @@ import { PageComponent } from './components/page/page.component';
 import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 import { AttendeeTableComponent } from './components/attendee-table/attendee-table.component';
 import { AuthenticationService } from './services/authentication.service';
-import { MeetingsService } from './services/meetings.service.';
+import { MeetingsService } from './services/meetings.service';
+import { TagsService } from './services/tags.service';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -84,7 +87,7 @@ export function configFactory(http: HttpClient): ConfigLoader {
     AttendeeTableComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
@@ -102,7 +105,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
       deps: [HttpClient]
     }),
     NgxDatatableModule,
-    ImageCropperModule
+    ImageCropperModule,
+    TagInputModule
   ],
   providers: [
     LoggedInGuardService,
@@ -110,7 +114,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     MeetingsService,
     UserService,
     UsersService,
-    AuthenticationService
+    AuthenticationService,
+    TagsService
   ],
   bootstrap: [AppComponent]
 })
