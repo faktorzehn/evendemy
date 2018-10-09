@@ -85,6 +85,9 @@
           [removable]="isEditable"
           [modelAsStrings]="true"
           (onSelect)="onTagSelect($event)"
+          (onAdd)="onAddingTag($event)"
+          [validators]="tagValidators"
+          [errorMessages]="tagErrorMessages"
           >
           <tag-input-dropdown [autocompleteItems]="allTags">
           </tag-input-dropdown>

@@ -15,6 +15,9 @@ import * as moment from 'moment';
 import { MeetingUtil } from './meeting.util';
 import { AuthenticationService } from '../../services/authentication.service';
 import { TagsService } from '../../services/tags.service';
+import { Observable } from 'rxjs';
+import { TagModel } from 'ngx-chips/core/accessor';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'evendemy-meeting',
@@ -295,5 +298,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   onTagSelect(tag: string) {
     this.router.navigate(['/meeting-list/', this.type, {tags: tag}]);
+  }
+
+  onAddingTag() {
+    this.meeting.tags = this.meeting.tags.map(tag => tag.toLowerCase()).map(tag => tag.replace(/ /g, '-'));
   }
 }
