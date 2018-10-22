@@ -44,7 +44,9 @@ describe('EventsOrCoursesComponent', () => {
       imports: [BrowserAnimationsModule, FormsModule, TagInputModule],
       providers: [{provide: MeetingsService, useValue: _meetingsSpy },
         {provide: ActivatedRoute,
-        useValue: { params: of({type: 'course'})}},
+        useValue: { params: of({type: 'course'}),
+        queryParams: of({})
+        }},
         {provide: Router, useValue: _routerSpy},
         {provide: Store, useValue: _storeSpy},
         {provide: TagsService, useValue: _tagsServiceSpy}]
@@ -64,6 +66,13 @@ describe('EventsOrCoursesComponent', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
     expect(component.loadMeetings).toHaveBeenCalled();
+  });
+
+  it('should set default right', () => {
+    fixture.detectChanges();
+    expect(component.showNew).toBeTruthy();
+    expect(component.showOld).toBeFalsy();
+    expect(component.showNotAnnounced).toBeTruthy();
   });
 
   it('should redirect to error page', () => {
@@ -119,4 +128,5 @@ describe('EventsOrCoursesComponent', () => {
     expect(component.showOld).toBeFalsy();
     expect(component.loadMeetings).toHaveBeenCalled();
   });
+
 });

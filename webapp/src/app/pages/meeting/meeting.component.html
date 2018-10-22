@@ -1,6 +1,6 @@
 <evendemy-menu>
 </evendemy-menu>
-<div class="row">
+<div class="row meeting-row">
   <div class="col-md-6 col-md-offset-3">
     <form #form="ngForm" *ngIf="meeting != undefined" name="form" class="meeting-card">
       <div *ngIf="isEditable" class="row">
@@ -94,7 +94,7 @@
         </tag-input>
         </div>
         <div class="col-md-8" *ngIf="!isEditable">
-            <a [routerLink]="['/meeting-list/', type, {tags: tag}]"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
+            <a [routerLink]="['/meeting-list/', this.type]" [queryParams]="{tags: tag}"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
         </div>
       </div>
 
@@ -256,7 +256,7 @@
 
       <!--COMMENTS-->
       <div class="row" style="margin-top: 50px;" *ngIf="!isNew">
-        <h3>Comments</h3>
+        <h3 id="comments">Comments</h3>
       </div>
       <evendemy-comments [comments]="meeting.comments" (addComment)="onAddComment($event)" [users]="users"></evendemy-comments>
 
