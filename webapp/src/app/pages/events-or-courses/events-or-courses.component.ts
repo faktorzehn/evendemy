@@ -21,6 +21,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public selectedTags = [];
   public allTags = [];
   private type: string;
+  public loading = false;
   private sub;
 
   constructor(
@@ -30,7 +31,10 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private tagsService: TagsService
   ) {
-    this.store.select('meetings').subscribe(res => (this.meetings = res));
+    this.store.select('meetings').subscribe(res => {
+      this.meetings = res;
+      this.loading = false;
+    });
   }
 
   ngOnInit() {
@@ -77,6 +81,8 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
       showNotAnnounced: this.showNotAnnounced,
       tags: this.selectedTags
     };
+    this.meetings = [];
+    this.loading = true;
     this.meetingsService.getAllMeetings(options);
     this.changeQuery();
   }
