@@ -15,10 +15,14 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li routerLink="/meeting-list/course" routerLinkActive="active">
+          <li [routerLink]="['/meeting-list/course']"
+          [queryParams]="{new: true, old: false, 'not-announced': true}"
+          [ngClass]="{active: type === 'course'}">
             <a>Courses</a>
           </li>
-          <li routerLink="/meeting-list/event" routerLinkActive="active">
+          <li [routerLink]="['/meeting-list/event']"
+          [queryParams]="{new: true, old: false, 'not-announced': true}"
+          [ngClass]="{active: type === 'event'}">
             <a>Events</a>
           </li>
           <li routerLink="/users" routerLinkActive="active">
