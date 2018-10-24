@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MeetingsService } from '../../services/meetings.service';
 import { TagsService } from '../../services/tags.service';
 import { combineLatest } from 'rxjs';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'evendemy-events',
@@ -74,7 +73,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  loadMeetings() {
+  private loadMeetings() {
     const options = {
       courseOrEvent: this.type,
       showNew: this.showNew,
@@ -85,26 +84,25 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.meetings = [];
     this.loading = true;
     this.meetingsService.getAllMeetings(options);
-    this.changeQuery();
   }
 
   public onShowNotAnnounced(state: boolean) {
     this.showNotAnnounced = state;
-    this.loadMeetings();
+    this.changeQuery();
   }
 
   public onShowNew(state: boolean) {
     this.showNew = state;
-    this.loadMeetings();
+    this.changeQuery();
   }
 
   public onShowOld(state: boolean) {
     this.showOld = state;
-    this.loadMeetings();
+    this.changeQuery();
   }
 
   public onTagsChanged() {
-    this.loadMeetings();
+    this.changeQuery();
   }
 
   private changeQuery() {
