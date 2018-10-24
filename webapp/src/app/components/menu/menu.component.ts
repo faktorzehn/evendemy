@@ -14,7 +14,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   type: string;
   user: User;
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private authService: AuthenticationService) { }
+  constructor(private route: ActivatedRoute,
+    private router: Router, private userService: UserService, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -32,5 +33,9 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logoutUser();
+  }
+
+  navigateTo(url: string) {
+    this.router.navigate([url], { queryParams: {new: true, old: false, 'not-announced': true} } );
   }
 }

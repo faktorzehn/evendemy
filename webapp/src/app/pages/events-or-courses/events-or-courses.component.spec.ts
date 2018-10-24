@@ -83,50 +83,50 @@ describe('EventsOrCoursesComponent', () => {
 
   it('onShowNotAnnounced should change state to true', () => {
     component.showNotAnnounced = false;
-    spyOn(component, 'loadMeetings');
+    spyOn(component, 'changeQuery');
     component.onShowNotAnnounced(true);
     expect(component.showNotAnnounced).toBeTruthy();
-    expect(component.loadMeetings).toHaveBeenCalled();
+    expect(component.changeQuery).toHaveBeenCalled();
   });
 
   it('onShowNotAnnounced should change state to false', () => {
     component.showNotAnnounced = true;
-    spyOn(component, 'loadMeetings');
+    spyOn(component, 'changeQuery');
     component.onShowNotAnnounced(false);
     expect(component.showNotAnnounced).toBeFalsy();
-    expect(component.loadMeetings).toHaveBeenCalled();
+    expect(component.changeQuery).toHaveBeenCalled();
   });
 
   it('onShowNew should change state to true', () => {
     component.showNew = false;
-    spyOn(component, 'loadMeetings');
+    spyOn(component, 'changeQuery');
     component.onShowNew(true);
     expect(component.showNew).toBeTruthy();
-    expect(component.loadMeetings).toHaveBeenCalled();
+    expect(component.changeQuery).toHaveBeenCalled();
   });
 
   it('onShowNew should change state to false', () => {
     component.showNew = true;
-    spyOn(component, 'loadMeetings');
+    spyOn(component, 'changeQuery');
     component.onShowNew(false);
     expect(component.showNew).toBeFalsy();
-    expect(component.loadMeetings).toHaveBeenCalled();
+    expect(component.changeQuery).toHaveBeenCalled();
   });
 
   it('onShowOld should change state to true', () => {
     component.showOld = false;
-    spyOn(component, 'loadMeetings');
+    spyOn(component, 'changeQuery');
     component.onShowOld(true);
     expect(component.showOld).toBeTruthy();
-    expect(component.loadMeetings).toHaveBeenCalled();
+    expect(component.changeQuery).toHaveBeenCalled();
   });
 
   it('onShowOld should change state to false', () => {
     component.showOld = true;
-    spyOn(component, 'loadMeetings');
+    spyOn(component, 'changeQuery');
     component.onShowOld(false);
     expect(component.showOld).toBeFalsy();
-    expect(component.loadMeetings).toHaveBeenCalled();
+    expect(component.changeQuery).toHaveBeenCalled();
   });
 
 });

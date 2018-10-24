@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MeetingsService } from '../../services/meetings.service';
 import { TagsService } from '../../services/tags.service';
 import { combineLatest } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'evendemy-events',
@@ -37,7 +38,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = combineLatest(this.route.params, this.route.queryParams).subscribe(
+    this.sub = combineLatest(this.route.params, this.route.queryParams).pipe(debounceTime(10)).subscribe(
       ([params, queryParams]) => {
         this.type = params['type'];
         if (this.type !== 'course' && this.type !== 'event') {
@@ -73,7 +74,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  private loadMeetings() {
+  public loadMeetings() {
     const options = {
       courseOrEvent: this.type,
       showNew: this.showNew,
@@ -105,7 +106,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.changeQuery();
   }
 
-  private changeQuery() {
+  public changeQuery() {
     this.router.navigate(['.'], {
       relativeTo: this.route,
       queryParams: {
