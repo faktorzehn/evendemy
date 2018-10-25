@@ -44,6 +44,7 @@ import { AttendeeTableComponent } from './components/attendee-table/attendee-tab
 import { AuthenticationService } from './services/authentication.service';
 import { MeetingsService } from './services/meetings.service';
 import { TagsService } from './services/tags.service';
+import { TagComponent } from './components/tag/tag.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -84,7 +85,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     CommentsComponent,
     PageComponent,
     SummaryCoursesEventsComponent,
-    AttendeeTableComponent
+    AttendeeTableComponent,
+    TagComponent
   ],
   imports: [
     BrowserAnimationsModule,

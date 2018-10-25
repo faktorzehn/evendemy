@@ -5,6 +5,7 @@ import { ConfigService } from '@ngx-config/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import * as moment from 'moment';
 import { Meeting } from '../../model/meeting';
+import { Component, Input } from '@angular/core';
 
 
 describe('MeetingListComponent', () => {
@@ -15,11 +16,16 @@ describe('MeetingListComponent', () => {
     const configSpy = jasmine.createSpyObj('ConfigService', ['getSettings']);
     configSpy.getSettings.and.returnValue({meeting_image_folder: 'folder'});
 
+    @Component({selector: 'evendemy-tag', template: ''})
+    class TagStubComponent {
+      @Input() name: String;
+    }
+
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([])
       ],
-      declarations: [MeetingListComponent],
+      declarations: [MeetingListComponent, TagStubComponent],
       providers: [
         {provide: ConfigService, useValue: configSpy}]
     }).compileComponents();

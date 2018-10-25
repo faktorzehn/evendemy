@@ -1,7 +1,9 @@
+@import "./../../../variables";
+
 .thumbnail{
     margin: 5px;
-    width: 230px;
-    height: 350px;
+    width: 260px;
+    height: 360px;
 }
 
 .evendemy-badge{
@@ -14,7 +16,7 @@
 }
 
 .meeting-image > img{
-  width: 200px;
+  width: 230px;
   height: 150px;
 }
 
@@ -41,7 +43,7 @@
 }
 
 .meeting-shortdescription{
-  width: 200px;
+  width: 230px;
   height: 35px;
   margin-top: 5px;
   overflow:hidden;
@@ -49,12 +51,35 @@
   text-overflow: ellipsis;
 }
 
+.no-meeting-shortdescription{
+  @extend .meeting-shortdescription;
+  color: $evendemy-background-alternate;
+}
+
+
 .meeting-title{
   padding-top: 15px;
-  width: 200px;
+  padding-bottom: 2px;
+  width: 230px;
   overflow:hidden;
   white-space:nowrap;
   text-overflow: ellipsis;
+}
+
+.meeting-date{
+  margin-bottom: 10px;
+}
+
+.meeting-tags{
+  width: 230px;
+  height: 22px;
+  margin-bottom: 2px;
+  overflow: hidden;
+}
+
+.no-meeting-tags{
+  @extend .meeting-tags;
+  color: $evendemy-background-alternate;
 }
 
 .meeting-more-button{
