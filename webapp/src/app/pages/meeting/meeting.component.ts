@@ -297,7 +297,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onTagSelect(tag: string) {
-    this.router.navigate(['/meeting-list/', this.type, {tags: tag}]);
+    this.router.navigate(['/meeting-list/', this.type], {queryParams: {tags: tag}});
   }
 
   onAddingTag() {

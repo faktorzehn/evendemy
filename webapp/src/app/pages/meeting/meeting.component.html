@@ -1,6 +1,6 @@
 <evendemy-menu>
 </evendemy-menu>
-<div class="row">
+<div class="row meeting-row">
   <div class="col-md-6 col-md-offset-3">
     <form #form="ngForm" *ngIf="meeting != undefined" name="form" class="meeting-card">
       <div *ngIf="isEditable" class="row">
@@ -20,6 +20,10 @@
         <button *ngIf="isEditable" class="btn btn-info meeting-image-button" data-toggle="modal" data-target="#evendemy-image-upload-dialog">change</button>
       </div>
 
+      <div class="row" *ngIf="!isEditable">
+        <h1>{{meeting.title}}</h1>
+        <h4>{{meeting.shortDescription}}</h4>
+      </div>
 
       <!--Title-->
       <div class="row form-row" *ngIf="isEditable">
@@ -29,34 +33,30 @@
         </div>
       </div>
 
-      <div class="row" *ngIf="!isEditable">
-        <h1>{{meeting.title}}</h1>
+      <div class="row form-row" *ngIf="isEditable">
+        <div class="col-md-4">Second Title</div>
+        <div class="col-md-8">
+          <input type="text" class="form-control" [(ngModel)]="meeting.shortDescription" name="shortDescription"
+          />
+        </div>
       </div>
+
 
       <!--Description-->
       <div class="row form-row" *ngIf="isEditable">
         <div class="col-md-4">Description</div>
         <div class="col-md-8">
-          <evendemy-editor [value]="meeting?.description" [editable]="isEditable"></evendemy-editor>
+          <evendemy-editor [value]="meeting?.description" [editable]="true"></evendemy-editor>
         </div>
       </div>
       <div class="row" *ngIf="!isEditable">
-        <div class="col-md-12">
-          <evendemy-editor [value]="meeting?.description" [editable]="isEditable"></evendemy-editor>
+        <div class="col-md-12 meeting-description-not-editable">
+          <evendemy-editor [value]="meeting?.description" [editable]="false"></evendemy-editor>
         </div>
       </div>
 
-      <div *ngIf="!isEditable" class="row" style="margin-top: 50px;">
+      <div *ngIf="!isEditable" class="row">
         <h3>More Information</h3>
-      </div>
-
-      <div class="row form-row">
-        <div class="col-md-4">Short Description</div>
-        <div class="col-md-8">
-          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.shortDescription" name="shortDescription"
-          />
-          <div *ngIf="!isEditable">{{meeting.shortDescription}}</div>
-        </div>
       </div>
 
       <div class="row form-row">
@@ -86,15 +86,13 @@
           [modelAsStrings]="true"
           (onSelect)="onTagSelect($event)"
           (onAdd)="onAddingTag($event)"
-          [validators]="tagValidators"
-          [errorMessages]="tagErrorMessages"
           >
-          <tag-input-dropdown [autocompleteItems]="allTags">
+          <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
           </tag-input-dropdown>
         </tag-input>
         </div>
         <div class="col-md-8" *ngIf="!isEditable">
-            <a [routerLink]="['/meeting-list/', type, {tags: tag}]"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
+            <a [routerLink]="['/meeting-list/', this.type]" [queryParams]="{tags: tag}"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
         </div>
       </div>
 
@@ -256,7 +254,7 @@
 
       <!--COMMENTS-->
       <div class="row" style="margin-top: 50px;" *ngIf="!isNew">
-        <h3>Comments</h3>
+        <h3 id="comments">Comments</h3>
       </div>
       <evendemy-comments [comments]="meeting.comments" (addComment)="onAddComment($event)" [users]="users"></evendemy-comments>
 

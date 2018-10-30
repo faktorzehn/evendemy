@@ -1,11 +1,20 @@
 @import './../../../variables';
 
+.meeting-row{
+  margin: 0px;
+}
+
 .meeting-card{
   padding: 20px 0px;
 }
 
 .meeting-image > img {
   width: 100%;
+}
+
+.meeting-description-not-editable{
+  padding: 0px;
+  margin-bottom: 20px;
 }
 
 .meeting-image-button{

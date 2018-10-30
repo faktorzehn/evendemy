@@ -10,10 +10,19 @@
 
       <!-- title -->
       <h3 class="meeting-title">{{meeting.title}}</h3>
-      <p class="meeting-shortdescription">{{meeting.shortDescription}}</p>
+
+      <!--subtitle-->
+      <p class="meeting-shortdescription" *ngIf="meeting.shortDescription">{{meeting.shortDescription}}</p>
+      <p class="no-meeting-shortdescription" *ngIf="!meeting.shortDescription">- - -</p>
+
+      <!--tags-->
+      <div class="meeting-tags" *ngIf="meeting.tags?.length > 0">
+        <evendemy-tag *ngFor="let tag of meeting.tags" [name]="tag"></evendemy-tag>
+      </div>
+      <p class="no-meeting-tags" *ngIf="meeting.tags?.length <= 0 || !meeting.tags">no tags</p>
 
       <!-- time info -->
-      <div style="margin-bottom:20px;">
+      <div class="meeting-date">
         <i class="fa fa-calendar" aria-hidden="true" style="padding-right: 5px;"></i>
         <div style="display: inline-block;" *ngIf="meeting.date">
           <div *ngIf="!(meeting.startTime && meeting.endTime)" style="display:inline;">{{meeting.date | date:'dd.MM.yyyy'}}</div>

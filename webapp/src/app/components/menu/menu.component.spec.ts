@@ -2,7 +2,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MenuComponent } from './menu.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { User } from '../../model/user';
@@ -22,6 +22,8 @@ describe('MenuComponent', () => {
     const authServiceMock = jasmine.createSpyObj('authService', ['getLoggedInUsername', 'logoutUser']);
     authServiceMock.getLoggedInUsername.and.returnValue('john');
 
+    const router = jasmine.createSpyObj('Router', ['navigate']);
+
     @Component({selector: 'evendemy-user-image', template: ''})
     class UserImageStubComponent {
       @Input() username: String;
@@ -35,7 +37,8 @@ describe('MenuComponent', () => {
       providers: [
         {provide: ActivatedRoute, useValue: { params: of({type: 'course'})}},
         {provide: UserService, useValue: userServiceMock},
-        {provide: AuthenticationService, useValue: authServiceMock}]
+        {provide: AuthenticationService, useValue: authServiceMock}
+      ]
     }).compileComponents();
 
     authService = TestBed.get(AuthenticationService);
