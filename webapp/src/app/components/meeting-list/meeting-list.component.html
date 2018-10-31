@@ -4,7 +4,14 @@
 
       <!-- picture -->
       <div class="meeting-image">
-        <div class="evendemy-badge" *ngIf="isMeetingNew(meeting)" >new</div>
+        <div class="meeting-image-info">
+            <div class="evendemy-badge" *ngIf="isMeetingNew(meeting)" >new</div>
+            <div class="status-attending" *ngIf="isAttending(meeting)"></div>
+            <div class="status-confirmed" *ngIf="hasTookPart(meeting)"></div>
+            <div class="tooltip">Hover over me
+                <span class="tooltip-text">Tooltip text</span>
+              </div>
+        </div>
         <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
       </div>
 

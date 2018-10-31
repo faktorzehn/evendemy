@@ -233,10 +233,16 @@ module.exports = {
         return MeetingUser.find({mid: mid, deleted: false}).exec();
     },
 
-    getMeetingUserForUser: function(username){
+    getMeetingUserForUserWhichTookPart: function(username){
         var MeetingUser = require('../models/meeting_user');
         username = username.toLowerCase();
         return MeetingUser.find({username: username, tookPart: true}).where('deleted').eq(false).exec();
+    },
+
+    getAllMeetingUserForUser: function(username){
+        var MeetingUser = require('../models/meeting_user');
+        username = username.toLowerCase();
+        return MeetingUser.find({username: username}).where('deleted').eq(false).exec();
     },
 
     getMeetingsFromAuthor: function(username){

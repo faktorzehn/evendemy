@@ -58,11 +58,18 @@ export class MeetingsService extends BaseService {
         });
     }
 
-    public getMyMeetings(username: string): Observable<MeetingUser[]> {
+  public getMyConfirmedMeetings(username: string): Observable<MeetingUser[]> {
       const headers = this.createHeaders();
-      const url = this.url + '/meetings/attendee/' + username;
+      const url = this.url + '/meetings/attending/confirmed/' + username;
 
       return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
+  }
+
+  public getMyAttendingMeetings(username: string): Observable<MeetingUser[]> {
+    const headers = this.createHeaders();
+    const url = this.url + '/meetings/attending/' + username;
+
+    return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
   }
 
   public getMeetingsFromAuthor(username: string): Observable<Meeting[]> {

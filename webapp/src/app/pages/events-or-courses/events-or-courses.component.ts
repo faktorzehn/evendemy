@@ -7,6 +7,8 @@ import { MeetingsService } from '../../services/meetings.service';
 import { TagsService } from '../../services/tags.service';
 import { combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { AuthenticationService } from '../../services/authentication.service';
+import { MeetingUser } from '../../model/meeting_user';
 
 @Component({
   selector: 'evendemy-events',
@@ -20,6 +22,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public showNew = true;
   public selectedTags = [];
   public allTags = [];
+  public attendedMeetings: MeetingUser[] = [];
   private type: string;
   public loading = false;
   private sub;
@@ -29,7 +32,8 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>,
-    private tagsService: TagsService
+    private tagsService: TagsService,
+    private authService: AuthenticationService
   ) {
     this.store.select('meetings').subscribe(res => {
       this.meetings = res;
@@ -65,6 +69,10 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
         this.loadMeetings();
         this.tagsService.getAllTags().subscribe((tags: string[]) => {
           this.allTags = tags;
+        });
+
+        this.meetingsService.getMyAttendingMeetings(this.authService.getLoggedInUsername()).subscribe(meeting_users => {
+          this.attendedMeetings = meeting_users;
         });
       }
     );

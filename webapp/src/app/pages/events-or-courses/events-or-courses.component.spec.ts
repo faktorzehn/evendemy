@@ -12,6 +12,9 @@ import { MeetingsService } from '../../services/meetings.service';
 import { TagInputModule } from 'ngx-chips';
 import { TagsService } from '../../services/tags.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MeetingUser } from '../../model/meeting_user';
+import { AuthenticationServiceTestBuilder } from '../../test-utils/authentication-service-test-builder';
+import { AuthenticationService } from '../../services/authentication.service';
 
 describe('EventsOrCoursesComponent', () => {
   let component: EventsOrCoursesComponent;
@@ -27,6 +30,10 @@ describe('EventsOrCoursesComponent', () => {
   class EvendemyMeetungListStubComponent {
     @Input()
     meetings: any[];
+
+    @Input()
+    public attendedMeetingInformation: MeetingUser[] = [];
+
   }
 
   beforeEach(async(() => {
@@ -34,6 +41,8 @@ describe('EventsOrCoursesComponent', () => {
     const _routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     const _storeSpy = jasmine.createSpyObj('Store', ['select']);
     const _tagsServiceSpy = jasmine.createSpyObj('TagsService', ['getAllTags']);
+
+    const authServiceSpy = new AuthenticationServiceTestBuilder().username('').build();
 
     _storeSpy.select.and.returnValue(of([]));
     _tagsServiceSpy.getAllTags.and.returnValue(of([]));
@@ -49,7 +58,9 @@ describe('EventsOrCoursesComponent', () => {
         }},
         {provide: Router, useValue: _routerSpy},
         {provide: Store, useValue: _storeSpy},
-        {provide: TagsService, useValue: _tagsServiceSpy}]
+        {provide: TagsService, useValue: _tagsServiceSpy},
+        {provide: AuthenticationService, useValue: authServiceSpy}
+      ]
     });
     activatedRoute = TestBed.get(ActivatedRoute);
     routerSpy = TestBed.get(Router);
