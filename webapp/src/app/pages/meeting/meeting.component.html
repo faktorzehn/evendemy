@@ -2,7 +2,7 @@
 </evendemy-menu>
 <div class="row meeting-row">
   <div class="col-md-6 col-md-offset-3">
-    <form #form="ngForm" *ngIf="meeting != undefined" name="form" class="meeting-card">
+    <form #form="ngForm" [formGroup]="formGroup" *ngIf="meeting != undefined" name="form" class="meeting-card">
       <div *ngIf="isEditable" class="row">
         <h3>Meeting Information</h3>
       </div>
@@ -29,14 +29,14 @@
       <div class="row form-row" *ngIf="isEditable">
         <div class="col-md-4">Title</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.title" name="title" />
+          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.title" [ngModelOptions]="{standalone: true}" name="title" />
         </div>
       </div>
 
       <div class="row form-row" *ngIf="isEditable">
         <div class="col-md-4">Second Title</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" [(ngModel)]="meeting.shortDescription" name="shortDescription"
+          <input type="text" class="form-control" [(ngModel)]="meeting.shortDescription" [ngModelOptions]="{standalone: true}" name="shortDescription"
           />
         </div>
       </div>
@@ -64,13 +64,13 @@
         <div class="col-md-8" *ngIf="!isEditable">{{meeting.courseOrEvent}}</div>
         <div class="col-md-8" *ngIf="isEditable">
           <div class="pretty p-default p-round">
-              <input type="radio" value="course" name="type" [(ngModel)]="meeting.courseOrEvent">
+              <input type="radio" value="course" name="type" [(ngModel)]="meeting.courseOrEvent" [ngModelOptions]="{standalone: true}">
               <div class="state p-primary">
                   <label>Course</label>
               </div>
           </div>
           <div class="pretty p-default p-round">
-              <input type="radio" value="event" name="type" [(ngModel)]="meeting.courseOrEvent">
+              <input type="radio" value="event" name="type" [(ngModel)]="meeting.courseOrEvent" [ngModelOptions]="{standalone: true}">
               <div class="state p-primary">
                   <label>Event</label>
               </div>
@@ -79,9 +79,28 @@
       </div>
 
       <div class="row form-row">
+        <div class="col-md-4">Idea</div>
+        <div class="col-md-8" *ngIf="!isEditable">{{meeting.isIdea}}</div>
+        <div class="col-md-8" *ngIf="isEditable">
+          <div class="pretty p-default p-round">
+              <input type="radio" [value]="true" (change)="updateValidators(meeting)" name="idea" [(ngModel)]="meeting.isIdea" [ngModelOptions]="{standalone: true}">
+              <div class="state p-primary">
+                  <label>true</label>
+              </div>
+          </div>
+          <div class="pretty p-default p-round">
+              <input type="radio" [value]="false" (change)="updateValidators(meeting)" name="idea" [(ngModel)]="meeting.isIdea" [ngModelOptions]="{standalone: true}">
+              <div class="state p-primary">
+                  <label>false</label>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-row">
         <div class="col-md-4">Tags</div>
         <div class="col-md-8" *ngIf="isEditable">
-          <tag-input [(ngModel)]="meeting.tags" name="tag"
+          <tag-input [(ngModel)]="meeting.tags" [ngModelOptions]="{standalone: true}" name="tag"
           [removable]="isEditable"
           [modelAsStrings]="true"
           (onSelect)="onTagSelect($event)"
@@ -99,15 +118,15 @@
       <div class="row form-row">
         <div class="col-md-4">Date</div>
         <div *ngIf="isEditable" class="col-md-8">
-          <input type="text" id="date" class="form-control" pattern="(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[012]).(19|20)\d\d" name="date"
-            [(ngModel)]="inputDate" placeholder="dd.MM.yyyy" #date="ngModel">
-          <div *ngIf="date.errors && (date.dirty || date.touched)" class="alert alert-danger">
+          <input type="text" id="date" class="form-control" name="date"
+            formControlName="date" placeholder="dd.MM.yyyy">
+          <div *ngIf="date.errors" class="alert alert-danger">
             <div [hidden]="!date.errors.pattern">
               <i class="fa fa-close fa-lg"></i> Date has to be a valid date: dd.MM.yyyy. For example 24.12.2020
             </div>
-          </div>
-          <div *ngIf="!inputDate" class="alert alert-warning">
-            <i class="fa fa-info-circle fa-lg"></i> Without a date participants will not receive a calendar invitation. You can't confirm any participant.
+            <div [hidden]="!date.errors.required">
+              <i class="fa fa-close fa-lg"></i>A date is required
+            </div>
           </div>
         </div>
         <div *ngIf="!isEditable" class="col-md-8">
@@ -117,15 +136,15 @@
       <div class="row form-row">
         <div class="col-md-4">From</div>
         <div *ngIf="isEditable" class="col-md-8">
-          <input type="text" id="startTime" class="form-control" pattern="(0?[0-9]|[1][0-9]|2[0-4]):([0-4][0-9]|5[0-9])" name="startTime"
-            [(ngModel)]="meeting.startTime" placeholder="hh:mm" #startTime="ngModel">
-          <div *ngIf="startTime.errors && (startTime.dirty || startTime.touched)" class="alert alert-danger">
+          <input type="text" id="startTime" class="form-control"
+          formControlName="startTime" placeholder="hh:mm">
+          <div *ngIf="startTime.errors" class="alert alert-danger">
             <div [hidden]="!startTime.errors.pattern">
               <i class="fa fa-close fa-lg"></i> Time has to be like HH:MM. For example 12:00
             </div>
-          </div>
-          <div *ngIf="!meeting.startTime" class="alert alert-warning">
-            <i class="fa fa-info-circle fa-lg"></i> Without a start time participants will not receive a calendar invitation. You can't confirm any participant.
+            <div [hidden]="!startTime.errors.required">
+              <i class="fa fa-close fa-lg"></i> Time is required
+            </div>
           </div>
         </div>
         <div *ngIf="!isEditable" class="col-md-8">
@@ -135,15 +154,15 @@
       <div class="row form-row">
         <div class="col-md-4">To</div>
         <div *ngIf="isEditable" class="col-md-8">
-          <input type="text" id="endTime" class="form-control" pattern="(0?[0-9]|[1][0-9]|2[0-4]):([0-4][0-9]|5[0-9])" name="endTime"
-            [(ngModel)]="meeting.endTime" placeholder="hh:mm" #endTime="ngModel">
-          <div *ngIf="endTime.errors && (endTime.dirty || endTime.touched)" class="alert alert-danger">
+          <input type="text" id="endTime" class="form-control" name="endTime"
+          formControlName="endTime" placeholder="hh:mm">
+          <div *ngIf="endTime.errors" class="alert alert-danger">
             <div [hidden]="!endTime.errors.pattern">
               <i class="fa fa-close fa-lg"></i> Time has to be like HH:MM. For example 12:00
             </div>
-          </div>
-          <div *ngIf="!meeting.endTime" class="alert alert-warning">
-            <i class="fa fa-info-circle fa-lg"></i> Without an end time participants will not receive a calendar invitation. You can't confirm any participant.
+            <div [hidden]="!endTime.errors.required">
+              <i class="fa fa-close fa-lg"></i> Time is required
+            </div>
           </div>
         </div>
         <div *ngIf="!isEditable" class="col-md-8">
@@ -153,14 +172,14 @@
       <div class="row form-row">
         <div class="col-md-4">Location</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.location" name="location" />
+          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.location" [ngModelOptions]="{standalone: true}" name="location" />
           <div *ngIf="!isEditable">{{meeting.location}}</div>
         </div>
       </div>
       <div class="row form-row">
         <div class="col-md-4">Cost Center</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.costCenter" name="costCenter" />
+          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.costCenter" [ngModelOptions]="{standalone: true}" name="costCenter" />
           <div *ngIf="!isEditable">{{meeting.costCenter}}</div>
         </div>
       </div>

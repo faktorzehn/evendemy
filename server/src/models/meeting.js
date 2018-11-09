@@ -12,6 +12,7 @@ const MeetingSchema = mongoose.Schema({
     costCenter: { type: String, default: '' },
     location: { type: String, default: '' },
     courseOrEvent: { type: String, default: 'course' },
+    isIdea:  { type: Boolean, default: false },
     isFreetime: { type: Boolean, default: false },
     date: { type: Date, default: null },
     creationDate: { type: Date, default: Date.now },

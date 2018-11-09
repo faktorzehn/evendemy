@@ -6,6 +6,7 @@ export class Meeting {
   public description: string;
   public costCenter: string;
   public courseOrEvent: string;
+  public isIdea: boolean;
   public isFreetime: boolean;
   public date: Date;
   public startTime: String;

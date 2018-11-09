@@ -15,9 +15,17 @@ import * as moment from 'moment';
 import { MeetingUtil } from './meeting.util';
 import { AuthenticationService } from '../../services/authentication.service';
 import { TagsService } from '../../services/tags.service';
-import { Observable } from 'rxjs';
-import { TagModel } from 'ngx-chips/core/accessor';
-import { FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+
+
+export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    if (isIdea === null || isIdea === undefined || isIdea === true) {
+      return null;
+    }
+    return control.value ? null : {'required': {value: control.value}};
+  };
+}
 
 @Component({
   selector: 'evendemy-meeting',
@@ -33,10 +41,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   isEditable = false;
   userHasAccepted = false;
   userHasFinished = false;
-  inputDate = '';
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
   allTags = [];
+  formGroup: FormGroup;
 
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
@@ -53,7 +61,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store<AppState>,
     private config: ConfigService,
-    private tagsService: TagsService) {
+    private tagsService: TagsService,
+    private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
@@ -70,8 +79,20 @@ export class MeetingComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.formGroup = this.formBuilder.group({
+      date: '',
+      startTime: '',
+      endTime: ''
+    });
+
     this.store.select('selectMeeting').subscribe(res => {
-      this.meeting = res;
+      if (res) {
+        this.meeting = res;
+        this.formGroup.patchValue({date: MeetingUtil.dateToString(res.date)});
+        this.formGroup.patchValue({startTime: res.startTime});
+        this.formGroup.patchValue({endTime: res.endTime});
+        this.updateValidators(res);
+      }
     });
 
     this.store.select('users').subscribe( res => this.users = res);
@@ -79,6 +100,41 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.tagsService.getAllTags().subscribe((tags: string[]) => {
       this.allTags = tags;
     });
+  }
+
+  updateValidators(meeting) {
+    if (!meeting) {
+      return;
+    }
+
+    this.date.setValidators([
+      Validators.pattern(/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/g),
+      requiredIfNotAnIdea(meeting.isIdea)
+    ]);
+    this.startTime.setValidators([
+      Validators.pattern(/(0?[0-9]|[1][0-9]|2[0-4]):([0-4][0-9]|5[0-9])/g),
+      requiredIfNotAnIdea(meeting.isIdea)
+    ]);
+    this.endTime.setValidators([
+      Validators.pattern(/(0?[0-9]|[1][0-9]|2[0-4]):([0-4][0-9]|5[0-9])/g),
+      requiredIfNotAnIdea(meeting.isIdea)
+    ]);
+
+    this.date.updateValueAndValidity();
+    this.startTime.updateValueAndValidity();
+    this.endTime.updateValueAndValidity();
+  }
+
+  get date() {
+    return this.formGroup.get('date');
+  }
+
+  get startTime() {
+    return this.formGroup.get('startTime');
+  }
+
+  get endTime() {
+    return this.formGroup.get('endTime');
   }
 
   private initForCreation(type: string) {
@@ -89,6 +145,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     const meeting = new Meeting();
     meeting.courseOrEvent = this.type;
     meeting.numberOfAllowedExternals = 0;
+    meeting.isIdea = false;
     this.meetingService.selectMeeting(meeting);
 
     this.isEditable = true;
@@ -116,10 +173,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
         this.editor.setValue(this.meeting.description);
       }
       this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
-      if (this.meeting.date) {
-        this.meeting.date = new Date(this.meeting.date);
-        this.inputDate = MeetingUtil.dateToString(this.meeting.date);
-      }
     });
   }
 
@@ -147,7 +200,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   createMeeting() {
     this.meeting.description = this.editor.getValue();
-    this.meeting.date = MeetingUtil.stringToDate(this.inputDate);
+    this.meeting.date = MeetingUtil.stringToDate(this.date.value);
+    this.meeting.startTime = this.startTime.value;
+    this.meeting.endTime = this.endTime.value;
     this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
@@ -158,7 +213,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
   updateMeeting() {
     this.uploadImage(this.meeting.mid);
     this.meeting.description = this.editor.getValue();
-    this.meeting.date = MeetingUtil.stringToDate(this.inputDate);
+    this.meeting.date = MeetingUtil.stringToDate(this.date.value);
+    this.meeting.startTime = this.startTime.value;
+    this.meeting.endTime = this.endTime.value;
     this.meetingService.updateMeeting(this.meeting).subscribe((result) => {
       this.router.navigate(['/meeting-list/' + this.type]);
     });

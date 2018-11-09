@@ -114,6 +114,9 @@ module.exports = {
         if (request.courseOrEvent !== undefined) {
             meeting.courseOrEvent = request.courseOrEvent;
         }
+        if (request.isIdea !== undefined) {
+            meeting.isIdea = request.isIdea;
+        }
         if (request.isFreetime !== undefined) {
             meeting.isFreetime = request.isFreetime;
         }
@@ -161,6 +164,9 @@ module.exports = {
         }
         if (request.courseOrEvent !== undefined) {
             updateMeeting.courseOrEvent = request.courseOrEvent;
+        }
+        if (request.isIdea !== undefined) {
+            updateMeeting.isIdea = request.isIdea;
         }
         if (request.isFreetime !== undefined) {
             updateMeeting.isFreetime = request.isFreetime;
