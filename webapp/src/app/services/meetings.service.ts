@@ -20,6 +20,7 @@ export class MeetingsService extends BaseService {
     public getAllMeetings(options?: {
         username?: string;
         type?: string;
+        idea: boolean,
         isFreetime?: boolean;
         showNew?: boolean;
         showOld?: boolean;
@@ -36,6 +37,9 @@ export class MeetingsService extends BaseService {
             }
             if (options.type !== undefined) {
                 params = params.append('type', options.type.toString());
+            }
+            if (options.idea !== undefined) {
+              params = params.append('idea', options.idea.toString());
             }
             if (options.isFreetime !== undefined) {
                 params = params.append('isFreetime', options.isFreetime.toString());

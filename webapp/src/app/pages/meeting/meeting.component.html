@@ -111,7 +111,7 @@
         </tag-input>
         </div>
         <div class="col-md-8" *ngIf="!isEditable">
-            <a [routerLink]="['/meeting-list/', this.type]" [queryParams]="{tags: tag}"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
+            <a [routerLink]="['/meetings']" [queryParams]="{tags: tag}"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
         </div>
       </div>
 

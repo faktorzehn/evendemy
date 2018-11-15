@@ -24,6 +24,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public allTags = [];
   public attendedMeetings: MeetingUser[] = [];
   public type = 'all';
+  public isIdea = false;
   public loading = false;
   private sub;
 
@@ -42,8 +43,9 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.route.queryParams.pipe(debounceTime(10)).subscribe(
-      (queryParams) => {
+    this.sub = combineLatest(this.route.url, this.route.queryParams).pipe(debounceTime(10)).subscribe(
+      ([url, queryParams]) => {
+        this.isIdea = url[0].toString() === 'ideas';
 
         if (queryParams['type']) {
           if (queryParams['type'] === 'event') {
@@ -91,6 +93,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public loadMeetings() {
     const options = {
       type: this.type,
+      idea: this.isIdea,
       showNew: this.showNew,
       showOld: this.showOld,
       showNotAnnounced: this.showNotAnnounced,

@@ -206,7 +206,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
-      this.router.navigate(['/meeting-list/' + this.type]);
+      this.router.navigate(['/meetings']);
     });
   }
 
@@ -217,7 +217,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meeting.startTime = this.startTime.value;
     this.meeting.endTime = this.endTime.value;
     this.meetingService.updateMeeting(this.meeting).subscribe((result) => {
-      this.router.navigate(['/meeting-list/' + this.type]);
+      this.router.navigate(['/meetings']);
     });
   }
 
@@ -233,7 +233,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   onDeleteMeeting() {
     this.meetingService.deleteMeeting(this.meeting.mid).subscribe((result) => {
-      this.router.navigate(['/meeting-list/' + this.type]);
+      this.router.navigate(['/meetings' + this.type]);
     });
   }
 
@@ -354,7 +354,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onTagSelect(tag: string) {
-    this.router.navigate(['/meeting-list/', this.type], {queryParams: {tags: tag}});
+    this.router.navigate(['/meetings', this.type], {queryParams: {tags: tag}});
   }
 
   onAddingTag() {

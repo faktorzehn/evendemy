@@ -49,6 +49,7 @@ import { TagComponent } from './components/tag/tag.component';
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'meetings', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
+  { path: 'ideas', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/new/:type', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },

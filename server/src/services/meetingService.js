@@ -19,6 +19,9 @@ module.exports = {
                 filter.courseOrEvent = 'course';
             }
         }
+        if (options.idea !== undefined) {
+            filter.isIdea = (options.idea === 'true');
+        }
         if (options.isFreetime !== undefined) {
             filter.isFreetime = (options.isFreetime === 'true');
         }
