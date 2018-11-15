@@ -12,8 +12,12 @@ module.exports = {
         if (options.username !== undefined) {
             filter.username = options.username.toLowerCase();
         }
-        if (options.courseOrEvent !== undefined) {
-            filter.courseOrEvent = options.courseOrEvent;
+        if (options.type !== undefined && options.type!='all') {
+            if(options.type==='event'){
+                filter.courseOrEvent = 'event';
+            } else if (options.type==='course'){
+                filter.courseOrEvent = 'course';
+            }
         }
         if (options.isFreetime !== undefined) {
             filter.isFreetime = (options.isFreetime === 'true');
