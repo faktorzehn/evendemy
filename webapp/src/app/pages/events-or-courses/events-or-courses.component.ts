@@ -23,7 +23,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public selectedTags = [];
   public allTags = [];
   public attendedMeetings: MeetingUser[] = [];
-  private type: string;
+  public type = 'all';
   public loading = false;
   private sub;
 
@@ -42,11 +42,17 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = combineLatest(this.route.params, this.route.queryParams).pipe(debounceTime(10)).subscribe(
-      ([params, queryParams]) => {
-        this.type = params['type'];
-        if (this.type !== 'course' && this.type !== 'event') {
-          this.router.navigate(['/error']);
+    this.sub = this.route.queryParams.pipe(debounceTime(10)).subscribe(
+      (queryParams) => {
+
+        if (queryParams['type']) {
+          if (queryParams['type'] === 'event') {
+            this.type = 'event';
+          } else if (queryParams['type'] === 'course') {
+            this.type = 'course';
+          } else {
+            this.type = 'all';
+          }
         }
 
         this.selectedTags = [];
@@ -84,7 +90,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
 
   public loadMeetings() {
     const options = {
-      courseOrEvent: this.type,
+      type: this.type,
       showNew: this.showNew,
       showOld: this.showOld,
       showNotAnnounced: this.showNotAnnounced,
@@ -110,7 +116,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.changeQuery();
   }
 
-  public onTagsChanged() {
+  public onToolbarChange() {
     this.changeQuery();
   }
 
@@ -118,6 +124,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.router.navigate(['.'], {
       relativeTo: this.route,
       queryParams: {
+        type: this.type,
         new: this.showNew,
         old: this.showOld,
         'not-announced': this.showNotAnnounced,

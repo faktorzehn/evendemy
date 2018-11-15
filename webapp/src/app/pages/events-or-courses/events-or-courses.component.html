@@ -3,17 +3,21 @@
   <!-- filter bar -->
   <div class="tool-bar">
     <div>
-      <div class="filter-label">
-            Meetings:
-      </div>
-      <evendemy-checkbox [label]="'not announced'" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
+      Type:
+      <select [(ngModel)]="type" class="tool-bar-select" (click)="onToolbarChange()">
+            <option value="all">All</option>
+            <option value="event">Events</option>
+            <option value="course">Courses</option>
+      </select>
+      Date:
       <evendemy-checkbox [label]="'old'" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
       <evendemy-checkbox [label]="'new'" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
+      Tags:
       <tag-input [(ngModel)]="selectedTags" name="tag" [modelAsStrings]="true"
         [onlyFromAutocomplete]="true"
         [placeholder]="'+tags'"
         [secondaryPlaceholder]="'tags to be shown'"
-        [maxItems]="5" (onAdd)="onTagsChanged()" (onRemove)="onTagsChanged()"
+        [maxItems]="5" (onAdd)="onToolbarChange()" (onRemove)="onToolbarChange()"
         class="tag-input">
         <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
         </tag-input-dropdown>

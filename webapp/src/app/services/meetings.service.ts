@@ -19,7 +19,7 @@ export class MeetingsService extends BaseService {
 
     public getAllMeetings(options?: {
         username?: string;
-        courseOrEvent?: string;
+        type?: string;
         isFreetime?: boolean;
         showNew?: boolean;
         showOld?: boolean;
@@ -34,8 +34,8 @@ export class MeetingsService extends BaseService {
             if (options.username !== undefined) {
                 params = params.append('username', options.username);
             }
-            if (options.courseOrEvent !== undefined) {
-                params = params.append('courseOrEvent', options.courseOrEvent.toString());
+            if (options.type !== undefined) {
+                params = params.append('type', options.type.toString());
             }
             if (options.isFreetime !== undefined) {
                 params = params.append('isFreetime', options.isFreetime.toString());
