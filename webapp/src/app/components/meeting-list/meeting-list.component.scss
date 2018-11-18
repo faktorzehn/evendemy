@@ -8,14 +8,22 @@
 
 .create-thumbnail{
   @extend .thumbnail;
-  background-color: #dadada;
   text-align: center;
+  border: solid #dadada 2px;
+  border-radius: 5px;
 }
+
+// .create-thumbnail:hover{
+//   background-color: #dadada;
+// }
 
 .create-title{
   padding-top: 120px;
-  font-size: 20px;
+  font-size: 18px;
   color: grey;
+  .fa{
+    padding-bottom: 5px;
+  }
 }
 
 .create-button{
