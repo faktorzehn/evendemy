@@ -6,6 +6,22 @@
     height: 360px;
 }
 
+.create-thumbnail{
+  @extend .thumbnail;
+  background-color: #dadada;
+  text-align: center;
+}
+
+.create-title{
+  padding-top: 120px;
+  font-size: 20px;
+  color: grey;
+}
+
+.create-button{
+  margin-top: 10px;
+}
+
 .meeting-image-info{
   position: absolute;
   width: 230px;

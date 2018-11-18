@@ -17,6 +17,12 @@ export class MeetingListComponent implements OnInit {
   @Input()
   public attendedMeetingInformation: MeetingUser[] = [];
 
+  @Input()
+  public meetingType = '';
+
+  @Input()
+  public canCreate = false;
+
   private randomizedNumber = Math.floor(Math.random() * 10000);
   private imageFolder = this.config.getSettings().meeting_image_folder;
 

@@ -16,6 +16,7 @@ import { MeetingUtil } from './meeting.util';
 import { AuthenticationService } from '../../services/authentication.service';
 import { TagsService } from '../../services/tags.service';
 import { FormGroup, FormControl, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { combineLatest } from 'rxjs';
 
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
@@ -66,16 +67,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscribe = this.route.params.subscribe(params => {
-      const type = params['type'];
+    this.subscribe = combineLatest(this.route.url, this.route.params).subscribe(([url, params]) => {
       const mid = params['mid'];
-      if (mid === 'new') {
-        console.error('Routing has some error! mid should not be new');
-      }
-      if (type) {
-        this.initForCreation(type);
-      } else if (mid) {
+      const isIdea = url[0].toString() === 'idea';
+
+      if (mid) {
         this.initForExistingMeeting(mid);
+      } else {
+        this.initForCreation(isIdea);
       }
     });
 
@@ -137,15 +136,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return this.formGroup.get('endTime');
   }
 
-  private initForCreation(type: string) {
-    this.type = type;
+  private initForCreation(isIdea) {
+    this.type = 'event';
     this.isNew = true;
-    this.type = MeetingUtil.mapType(this.type);
 
     const meeting = new Meeting();
     meeting.courseOrEvent = this.type;
     meeting.numberOfAllowedExternals = 0;
-    meeting.isIdea = false;
+    meeting.isIdea = isIdea;
     this.meetingService.selectMeeting(meeting);
 
     this.isEditable = true;
@@ -237,12 +235,29 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCopyMeeting() {
+  createCopy() {
     const meeting = { ... this.meeting };
     meeting.mid = null;
     meeting.comments = [];
     meeting.creationDate = null;
     meeting.username = null;
+    return meeting;
+  }
+
+  onCopy() {
+    const meeting = this.createCopy();
+    this.potentialAttendees = [];
+    this.isNew = true;
+    this.userHasAccepted = false;
+    this.userHasFinished = false;
+
+    this.meetingService.selectMeeting(meeting);
+  }
+
+  onMakeAMeeting() {
+    const meeting = this.createCopy();
+    meeting.isIdea = false;
+
     this.potentialAttendees = [];
     this.isNew = true;
     this.userHasAccepted = false;

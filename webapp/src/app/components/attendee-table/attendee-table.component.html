@@ -27,7 +27,7 @@
             {{row.dateOfRegistration | date:'dd.MM.yyyy'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Action" *ngIf="editable">
+        <ngx-datatable-column name="Action" *ngIf="editable && showTakePartButton">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <button class="btn btn-success" (click)="onClickTakeParteButton(row)" [disabled]="disableTakePartButton" *ngIf="!row.tookPart">
               <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>

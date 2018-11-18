@@ -4,7 +4,8 @@
   <div class="col-md-6 col-md-offset-3">
     <form #form="ngForm" [formGroup]="formGroup" *ngIf="meeting != undefined" name="form" class="meeting-card">
       <div *ngIf="isEditable" class="row">
-        <h3>Meeting Information</h3>
+        <h3 *ngIf="!meeting.isIdea">Your Meeting</h3>
+        <h3 *ngIf="meeting.isIdea">Your Idea</h3>
       </div>
 
       <!--Image-->
@@ -80,21 +81,7 @@
 
       <div class="row form-row">
         <div class="col-md-4">Idea</div>
-        <div class="col-md-8" *ngIf="!isEditable">{{meeting.isIdea}}</div>
-        <div class="col-md-8" *ngIf="isEditable">
-          <div class="pretty p-default p-round">
-              <input type="radio" [value]="true" (change)="updateValidators(meeting)" name="idea" [(ngModel)]="meeting.isIdea" [ngModelOptions]="{standalone: true}">
-              <div class="state p-primary">
-                  <label>true</label>
-              </div>
-          </div>
-          <div class="pretty p-default p-round">
-              <input type="radio" [value]="false" (change)="updateValidators(meeting)" name="idea" [(ngModel)]="meeting.isIdea" [ngModelOptions]="{standalone: true}">
-              <div class="state p-primary">
-                  <label>false</label>
-              </div>
-          </div>
-        </div>
+        <div class="col-md-8">{{meeting.isIdea}}</div>
       </div>
 
       <div class="row form-row">
@@ -216,7 +203,7 @@
           <div style="display: flex; flex-wrap: wrap;">
             <div *ngFor="let attendee of potentialAttendees; trackBy: trackByFn">
               <evendemy-attendee-card [additionalAttendee]="attendee.externals[0]" [tookPart]="attendee.tookPart" [user]="getUser(attendee.username)"
-                [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date" [disableTakePartButton]="!isInThePastOrToday()" [small]="!isEditable"
+                [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date && !meeting.isIdea" [disableTakePartButton]="!isInThePastOrToday()" [small]="!isEditable"
                 (tookPartClicked)="onHasTakenPart($event)">
               </evendemy-attendee-card>
             </div>
@@ -224,7 +211,7 @@
         </div>
 
         <div class="row" *ngIf="listView">
-          <evendemy-attendee-table [attendees]="potentialAttendees" [users]="users" [editable]="isEditable" [disableTakePartButton]="!isInThePastOrToday()" (tookPartClicked)="onHasTakenPart($event)"></evendemy-attendee-table>
+          <evendemy-attendee-table [showTakePartButton]="!meeting.isIdea" [attendees]="potentialAttendees" [users]="users" [editable]="isEditable" [disableTakePartButton]="!isInThePastOrToday()" (tookPartClicked)="onHasTakenPart($event)"></evendemy-attendee-table>
         </div>
       </div>
 
@@ -282,6 +269,7 @@
         <!--EDITOR-MODE-->
         <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()" [disabled]="!form.form.valid">Save</button>
         <button *ngIf="!isNew && isEditable" class="btn" data-toggle="modal" data-target="#copyDialog">Copy</button>
+        <button *ngIf="!isNew && isEditable && meeting.isIdea" class="btn" data-toggle="modal" data-target="#copyToMeetingDialog">Make a Meeting</button>
         <button *ngIf="!isNew && isEditable" class="btn" data-toggle="modal" data-target="#confirmDialog">Delete</button>
       </div>
 
@@ -293,8 +281,14 @@
       <br/> Do you really want to delete this meeting?
     </evendemy-confirm-dialog>
 
-    <evendemy-confirm-dialog title="Do you really want to copy this meeting?" (confirm)="onCopyMeeting()" dialogID="copyDialog">
+    <evendemy-confirm-dialog title="Do you really want to copy this meeting?" (confirm)="onCopy()" dialogID="copyDialog">
       With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
+      <br/>
+      <br/> Do you really want to create this meeting?
+    </evendemy-confirm-dialog>
+
+    <evendemy-confirm-dialog title="Do you really want to make a meeting of your idea?" (confirm)="onMakeAMeeting()" dialogID="copyToMeetingDialog">
+      With this action you will create a meeting of your idea! You can edit things before saving. Your image will not be copied!
       <br/>
       <br/> Do you really want to copy this meeting?
     </evendemy-confirm-dialog>

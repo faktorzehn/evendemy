@@ -25,7 +25,7 @@ export class MeetingUtil {
     if (type === 'course' || type === 'event') {
       return type;
     }
-    return 'course';
+    return 'event';
   }
 
   public static generateCSV(attendees: MeetingUser[], users: User[]): any {

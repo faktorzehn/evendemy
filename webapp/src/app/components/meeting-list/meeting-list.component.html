@@ -1,4 +1,9 @@
 <div class="meeting-list">
+  <div class="create-thumbnail" *ngIf="canCreate">
+      <div class="create-title" *ngIf="meetingType === 'meeting'">create a meeting</div>
+      <div class="create-title" *ngIf="meetingType === 'idea'">create an idea</div>
+      <button type="button" class="btn btn-default create-button" routerLink="/{{meetingType}}">create</button>
+  </div>
   <div class="thumbnail" *ngFor="let meeting of meetings">
     <div class="caption text-center thumbnail-container">
 
