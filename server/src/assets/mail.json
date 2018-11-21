@@ -33,13 +33,22 @@
         "button_label": "Idee ansehen",
         "foot": "Evendemy"
     },
-    "confirmMail":{
+    "confirmMeeting":{
         "header": "Evendemy - Du hast dich angemeldet ✔",
         "title": "Evendemy: Du nimmst teil an {{{meeting.title}}}",
         "body": "Hi!\n Danke das du an dem Meeting '{{{meeting.title}}}' teil nimmst.\nAnbei senden wir dir noch ein Kalendar Eintrag und den Link um das Meeting anzuschauen.",
         "body_no_calendar": "Hi!\n Danke das du an dem Meeting '{{{meeting.title}}}' teil nimmst.\nDer Termin steht leider noch nicht komplett fest - deswegen schaue bitte regelmäßig in die Evendemy um Neuigkeiten zu erfahren.",
         "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
         "button_label": "Meeting ansehen",
+        "foot": "Evendemy"
+    },
+    "confirmIdea":{
+        "header": "Evendemy - Du bist interessiert ✔",
+        "title": "Evendemy: Du bist interessiert an {{{meeting.title}}}",
+        "body": "Hi!\n Super! Du bist an der Idee '{{{meeting.title}}}' interessiert.\nEs gibt sogar einen Zeitpunkt für die Idee. Anbei senden wir dir den Kalendar Eintrag und den Link um die Idee anzuschauen.",
+        "body_no_calendar": "Hi!\n Super! Du bist an der Idee '{{{meeting.title}}}' interessiert.",
+        "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+        "button_label": "Idee ansehen",
         "foot": "Evendemy"
     },
     "addCommentMail":{

@@ -252,10 +252,10 @@ module.exports = function (server, config, production_mode) {
     });
 
     function confirmAttendee(meeting, user) {
-
-        var view = mailService.renderAllTemplates(mailConfig.confirmMail, meeting, user);
+        var template = meeting.isIdea ? mailConfig.confirmIdea : mailConfig.confirmMeeting;
+        var view = mailService.renderAllTemplates(template, meeting, user);
         if (!meeting.date || !meeting.startTime || !meeting.endTime) {
-            view.body = mailService.renderTemplate(mailConfig.confirmMail.body_no_calendar, meeting, user);
+            view.body = mailService.renderTemplate(template.body_no_calendar, meeting, user);
         }
 
         var sendTo = user.email;
