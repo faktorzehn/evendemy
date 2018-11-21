@@ -1,22 +1,23 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Meeting } from '../../model/meeting';
-import { Comment } from '../../model/comment';
-import { MeetingUser } from '../../model/meeting_user';
-import { EditorComponent } from '../../components/editor/editor.component';
-import { MeetingService } from '../../services/meeting.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../appState';
-import { Subscription } from 'rxjs/Subscription';
-import { User } from '../../model/user';
-import * as FileSaver from 'file-saver';
 import { ConfigService } from '@ngx-config/core';
+import * as FileSaver from 'file-saver';
 import * as moment from 'moment';
-import { MeetingUtil } from './meeting.util';
-import { AuthenticationService } from '../../services/authentication.service';
-import { TagsService } from '../../services/tags.service';
-import { FormGroup, FormControl, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { combineLatest } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+
+import { AppState } from '../../appState';
+import { EditorComponent } from '../../components/editor/editor.component';
+import { Comment } from '../../model/comment';
+import { Meeting } from '../../model/meeting';
+import { MeetingUser } from '../../model/meeting_user';
+import { User } from '../../model/user';
+import { AuthenticationService } from '../../services/authentication.service';
+import { MeetingService } from '../../services/meeting.service';
+import { TagsService } from '../../services/tags.service';
+import { MeetingUtil } from './meeting.util';
 
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
@@ -204,7 +205,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
-      this.router.navigate(['/meetings']);
+      this.navigateBack();
     });
   }
 
@@ -215,8 +216,16 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meeting.startTime = this.startTime.value;
     this.meeting.endTime = this.endTime.value;
     this.meetingService.updateMeeting(this.meeting).subscribe((result) => {
-      this.router.navigate(['/meetings']);
+      this.navigateBack();
     });
+  }
+
+  private navigateBack() {
+    if (this.meeting.isIdea) {
+      this.router.navigate(['/ideas']);
+      return;
+    }
+    this.router.navigate(['/meetings']);
   }
 
   uploadImage(mid: number) {
