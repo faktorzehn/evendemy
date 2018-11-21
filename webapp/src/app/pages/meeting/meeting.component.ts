@@ -35,7 +35,6 @@ export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   styleUrls: ['./meeting.component.scss']
 })
 export class MeetingComponent implements OnInit, OnDestroy {
-  type: string;
   isNew: boolean;
   subscribe: Subscription;
   meeting: Meeting;
@@ -68,29 +67,40 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.formGroup = this.formBuilder.group({
+      title: '',
+      shortDescription: '',
+      courseOrEvent: '',
+      date: '',
+      startTime: '',
+      endTime: '',
+      location: '',
+      costCenter: ''
+    });
+
     this.subscribe = combineLatest(this.route.url, this.route.params).subscribe(([url, params]) => {
       const mid = params['mid'];
       const isIdea = url[0].toString() === 'idea';
 
-      if (mid) {
+      if (mid !== undefined) {
         this.initForExistingMeeting(mid);
       } else {
         this.initForCreation(isIdea);
       }
     });
 
-    this.formGroup = this.formBuilder.group({
-      date: '',
-      startTime: '',
-      endTime: ''
-    });
-
     this.store.select('selectMeeting').subscribe(res => {
       if (res) {
         this.meeting = res;
-        this.formGroup.patchValue({date: MeetingUtil.dateToString(res.date)});
-        this.formGroup.patchValue({startTime: res.startTime});
-        this.formGroup.patchValue({endTime: res.endTime});
+        this.formGroup.patchValue({
+          title: res.title,
+          shortDescription: res.shortDescription,
+          courseOrEvent: res.courseOrEvent,
+          date: MeetingUtil.dateToString(res.date),
+          startTime: res.startTime,
+          endTime: res.endTime,
+          location: res.location,
+          costCenter: res.costCenter});
         this.updateValidators(res);
       }
     });
@@ -120,9 +130,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
       requiredIfNotAnIdea(meeting.isIdea)
     ]);
 
+    this.location.setValidators([
+      requiredIfNotAnIdea(meeting.isIdea)
+    ]);
+
     this.date.updateValueAndValidity();
     this.startTime.updateValueAndValidity();
     this.endTime.updateValueAndValidity();
+    this.location.updateValueAndValidity();
   }
 
   get date() {
@@ -137,12 +152,31 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return this.formGroup.get('endTime');
   }
 
+  get title() {
+    return this.formGroup.get('title');
+  }
+
+  get shortDescription() {
+    return this.formGroup.get('shortDescription');
+  }
+
+  get courseOrEvent() {
+    return this.formGroup.get('courseOrEvent');
+  }
+
+  get location() {
+    return this.formGroup.get('location');
+  }
+
+  get costCenter() {
+    return this.formGroup.get('costCenter');
+  }
+
   private initForCreation(isIdea) {
-    this.type = 'event';
     this.isNew = true;
 
     const meeting = new Meeting();
-    meeting.courseOrEvent = this.type;
+    this.courseOrEvent.patchValue('event');
     meeting.numberOfAllowedExternals = 0;
     meeting.isIdea = isIdea;
     this.meetingService.selectMeeting(meeting);
@@ -167,7 +201,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   loadMeeting(mid) {
     this.meetingService.getMeetingAndSelect(mid).subscribe((result) => {
-      this.type = this.meeting.courseOrEvent;
+      this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
       if (this.editor) {
         this.editor.setValue(this.meeting.description);
       }
@@ -190,18 +224,27 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onSaveMeeting() {
-    if (this.meeting.mid) {
+    if (this.meeting.mid !== undefined) {
       this.updateMeeting();
     } else {
       this.createMeeting();
     }
   }
 
-  createMeeting() {
+  setDataAtMeeting() {
+    this.meeting.title = this.title.value;
+    this.meeting.shortDescription = this.shortDescription.value;
+    this.meeting.courseOrEvent = this.courseOrEvent.value;
     this.meeting.description = this.editor.getValue();
     this.meeting.date = MeetingUtil.stringToDate(this.date.value);
     this.meeting.startTime = this.startTime.value;
     this.meeting.endTime = this.endTime.value;
+    this.meeting.location = this.location.value;
+    this.meeting.costCenter = this.costCenter.value;
+  }
+
+  createMeeting() {
+    this.setDataAtMeeting();
     this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
@@ -211,10 +254,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   updateMeeting() {
     this.uploadImage(this.meeting.mid);
-    this.meeting.description = this.editor.getValue();
-    this.meeting.date = MeetingUtil.stringToDate(this.date.value);
-    this.meeting.startTime = this.startTime.value;
-    this.meeting.endTime = this.endTime.value;
+    this.setDataAtMeeting();
     this.meetingService.updateMeeting(this.meeting).subscribe((result) => {
       this.navigateBack();
     });
@@ -240,7 +280,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   onDeleteMeeting() {
     this.meetingService.deleteMeeting(this.meeting.mid).subscribe((result) => {
-      this.router.navigate(['/meetings' + this.type]);
+      this.router.navigate(['/meetings' + this.courseOrEvent.value]);
     });
   }
 
@@ -378,7 +418,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onTagSelect(tag: string) {
-    this.router.navigate(['/meetings', this.type], {queryParams: {tags: tag}});
+    this.router.navigate(['/meetings', this.courseOrEvent.value], {queryParams: {tags: tag}});
   }
 
   onAddingTag() {

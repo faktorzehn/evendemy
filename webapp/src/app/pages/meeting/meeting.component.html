@@ -30,15 +30,14 @@
       <div class="row form-row" *ngIf="isEditable">
         <div class="col-md-4">Title</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.title" [ngModelOptions]="{standalone: true}" name="title" />
+          <input type="text" class="form-control" *ngIf="isEditable" formControlName="title" name="title" />
         </div>
       </div>
 
       <div class="row form-row" *ngIf="isEditable">
         <div class="col-md-4">Second Title</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" [(ngModel)]="meeting.shortDescription" [ngModelOptions]="{standalone: true}" name="shortDescription"
-          />
+          <input type="text" class="form-control" formControlName="shortDescription" name="shortDescription" />
         </div>
       </div>
 
@@ -65,23 +64,18 @@
         <div class="col-md-8" *ngIf="!isEditable">{{meeting.courseOrEvent}}</div>
         <div class="col-md-8" *ngIf="isEditable">
           <div class="pretty p-default p-round">
-              <input type="radio" value="course" name="type" [(ngModel)]="meeting.courseOrEvent" [ngModelOptions]="{standalone: true}">
+              <input type="radio" value="course" formControlName="courseOrEvent">
               <div class="state p-primary">
                   <label>Course</label>
               </div>
           </div>
           <div class="pretty p-default p-round">
-              <input type="radio" value="event" name="type" [(ngModel)]="meeting.courseOrEvent" [ngModelOptions]="{standalone: true}">
+              <input type="radio" value="event" formControlName="courseOrEvent">
               <div class="state p-primary">
                   <label>Event</label>
               </div>
           </div>
         </div>
-      </div>
-
-      <div class="row form-row">
-        <div class="col-md-4">Idea</div>
-        <div class="col-md-8">{{meeting.isIdea}}</div>
       </div>
 
       <div class="row form-row">
@@ -159,14 +153,19 @@
       <div class="row form-row">
         <div class="col-md-4">Location</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.location" [ngModelOptions]="{standalone: true}" name="location" />
+          <input type="text" class="form-control" *ngIf="isEditable" formControlName="location" name="location" />
+          <div *ngIf="location.errors" class="alert alert-danger">
+            <div [hidden]="!location.errors.required">
+              <i class="fa fa-close fa-lg"></i> Location is required
+            </div>
+          </div>
           <div *ngIf="!isEditable">{{meeting.location}}</div>
         </div>
       </div>
       <div class="row form-row">
         <div class="col-md-4">Cost Center</div>
         <div class="col-md-8">
-          <input type="text" class="form-control" *ngIf="isEditable" [(ngModel)]="meeting.costCenter" [ngModelOptions]="{standalone: true}" name="costCenter" />
+          <input type="text" class="form-control" *ngIf="isEditable" formControlName="costCenter" name="costCenter" />
           <div *ngIf="!isEditable">{{meeting.costCenter}}</div>
         </div>
       </div>
