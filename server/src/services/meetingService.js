@@ -188,6 +188,8 @@ module.exports = {
             updateMeeting.tags = request.tags;
         }
 
+        updateMeeting.lastUpdateDate = new Date();
+
         return Meeting.findOneAndUpdate({ mid: mid }, { $set: updateMeeting }, { upsert: true, new:true });
     },
 
@@ -214,6 +216,7 @@ module.exports = {
                 meeting.comments = [];
             }
             meeting.comments.push(comment);
+            meeting.lastUpdateDate = new Date();
 
             return meeting.save();
         });
@@ -227,7 +230,7 @@ module.exports = {
                 reject('No mid specified');
             }
 
-            Meeting.update({ mid: mid }, { $set: { deleted: true } }, { upsert: true }, function (err, meeting) {
+            Meeting.update({ mid: mid }, { $set: { deleted: true, lastUpdateDate: new Date() } }, { upsert: true }, function (err, meeting) {
                 if (err) {
                     reject(err);
                     return;
