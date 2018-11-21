@@ -17,12 +17,20 @@
             "foot": "Evendemy"
         }
     },
-    "informAllMail":{
+    "informAboutMeeting":{
         "header": "Evendemy News",
         "title": "Evendemy News: {{{meeting.title}}}",
-        "body": "Hallo!\n Es gibt einen neuen Eintrag in der Evendemy: '{{{meeting.title}}}'",
+        "body": "Hallo!\n Es gibt einen neues Meeting in der Evendemy: '{{{meeting.title}}}'",
         "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
         "button_label": "Meeting ansehen",
+        "foot": "Evendemy"
+    },
+    "informAboutIdea":{
+        "header": "Evendemy News",
+        "title": "Evendemy News: {{{meeting.title}}}",
+        "body": "Hallo!\n Es gibt eine neue Idee in der Evendemy: '{{{meeting.title}}}'",
+        "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+        "button_label": "Idee ansehen",
         "foot": "Evendemy"
     },
     "confirmMail":{

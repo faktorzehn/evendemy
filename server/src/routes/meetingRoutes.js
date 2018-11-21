@@ -51,7 +51,12 @@ module.exports = function (server, config, production_mode) {
 
             //inform all users about the new meeting entry
             userService.getAllUsers().then(function (users) {
-                var view = mailService.renderAllTemplates(mailConfig.informAllMail, meeting, null);
+                var view;
+                if (meeting.isIdea) {
+                    view = mailService.renderAllTemplates(mailConfig.informAboutIdea, meeting, null);
+                } else {
+                    view = mailService.renderAllTemplates(mailConfig.informAboutMeeting, meeting, null);
+                }
                 var sendTo = getMailAdresses(users);
                 mailService.sendMail(config, sendTo, view, null, production_mode);
             }, function (err) {
