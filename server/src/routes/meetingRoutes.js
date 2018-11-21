@@ -119,7 +119,12 @@ module.exports = function (server, config, production_mode) {
                         }
                         
                         const iCal = calendarService.createICalAttachment(config, meeting);
-                        notifyAllAttendingUsers(meeting, meeting.username, mailConfig.dateChangedMail, text, iCal);
+                        if(meeting.isIdea){
+                            notifyAllAttendingUsers(meeting, meeting.username, mailConfig.dateChangedFromIdea, text, iCal);
+                        } else {
+                            notifyAllAttendingUsers(meeting, meeting.username, mailConfig.dateChangedFromMeeting, text, iCal);
+                        }
+                        
                     }
                     res.send(meeting);
                 }, function (err) {
@@ -138,8 +143,12 @@ module.exports = function (server, config, production_mode) {
 
     server.del('/meeting/:mid', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
-            notifyAllAttendingUsers(meeting, meeting.username, mailConfig.meetingDeleted, null, null);
-
+            if (meeting.isIdea) {
+                notifyAllAttendingUsers(meeting, meeting.username, mailConfig.ideaDeleted, null, null);
+            } else {
+                notifyAllAttendingUsers(meeting, meeting.username, mailConfig.meetingDeleted, null, null);
+            }
+            
             meetingService.deleteMeeting(req.params.mid).then(function (meeting) {
                 res.send(meeting);
             }, function (err) {
@@ -275,9 +284,17 @@ module.exports = function (server, config, production_mode) {
 
             var view;
             if(isNewAttendee){
-                view = mailService.renderAllTemplates(mailConfig.notificationMail.newAttendee, meeting, attendee);
+                if(meeting.isIdea){
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.newAttendeeForIdea, meeting, attendee);
+                }else{
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.newAttendeeForMeeting, meeting, attendee);
+                }
             } else{
-                view = mailService.renderAllTemplates(mailConfig.notificationMail.canceledAttendee, meeting, attendee);
+                if(meeting.isIdea){
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.canceledAttendeeForIdea, meeting, attendee);
+                }else{
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.canceledAttendeeForMeeting, meeting, attendee);
+                }
             }
 
             mailService.sendMail(config, author.email, view, null, production_mode);
