@@ -88,7 +88,11 @@ module.exports = function (server, config, production_mode) {
 
     server.post('/meeting/:mid/comment', function (req, res, next) {
         meetingService.addComment(req.params.mid, req.params).then(function (meeting) {
-            notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.addCommentMail, req.params.text, null);
+            if(meeting.isIdea){
+                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToIdea, req.params.text, null);
+            }else{
+                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToMeeting, req.params.text, null);
+            }
             res.send(meeting);
         }, function (err) {
             res.send(500, { error: err });
@@ -115,7 +119,12 @@ module.exports = function (server, config, production_mode) {
                         }
                         
                         const iCal = calendarService.createICalAttachment(config, meeting);
-                        notifyAllAttendingUsers(meeting, meeting.username, mailConfig.dateChangedMail, text, iCal);
+                        if(meeting.isIdea){
+                            notifyAllAttendingUsers(meeting, meeting.username, mailConfig.dateChangedFromIdea, text, iCal);
+                        } else {
+                            notifyAllAttendingUsers(meeting, meeting.username, mailConfig.dateChangedFromMeeting, text, iCal);
+                        }
+                        
                     }
                     res.send(meeting);
                 }, function (err) {
@@ -134,8 +143,12 @@ module.exports = function (server, config, production_mode) {
 
     server.del('/meeting/:mid', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
-            notifyAllAttendingUsers(meeting, meeting.username, mailConfig.meetingDeleted, null, null);
-
+            if (meeting.isIdea) {
+                notifyAllAttendingUsers(meeting, meeting.username, mailConfig.ideaDeleted, null, null);
+            } else {
+                notifyAllAttendingUsers(meeting, meeting.username, mailConfig.meetingDeleted, null, null);
+            }
+            
             meetingService.deleteMeeting(req.params.mid).then(function (meeting) {
                 res.send(meeting);
             }, function (err) {
@@ -252,10 +265,10 @@ module.exports = function (server, config, production_mode) {
     });
 
     function confirmAttendee(meeting, user) {
-
-        var view = mailService.renderAllTemplates(mailConfig.confirmMail, meeting, user);
+        var template = meeting.isIdea ? mailConfig.confirmIdea : mailConfig.confirmMeeting;
+        var view = mailService.renderAllTemplates(template, meeting, user);
         if (!meeting.date || !meeting.startTime || !meeting.endTime) {
-            view.body = mailService.renderTemplate(mailConfig.confirmMail.body_no_calendar, meeting, user);
+            view.body = mailService.renderTemplate(template.body_no_calendar, meeting, user);
         }
 
         var sendTo = user.email;
@@ -271,9 +284,17 @@ module.exports = function (server, config, production_mode) {
 
             var view;
             if(isNewAttendee){
-                view = mailService.renderAllTemplates(mailConfig.notificationMail.newAttendee, meeting, attendee);
+                if(meeting.isIdea){
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.newAttendeeForIdea, meeting, attendee);
+                }else{
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.newAttendeeForMeeting, meeting, attendee);
+                }
             } else{
-                view = mailService.renderAllTemplates(mailConfig.notificationMail.canceledAttendee, meeting, attendee);
+                if(meeting.isIdea){
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.canceledAttendeeForIdea, meeting, attendee);
+                }else{
+                    view = mailService.renderAllTemplates(mailConfig.notificationMail.canceledAttendeeForMeeting, meeting, attendee);
+                }
             }
 
             mailService.sendMail(config, author.email, view, null, production_mode);

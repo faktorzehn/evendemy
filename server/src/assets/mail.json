@@ -1,6 +1,6 @@
 {
     "notificationMail":{
-        "newAttendee":{
+        "newAttendeeForMeeting":{
             "header": "Evendemy - Ein neuer Teilnehmer: {{user.firstname}} {{user.lastname}}",
             "title": "Evendemy: Ein neuer Teilnehmer: {{user.firstname }} {{user.lastname}}",
             "body": "Hi!\n An deinem Meeting: '{{{meeting.title}}}' will {{user.firstname}} {{user.lastname}} teilnehmen.\n",
@@ -8,12 +8,28 @@
             "button_label": "Meeting ansehen",
             "foot": "Evendemy"
         },
-        "canceledAttendee":{
+        "newAttendeeForIdea":{
+            "header": "Evendemy - Eine neue interessierte Person: {{user.firstname}} {{user.lastname}}",
+            "title": "Evendemy: Eine neue interessierte Person: {{user.firstname }} {{user.lastname}}",
+            "body": "Hi!\n An deiner Idee: '{{{meeting.title}}}' ist {{user.firstname}} {{user.lastname}} interessiert.\n",
+            "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+            "button_label": "Idee ansehen",
+            "foot": "Evendemy"
+        },
+        "canceledAttendeeForMeeting":{
             "header": "Evendemy - Ein Teilnehmer will nicht mehr teilnehmen: {{user.firstname}} {{user.lastname}}",
             "title": "Evendemy: Ein Teilnehmer will nicht mehr teilnehmen: {{user.firstname }} {{user.lastname}}",
             "body": "Hi!\n Leider will an deinem Meeting: '{{{meeting.title}}}' {{user.firstname}} {{user.lastname}} nicht mehr teilnehmen.\n",
             "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
             "button_label": "Meeting ansehen",
+            "foot": "Evendemy"
+        },
+        "canceledAttendeeForIdea":{
+            "header": "Evendemy -  Eine Person ist nicht mehr interessiert: {{user.firstname}} {{user.lastname}}",
+            "title": "Evendemy: Eine Person ist nicht mehr interessiert: {{user.firstname }} {{user.lastname}}",
+            "body": "Hi!\n Leider ist  {{user.firstname}} {{user.lastname}} nicht mehr an deiner Idee: '{{{meeting.title}}}' interessiert.\n",
+            "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+            "button_label": "Idee ansehen",
             "foot": "Evendemy"
         }
     },
@@ -33,7 +49,7 @@
         "button_label": "Idee ansehen",
         "foot": "Evendemy"
     },
-    "confirmMail":{
+    "confirmMeeting":{
         "header": "Evendemy - Du hast dich angemeldet ✔",
         "title": "Evendemy: Du nimmst teil an {{{meeting.title}}}",
         "body": "Hi!\n Danke das du an dem Meeting '{{{meeting.title}}}' teil nimmst.\nAnbei senden wir dir noch ein Kalendar Eintrag und den Link um das Meeting anzuschauen.",
@@ -42,7 +58,16 @@
         "button_label": "Meeting ansehen",
         "foot": "Evendemy"
     },
-    "addCommentMail":{
+    "confirmIdea":{
+        "header": "Evendemy - Du bist interessiert ✔",
+        "title": "Evendemy: Du bist interessiert an {{{meeting.title}}}",
+        "body": "Hi!\n Super! Du bist an der Idee '{{{meeting.title}}}' interessiert.\nEs gibt sogar einen Zeitpunkt für die Idee. Anbei senden wir dir den Kalendar Eintrag und den Link um die Idee anzuschauen.",
+        "body_no_calendar": "Hi!\n Super! Du bist an der Idee '{{{meeting.title}}}' interessiert.",
+        "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+        "button_label": "Idee ansehen",
+        "foot": "Evendemy"
+    },
+    "commentAddedToMeeting":{
         "header": "Evendemy - Ein neues Kommentar zu {{{meeting.title}}}",
         "title": "Evendemy: Es gibt ein neues Kommentar zu {{{meeting.title}}}",
         "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat ein Kommentar zu '{{{meeting.title}}}' geschrieben:\n '{{text}}'",
@@ -50,7 +75,15 @@
         "button_label": "Meeting ansehen",
         "foot": "Evendemy"
     },
-    "dateChangedMail":{
+    "commentAddedToIdea":{
+        "header": "Evendemy - Ein neues Kommentar zu {{{meeting.title}}}",
+        "title": "Evendemy: Es gibt ein neues Kommentar zu {{{meeting.title}}}",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat ein Kommentar zu '{{{meeting.title}}}' geschrieben:\n '{{text}}'",
+        "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+        "button_label": "Idee ansehen",
+        "foot": "Evendemy"
+    },
+    "dateChangedFromMeeting":{
         "header": "Evendemy - Der Zeitpunkt für {{{meeting.title}}} wurde geändert",
         "title": "Evendemy: Der Zeitpunkt für {{{meeting.title}}} wurde geändert",
         "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat den Termin für '{{{meeting.title}}}' geändert:\n {{text}}. Falls der Termin bekannt ist, schicken wir dir sicherheitshalber nochmals den Kalendareintrag.",
@@ -58,10 +91,26 @@
         "button_label": "Meeting ansehen",
         "foot": "Evendemy"
     },
+    "dateChangedFromIdea":{
+        "header": "Evendemy - Der Zeitpunkt für {{{meeting.title}}} wurde geändert",
+        "title": "Evendemy: Der Zeitpunkt für {{{meeting.title}}} wurde geändert",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat den Termin für '{{{meeting.title}}}' geändert:\n {{text}}. Falls der Termin bekannt ist, schicken wir dir sicherheitshalber nochmals den Kalendareintrag.",
+        "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+        "button_label": "Idee ansehen",
+        "foot": "Evendemy"
+    },
     "meetingDeleted":{
         "header": "Evendemy - Das Meeting {{{meeting.title}}} findet nicht statt!",
         "title": "Evendemy: Das Meeting {{{meeting.title}}} findet nicht statt",
         "body": "Hi!\n leider findet '{{{meeting.title}}}' nicht statt. Vielleicht findest du ein anderes spannendes Meeting.",
+        "button_href": "https://your-evendemy-app",
+        "button_label": "Zur Evendemy",
+        "foot": "Evendemy"
+    },
+    "ideaDeleted":{
+        "header": "Evendemy - Die Idee {{{meeting.title}}} wurde gelöscht.",
+        "title": "Evendemy: Die Idee {{{meeting.title}}} wurde gelöscht",
+        "body": "Hi!\n leider wurde die Idee gelöscht '{{{meeting.title}}}'. Vielleicht gibt es ein passendes Meeting dafür.",
         "button_href": "https://your-evendemy-app",
         "button_label": "Zur Evendemy",
         "foot": "Evendemy"

@@ -16,6 +16,7 @@ const MeetingSchema = mongoose.Schema({
     isFreetime: { type: Boolean, default: false },
     date: { type: Date, default: null },
     creationDate: { type: Date, default: Date.now },
+    lastUpdateDate: { type: Date, default: Date.now },
     username: { type: String, required: true },
     comments: { type: [Comment.schema], default: [] },
     numberOfAllowedExternals: { type: Number, default: 0},
