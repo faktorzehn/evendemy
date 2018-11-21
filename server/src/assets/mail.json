@@ -51,12 +51,20 @@
         "button_label": "Idee ansehen",
         "foot": "Evendemy"
     },
-    "addCommentMail":{
+    "commentAddedToMeeting":{
         "header": "Evendemy - Ein neues Kommentar zu {{{meeting.title}}}",
         "title": "Evendemy: Es gibt ein neues Kommentar zu {{{meeting.title}}}",
         "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat ein Kommentar zu '{{{meeting.title}}}' geschrieben:\n '{{text}}'",
         "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
         "button_label": "Meeting ansehen",
+        "foot": "Evendemy"
+    },
+    "commentAddedToIdea":{
+        "header": "Evendemy - Ein neues Kommentar zu {{{meeting.title}}}",
+        "title": "Evendemy: Es gibt ein neues Kommentar zu {{{meeting.title}}}",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat ein Kommentar zu '{{{meeting.title}}}' geschrieben:\n '{{text}}'",
+        "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+        "button_label": "Idee ansehen",
         "foot": "Evendemy"
     },
     "dateChangedMail":{

@@ -88,7 +88,11 @@ module.exports = function (server, config, production_mode) {
 
     server.post('/meeting/:mid/comment', function (req, res, next) {
         meetingService.addComment(req.params.mid, req.params).then(function (meeting) {
-            notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.addCommentMail, req.params.text, null);
+            if(meeting.isIdea){
+                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToIdea, req.params.text, null);
+            }else{
+                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToMeeting, req.params.text, null);
+            }
             res.send(meeting);
         }, function (err) {
             res.send(500, { error: err });
