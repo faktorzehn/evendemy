@@ -9,6 +9,7 @@ import { combineLatest } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../../appState';
+import { Step } from '../../components/breadcrump/breadcrump.component';
 import { EditorComponent } from '../../components/editor/editor.component';
 import { Comment } from '../../model/comment';
 import { Meeting } from '../../model/meeting';
@@ -46,6 +47,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   listView = false;
   allTags = [];
   formGroup: FormGroup;
+  steps: Step[] = [];
 
   @ViewChild(EditorComponent)
   private editor: EditorComponent;
@@ -102,6 +104,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
           location: res.location,
           costCenter: res.costCenter});
         this.updateValidators(res);
+        this.steps = [
+          {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
+          {title: this.isNew ? 'new' : this.meeting.title }
+        ];
       }
     });
 
@@ -185,6 +191,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (this.editor) {
       this.editor.setValue('');
     }
+
   }
 
   public initForExistingMeeting(mid: string) {
