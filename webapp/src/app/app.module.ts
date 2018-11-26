@@ -57,7 +57,7 @@ const appRoutes: Routes = [
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
   { path: 'user-info/:username', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
   { path: 'users', component: UsersComponent, canActivate: [LoggedInGuardService]},
-  { path: '', redirectTo: '/meeting-list/course', pathMatch: 'full' },
+  { path: '', redirectTo: '/meetings', pathMatch: 'full' },
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
 
