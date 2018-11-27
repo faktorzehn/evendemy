@@ -231,7 +231,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onSaveMeeting() {
-    if (this.meeting.mid !== undefined) {
+    if (this.meeting.mid !== undefined && this.meeting.mid !== null) {
       this.updateMeeting();
     } else {
       this.createMeeting();
