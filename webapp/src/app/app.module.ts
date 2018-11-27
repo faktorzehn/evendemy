@@ -45,6 +45,7 @@ import { MeetingsService } from './services/meetings.service';
 import { TagsService } from './services/tags.service';
 import { UserService } from './services/user.service';
 import { UsersService } from './services/users.service';
+import { AttendeeStatusComponent } from './components/attendee-status/attendee-status.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -90,7 +91,8 @@ export function configFactory(http: HttpClient): ConfigLoader {
     SummaryCoursesEventsComponent,
     AttendeeTableComponent,
     TagComponent,
-    BreadcrumpComponent
+    BreadcrumpComponent,
+    AttendeeStatusComponent
   ],
   imports: [
     BrowserAnimationsModule,

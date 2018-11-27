@@ -34,7 +34,7 @@ describe('MeetingUtil', () => {
   });
 
   it('mapType should transform anything else to course', () => {
-    expect(MeetingUtil.mapType('xyz')).toEqual('course');
+    expect(MeetingUtil.mapType('xyz')).toEqual('event');
   });
 
   it('generateCSV should generate empty csv', () => {

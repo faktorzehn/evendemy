@@ -15,6 +15,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MeetingUser } from '../../model/meeting_user';
 import { AuthenticationServiceTestBuilder } from '../../test-utils/authentication-service-test-builder';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Meeting } from '../../model/meeting';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('EventsOrCoursesComponent', () => {
   let component: EventsOrCoursesComponent;
@@ -29,10 +31,16 @@ describe('EventsOrCoursesComponent', () => {
   @Component({selector: 'evendemy-meeting-list', template: ''})
   class EvendemyMeetungListStubComponent {
     @Input()
-    meetings: any[];
+    public meetings: Meeting[] = [];
 
     @Input()
     public attendedMeetingInformation: MeetingUser[] = [];
+
+    @Input()
+    public meetingType = '';
+
+    @Input()
+    public canCreate = false;
 
   }
 
@@ -53,8 +61,9 @@ describe('EventsOrCoursesComponent', () => {
       imports: [BrowserAnimationsModule, FormsModule, TagInputModule],
       providers: [{provide: MeetingsService, useValue: _meetingsSpy },
         {provide: ActivatedRoute,
-        useValue: { params: of({type: 'course'}),
-        queryParams: of({})
+        useValue: {
+          url: of('ideas'),
+          queryParams: of({type: 'course'})
         }},
         {provide: Router, useValue: _routerSpy},
         {provide: Store, useValue: _storeSpy},
@@ -84,12 +93,6 @@ describe('EventsOrCoursesComponent', () => {
     expect(component.showNew).toBeTruthy();
     expect(component.showOld).toBeFalsy();
     expect(component.showNotAnnounced).toBeTruthy();
-  });
-
-  it('should redirect to error page', () => {
-    activatedRoute.params = of({type: 'not-valid'});
-    fixture.detectChanges();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/error']);
   });
 
   it('onShowNotAnnounced should change state to true', () => {

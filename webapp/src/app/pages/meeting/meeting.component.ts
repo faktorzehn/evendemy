@@ -19,6 +19,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingService } from '../../services/meeting.service';
 import { TagsService } from '../../services/tags.service';
 import { MeetingUtil } from './meeting.util';
+import { AttendeeStatus } from '../../components/attendee-status/attendee-status.component';
 
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
@@ -430,5 +431,20 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   onAddingTag() {
     this.meeting.tags = this.meeting.tags.map(tag => tag.toLowerCase()).map(tag => tag.replace(/ /g, '-'));
+  }
+
+  getStatus() {
+    if (this.isNew === true) {
+      return AttendeeStatus.INVALID;
+    }
+
+    if (this.userHasFinished) {
+      return AttendeeStatus.CONFIRMED;
+    } else if (this.userHasAccepted) {
+        return AttendeeStatus.ATTENDING;
+    }
+
+    return AttendeeStatus.NOT_ATTENDING;
+
   }
 }

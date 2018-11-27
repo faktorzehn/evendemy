@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { BreadcrumpComponent } from './breadcrump.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('BreadcrumpComponent', () => {
   let component: BreadcrumpComponent;
@@ -11,6 +12,9 @@ describe('BreadcrumpComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule.withRoutes([])
+      ],
       declarations: [ BreadcrumpComponent ]
     })
     .compileComponents();

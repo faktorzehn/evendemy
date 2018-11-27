@@ -213,39 +213,14 @@
         </div>
       </div>
 
-      <div class="meeting-tools" style="margin-top: 20px; text-align: center;">
-        <button *ngIf="(isNew == false) && !userHasAccepted" class="btn btn-info" (click)="onAcceptMeeting()">
-          <i class="fa fa-user fa-lg"></i> I want to participate
-        </button>
-        <button *ngIf="(isNew == false) && !userHasAccepted && meeting.numberOfAllowedExternals > 0" class="btn" data-toggle="modal"
-          data-target="#externalDialog">
-          <i class="fa fa-user-plus fa-lg"></i> I want to participate with a friend
-        </button>
-      </div>
-
-      <div class="row meeting-info-box" *ngIf="(isNew == false) && userHasAccepted && !userHasFinished">
-        <h4>Have a great time!</h4>
-        <p>You registered for the event and can take part. Your host and you will get a mail. If something will change, you
-          will be informed. Enjoy your meeting!</p>
-        <div class="meeting-info-box-buttons">
-          <button class="btn btn-danger" (click)="onRejectMeeting()">
-            I cannot participate anymore
-          </button>
-          <button class="btn btn-info" (click)="onGetCalendar()" [disabled]="!hasValidDate()">
-            <i class="fa fa-calendar fa-lg"></i> Calendar
-          </button>
-        </div>
-      </div>
-
-      <div class="row meeting-info-box" *ngIf="(isNew == false) && userHasFinished">
-        <h4>Thank you for taking part!</h4>
-        <p>You have been confirmed that you have participated.</p>
-        <div class="meeting-info-box-buttons">
-          <button class="btn btn-info" (click)="onGetCalendar()" [disabled]="!hasValidDate()">
-            <i class="fa fa-calendar fa-lg"></i> Calendar
-          </button>
-        </div>
-      </div>
+      <evendemy-attendee-status
+        *ngIf="!isNew"
+        [meeting]="meeting"
+        [status]="getStatus()"
+        (acceptMeeting)="onAcceptMeeting()"
+        (rejectMeeting)="onRejectMeeting()"
+        (calendar)="onGetCalendar()">
+      </evendemy-attendee-status>
 
       <div class="row" *ngIf="isInThePast()">
         <p class="col-md-12 meeting-participants-info" *ngIf="hasEveryoneTookPart()">
@@ -289,12 +264,6 @@
       With this action you will create a meeting of your idea! You can edit things before saving. Your image will not be copied!
       <br/>
       <br/> Do you really want to copy this meeting?
-    </evendemy-confirm-dialog>
-
-    <evendemy-confirm-dialog title="Do you want to take some friend with you?" (confirm)="onAcceptMeeting(external.value)" dialogID="externalDialog">
-      This meeting allows you to take some friend with you. If you want, please enter a name.
-      <br/>
-      <input type="text" class="form-control" #external style="margin-top:10px;" />
     </evendemy-confirm-dialog>
 
     <evendemy-image-upload-dialog (data)="setTemporaryImage($event)"></evendemy-image-upload-dialog>
