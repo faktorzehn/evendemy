@@ -64,6 +64,7 @@ body {
   right: 7px;
 }
 
+/* TAG */
 .meeting-tag{
   border-width: 1px;
   border-style: solid;
@@ -112,4 +113,15 @@ body {
 .evendemy-tooltip:hover .evendemy-tooltip-text {
   visibility: visible;
   z-index: 1000;
+}
+
+/* TOOLS */
+.evendemy-tools{
+  .btn{
+    margin: 5px;
+  }
+}
+
+.evendemy-tools--centered{
+  text-align: center;
 }

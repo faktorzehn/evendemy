@@ -8,12 +8,7 @@ export enum AttendeeStatus {
   INVALID = 'INVALID'
 }
 
-@Component({
-  selector: 'evendemy-attendee-status',
-  templateUrl: './attendee-status.component.html',
-  styleUrls: ['./attendee-status.component.scss']
-})
-export class AttendeeStatusComponent implements OnInit {
+export abstract class AbstractAttendeeStatusComponent implements OnInit {
 
   @Input()
   meeting: Meeting;

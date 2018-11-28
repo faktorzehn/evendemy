@@ -1,0 +1,18 @@
+.info-box{
+  background-color: #dddddd;
+  border-radius: 5px;
+  padding: 10px;
+
+  .info-box-buttons{
+    float: right;
+    padding-top: 10px;
+
+    > .btn {
+      margin-right: 5px;
+    }
+  }
+}
+
+.attendee-status{
+  margin-top: 20px;
+}
