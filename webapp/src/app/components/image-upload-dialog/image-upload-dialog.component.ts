@@ -30,8 +30,9 @@ export class ImageUploadDialogComponent implements OnInit {
       this.cropperSettings.height = 3;
       this.cropperSettings.canvasWidth = 500;
       this.cropperSettings.canvasHeight = 300;
-      this.cropperSettings.croppedWidth = 800;
-      this.cropperSettings.croppedHeight = 600;
+      this.cropperSettings.croppedWidth = 1600;
+      this.cropperSettings.croppedHeight = 1200;
+      this.cropperSettings.compressRatio = 10;
     } else {
       this.cropperSettings.width = 1;
       this.cropperSettings.height = 1;
