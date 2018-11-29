@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+
 import { Meeting } from '../../model/meeting';
 
 export enum AttendeeStatus {
@@ -30,31 +31,31 @@ export abstract class AbstractAttendeeStatusComponent implements OnInit {
   ngOnInit() {
   }
 
-  protected onAccept(name: string) {
+  onAccept(name: string) {
     this.acceptMeeting.emit(name);
   }
 
-  protected onReject() {
+  onReject() {
     this.rejectMeeting.emit(true);
   }
 
-  protected onCalendar() {
+  onCalendar() {
     this.calendar.emit(true);
   }
 
-  protected isNotAttending() {
+  isNotAttending() {
     return this.status === AttendeeStatus.NOT_ATTENDING;
   }
 
-  protected isAttending() {
+  isAttending() {
     return this.status === AttendeeStatus.ATTENDING;
   }
 
-  protected isConfirmed() {
+  isConfirmed() {
     return this.status === AttendeeStatus.CONFIRMED;
   }
 
-  protected hasValidDate() {
+  hasValidDate() {
     return this.meeting.startTime && this.meeting.endTime && this.meeting.date;
   }
 
