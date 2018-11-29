@@ -11,18 +11,12 @@ import { UserService } from '../../services/user.service';
 })
 export class MenuComponent implements OnInit, OnDestroy {
   sub: any;
-  type: string;
   user: User;
 
-  constructor(private route: ActivatedRoute,
-    private router: Router, private userService: UserService, private authService: AuthenticationService) { }
+  constructor(private userService: UserService, private authService: AuthenticationService) { }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      this.type = params['type'];
-    });
-
-    this.userService.getUserByUsername( this.authService.getLoggedInUsername()).subscribe( (user: User) => {
+    this.sub = this.userService.getUserByUsername( this.authService.getLoggedInUsername()).subscribe( (user: User) => {
       this.user = user;
     });
   }
@@ -33,9 +27,5 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logoutUser();
-  }
-
-  navigateTo(url: string) {
-    this.router.navigate([url], { queryParams: {new: true, old: false, 'not-announced': true} } );
   }
 }

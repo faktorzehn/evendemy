@@ -19,7 +19,8 @@ export class MeetingsService extends BaseService {
 
     public getAllMeetings(options?: {
         username?: string;
-        courseOrEvent?: string;
+        type?: string;
+        idea: boolean,
         isFreetime?: boolean;
         showNew?: boolean;
         showOld?: boolean;
@@ -34,8 +35,11 @@ export class MeetingsService extends BaseService {
             if (options.username !== undefined) {
                 params = params.append('username', options.username);
             }
-            if (options.courseOrEvent !== undefined) {
-                params = params.append('courseOrEvent', options.courseOrEvent.toString());
+            if (options.type !== undefined) {
+                params = params.append('type', options.type.toString());
+            }
+            if (options.idea !== undefined) {
+              params = params.append('idea', options.idea.toString());
             }
             if (options.isFreetime !== undefined) {
                 params = params.append('isFreetime', options.isFreetime.toString());
@@ -58,11 +62,18 @@ export class MeetingsService extends BaseService {
         });
     }
 
-    public getMyMeetings(username: string): Observable<MeetingUser[]> {
+  public getMyConfirmedMeetings(username: string): Observable<MeetingUser[]> {
       const headers = this.createHeaders();
-      const url = this.url + '/meetings/attendee/' + username;
+      const url = this.url + '/meetings/attending/confirmed/' + username;
 
       return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
+  }
+
+  public getMyAttendingMeetings(username: string): Observable<MeetingUser[]> {
+    const headers = this.createHeaders();
+    const url = this.url + '/meetings/attending/' + username;
+
+    return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
   }
 
   public getMeetingsFromAuthor(username: string): Observable<Meeting[]> {

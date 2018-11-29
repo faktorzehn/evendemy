@@ -12,10 +12,6 @@
               <input id="custom-input" type="file" (change)="fileChangeListener($event)">
           </div>
           <img-cropper #cropper [image]="_data" [settings]="cropperSettings"></img-cropper>
-          <br>
-          <!-- <span class="result rounded" *ngIf="_data.image" >
-              <img [src]="_data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
-          </span> -->
       </div>
       <div class="modal-footer">
 

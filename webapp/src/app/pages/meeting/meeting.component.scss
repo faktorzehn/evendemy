@@ -46,22 +46,6 @@
   }
 }
 
-
-.meeting-info-box{
-  background-color: #dddddd;
-  border-radius: 5px;
-  padding: 10px;
-
-  .meeting-info-box-buttons{
-    float: right;
-    padding-top: 10px;
-
-    > .btn {
-      margin-right: 5px;
-    }
-  }
-}
-
 .meeting-participants-info{
   text-align: center;
   padding-top: 10px;
@@ -75,12 +59,6 @@
   border-color: $evendemy-primary;
   color: $evendemy-primary;
   padding: 0px 10px 0px 10px;
-}
-
-.meeting-tools{
-  .btn{
-    margin: 5px;
-  }
 }
 
 .meeting-checkbox{

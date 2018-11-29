@@ -53,7 +53,6 @@ describe('MenuComponent', () => {
   it('should create and load user', () => {
     expect(component).toBeTruthy();
     expect(component.user.username).toBe('john');
-    expect(component.type).toBe('course');
   });
 
   it('should logout user', () => {

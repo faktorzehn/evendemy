@@ -64,6 +64,7 @@ body {
   right: 7px;
 }
 
+/* TAG */
 .meeting-tag{
   border-width: 1px;
   border-style: solid;
@@ -71,4 +72,56 @@ body {
   border-color: $evendemy-primary;
   color: $evendemy-primary;
   padding: 0px 10px 0px 10px;
+}
+
+
+/* TOOLTIP */
+.evendemy-tooltip {
+  position: relative;
+  display: inline-block;
+  opacity: 1 !important;
+}
+
+.evendemy-tooltip .evendemy-tooltip-text {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  position: absolute;
+}
+
+.evendemy-tooltip > .right{
+  top: -5px;
+  left: 100%;
+  margin-left: 15px;
+  width: max-content;
+}
+
+.evendemy-tooltip > .right::after{
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+
+.evendemy-tooltip:hover .evendemy-tooltip-text {
+  visibility: visible;
+  z-index: 1000;
+}
+
+/* TOOLS */
+.evendemy-tools{
+  .btn{
+    margin: 5px;
+  }
+}
+
+.evendemy-tools--centered{
+  text-align: center;
 }

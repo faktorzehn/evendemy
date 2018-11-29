@@ -9,24 +9,21 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <button type="button" class="btn btn-default navbar-plus-button visible-xs" *ngIf="type" routerLink="/meeting/new/{{type}}">+</button>
         <a class="navbar-brand" >Evendemy</a>
       </div>
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li (click)="navigateTo('/meeting-list/course')"
-             [ngClass]="{active: type === 'course'}">
-            <a>Courses</a>
+          <li routerLink="/meetings" routerLinkActive="active">
+            <a>Meetings</a>
           </li>
-          <li (click)="navigateTo('/meeting-list/event')" [ngClass]="{active: type === 'event'}">
-            <a>Events</a>
+          <li routerLink="/ideas" routerLinkActive="active">
+            <a>Ideas</a>
           </li>
           <li routerLink="/users" routerLinkActive="active">
             <a>Users</a>
           </li>
-          <button type="button" class="btn btn-default hidden-xs" *ngIf="type" routerLink="/meeting/new/{{type}}" style="margin: 8px 5px 0px 5px;">Create</button>
-        </ul>
+       </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">

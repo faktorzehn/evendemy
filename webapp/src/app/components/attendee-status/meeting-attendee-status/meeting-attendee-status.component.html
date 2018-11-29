@@ -1,0 +1,41 @@
+<div class="attendee-status">
+  <div *ngIf="isNotAttending()"  class="evendemy-tools evendemy-tools--centered">
+    <button class="btn btn-info" (click)="onAccept(null)">
+      <i class="fa fa-user fa-lg"></i> I want to participate
+    </button>
+    <button *ngIf="meeting.numberOfAllowedExternals > 0" class="btn" data-toggle="modal"
+      data-target="#externalDialog">
+      <i class="fa fa-user-plus fa-lg"></i> I want to participate with a friend
+    </button>
+  </div>
+
+  <div class="row info-box" *ngIf="isAttending()">
+    <h4>Have a great time!</h4>
+    <p>You registered for the event and can take part. Your host and you will get a mail. If something will change, you
+      will be informed. Enjoy your meeting!</p>
+    <div class="info-box-buttons">
+      <button class="btn btn-danger" (click)="onReject()">
+        I cannot participate anymore
+      </button>
+      <button class="btn btn-info" (click)="onCalendar()" [disabled]="!hasValidDate()">
+        <i class="fa fa-calendar fa-lg"></i> Calendar
+      </button>
+    </div>
+  </div>
+
+  <div class="row info-box" *ngIf="isConfirmed()">
+    <h4>Thank you for taking part!</h4>
+    <p>You have been confirmed that you have participated.</p>
+    <div class="info-box-buttons">
+      <button class="btn btn-info" (click)="onCalendar()" [disabled]="!hasValidDate()">
+        <i class="fa fa-calendar fa-lg"></i> Calendar
+      </button>
+    </div>
+  </div>
+</div>
+
+<evendemy-confirm-dialog title="Do you want to take some friend with you?" (confirm)="onAccept(external.value)" dialogID="externalDialog">
+  This meeting allows you to take some friend with you. If you want, please enter a name.
+  <br/>
+  <input type="text" class="form-control" #external style="margin-top:10px;" />
+</evendemy-confirm-dialog>

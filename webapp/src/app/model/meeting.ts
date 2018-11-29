@@ -1,4 +1,4 @@
-import {Comment} from './comment';
+import { Comment } from './comment';
 
 export class Meeting {
   public title: string;
@@ -6,12 +6,14 @@ export class Meeting {
   public description: string;
   public costCenter: string;
   public courseOrEvent: string;
+  public isIdea: boolean;
   public isFreetime: boolean;
   public date: Date;
   public startTime: String;
   public endTime: String;
   public location: String;
   public creationDate: Date;
+  public lastUpdateDate: Date;
   public mid: number;
   public username: string;
   public numberOfAllowedExternals: number;

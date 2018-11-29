@@ -1,10 +1,35 @@
 <div class="meeting-list">
+  <div class="create-thumbnail" *ngIf="canCreate">
+      <div class="create-title" *ngIf="meetingType === 'meeting'">
+        <i class="fa fa-calendar fa-lg"></i>
+        <div>
+            create a meeting
+        </div>
+      </div>
+      <div class="create-title" *ngIf="meetingType === 'idea'">
+          <i class="fa fa-flask fa-lg"></i>
+          <div>
+              create an idea
+          </div>
+      </div>
+      <button type="button" class="btn btn-default create-button" routerLink="/{{meetingType}}">create</button>
+  </div>
   <div class="thumbnail" *ngFor="let meeting of meetings">
     <div class="caption text-center thumbnail-container">
 
       <!-- picture -->
       <div class="meeting-image">
-        <div class="evendemy-badge" *ngIf="isMeetingNew(meeting)" >new</div>
+        <div class="meeting-image-info">
+            <div class="evendemy-badge" *ngIf="isMeetingNew(meeting)" >new</div>
+            <div  *ngIf="isAttending(meeting)" class="evendemy-tooltip">
+                <div class="status-attending" *ngIf="isAttending(meeting)"></div>
+                <span class="evendemy-tooltip-text right attendee-additional-badge-label">you want to attend</span>
+            </div>
+            <div *ngIf="hasTookPart(meeting)" class="evendemy-tooltip">
+                <div class="status-confirmed" *ngIf="hasTookPart(meeting)"></div>
+                <span class="evendemy-tooltip-text right attendee-additional-badge-label">you took part</span>
+            </div>
+        </div>
         <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
       </div>
 
@@ -32,7 +57,8 @@
       </div>
 
       <!-- more-button -->
-      <a type="button" class="btn btn-default meeting-more-button" routerLink="/meeting/{{meeting.mid}}">more</a>
+      <a type="button" *ngIf="meetingType === 'meeting'" class="btn btn-default meeting-more-button" routerLink="/meeting/{{meeting.mid}}">more</a>
+      <a type="button" *ngIf="meetingType === 'idea'" class="btn btn-default meeting-more-button" routerLink="/idea/{{meeting.mid}}">more</a>
 
     </div>
   </div>

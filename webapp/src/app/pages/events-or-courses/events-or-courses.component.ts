@@ -7,6 +7,8 @@ import { MeetingsService } from '../../services/meetings.service';
 import { TagsService } from '../../services/tags.service';
 import { combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { AuthenticationService } from '../../services/authentication.service';
+import { MeetingUser } from '../../model/meeting_user';
 
 @Component({
   selector: 'evendemy-events',
@@ -20,7 +22,9 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public showNew = true;
   public selectedTags = [];
   public allTags = [];
-  private type: string;
+  public attendedMeetings: MeetingUser[] = [];
+  public type = 'all';
+  public isIdea = false;
   public loading = false;
   private sub;
 
@@ -29,7 +33,8 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>,
-    private tagsService: TagsService
+    private tagsService: TagsService,
+    private authService: AuthenticationService
   ) {
     this.store.select('meetings').subscribe(res => {
       this.meetings = res;
@@ -38,11 +43,18 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = combineLatest(this.route.params, this.route.queryParams).pipe(debounceTime(10)).subscribe(
-      ([params, queryParams]) => {
-        this.type = params['type'];
-        if (this.type !== 'course' && this.type !== 'event') {
-          this.router.navigate(['/error']);
+    this.sub = combineLatest(this.route.url, this.route.queryParams).pipe(debounceTime(10)).subscribe(
+      ([url, queryParams]) => {
+        this.isIdea = url[0].toString() === 'ideas';
+
+        if (queryParams['type']) {
+          if (queryParams['type'] === 'event') {
+            this.type = 'event';
+          } else if (queryParams['type'] === 'course') {
+            this.type = 'course';
+          } else {
+            this.type = 'all';
+          }
         }
 
         this.selectedTags = [];
@@ -66,6 +78,10 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
         this.tagsService.getAllTags().subscribe((tags: string[]) => {
           this.allTags = tags;
         });
+
+        this.meetingsService.getMyAttendingMeetings(this.authService.getLoggedInUsername()).subscribe(meeting_users => {
+          this.attendedMeetings = meeting_users;
+        });
       }
     );
   }
@@ -76,7 +92,8 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
 
   public loadMeetings() {
     const options = {
-      courseOrEvent: this.type,
+      type: this.type,
+      idea: this.isIdea,
       showNew: this.showNew,
       showOld: this.showOld,
       showNotAnnounced: this.showNotAnnounced,
@@ -102,7 +119,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.changeQuery();
   }
 
-  public onTagsChanged() {
+  public onToolbarChange() {
     this.changeQuery();
   }
 
@@ -110,6 +127,7 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     this.router.navigate(['.'], {
       relativeTo: this.route,
       queryParams: {
+        type: this.type,
         new: this.showNew,
         old: this.showOld,
         'not-announced': this.showNotAnnounced,

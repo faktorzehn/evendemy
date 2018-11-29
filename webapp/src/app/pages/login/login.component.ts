@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { UsersService } from '../../services/users.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { AuthenticationService } from '../../services/authentication.service';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'evendemy-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
     private userService: UsersService) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => this.returnLink = params['return'] || '/meeting-list/course');
+    this.route.queryParams.subscribe(params => this.returnLink = params['return'] || '/meetings');
   }
 
   login(username: string, password: string) {

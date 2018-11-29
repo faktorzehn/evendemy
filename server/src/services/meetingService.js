@@ -12,8 +12,15 @@ module.exports = {
         if (options.username !== undefined) {
             filter.username = options.username.toLowerCase();
         }
-        if (options.courseOrEvent !== undefined) {
-            filter.courseOrEvent = options.courseOrEvent;
+        if (options.type !== undefined && options.type!='all') {
+            if(options.type==='event'){
+                filter.courseOrEvent = 'event';
+            } else if (options.type==='course'){
+                filter.courseOrEvent = 'course';
+            }
+        }
+        if (options.idea !== undefined) {
+            filter.isIdea = (options.idea === 'true');
         }
         if (options.isFreetime !== undefined) {
             filter.isFreetime = (options.isFreetime === 'true');
@@ -114,6 +121,9 @@ module.exports = {
         if (request.courseOrEvent !== undefined) {
             meeting.courseOrEvent = request.courseOrEvent;
         }
+        if (request.isIdea !== undefined) {
+            meeting.isIdea = request.isIdea;
+        }
         if (request.isFreetime !== undefined) {
             meeting.isFreetime = request.isFreetime;
         }
@@ -162,6 +172,9 @@ module.exports = {
         if (request.courseOrEvent !== undefined) {
             updateMeeting.courseOrEvent = request.courseOrEvent;
         }
+        if (request.isIdea !== undefined) {
+            updateMeeting.isIdea = request.isIdea;
+        }
         if (request.isFreetime !== undefined) {
             updateMeeting.isFreetime = request.isFreetime;
         }
@@ -174,6 +187,8 @@ module.exports = {
         if (request.tags !== undefined) {
             updateMeeting.tags = request.tags;
         }
+
+        updateMeeting.lastUpdateDate = new Date();
 
         return Meeting.findOneAndUpdate({ mid: mid }, { $set: updateMeeting }, { upsert: true, new:true });
     },
@@ -201,6 +216,7 @@ module.exports = {
                 meeting.comments = [];
             }
             meeting.comments.push(comment);
+            meeting.lastUpdateDate = new Date();
 
             return meeting.save();
         });
@@ -214,7 +230,7 @@ module.exports = {
                 reject('No mid specified');
             }
 
-            Meeting.update({ mid: mid }, { $set: { deleted: true } }, { upsert: true }, function (err, meeting) {
+            Meeting.update({ mid: mid }, { $set: { deleted: true, lastUpdateDate: new Date() } }, { upsert: true }, function (err, meeting) {
                 if (err) {
                     reject(err);
                     return;
@@ -233,10 +249,16 @@ module.exports = {
         return MeetingUser.find({mid: mid, deleted: false}).exec();
     },
 
-    getMeetingUserForUser: function(username){
+    getMeetingUserForUserWhichTookPart: function(username){
         var MeetingUser = require('../models/meeting_user');
         username = username.toLowerCase();
         return MeetingUser.find({username: username, tookPart: true}).where('deleted').eq(false).exec();
+    },
+
+    getAllMeetingUserForUser: function(username){
+        var MeetingUser = require('../models/meeting_user');
+        username = username.toLowerCase();
+        return MeetingUser.find({username: username}).where('deleted').eq(false).exec();
     },
 
     getMeetingsFromAuthor: function(username){

@@ -12,6 +12,7 @@ export class AttendeeTableComponent implements OnInit {
   @Input() attendees: MeetingUser[] = [];
   @Input() users: User[] = [];
   @Input() editable = false;
+  @Input() showTakePartButton = true;
   @Input() disableTakePartButton = true;
   @Output() tookPartClicked = new EventEmitter<MeetingUser>();
 
