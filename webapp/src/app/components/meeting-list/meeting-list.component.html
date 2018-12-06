@@ -57,8 +57,8 @@
       </div>
 
       <!-- more-button -->
-      <a type="button" *ngIf="meetingType === 'meeting'" class="btn btn-default meeting-more-button" routerLink="/meeting/{{meeting.mid}}">more</a>
-      <a type="button" *ngIf="meetingType === 'idea'" class="btn btn-default meeting-more-button" routerLink="/idea/{{meeting.mid}}">more</a>
+      <a type="button" *ngIf="!meeting.isIdea" class="btn btn-default meeting-more-button" routerLink="/meeting/{{meeting.mid}}">more</a>
+      <a type="button" *ngIf="meeting.isIdea" class="btn btn-default meeting-more-button" routerLink="/idea/{{meeting.mid}}">more</a>
 
     </div>
   </div>
