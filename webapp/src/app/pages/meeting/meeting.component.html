@@ -201,8 +201,12 @@
           <div style="display: flex; flex-wrap: wrap;">
             <div *ngFor="let attendee of potentialAttendees; trackBy: trackByFn">
               <evendemy-attendee-card [additionalAttendee]="attendee.externals[0]" [tookPart]="attendee.tookPart" [user]="getUser(attendee.username)"
-                [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date && !meeting.isIdea" [disableTakePartButton]="!isInThePastOrToday()" [small]="!isEditable"
-                (tookPartClicked)="onHasTakenPart($event)">
+                [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date && !meeting.isIdea"
+                [showRemoveButton]="isEditable && !attendee.tookPart"
+                [disableTakePartButton]="!isInThePastOrToday()" [small]="!isEditable"
+                (tookPartClicked)="onHasTakenPart($event)"
+                (removeAttendee)="onRemoveAttendee($event)"
+                >
               </evendemy-attendee-card>
             </div>
           </div>

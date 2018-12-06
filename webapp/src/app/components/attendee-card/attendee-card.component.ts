@@ -11,9 +11,11 @@ export class AttendeeCardComponent implements OnInit {
   @Input() additionalAttendee: String;
   @Input() tookPart = false;
   @Input() showTakePartButton = false;
+  @Input() showRemoveButton = false;
   @Input() disableTakePartButton = true;
   @Input() small = true;
   @Output() tookPartClicked: EventEmitter<User> = new EventEmitter<User>();
+  @Output() removeAttendee: EventEmitter<User> = new EventEmitter<User>();
 
   constructor() {}
 
@@ -21,5 +23,9 @@ export class AttendeeCardComponent implements OnInit {
 
   onClickTakePartButton() {
     this.tookPartClicked.emit(this.user);
+  }
+
+  onRemoveAttendee() {
+    this.removeAttendee.emit(this.user);
   }
 }

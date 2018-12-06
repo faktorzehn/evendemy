@@ -2,6 +2,9 @@
   <div class="caption text-center thumbnail-container">
     <div>
       <div style="position:relative;">
+        <div *ngIf="showRemoveButton" class="remove-button">
+          <i class="fa fa-close fa-lg" (click)="onRemoveAttendee()"></i>
+        </div>
         <evendemy-user-image [username]="user?.username" width="100" height="100" routerLink="/user-info/{{user?.username}}"></evendemy-user-image>
         <div class="attendee-additional-badge" *ngIf="additionalAttendee">
           <div class="evendemy-tooltip">+1

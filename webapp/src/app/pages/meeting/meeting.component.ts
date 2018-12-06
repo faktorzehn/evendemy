@@ -339,6 +339,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
+  onRemoveAttendee(user: User) {
+    this.meetingService.rejectAttendingMeeting(this.meeting.mid, user.username).subscribe((result) => {
+      this.loadPotentialAttendees(this.meeting.mid);
+    });
+  }
+
   onHasTakenPart(attendee: MeetingUser) {
     if (attendee && !attendee.tookPart) {
       const foundedAttendee = this.potentialAttendees.find(p => p.username === attendee.username);

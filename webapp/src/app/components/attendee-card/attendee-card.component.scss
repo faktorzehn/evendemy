@@ -34,3 +34,16 @@
 h3 {
   padding-top: 5px;
 }
+
+.remove-button{
+  text-align: right;
+
+  i {
+    padding: 4px;
+  }
+
+  i:hover {
+    border-radius: 50%;
+    background-color: #dedede;
+  }
+}
