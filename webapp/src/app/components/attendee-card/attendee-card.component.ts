@@ -13,7 +13,7 @@ export class AttendeeCardComponent implements OnInit {
   @Input() showTakePartButton = false;
   @Input() showRemoveButton = false;
   @Input() disableTakePartButton = true;
-  @Input() small = true;
+  @Input() small = false;
   @Output() tookPartClicked: EventEmitter<User> = new EventEmitter<User>();
   @Output() removeAttendee: EventEmitter<User> = new EventEmitter<User>();
 
