@@ -3,7 +3,7 @@
 .thumbnail {
   margin: 5px;
   width: 180px;
-  height: 240px;
+  height: 250px;
   padding: 10px;
 }
 
@@ -33,4 +33,17 @@
 
 h3 {
   padding-top: 5px;
+}
+
+.remove-button{
+  text-align: right;
+
+  i {
+    padding: 4px;
+  }
+
+  i:hover {
+    border-radius: 50%;
+    background-color: #dedede;
+  }
 }

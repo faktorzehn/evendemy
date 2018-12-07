@@ -31,6 +31,22 @@
             "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
             "button_label": "Idee ansehen",
             "foot": "Evendemy"
+        },
+        "ideaParticipationRejected":{
+            "header": "Evendemy -  Du wurdest von einer Idee abgemeldet",
+            "title": "Evendemy: Du wurdest von einer Idee abgemeldet",
+            "body": "Hi!\n Du wurdest leider von folgender Idee abgemeldet: '{{{meeting.title}}}'.\n",
+            "button_href": "https://your-evendemy-app/idea/{{meeting.mid}}",
+            "button_label": "Idee ansehen",
+            "foot": "Evendemy"
+        },
+        "meetingParticipationRejected":{
+            "header": "Evendemy -  Du wurdest von einem Meeting abgemeldet",
+            "title": "Evendemy: Du wurdest von einem Meeting abgemeldet",
+            "body": "Hi!\n Du wurdest leider von folgendem Meeting abgemeldet: '{{{meeting.title}}}'.\n",
+            "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
+            "button_label": "Idee ansehen",
+            "foot": "Evendemy"
         }
     },
     "informAboutMeeting":{

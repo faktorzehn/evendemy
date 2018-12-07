@@ -211,27 +211,40 @@ module.exports = function (server, config, production_mode) {
             return res.send(500, { error: 'No mid or username specified' });
         }
 
-        meetingService.notAttendingToMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
-            //send mail to notify author
-            meetingService.getMeeting(req.params.mid).then(function(meeting){
-                if (meeting !== null) {
-                    userService.getUserByUsername(req.params.username).then(function (user) {
-                        notifyAuthor(false, meeting, user);
-                    }, function (err) {
-                        console.error('put of meeting_user, user not found to send mail: ' + req.params.username + err);
-                    });
-                }
-            }, function(err){
-                console.error('should have found deleted meeting so that author can be notified, mid:' + req.params.mid + ", can not send a mail");
-            });
+        var meetingPromise = meetingService.getMeeting(req.params.mid);
+        var userPromises = userService.getUserByUsername(req.params.username);
 
-            res.send(meeting_user);
-        }, function (err) {
+        Promise.all([meetingPromise, userPromises]).then(function([meeting, user]) {
+            if(meeting!= null && user != null){
+                if(req.params.username === req.user.uid) {
+                    // user doenst want to attend anymore
+                    meetingService.notAttendingToMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
+                        notifyAuthor(false, meeting, user);
+                        res.send(meeting_user);
+                    }, function (err) {
+                        return res.send(500, { error: err });
+                    });
+                } else if(meeting.username === req.user.uid) { 
+                    // author rejects the participant
+                    meetingService.notAttendingToMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
+                        if(meeting.isIdea){
+                            notifyUser(mailConfig.notificationMail.ideaParticipationRejected, user, meeting);
+                        }else{
+                            notifyUser(mailConfig.notificationMail.meetingParticipationRejected, user, meeting);
+                        }
+                        res.send(meeting_user);
+                    }, function (err) {
+                        return res.send(500, { error: err });
+                    });
+                } else {
+                    return res.send(403, { error: 'Forbidden' });
+                }
+            }
+        }).catch( err => {
             return res.send(500, { error: err });
         });
 
         return next();
-
     });
 
     server.put('/meeting/:mid/attendee/:username/confirm', function (req, res, next) {
@@ -302,6 +315,11 @@ module.exports = function (server, config, production_mode) {
         }, function (err) {
             console.error('notify via mail: ' + meeting.username + err);
         });
+    }
+
+    function notifyUser(mailTemplate, user, meeting) {
+            var view = mailService.renderAllTemplates(mailTemplate, meeting, user);
+            mailService.sendMail(config, user.email, view, null, production_mode);
     }
 
     server.post('/meeting/:mid/image', function (req, res, next) {

@@ -32,8 +32,8 @@ describe('ImageUploadDialogComponent', () => {
     expect(component.cropperSettings.height).toBe(3);
     expect(component.cropperSettings.canvasWidth).toBe(500);
     expect(component.cropperSettings.canvasHeight).toBe(300);
-    expect(component.cropperSettings.croppedWidth).toBe(800);
-    expect(component.cropperSettings.croppedHeight).toBe(600);
+    expect(component.cropperSettings.croppedWidth).toBe(1600);
+    expect(component.cropperSettings.croppedHeight).toBe(1200);
   });
 
   it('should create dialog for avatar icon', () => {
