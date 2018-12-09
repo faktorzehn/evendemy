@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MeetingsService } from '../../services/meetings.service';
 import { TagsService } from '../../services/tags.service';
 import { combineLatest } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, first } from 'rxjs/operators';
 import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingUser } from '../../model/meeting_user';
 
@@ -75,11 +75,11 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
         }
 
         this.loadMeetings();
-        this.tagsService.getAllTags().subscribe((tags: string[]) => {
+        this.tagsService.getAllTags().pipe(first()).subscribe((tags: string[]) => {
           this.allTags = tags;
         });
 
-        this.meetingsService.getMyAttendingMeetings(this.authService.getLoggedInUsername()).subscribe(meeting_users => {
+        this.meetingsService.getMyAttendingMeetings(this.authService.getLoggedInUsername()).pipe(first()).subscribe(meeting_users => {
           this.attendedMeetings = meeting_users;
         });
       }
