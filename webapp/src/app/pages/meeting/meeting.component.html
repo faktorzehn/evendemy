@@ -199,14 +199,14 @@
         </div>
         <div class="row" *ngIf="!listView">
           <div style="display: flex; flex-wrap: wrap;">
-            <div *ngFor="let attendee of potentialAttendees; trackBy: trackByFn">
+            <div *ngFor="let attendee of potentialAttendees; trackBy: attendee?.username">
               <evendemy-attendee-card
                 [additionalAttendee]="attendee.externals[0]"
                 [tookPart]="attendee.tookPart"
                 [user]="getUser(attendee.username)"
                 [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date && !meeting.isIdea"
                 [showRemoveButton]="isEditable && !attendee.tookPart"
-                [disableTakePartButton]="!isInThePastOrToday()"
+                [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()"
                 [small]="!isEditable"
                 (tookPartClicked)="onHasTakenPart($event)"
                 (removeAttendee)="onRemoveAttendee($event)"
@@ -217,7 +217,7 @@
         </div>
 
         <div class="row" *ngIf="listView">
-          <evendemy-attendee-table [showTakePartButton]="!meeting.isIdea" [attendees]="potentialAttendees" [users]="users" [editable]="isEditable" [disableTakePartButton]="!isInThePastOrToday()" (tookPartClicked)="onHasTakenPart($event)"></evendemy-attendee-table>
+          <evendemy-attendee-table [showTakePartButton]="!meeting.isIdea" [attendees]="potentialAttendees" [users]="users" [editable]="isEditable" [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()" (tookPartClicked)="onHasTakenPart($event)"></evendemy-attendee-table>
         </div>
       </div>
 

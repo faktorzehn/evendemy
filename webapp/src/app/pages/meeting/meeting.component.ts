@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ConfigService } from '@ngx-config/core';
 import * as FileSaver from 'file-saver';
-import * as moment from 'moment';
 import { combineLatest } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -19,7 +18,6 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingService } from '../../services/meeting.service';
 import { TagsService } from '../../services/tags.service';
 import { MeetingUtil } from './meeting.util';
-import { AttendeeStatus } from '../../components/attendee-status/attendee-status.component';
 import { first } from 'rxjs/operators';
 
 
@@ -120,6 +118,11 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDestroy() {
+    this.meetingService.unloadMeeting();
+    this.subscribe.unsubscribe();
+  }
+
   updateValidators(meeting) {
     if (!meeting) {
       return;
@@ -201,11 +204,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
     this.loadMeeting(mid);
     this.loadPotentialAttendees(mid);
-  }
-
-  ngOnDestroy() {
-    this.meetingService.unloadMeeting();
-    this.subscribe.unsubscribe();
   }
 
   loadMeeting(mid) {
@@ -394,32 +392,20 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return this.potentialAttendees.filter( p => p.tookPart !== true).length;
   }
 
-  hasValidDate() {
-    return this.meeting.startTime && this.meeting.endTime && this.meeting.date;
+  hasValidDateAndTime() {
+    return MeetingUtil.hasValidDateAndTime(this.meeting);
   }
 
   isInThePast() {
-    if (!this.hasValidDate()) {
-      return false;
-    }
-    const now = moment();
-    return moment(this.meeting.date).isBefore(now, 'day');
+    return MeetingUtil.isInThePast(this.meeting);
   }
 
   isInThePastOrToday() {
-    if (!this.hasValidDate()) {
-      return false;
-    }
-    const now = moment();
-    return moment(this.meeting.date).isSameOrBefore(now, 'day');
+    return MeetingUtil.isInThePastOrToday(this.meeting);
   }
 
   hasEveryoneTookPart() {
     return this.potentialAttendees.length === this.getAttendedNumber();
-  }
-
-  trackByFn (user: User) {
-    return user.username;
   }
 
   checkboxChanged() {
@@ -440,17 +426,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   getStatus() {
-    if (this.isNew === true) {
-      return AttendeeStatus.INVALID;
-    }
-
-    if (this.userHasFinished) {
-      return AttendeeStatus.CONFIRMED;
-    } else if (this.userHasAccepted) {
-        return AttendeeStatus.ATTENDING;
-    }
-
-    return AttendeeStatus.NOT_ATTENDING;
-
+    return MeetingUtil.mapStatus(this.isNew,  this.userHasAccepted, this.userHasFinished);
   }
 }
