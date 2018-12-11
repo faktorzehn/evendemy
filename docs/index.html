@@ -79,6 +79,15 @@
             background-color: rgba(255, 255, 255, 0.192);
         }
 
+        .evendemy-image{
+            flex-grow: 1; padding: 5px;
+        }
+
+        .evendemy-image:hover{
+            transform: scale(1.25);
+            transition: transform .25s ease;
+        }
+
         @media screen and (max-width: 700px) {
             .head {
                 padding: 100px 10px 0px 10px;
@@ -106,12 +115,20 @@
         </a>
 
         <div class="row-with-image">
-                <div style="flex-grow: 1; padding: 5px;">
-                    <img src="assets/evendemy_events.png" style="width: 100%;" />
+                <div class="evendemy-image">
+                    <img src="assets/meetings.png" style="width: 100%;" />
                 </div>
                 
-                <div style="flex-grow: 1; padding: 5px;">
-                    <img src="assets/evendemy_avatar.png" style="width: 100%;" />
+                <div class="evendemy-image">
+                    <img src="assets/meeting.png" style="width: 100%;" />
+                </div>
+
+                <div class="evendemy-image">
+                    <img src="assets/users.png" style="width: 100%;" />
+                </div>
+
+                <div class="evendemy-image">
+                    <img src="assets/user_info.png" style="width: 100%;" />
                 </div>
         </div>
 
