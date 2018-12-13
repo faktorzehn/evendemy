@@ -1,7 +1,7 @@
 <html>
 
 <head>
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <style>
         body {
             background-color: #48CFAE;
@@ -13,7 +13,7 @@
         }
 
         .card {
-            padding: 50px 200px 50px 200px;
+            padding: 50px 250px 50px 250px;
         }
 
         .row-with-image {
@@ -50,6 +50,44 @@
             padding-top: 40px;
         }
 
+        .advantages {
+            padding: 0px;
+        }
+
+        .advantages > li{
+            list-style-type: none;
+            margin: 5px 0px 5px 0px;
+            width: 600px;
+            padding: 5px;
+        }
+
+        .advantages > li:hover{
+            background-color: rgba(255, 255, 255, 0.192);
+        }
+
+        .advantages > li > i{
+           padding: 5px;
+        }
+
+        .scenario-card{
+            flex-basis: 50%; 
+            margin: 2px; 
+            padding: 10px;
+        }
+
+        .scenario-card:hover{
+            background-color: rgba(255, 255, 255, 0.192);
+        }
+
+        .evendemy-image{
+            flex-grow: 1; padding: 5px;
+        }
+
+        .evendemy-image:hover{
+            transform: scale(1.25);
+            transition: transform .25s ease;
+        }
+
         @media screen and (max-width: 700px) {
             .head {
                 padding: 100px 10px 0px 10px;
@@ -77,66 +115,98 @@
         </a>
 
         <div class="row-with-image">
-                <div style="flex-grow: 1; padding: 5px;">
-                    <img src="assets/evendemy_events.png" style="width: 100%;" />
+                <div class="evendemy-image">
+                    <img src="assets/meetings.png" style="width: 100%;" />
                 </div>
                 
-                <div style="flex-grow: 1; padding: 5px;">
-                    <img src="assets/evendemy_avatar.png" style="width: 100%;" />
+                <div class="evendemy-image">
+                    <img src="assets/meeting.png" style="width: 100%;" />
+                </div>
+
+                <div class="evendemy-image">
+                    <img src="assets/users.png" style="width: 100%;" />
+                </div>
+
+                <div class="evendemy-image">
+                    <img src="assets/user_info.png" style="width: 100%;" />
                 </div>
         </div>
 
         <h2>What is Evendemy?</h2>
-        <p>Evendemy is a open-source community webapp for your company! Create appointments for your trainings, meetings
-                or for anything worth celebrating. With Evendemy this possibility is just a few clicks far away. Evendemy
-                is a plattform where you can manage all these meetings and invite everyone to be part of. </p>
-
-        <h2>An example how Evendemy works</h2>
-        <p>Let's say, you want to go to the cinema with colleagues. Evendemy can help you. It is really easy to use Evendemy.</p>
         <p>
-            <ul>
-                <li>First step: create a meeting. Every information is optional - but better information will help you for a
-                    more successfull meeting.</li>
-                <li>Evendemy notifies everyone about the new meeting.</li>
-                <li>Interested people can participate. They get a mail with a calendar entry and you will also be notified.</li>
-                <li>Have a great time!</li>
-                <li>After having a wonderful time: you can confirm who participated and the confirmed attendees will see that.</li>
-            </ul>
-        </p>
-        <p>An easy but powerful way to manage and share some wonderful moments.</p>
+            Evendemy is a open-source community webapp for your company! 
+            Create appointments for your trainings, meetings or for anything worth celebrating. 
+            With Evendemy this possibility is just a few clicks far away. 
+            Evendemy is a plattform where you can manage all these meetings and invite everyone to be part of. Start a new way of working together - now.</p>
+
+        <h2>Some examples how Evendemy works</h2>
+        <p>See how Evendemy works. There are many ways that Evendery can help you.</p>
+        <div style="display:flex">
+            <div class="scenario-card">
+                <h3>Scenario 1: Going to the cinema</h3>
+                <p>Let's say, you want to go to the cinema with colleagues. Evendemy can help you. It is really easy to use Evendemy.</p>
+                <p>
+                    <ul>
+                        <li>You want to go to the cinema? Nothing easier than that! Just create an event in Evendemy.</li>
+                        <li>Evendemy now notifies everyone about the new event! You can easily find the meeting at Evendemy.</li>
+                        <li>Interested people can participate. If they join your event, they get a mail with a calendar entry. The author (you) will also be notified.</li>
+                        <li>Now you can enjoy the cinema together.</li>
+                        <li>After watching a great movie: you can confirm who participated. All confirmed attendees can see the meeting at their personal user account page.</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="scenario-card">
+                <h3>Scenario 2: You want to teach Angular</h3>
+                <p>Another example. You learned much about Angular and want to share your knowledge with your colleagues. 
+                    But you are maybe not sure if others are interested into it. Evendemy can help you.</p>
+                <p>
+                    <ul>
+                        <li>Angular is great. That is why you add an idea to Evendemy.</li>
+                        <li>Evendemy now notifies everyone about the new idea. You can easily find the idea at Evendemy.</li>
+                        <li>Interested people can tell you that they are interessted. If they are interessted, they get a confirmation mail. The author (you) will also be notified.</li>
+                        <li>If there are enough interested people, you can create a course from your idea.</li>
+                        <li>See Scenario 1 on how to proceed...</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    
 
         <h2>Advantages compared to a simple calendar invitations</h2>
         <p>You maybe ask yourself what is the benefit compared to simple calendar invitations or other solutions? Evendemy can
             help you in so many ways! Here are some advantages compared to other solutions:</p>
         <p>
-            <ul>
-                <li>One place where all meetings will be collected</li>
-                <li>Every Meeting has the same structure</li>
-                <li>You see which events are upcoming</li>
-                <li>Everyone is invited to participate to the meetings</li>
-                <li>Everyone can see who want to participate</li>
-                <li>Meetings can be commented - every attendee will be informed</li>
-                <li>You can easily add some of your friends with a "+1" option</li>
-                <li>You can see each meeting where you took part</li>
+            <ul class="advantages">
+                <li><i class="fas fa-plus"></i> One place where all meetings will be collected</li>
+                <li><i class="fas fa-plus"></i> Every Meeting has the same structure</li>
+                <li><i class="fas fa-plus"></i> Categorize your meetings with tags</li>
+                <li><i class="fas fa-plus"></i> You see which events are upcoming</li>
+                <li><i class="fas fa-plus"></i> Everyone is invited to participate to the meetings</li>
+                <li><i class="fas fa-plus"></i> Everyone can see who want to participate</li>
+                <li><i class="fas fa-plus"></i> Meetings can be commented - every attendee will be informed</li>
+                <li><i class="fas fa-plus"></i> You can easily add some of your friends with a "+1" option</li>
+                <li><i class="fas fa-plus"></i> You can see each meeting where you took part</li>
+                <li><i class="fas fa-plus"></i> Find those who are interested in your ideas before you make a meeting</li>
             </ul>
         </p>
 
         <h2>Award</h2>
-        <div>
-            <p>
-                Evendemy won Convista's Innovation Award 2018! A great honor and a nice sign of how important such a project can be.
-            </p>
-            <p>
-                Read more on our blog: <a href="https://blog.faktorzehn.de/?p=990" style="color:white;">https://blog.faktorzehn.de/?p=990</a>
-            </p>
-            <div style="text-align: center;">
-                <img src="./assets/evendemy_innovation_award.png" style="width: 500px;" />
+        <div style="display:flex;">
+            <div style="flex-basis: 60%">
+                    <p>
+                        Evendemy won Convista's Innovation Award 2018! A great honor and a nice sign of how important such a project can be.
+                    </p>
+                    <a class="button" href="https://blog.faktorzehn.de/?p=990">Read Blog</a>
+            </div>
+            <div style="flex-basis: 40%"">
+                <img src="./assets/evendemy_innovation_award.png" style="width: 100%" />
             </div>
         </div>
 
         <h2>How can I use it?</h2>
         <p>It is really easy to use. Just see the
             <a href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">documentation</a> for details.</p>
+            <a class="button" href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">Documentation</a>
 
         <h2>How can I contribute?</h2>
         <p>You want to help to make Evendemy even a better software and great tool for everyone? There are a lot of work and
@@ -146,7 +216,7 @@
             <a href="https://github.com/Roshanjossey/first-contributions/blob/master/README.md">pull-request method</a>. If you use Evendemy at your company it would also be great to here from you too!</p>
 
 
-        <div style="text-align: center; margin-top: 100px;">
+        <div style="text-align: center; margin-top: 120px;">
             <a class="button" href="https://github.com/ConVista-FaktorZehn-GmbH/evendemy">Explore Evendemy!</a>
         </div>
     </div>

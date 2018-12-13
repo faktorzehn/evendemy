@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ConfigService } from '@ngx-config/core';
 import * as FileSaver from 'file-saver';
-import * as moment from 'moment';
 import { combineLatest } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -19,7 +18,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingService } from '../../services/meeting.service';
 import { TagsService } from '../../services/tags.service';
 import { MeetingUtil } from './meeting.util';
-import { AttendeeStatus } from '../../components/attendee-status/attendee-status.component';
+import { first } from 'rxjs/operators';
 
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
@@ -119,6 +118,11 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDestroy() {
+    this.meetingService.unloadMeeting();
+    this.subscribe.unsubscribe();
+  }
+
   updateValidators(meeting) {
     if (!meeting) {
       return;
@@ -202,11 +206,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.loadPotentialAttendees(mid);
   }
 
-  ngOnDestroy() {
-    this.meetingService.unloadMeeting();
-    this.subscribe.unsubscribe();
-  }
-
   loadMeeting(mid) {
     this.meetingService.getMeetingAndSelect(mid).subscribe((result) => {
       this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
@@ -253,7 +252,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   createMeeting() {
     this.setDataAtMeeting();
-    this.meetingService.createMeeting(this.meeting).subscribe((result: Meeting) => {
+    this.meetingService.createMeeting(this.meeting).pipe(first()).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
       this.navigateBack();
@@ -263,7 +262,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   updateMeeting() {
     this.uploadImage(this.meeting.mid);
     this.setDataAtMeeting();
-    this.meetingService.updateMeeting(this.meeting).subscribe((result) => {
+    this.meetingService.updateMeeting(this.meeting).pipe(first()).subscribe((result) => {
       this.navigateBack();
     });
   }
@@ -282,13 +281,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
         mid: mid,
         data: this.tmpImgData.image
       };
-      this.meetingService.addImage(mid, result).subscribe((img_result) => {});
+      this.meetingService.addImage(mid, result).pipe(first()).subscribe((img_result) => {});
     }
   }
 
   onDeleteMeeting() {
-    this.meetingService.deleteMeeting(this.meeting.mid).subscribe((result) => {
-      this.router.navigate(['/meetings' + this.courseOrEvent.value]);
+    this.meetingService.deleteMeeting(this.meeting.mid).pipe(first()).subscribe((result) => {
+      this.router.navigate(['/meetings']);
     });
   }
 
@@ -324,24 +323,27 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onAcceptMeeting(external) {
-    this.meetingService.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external).subscribe((result) => {
-      this.userHasAccepted = true;
-      this.userHasFinished = false;
-      this.loadPotentialAttendees(this.meeting.mid);
+    this.meetingService.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external)
+      .pipe(first()).subscribe((result) => {
+        this.userHasAccepted = true;
+        this.userHasFinished = false;
+        this.loadPotentialAttendees(this.meeting.mid);
     });
   }
 
   onRejectMeeting() {
-    this.meetingService.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername()).subscribe((result) => {
-      this.userHasAccepted = false;
-      this.userHasFinished = false;
-      this.loadPotentialAttendees(this.meeting.mid);
+    this.meetingService.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername())
+      .pipe(first()).subscribe((result) => {
+        this.userHasAccepted = false;
+        this.userHasFinished = false;
+        this.loadPotentialAttendees(this.meeting.mid);
     });
   }
 
   onRemoveAttendee(user: User) {
-    this.meetingService.rejectAttendingMeeting(this.meeting.mid, user.username).subscribe((result) => {
-      this.loadPotentialAttendees(this.meeting.mid);
+    this.meetingService.rejectAttendingMeeting(this.meeting.mid, user.username)
+      .pipe(first()).subscribe((result) => {
+        this.loadPotentialAttendees(this.meeting.mid);
     });
   }
 
@@ -352,28 +354,24 @@ export class MeetingComponent implements OnInit, OnDestroy {
       if (foundedAttendee.username === this.authService.getLoggedInUsername()) {
         this.userHasFinished = true;
       }
-      this.meetingService.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).subscribe((result) => { });
+      this.meetingService.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).pipe(first()).subscribe((result) => { });
     }
   }
 
   onAddComment(comment: Comment) {
-    this.meetingService.addComment(this.meeting.mid, comment).subscribe((result) => {});
+    this.meetingService.addComment(this.meeting.mid, comment).pipe(first()).subscribe((result) => {});
   }
 
   downloadCSV() {
     const csv = MeetingUtil.generateCSV(this.potentialAttendees, this.users);
-
     const blob = new Blob([csv], { type: 'text/csv' });
     FileSaver.saveAs(blob, 'attendees-for-meeting-' + this.meeting.mid + '.csv');
-
-    console.log(csv);
   }
 
   onGetCalendar() {
-    this.meetingService.getCalendar(this.meeting.mid).subscribe( (cal: any) => {
+    this.meetingService.getCalendar(this.meeting.mid).pipe(first()).subscribe( (cal: any) => {
       const blob = new Blob([cal.content], { type: 'text/calendar;charset=utf-8' });
       FileSaver.saveAs(blob, 'calendar-for-meeting-' + this.meeting.mid + '.ics');
-
     });
   }
 
@@ -394,32 +392,20 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return this.potentialAttendees.filter( p => p.tookPart !== true).length;
   }
 
-  hasValidDate() {
-    return this.meeting.startTime && this.meeting.endTime && this.meeting.date;
+  hasValidDateAndTime() {
+    return MeetingUtil.hasValidDateAndTime(this.meeting);
   }
 
   isInThePast() {
-    if (!this.hasValidDate()) {
-      return false;
-    }
-    const now = moment();
-    return moment(this.meeting.date).isBefore(now, 'day');
+    return MeetingUtil.isInThePast(this.meeting);
   }
 
   isInThePastOrToday() {
-    if (!this.hasValidDate()) {
-      return false;
-    }
-    const now = moment();
-    return moment(this.meeting.date).isSameOrBefore(now, 'day');
+    return MeetingUtil.isInThePastOrToday(this.meeting);
   }
 
   hasEveryoneTookPart() {
     return this.potentialAttendees.length === this.getAttendedNumber();
-  }
-
-  trackByFn (user: User) {
-    return user.username;
   }
 
   checkboxChanged() {
@@ -440,17 +426,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   getStatus() {
-    if (this.isNew === true) {
-      return AttendeeStatus.INVALID;
-    }
-
-    if (this.userHasFinished) {
-      return AttendeeStatus.CONFIRMED;
-    } else if (this.userHasAccepted) {
-        return AttendeeStatus.ATTENDING;
-    }
-
-    return AttendeeStatus.NOT_ATTENDING;
-
+    return MeetingUtil.mapStatus(this.isNew,  this.userHasAccepted, this.userHasFinished);
   }
 }
