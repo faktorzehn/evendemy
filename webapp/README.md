@@ -1,15 +1,16 @@
-# Evendemy
-
 # Evendemy Webapp
-## How to install the server
-* 'npm install' in the webapp folder
+
+## How to use
+You can find a compiled version of Evendemy in the [dist folder](https://github.com/ConVista-FaktorZehn-GmbH/evendemy/tree/master/dist). Just change the configuration (for production) and Evendemy is ready to use.
 
 ## How to execute locally
-* start with 'ng serve'
+Execute 'npm i' in the webapp folder.
+Start the frontend part for development with 'ng serve'.
 
-## What you should do for production
-At the current state, the webapp part is configured for development. If you like to use it in production:
-* configure config.json
-* build with 'ng build'
+## How to build for production
+Execute 'npm i' in the webapp folder.
+Build the sources with 'ng build --prod'.
+Change the configuration to your needs.
+
 
 

@@ -1,21 +1,30 @@
 # Evendemy Server
-## How to install the server
-* 'npm install' in the server folder
-* install mongodb from https://www.mongodb.com
+
+
+## How to use
+You can find a compiled version of Evendemy-Server in the [dist folder](https://github.com/ConVista-FaktorZehn-GmbH/evendemy/tree/master/dist). Just change the configuration (for production) and Evendemy is ready to use.
 
 ## How to execute locally
-* start mongodb "path/of/my/mongod.exe" --dbpath="where/to/store/your/mongodb"
-* be sure, that you have a "C:/images" folder (defined in server/developer-config.json)
-* start server: node src/server.js
+Execute 'npm i' in the server folder.
+Start the backend part for development with 'node src/server.js'.
 
-## What you should do for production
-If you like to use it in production be sure that developer-config is removed and everything is configured in config.json.
-Be sure that you implemented plugins/auth.js!
-Run 'npm run build' and begin to configure config.json and plugins/auth.js
+## How to build for production
+Execute 'npm i' in the webapp folder.
+Build the sources with 'npm run build'.
+Change the 
+* configuration
+* plugins/auth.js
+* assets/mail.htm and assets/mail.json
+
+ to your needs. (Be sure that developer-config is removed)
+
+
+## Other requirements
+Install mongodb from https://www.mongodb.com (Version v3.4.9). It is required to execute Evendemy.
 
 ## How to update from an existing installation
 Be sure that you make a backup before updating to a new version!
-We create a task for an easier upgrade of the backend. Run 'npm run build-for-upgrade'. This will build the server.js but don't copy plugins/auth, assets or config.
+We created a task for an easier upgrade of the backend. Run 'npm run build-for-upgrade'. This will build the server.js but don't copy plugins/auth, assets or config.
 * save config.json, auth.js
-* replace server.js, package-kson and package-lock.json
+* replace server.js, package.json and package-lock.json
 * run 'npm install' again
