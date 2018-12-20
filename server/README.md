@@ -2,7 +2,7 @@
 
 
 ## How to use
-You can find a compiled version of Evendemy-Server in the dist folder. Just change the configuration (for production) and Evendemy is ready to use.
+You can find a compiled version of Evendemy-Server in the [dist folder](https://github.com/ConVista-FaktorZehn-GmbH/evendemy/tree/master/dist). Just change the configuration (for production) and Evendemy is ready to use.
 
 ## How to execute locally
 Execute 'npm i' in the server folder.
