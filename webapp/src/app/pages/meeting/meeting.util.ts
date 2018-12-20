@@ -30,7 +30,7 @@ export class MeetingUtil {
     return 'event';
   }
 
-  public static mapStatus(isNew: boolean, userHasAccepted: boolean, userHasFinished: boolean,): AttendeeStatus {
+  public static mapStatus(isNew: boolean, userHasAccepted: boolean, userHasFinished: boolean): AttendeeStatus {
       if (isNew === true) {
         return AttendeeStatus.INVALID;
       }
