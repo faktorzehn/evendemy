@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ConfigService } from '@ngx-config/core';
+import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class UserService extends BaseService {
 
-  constructor(private http: HttpClient, config: ConfigService) {
-    super(config);
+  constructor(private http: HttpClient, configService: ConfigService<any>) {
+    super(configService);
   }
 
   public getUserByUsername(username: string) {

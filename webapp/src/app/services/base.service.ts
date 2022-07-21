@@ -1,11 +1,11 @@
 import { HttpHeaders } from '@angular/common/http';
-import { ConfigService } from '@ngx-config/core';
+import { ConfigService } from './config.service';
 
 export class BaseService {
 
-  protected url = this.config.getSettings().backend_url;
+  protected url = this.configService.config.backend_url;
 
-  constructor(private config: ConfigService) {}
+  constructor(private configService: ConfigService<any>) {}
 
   protected createHeaders(): HttpHeaders {
     const headers = new HttpHeaders({

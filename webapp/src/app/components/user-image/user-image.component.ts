@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { ConfigService } from '@ngx-config/core';
 import { User } from '../../model/user';
+import { ConfigService } from '../../services/config.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -14,12 +14,12 @@ export class UserImageComponent implements OnInit, OnChanges {
   @Input() height: number;
 
   error = false;
-  folder = this.config.getSettings().user_image_folder;
+  folder = this.configService.config.user_image_folder;
   user: User;
   palette = ['#5da5e2', '#e87f7f', '#f9d44c', '#c6e96e', '#8375b5'];
 
   constructor(
-    private config: ConfigService,
+    private configService: ConfigService<any>,
     private userService: UserService
   ) { }
 

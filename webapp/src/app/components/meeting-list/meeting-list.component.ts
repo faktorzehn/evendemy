@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Meeting } from '../../model/meeting';
-import { ConfigService } from '@ngx-config/core';
 import * as moment from 'moment';
 import { MeetingUser } from '../../model/meeting_user';
+import { ConfigService } from '../../services/config.service';
 
 @Component({
   selector: 'evendemy-meeting-list',
@@ -24,9 +24,9 @@ export class MeetingListComponent implements OnInit {
   public canCreate = false;
 
   private randomizedNumber = Math.floor(Math.random() * 10000);
-  private imageFolder = this.config.getSettings().meeting_image_folder;
+  private imageFolder = this.configService.config.meeting_image_folder;
 
-  constructor(private config: ConfigService) {
+  constructor(private configService: ConfigService<any>) {
   }
 
   ngOnInit() {

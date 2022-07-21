@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ConfigService } from '@ngx-config/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
 import { map } from 'rxjs/operators';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class AuthenticationService {
-  private url = this.config.getSettings().backend_url;
+  private url = this.configService.config.backend_url;
 
   constructor(
     private http: HttpClient,
-    private config: ConfigService,
+    private configService: ConfigService<any>,
     private store: Store<AppState>
   ) {}
 

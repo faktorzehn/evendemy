@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { User } from '../../model/user';
 import { Meeting } from '../../model/meeting';
 import { UserService } from '../../services/user.service';
@@ -23,9 +23,7 @@ export class UserInfoComponent implements OnInit {
   events: Meeting[] = [];
   courses_from_author: Meeting[] = [];
   events_from_author: Meeting[] = [];
-
-  @ViewChild(EditorComponent)
-  private editor: EditorComponent;
+  editorContent = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -57,8 +55,8 @@ export class UserInfoComponent implements OnInit {
         .subscribe((result: User) => {
           this.user = result;
 
-          if (this.user && this.user.additional_info && this.editor ) {
-              this.editor.setValue(this.user.additional_info.description);
+          if (this.user && this.user.additional_info) {
+            this.editorContent = this.user.additional_info.description;
           }
         });
     }
@@ -96,7 +94,7 @@ export class UserInfoComponent implements OnInit {
   uploadImage(data) {
     const postData = {
       username: this.authService.getLoggedInUsername(),
-      data: data.image
+      data: data
     };
     this.userService
       .addImage(this.authService.getLoggedInUsername(), postData)
@@ -115,8 +113,9 @@ export class UserInfoComponent implements OnInit {
       .subscribe(o => {});
   }
 
-  saveAdditionalInfo() {
-    this.user.additional_info.description = this.editor.getValue();
+  public editorChanged(text: string){
+    this.editorContent = text;
+    this.user.additional_info.description = this.editorContent;
     this.userService
       .updateAdditionalInfo(this.authService.getLoggedInUsername(), this.user.additional_info)
       .subscribe(o => {});

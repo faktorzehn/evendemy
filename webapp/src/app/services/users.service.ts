@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { ConfigService } from '@ngx-config/core';
+import { HttpClient } from '@angular/common/http';
 import { User } from '../model/user';
 import { InitUsers } from '../actions/users.actions';
-import 'rxjs/add/operator/retry';
 import { BaseService } from './base.service';
+import { retry, first, tap} from 'rxjs/operators';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class UsersService extends BaseService {
 
-    constructor(private http: HttpClient, private store: Store<AppState>, config: ConfigService) {
-      super(config);
+    constructor(private http: HttpClient, private store: Store<AppState>, configService: ConfigService<any>) {
+      super(configService);
     }
 
     public loadAllUsers() {
       const headers = this.createHeaders();
       const url = this.url + '/users';
-      return this.http.get(url, {headers: headers}).retry(5).do( (res: User[]) => {
+      return this.http.get(url, {headers: headers}).pipe(retry(3), first(), tap( (res: User[]) => {
         this.setUsers(res);
-      });
+      }));
     }
 
     public setUsers(users: User[]) {

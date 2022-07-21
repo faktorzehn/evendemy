@@ -13,8 +13,8 @@
       <evendemy-checkbox *ngIf="isIdea" [label]="'not announced'" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
       <evendemy-checkbox [label]="'old'" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
       <evendemy-checkbox [label]="'new'" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
-      Tags:
-      <tag-input [(ngModel)]="selectedTags" name="tag" [modelAsStrings]="true"
+      <!-- Tags: -->
+      <!-- <tag-input [(ngModel)]="selectedTags" name="tag" [modelAsStrings]="true"
         [onlyFromAutocomplete]="true"
         [placeholder]="'+tags'"
         [secondaryPlaceholder]="'tags to be shown'"
@@ -22,7 +22,7 @@
         class="tag-input">
         <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
         </tag-input-dropdown>
-      </tag-input>
+      </tag-input>-->
     </div>
   </div>
 

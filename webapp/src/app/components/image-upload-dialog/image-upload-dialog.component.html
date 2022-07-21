@@ -9,9 +9,19 @@
       </div>
       <div class="modal-body">
           <div class="file-upload">
-              <input id="custom-input" type="file" (change)="fileChangeListener($event)">
+              <input id="custom-input" type="file" (change)="fileSelected($event)">
           </div>
-          <img-cropper #cropper [image]="_data" [settings]="cropperSettings"></img-cropper>
+          <image-cropper
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="ratio"
+                format="jpeg"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()"
+                (loadImageFailed)="loadImageFailed()"
+            ></image-cropper>
+          <!-- <img-cropper #cropper [image]="_data" [settings]="cropperSettings"></img-cropper> -->
       </div>
       <div class="modal-footer">
 

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
-import { ConfigService } from '@ngx-config/core';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class TagsService extends BaseService {
 
-  constructor(private http: HttpClient, config: ConfigService) {
-    super(config);
+  constructor(private http: HttpClient, configService: ConfigService<any>) {
+    super(configService);
   }
 
   public getAllTags() {

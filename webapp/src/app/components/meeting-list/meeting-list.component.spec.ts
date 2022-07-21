@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MeetingListComponent } from './meeting-list.component';
-import { ConfigService } from '@ngx-config/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import * as moment from 'moment';
 import { Meeting } from '../../model/meeting';
 import { Component, Input } from '@angular/core';
+import { ConfigService } from '../../services/config.service';
 
 
 describe('MeetingListComponent', () => {

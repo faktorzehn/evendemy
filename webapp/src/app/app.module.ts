@@ -1,15 +1,13 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ConfigLoader, ConfigModule } from '@ngx-config/core';
-import { ConfigHttpLoader } from '@ngx-config/http-loader';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { TagInputModule } from 'ngx-chips';
-import { ImageCropperModule } from 'ngx-img-cropper';
+// import { TagInputModule } from 'ngx-chips';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { AppComponent } from './app.component';
 import { AttendeeCardComponent } from './components/attendee-card/attendee-card.component';
@@ -47,6 +45,7 @@ import { UserService } from './services/user.service';
 import { UsersService } from './services/users.service';
 import { MeetingAttendeeStatusComponent } from './components/attendee-status/meeting-attendee-status/meeting-attendee-status.component';
 import { IdeaAttendeeStatusComponent } from './components/attendee-status/idea-attendee-status/idea-attendee-status.component';
+import { ConfigService } from './services/config.service';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -62,10 +61,6 @@ const appRoutes: Routes = [
   { path: '', redirectTo: '/meetings', pathMatch: 'full' },
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
-
-export function configFactory(http: HttpClient): ConfigLoader {
-  return new ConfigHttpLoader(http, './config.json');
-}
 
 @NgModule({
   declarations: [
@@ -110,14 +105,9 @@ export function configFactory(http: HttpClient): ConfigLoader {
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
-    ConfigModule.forRoot({
-      provide: ConfigLoader,
-      useFactory: (configFactory),
-      deps: [HttpClient]
-    }),
     NgxDatatableModule,
     ImageCropperModule,
-    TagInputModule
+    // TagInputModule
   ],
   providers: [
     LoggedInGuardService,
@@ -126,7 +116,9 @@ export function configFactory(http: HttpClient): ConfigLoader {
     UserService,
     UsersService,
     AuthenticationService,
-    TagsService
+    TagsService,
+    ConfigService,
+    { provide: APP_INITIALIZER, useFactory: (config: ConfigService<any>) => config.load(), deps: [ConfigService], multi: true}
   ],
   bootstrap: [AppComponent]
 })

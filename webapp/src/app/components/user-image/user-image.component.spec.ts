@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserImageComponent } from './user-image.component';
-import { ConfigService } from '@ngx-config/core';
 import { of } from 'rxjs';
 import { SimpleChange } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { ConfigService } from '../../services/config.service';
 
 describe('UserImageComponent', () => {
   let component: UserImageComponent;
@@ -12,7 +12,7 @@ describe('UserImageComponent', () => {
 
   beforeEach(async(() => {
     const userServiceMock = jasmine.createSpyObj('UserService', ['getUserByUsername']);
-    const configSpy = jasmine.createSpyObj('ConfigService', ['getSettings']);
+    const configSpy = jasmine.createSpyObj('ConfigService', ['config']);
     userServiceMock.getUserByUsername.and.callFake(username => {
       if (username === 'max') {
         return of({

@@ -2,19 +2,18 @@ import { Injectable } from '@angular/core';
 import { Meeting } from '../model/meeting';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
-import 'rxjs/add/operator/do';
-import { InitMeetings, AddMeeting, RemoveMeeting, UpdateMeeting } from '../actions/meetings.actions';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { ConfigService } from '@ngx-config/core';
+import { InitMeetings} from '../actions/meetings.actions';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 import { MeetingUser } from '../model/meeting_user';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class MeetingsService extends BaseService {
 
-    constructor(private http: HttpClient, private store: Store<AppState>, config: ConfigService) {
-      super(config);
+    constructor(private http: HttpClient, private store: Store<AppState>, configService: ConfigService<any>) {
+      super(configService);
     }
 
     public getAllMeetings(options?: {

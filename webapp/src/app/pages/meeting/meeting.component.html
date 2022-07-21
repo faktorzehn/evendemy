@@ -8,12 +8,12 @@
       </div>
 
       <!--Image-->
-      <div class="row meeting-image" *ngIf="!tmpImgData?.image">
+      <div class="row meeting-image" *ngIf="!tmpImgData">
         <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}" onError="this.src='assets/no-image.png'" />
       </div>
 
-      <div class="row meeting-image" *ngIf="tmpImgData?.image">
-        <img [src]="tmpImgData.image">
+      <div class="row meeting-image" *ngIf="tmpImgData">
+        <img [src]="tmpImgData">
       </div>
 
       <div style="text-align: right;">
@@ -45,12 +45,12 @@
       <div class="row form-row" *ngIf="isEditable">
         <div class="col-md-4">Description</div>
         <div class="col-md-8">
-          <evendemy-editor [value]="meeting?.description" [editable]="true"></evendemy-editor>
+          <evendemy-editor [value]="meeting?.description" (change)="editorChanged($event)" [editable]="true"></evendemy-editor>
         </div>
       </div>
       <div class="row" *ngIf="!isEditable">
         <div class="col-md-12 meeting-description-not-editable">
-          <evendemy-editor [value]="meeting?.description" [editable]="false"></evendemy-editor>
+          <evendemy-editor [value]="editorContent" [editable]="false"></evendemy-editor>
         </div>
       </div>
 
@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <div class="row form-row">
+      <!-- <div class="row form-row">
         <div class="col-md-4">Tags</div>
         <div class="col-md-8" *ngIf="isEditable">
           <tag-input [(ngModel)]="meeting.tags" [ngModelOptions]="{standalone: true}" name="tag"
@@ -88,12 +88,12 @@
           >
           <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
           </tag-input-dropdown>
-        </tag-input>
+        </tag-input> 
         </div>
         <div class="col-md-8" *ngIf="!isEditable">
             <a [routerLink]="['/meetings']" [queryParams]="{tags: tag}"  style="display: inline-block;" *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
         </div>
-      </div>
+      </div> -->
 
       <div class="row form-row">
         <div class="col-md-4">Date</div>

@@ -51,7 +51,7 @@ export class EditorComponent implements OnInit {
     this.setValue(this.value);
   }
 
-  public getValue() {
+  private getValue() {
     if (this.editable && this.quill) {
       return this.quill.root.innerHTML;
     }

@@ -1,11 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+
 import { Store } from '@ngrx/store';
-import { ConfigService } from '@ngx-config/core';
 import * as FileSaver from 'file-saver';
-import { combineLatest } from 'rxjs';
-import { Subscription } from 'rxjs/Subscription';
+import { combineLatest, Subscription } from 'rxjs';
 
 import { AppState } from '../../appState';
 import { Step } from '../../components/breadcrump/breadcrump.component';
@@ -19,6 +17,8 @@ import { MeetingService } from '../../services/meeting.service';
 import { TagsService } from '../../services/tags.service';
 import { MeetingUtil } from './meeting.util';
 import { first } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfigService } from '../../services/config.service';
 
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
@@ -48,14 +48,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
   allTags = [];
   formGroup: FormGroup;
   steps: Step[] = [];
-
-  @ViewChild(EditorComponent)
-  private editor: EditorComponent;
-
-  imageFolder = this.config.getSettings().meeting_image_folder;
+  
+  imageFolder = this.configService.config.meeting_image_folder;
   tmpImgData: any;
 
   users: User[] = [];
+  editorContent = "";
 
   constructor(
     private authService: AuthenticationService,
@@ -63,7 +61,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
      private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>,
-    private config: ConfigService,
+    private configService: ConfigService<any>,
     private tagsService: TagsService,
     private formBuilder: FormBuilder) {
   }
@@ -193,10 +191,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meetingService.selectMeeting(meeting);
 
     this.isEditable = true;
-    if (this.editor) {
-      this.editor.setValue('');
-    }
+    this.editorContent = ''
 
+  }
+
+  public editorChanged(text: string){
+    this.editorContent = text;
   }
 
   public initForExistingMeeting(mid: string) {
@@ -209,9 +209,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   loadMeeting(mid) {
     this.meetingService.getMeetingAndSelect(mid).subscribe((result) => {
       this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
-      if (this.editor) {
-        this.editor.setValue(this.meeting.description);
-      }
+      this.editorContent = this.meeting.description;
       this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
     });
   }
@@ -242,7 +240,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meeting.title = this.title.value;
     this.meeting.shortDescription = this.shortDescription.value;
     this.meeting.courseOrEvent = this.courseOrEvent.value;
-    this.meeting.description = this.editor.getValue();
+    this.meeting.description = this.editorContent;
     this.meeting.date = MeetingUtil.stringToDate(this.date.value);
     this.meeting.startTime = this.startTime.value;
     this.meeting.endTime = this.endTime.value;
@@ -279,7 +277,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (this.tmpImgData) {
       const result = {
         mid: mid,
-        data: this.tmpImgData.image
+        data: this.tmpImgData
       };
       this.meetingService.addImage(mid, result).pipe(first()).subscribe((img_result) => {});
     }

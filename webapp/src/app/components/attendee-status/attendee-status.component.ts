@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 
 import { Meeting } from '../../model/meeting';
 
@@ -9,6 +9,7 @@ export enum AttendeeStatus {
   INVALID = 'INVALID'
 }
 
+@Directive()
 export abstract class AbstractAttendeeStatusComponent implements OnInit {
 
   @Input()

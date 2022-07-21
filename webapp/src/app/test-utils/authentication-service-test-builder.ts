@@ -1,8 +1,3 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ConfigService } from '@ngx-config/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../appState';
 import { of } from 'rxjs';
 
 export class AuthenticationServiceTestBuilder {
