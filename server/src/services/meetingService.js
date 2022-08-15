@@ -194,11 +194,10 @@ module.exports = {
     },
 
     addComment: function (mid, request) {
-        var Meeting = require('../models/meeting');
         var Comment = require('../models/comment');
 
         return this.getMeeting(mid).then(function (meeting) {
-
+ 
             if (meeting === null) {
                 console.error('addComment: meeting is null');
                 return;

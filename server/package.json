@@ -24,12 +24,11 @@
     "ical-generator": "^0.2.9",
     "ldapauth-fork": "^3.0.0",
     "moment": "^2.21.0",
-    "mongoose": "^4.7.6",
+    "mongoose": "^6.5.2",
     "mongoose-auto-increment": "^5.0.1",
     "mustache": "^2.3.0",
     "nodemailer": "^2.7.0",
-    "restify": "^4.3.0",
-    "restify-cors-middleware": "0.0.8",
+    "restify": "^8.6.1",
     "underscore": "^1.8.3"
   }
 }

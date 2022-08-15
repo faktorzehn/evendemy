@@ -11,10 +11,10 @@ module.exports = function (server, config, production_mode) {
             else {
                 res.send(404, { error: "No users found" });
             }
+            return next();
         }, function (err) {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 }

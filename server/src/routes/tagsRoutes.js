@@ -7,14 +7,15 @@ module.exports = function (server, config, production_mode) {
         tagsService.getAllTags().then(function (tags) {
             if (tags !== null) {
                 res.send(tags.sort());
+                return next();
             }
             else {
                 res.send(404, { error: "No tags found" });
+                return next();
             }
         }, function (err) {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 }

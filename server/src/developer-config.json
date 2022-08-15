@@ -1,6 +1,6 @@
 {
 	"db": {
-		"url": "mongodb://localhost/mydb"
+		"url": "mongodb://localhost/evendemy"
 	},
 	"meetingImageFolder":"./../webapp/src/assets/meeting_images",
 	"userImageFolder":"./../webapp/src/assets/user_images",

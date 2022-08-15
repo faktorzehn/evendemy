@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-var autoIncrement = require('mongoose-auto-increment');
 var Comment = require('./comment');
+const IdentityCounters = require('./identitycounters');
 
 const MeetingSchema = mongoose.Schema({
-    mid: { type: Number, required: true },
+    mid: { type: Number, required: true, unique: true},
     title: { type: String, default: '' },
     shortDescription: { type: String, default: '' },
     description: { type: String, default: '' },
@@ -24,6 +24,7 @@ const MeetingSchema = mongoose.Schema({
     deleted: { type: Boolean, default: false }
 });
 
-MeetingSchema.plugin(autoIncrement.plugin, {model:'Meeting', field: 'mid'});
+IdentityCounters.createIndex(MeetingSchema, 'Meeting', 'mid');
 const Meeting = mongoose.model('Meeting', MeetingSchema);
+
 module.exports = Meeting; 

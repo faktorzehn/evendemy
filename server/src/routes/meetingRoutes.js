@@ -14,14 +14,15 @@ module.exports = function (server, config, production_mode) {
     server.get('/meeting/:mid', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
             res.send(meeting);
+            return next();
         }, function (err) {
             if (err === '404') {
-                return res.send(404, { error: 'No meeting found.' });
+                res.send(404, { error: 'No meeting found.' });
+            } else {
+                res.send(500, { error: err });
             }
-            return res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     server.get('/meeting/:mid/calendar', function (req, res, next) {
@@ -30,12 +31,12 @@ module.exports = function (server, config, production_mode) {
             res.send(attachment);
         }, function (err) {
             if (err === '404') {
-                return res.send(404, { error: 'No meeting found.' });
+                res.send(404, { error: 'No meeting found.' });
+            } else {
+                res.send(500, { error: err });
             }
-            return res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     function getMailAdresses(dbUsers) {
@@ -46,9 +47,8 @@ module.exports = function (server, config, production_mode) {
     }
 
     server.post('/meeting', function (req, res, next) {
-
-        meetingService.saveMeeting(req.params, req.username).then(function (meeting) {
-
+        meetingService.saveMeeting(req.body, req.username).then(function (meeting) {
+            console.log('saved');
             //inform all users about the new meeting entry
             userService.getAllUsers().then(function (users) {
                 var view;
@@ -60,14 +60,15 @@ module.exports = function (server, config, production_mode) {
                 var sendTo = getMailAdresses(users);
                 mailService.sendMail(config, sendTo, view, null, production_mode);
             }, function (err) {
-                return res.send(500, { error: err });
+                res.send(500, { error: err });
+                return next();
             });
             res.send(meeting);
+            return next();
         }, function(err){
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     function notifyAllAttendingUsers(meeting, username, templates, text, iCal){
@@ -87,18 +88,18 @@ module.exports = function (server, config, production_mode) {
     }
 
     server.post('/meeting/:mid/comment', function (req, res, next) {
-        meetingService.addComment(req.params.mid, req.params).then(function (meeting) {
+        meetingService.addComment(req.params.mid, req.body).then(function (meeting) {
             if(meeting.isIdea){
-                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToIdea, req.params.text, null);
+                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToIdea, req.body.text, null);
             }else{
-                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToMeeting, req.params.text, null);
+                notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToMeeting, req.body.text, null);
             }
             res.send(meeting);
+            return next();
         }, function (err) {
             res.send(500, { error: err });
+            return next();
         })
-
-        return next();
     });
 
     server.put('/meeting/:mid', function (req, res, next) {
@@ -127,18 +128,20 @@ module.exports = function (server, config, production_mode) {
                         
                     }
                     res.send(meeting);
+                    return next();
                 }, function (err) {
-                    return res.send(500, { error: err });
+                    res.send(500, { error: err });
+                    return next();
                 });
             }, function (err) {
-                return res.send(500, { error: err });
+                res.send(500, { error: err });
+                return next();
             });
         }
         else {
-            return res.send(500, { error: 'No mid specified' });
+            res.send(500, { error: 'No mid specified' });
+            return next();
         }
-
-        return next();
     });
 
     server.del('/meeting/:mid', function (req, res, next) {
@@ -151,34 +154,35 @@ module.exports = function (server, config, production_mode) {
             
             meetingService.deleteMeeting(req.params.mid).then(function (meeting) {
                 res.send(meeting);
+                return next();
             }, function (err) {
-                return res.send(500, { error: err });
+                res.send(500, { error: err });
+                return next();
             });
             
         });
-    
-        return next();
     });
 
     server.get('/meeting/:mid/attendees', function (req, res, next) {
         if (req.params.mid !== undefined) {
             meetingService.getAttendingUsersForMid(req.params.mid).then(function (meeting_users) {
                 res.send(meeting_users);
+                return next();
             }, function (err) {
                 res.send(500, { error: err });
+                return next();
             });
         } else {
             res.send(500, { error: 'no mid specified' });
-            return;
+            return next();
         }
-
-        return next();
     });
 
     server.put('/meeting/:mid/attendee/:username/attend', function (req, res, next) {
-
+        console.log('try to attend');
         if (req.params.mid === undefined || req.params.username === undefined ) {
-            return res.send(500, { error: 'no mid or username' });
+            res.send(500, { error: 'no mid or username' });
+            return next();
         }
 
         meetingService.attendingToMeeting(req.params.mid, req.params.username, req.params.externals).then(function (meeting_user) {
@@ -198,17 +202,18 @@ module.exports = function (server, config, production_mode) {
             })
 
             res.send(meeting_user);
+            return next();
         }, function (err) {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     server.del('/meeting/:mid/attendee/:username/attend', function (req, res, next) {
 
         if (req.params.mid === undefined || req.params.username === undefined) {
-            return res.send(500, { error: 'No mid or username specified' });
+            res.send(500, { error: 'No mid or username specified' });
+            return next();
         }
 
         var meetingPromise = meetingService.getMeeting(req.params.mid);
@@ -222,7 +227,8 @@ module.exports = function (server, config, production_mode) {
                         notifyAuthor(false, meeting, user);
                         res.send(meeting_user);
                     }, function (err) {
-                        return res.send(500, { error: err });
+                        res.send(500, { error: err });
+                        return next();
                     });
                 } else if(meeting.username === req.user.uid) { 
                     // author rejects the participant
@@ -233,48 +239,52 @@ module.exports = function (server, config, production_mode) {
                             notifyUser(mailConfig.notificationMail.meetingParticipationRejected, user, meeting);
                         }
                         res.send(meeting_user);
+                        return next();
                     }, function (err) {
-                        return res.send(500, { error: err });
+                        res.send(500, { error: err });
+                        return next();
                     });
                 } else {
-                    return res.send(403, { error: 'Forbidden' });
+                    res.send(403, { error: 'Forbidden' });
+                    return next();
                 }
             }
         }).catch( err => {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     server.put('/meeting/:mid/attendee/:username/confirm', function (req, res, next) {
 
         if (req.params.mid === undefined || req.params.username === undefined ) {
-            return res.send(500, { error: 'no mid or username' });
+            res.send(500, { error: 'no mid or username' });
+            return next();
         }
 
         meetingService.confirmUserForMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
             res.send(meeting_user);
+            return next();
         }, function (err) {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     server.del('/meeting/:mid/attendee/:username/confirm', function (req, res, next) {
 
         if (req.params.mid === undefined || req.params.username === undefined ) {
-            return res.send(500, { error: 'no mid or username' });
+            res.send(500, { error: 'no mid or username' });
+            return next();
         }
 
         meetingService.rejectUserFromMeeting(req.params.mid, req.params.username).then(function (meeting_user) {
             res.send(meeting_user);
+            return next();
         }, function (err) {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     function confirmAttendee(meeting, user) {
@@ -324,20 +334,22 @@ module.exports = function (server, config, production_mode) {
 
     server.post('/meeting/:mid/image', function (req, res, next) {
         if (!req.params.mid) {
-            return res.send(500, { error: 'No mid' });
+            res.send(500, { error: 'No mid' });
+            return next();
         }
 
         if (!req.params.data) {
-            return res.send(500, { error: 'No image' });
+            res.send(500, { error: 'No image' });
+            return next();
         }
 
         imageService.save(req.params.mid, req.params.data, config.meetingImageFolder).then(function () {
             res.send(req.params.data);
+            return next();
         }).catch(function (err) {
             console.log(err);
             res.send(500, { error: 'Image could not be saved.' });
+            return next();
         });
-
-        return next();
     });
 }

@@ -7,7 +7,8 @@ module.exports = function (server, config, production_mode) {
 
         userService.getUserByUsername(req.params.username).then(function (user) {
             if (!user) {
-                return res.send(404, { error: "No user found" });
+                res.send(404, { error: "No user found" });
+                return next();
             }
 
             if (req.params.username !== req.user.uid) {
@@ -17,86 +18,99 @@ module.exports = function (server, config, production_mode) {
             }
 
             res.send(user);
+            return next();
         }, function (err) {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     server.post('/user/:username/image', function (req, res, next) {
         if (!req.params.username) {
-            return res.send(500, { error: 'No username' });
+            res.send(500, { error: 'No username' });
+            return next();
         }
 
         if (!req.params.data) {
-            return res.send(500, { error: 'No image' });
+            res.send(500, { error: 'No image' });
+            return next();
         }
 
         if (req.params.username !== req.user.uid) {
-            return res.send(500, { error: 'Not allowed' });
+            res.send(500, { error: 'Not allowed' });
+            return next();
         }
 
         imageService.save(req.params.username, req.params.data, config.userImageFolder).then(function () {
             res.send(req.params.data);
+            return next();
         }).catch(function (err) {
             console.log(err);
             res.send(500, { error: 'Image could not be saved.' });
+            return next();
         });
-
-        return next();
     });
 
     server.put('/user/:username/settings', function (req, res, next) {
         if (!req.params.username) {
-            return res.send(500, { error: 'No username' });
+            res.send(500, { error: 'No username' });
+            return next();
         }
 
         if (req.params.username !== req.user.uid) {
-            return res.send(500, { error: 'Not allowed' });
+            res.send(500, { error: 'Not allowed' });
+            return next();
         }
 
-        userService.saveSettings(req.user.uid, req.params).then(function (user) {
+        userService.saveSettings(req.user.uid, req.body).then(function (user) {
             res.send(user);
+            return next();
         }, function (err) {
             console.log(err);
             res.send(500, { error: 'Settings could not be saved.' });
+            return next();
         });
     });
 
     server.put('/user/:username/additional_info', function (req, res, next) {
         if (!req.params.username) {
-            return res.send(500, { error: 'No username' });
+            res.send(500, { error: 'No username' });
+            return next();
         }
 
         if (req.params.username !== req.user.uid) {
-            return res.send(500, { error: 'Not allowed' });
+            res.send(500, { error: 'Not allowed' });
+            return next();
         }
 
-        userService.saveAdditionalInfo(req.user.uid, req.params).then(function (user) {
+        userService.saveAdditionalInfo(req.user.uid, req.body).then(function (user) {
             res.send(user);
+            return next();
         }, function (err) {
             console.log(err);
             res.send(500, { error: 'Info could not be saved.' });
+            return next();
         });
     });
 
     server.del('/user/:username/image', function (req, res, next) {
         if (!req.params.username) {
-            return res.send(500, { error: 'No username' });
+            res.send(500, { error: 'No username' });
+            return next();
         }
 
         if (req.params.username !== req.user.uid) {
-            return res.send(500, { error: 'Not allowed' });
+            res.send(500, { error: 'Not allowed' });
+            return next();
         }
 
         imageService.delete(req.params.username, config.userImageFolder).then(function () {
             res.send(true);
+            return next();
         }).catch(function (err) {
             console.log(err);
             res.send(500, { error: 'Image could not be deleted.' });
+            return next();
         });
-
-        return next();
     });
 }

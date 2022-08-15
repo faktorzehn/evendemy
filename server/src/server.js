@@ -1,8 +1,6 @@
 var restify = require('restify');
 var mongoose = require('mongoose');
 var fs = require('fs');
-var corsMiddleware = require('restify-cors-middleware');
-var autoIncrement = require('mongoose-auto-increment');
 var config = require('./config');
 var auth = require('./plugins/auth.js');
 
@@ -24,14 +22,8 @@ try {
 var mailConfig = require('./assets/mail.json');
 config.mail.config = mailConfig;
 
-//set cors
-var cors = corsMiddleware({
-	allowHeaders: ['Authorization']
-});
-
 //init mongo db
-var db = mongoose.connect(config.db.url);
-autoIncrement.initialize(db);
+mongoose.connect(config.db.url);
 
 //config for restify server
 var serverconfig = config.serverconfig;
@@ -47,20 +39,25 @@ if (serverconfig.keyPath) {
 }
 var server = restify.createServer(serverObj);
 
-server.pre(cors.preflight);
-server.use(cors.actual);
-server.use(restify.acceptParser(server.acceptable));
-server.use(restify.queryParser());
-server.use(restify.bodyParser({ "mapFiles": true }));
-server.use(restify.authorizationParser());
-server.use(auth(config));
-server.use(function (req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Headers', '*');
-	res.setHeader('Access-Control-Allow-Credentials', true);
+server.pre((req, res, next) => {
 
-	next();
+  res.header('Access-Control-Allow-Origin', req.header('origin'));
+  res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
+
+  if(req.method === 'OPTIONS')
+      return res.send(204);
+
+  next();
+
 });
+
+server.use(restify.plugins.acceptParser(server.acceptable));
+server.use(restify.plugins.queryParser());
+server.use(restify.plugins.bodyParser({ "mapFiles": true }));
+server.use(restify.plugins.authorizationParser());
+server.use(auth(config));
 
 server.listen(40274, function () {
 	console.log('Server started @ 40274');

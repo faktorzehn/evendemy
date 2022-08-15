@@ -4,13 +4,13 @@ module.exports = function (server, config, production_mode) {
     var userService = require('../services/userService');
 
     server.get('/meetings', function (req, res, next) {
-        meetingService.getMeetings(req.params).then(function (meetings) {
+        meetingService.getMeetings(req.query).then(function (meetings) {
             res.send(meetings);
+            return next();
         }, function (err) {
-            return res.send(500, { error: err });
+            res.send(500, { error: err });
+            return next();
         });
-
-        return next();
     });
 
     server.get('/meetings/attending/confirmed/:username', function (req, res, next) {
@@ -30,7 +30,7 @@ module.exports = function (server, config, production_mode) {
             .catch( err => res.send(500, { error: err })); 
         } else {
             res.send(500, { error: 'no username specified' });
-            return;
+            return next();
         }
     });
 
@@ -51,7 +51,7 @@ module.exports = function (server, config, production_mode) {
             .catch( err => res.send(500, { error: err })); 
         } else {
             res.send(500, { error: 'no username specified' });
-            return;
+            return next();
         }
     });
 
@@ -72,7 +72,7 @@ module.exports = function (server, config, production_mode) {
             .catch( err => res.send(500, { error: err })); 
         } else {
             res.send(500, { error: 'no username specified' });
-            return;
+            return next();
         }
     });
 

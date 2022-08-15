@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-var autoIncrement = require('mongoose-auto-increment');
+const IdentityCounters = require('./identitycounters');
 
 const UserSchema = mongoose.Schema({
+    _id: { type: Number, required: true, unique: true},
     username: {type: String, required: true, unique: true},
     firstname: {type: String, default: ''},
     lastname: {type: String, default: ''},
@@ -21,6 +22,6 @@ const UserSchema = mongoose.Schema({
     }
 });
 
-UserSchema.plugin(autoIncrement.plugin, 'User');
+IdentityCounters.createIndex(UserSchema, 'User', '_id');
 const User = mongoose.model('User', UserSchema);
 module.exports = User; 

@@ -116,6 +116,10 @@ export class UserInfoComponent implements OnInit {
   public editorChanged(text: string){
     this.editorContent = text;
     this.user.additional_info.description = this.editorContent;
+    this.saveAdditionalInfo();
+  }
+
+  public saveAdditionalInfo() {
     this.userService
       .updateAdditionalInfo(this.authService.getLoggedInUsername(), this.user.additional_info)
       .subscribe(o => {});
