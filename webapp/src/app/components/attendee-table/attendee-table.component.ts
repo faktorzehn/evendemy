@@ -7,7 +7,7 @@ import { User } from '../../model/user';
   templateUrl: './attendee-table.component.html',
   styleUrls: ['./attendee-table.component.scss']
 })
-export class AttendeeTableComponent implements OnInit {
+export class AttendeeTableComponent {
 
   @Input() attendees: MeetingUser[] = [];
   @Input() users: User[] = [];
@@ -17,9 +17,6 @@ export class AttendeeTableComponent implements OnInit {
   @Output() tookPartClicked = new EventEmitter<MeetingUser>();
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   getUser(username: string) {
     const res = this.users.find( user => user.username === username);

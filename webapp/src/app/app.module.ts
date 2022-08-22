@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+// import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 // import { TagInputModule } from 'ngx-chips';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
@@ -46,6 +46,7 @@ import { UsersService } from './services/users.service';
 import { MeetingAttendeeStatusComponent } from './components/attendee-status/meeting-attendee-status/meeting-attendee-status.component';
 import { IdeaAttendeeStatusComponent } from './components/attendee-status/idea-attendee-status/idea-attendee-status.component';
 import { ConfigService } from './services/config.service';
+import { TagInputModule } from 'ngx-chips';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -105,9 +106,9 @@ const appRoutes: Routes = [
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
-    NgxDatatableModule,
+    // NgxDatatableModule,
     ImageCropperModule,
-    // TagInputModule
+    TagInputModule
   ],
   providers: [
     LoggedInGuardService,

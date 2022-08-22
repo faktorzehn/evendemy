@@ -26,10 +26,10 @@ export class UserImageComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.username) {
+  ngOnChanges({username}: SimpleChanges) {
+    if (username && username.currentValue) {
       this.userService
-        .getUserByUsername(changes.username.currentValue)
+        .getUserByUsername(username.currentValue)
         .subscribe((u: User) => (this.user = u));
     }
   }
