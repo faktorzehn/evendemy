@@ -1,0 +1,49 @@
+:host {
+    background-color: #2c8872;
+    color: white;
+    width: 200px;
+    bottom: 0;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #37bc9b;
+
+        a {
+            font-size: 18px;
+            padding: 15px;
+            flex-grow: 1;
+            color: #26816a;
+            &:hover {
+                background-color: #31a084;
+                color: white;
+            }
+        }
+
+        fa-icon {
+            padding: 18px;
+            color: #26816a;
+
+            &:hover {
+                background-color: #31a084;
+                color: white;
+            }
+        }
+    }
+
+    .menu-link {
+        padding: 15px;
+        color: white;
+        border-bottom: 2px solid #226b59;
+
+        &:hover {
+            background-color: #247260;
+        }
+    }
+}

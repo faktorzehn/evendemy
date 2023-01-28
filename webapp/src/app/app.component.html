@@ -1,2 +1,5 @@
+<evendemy-sidebar id="sidebar" (byClick)="onMenuClick()"></evendemy-sidebar>
+<div class="sidebar-background" *ngIf="showSidebar" (click)="onMenuClick()"></div>
+<evendemy-navbar *ngIf="showNavbar" (byMenuClick)="onMenuClick()"></evendemy-navbar>
 <router-outlet></router-outlet>
 <evendemy-footer></evendemy-footer>

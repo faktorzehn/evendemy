@@ -7,7 +7,7 @@ describe('ErrorComponent', () => {
   let component: ErrorComponent;
   let fixture: ComponentFixture<ErrorComponent>;
 
-  @Component({selector: 'evendemy-menu', template: ''})
+  @Component({selector: 'evendemy-navbar', template: ''})
   class EvendemyMenuStubComponent {
   }
 

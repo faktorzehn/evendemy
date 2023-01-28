@@ -24,7 +24,7 @@ describe('EventsOrCoursesComponent', () => {
   let activatedRoute;
   let routerSpy;
 
-  @Component({selector: 'evendemy-menu', template: ''})
+  @Component({selector: 'evendemy-navbar', template: ''})
   class EvendemyMenuStubComponent {
   }
 

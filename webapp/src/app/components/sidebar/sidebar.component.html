@@ -1,0 +1,9 @@
+<nav class="sidebar">
+    <div class="header">
+        <a class="logo" routerLink="/meetings" (click)="byClick.emit()">Evendemy</a>
+        <fa-icon class="burger-menu" [icon]="'angle-left'" (click)="byClick.emit()"></fa-icon>
+    </div>
+    <a class="menu-link" routerLink="/meetings" routerLinkActive="active" (click)="byClick.emit()">Meetings</a>
+    <a class="menu-link" routerLink="/ideas" routerLinkActive="active" (click)="byClick.emit()">Ideas</a>
+    <a class="menu-link" routerLink="/users" routerLinkActive="active" (click)="byClick.emit()">Users</a>
+  </nav>

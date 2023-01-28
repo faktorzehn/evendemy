@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuComponent } from './menu.component';
+import { NavbarComponent } from './navbar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -10,9 +10,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Component, Input } from '@angular/core';
 import { UserService } from '../../services/user.service';
 
-describe('MenuComponent', () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
+describe('NavbarComponent', () => {
+  let component: NavbarComponent;
+  let fixture: ComponentFixture<NavbarComponent>;
   let authService;
 
   beforeEach(async(() => {
@@ -33,7 +33,7 @@ describe('MenuComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([])
       ],
-      declarations: [MenuComponent, UserImageStubComponent],
+      declarations: [NavbarComponent, UserImageStubComponent],
       providers: [
         {provide: ActivatedRoute, useValue: { params: of({type: 'course'})}},
         {provide: UserService, useValue: userServiceMock},
@@ -45,7 +45,7 @@ describe('MenuComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuComponent);
+    fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

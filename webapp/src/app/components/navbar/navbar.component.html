@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <div class="left">
+    <fa-icon class="burger-menu" [icon]="'bars'" (click)="onBurgerMenuClick()"></fa-icon>
+    <a class="logo" routerLink="/meetings">Evendemy</a>
+    <div class="page-links">
+      <a routerLink="/meetings" routerLinkActive="active">Meetings</a>
+      <a routerLink="/ideas" routerLinkActive="active">Ideas</a>
+      <a routerLink="/users" routerLinkActive="active">Users</a>
+    </div>
+  </div>
+  <div class="profile-menu" (click)="popupMenuIsOpen = !popupMenuIsOpen">
+    <div class="name">{{user?.firstname}} {{user?.lastname}}</div>
+    <evendemy-user-image class="menu-user-image" [username]="user?.username" width="30" height="30"></evendemy-user-image>
+    <span class="caret"></span>
+    <div class="popup-menu" *ngIf="popupMenuIsOpen">
+        <a routerLink="/user-info">Account</a>
+        <a routerLink="/login" (click)="onLogout()">Log out</a>
+    </div>
+  </div>
+</nav>

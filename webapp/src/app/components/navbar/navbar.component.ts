@@ -1,17 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, Event} from '@angular/router';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { User } from '../../model/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'evendemy-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  selector: 'evendemy-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.scss']
 })
-export class MenuComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit, OnDestroy {
+
+  @Output() byMenuClick: EventEmitter<void> = new EventEmitter();
+
   sub: any;
   user: User;
+  popupMenuIsOpen = false;
 
   constructor(private userService: UserService, private authService: AuthenticationService) { }
 
@@ -27,5 +30,9 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logoutUser();
+  }
+
+  onBurgerMenuClick() {
+    this.byMenuClick.emit();
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -6,7 +6,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-// import { TagInputModule } from 'ngx-chips';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { AppComponent } from './app.component';
@@ -20,7 +19,7 @@ import { EditorComponent } from './components/editor/editor.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
 import { MeetingListComponent } from './components/meeting-list/meeting-list.component';
-import { MenuComponent } from './components/menu/menu.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { PageComponent } from './components/page/page.component';
 import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 import { TagComponent } from './components/tag/tag.component';
@@ -47,6 +46,10 @@ import { MeetingAttendeeStatusComponent } from './components/attendee-status/mee
 import { IdeaAttendeeStatusComponent } from './components/attendee-status/idea-attendee-status/idea-attendee-status.component';
 import { ConfigService } from './services/config.service';
 import { TagInputModule } from 'ngx-chips';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faAngleLeft, faBars } from '@fortawesome/free-solid-svg-icons';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -66,7 +69,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent,
+    NavbarComponent,
     UserInfoComponent,
     LoginComponent,
     MeetingComponent,
@@ -90,7 +93,8 @@ const appRoutes: Routes = [
     TagComponent,
     BreadcrumpComponent,
     MeetingAttendeeStatusComponent,
-    IdeaAttendeeStatusComponent
+    IdeaAttendeeStatusComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -108,7 +112,8 @@ const appRoutes: Routes = [
     }),
     // NgxDatatableModule,
     ImageCropperModule,
-    TagInputModule
+    TagInputModule,
+    FontAwesomeModule
   ],
   providers: [
     LoggedInGuardService,
@@ -123,4 +128,9 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faBars);
+    library.addIcons(faAngleLeft);
+  }
+}
