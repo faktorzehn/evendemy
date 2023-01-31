@@ -106,7 +106,7 @@ module.exports = function (server, config, production_mode) {
 
         if (req.params.mid !== undefined) {
             meetingService.getMeeting(req.params.mid).then(function(oldMeeting){
-                meetingService.updateMeeting(req.params.mid, req.params).then(function (meeting) {
+                meetingService.updateMeeting(req.params.mid, req.body).then(function (meeting) {
                     var diffResult = diffService.diff(oldMeeting.toJSON(), meeting.toJSON());
                     if(diffResult['startTime']!= null || diffResult['endTime'] || diffResult['date']){
                         //something important changed

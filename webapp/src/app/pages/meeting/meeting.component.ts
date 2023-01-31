@@ -236,21 +236,24 @@ export class MeetingComponent implements OnInit, OnDestroy {
     }
   }
 
-  setDataAtMeeting() {
-    this.meeting.title = this.title.value;
-    this.meeting.shortDescription = this.shortDescription.value;
-    this.meeting.courseOrEvent = this.courseOrEvent.value;
-    this.meeting.description = this.editorContent;
-    this.meeting.date = MeetingUtil.stringToDate(this.date.value);
-    this.meeting.startTime = this.startTime.value;
-    this.meeting.endTime = this.endTime.value;
-    this.meeting.location = this.location.value;
-    this.meeting.costCenter = this.costCenter.value;
+  createMeetingObject(): Meeting {
+    var meeting = new Meeting();
+    meeting.mid = this.meeting.mid;
+    meeting.title = this.title.value;
+    meeting.shortDescription = this.shortDescription.value;
+    meeting.courseOrEvent = this.courseOrEvent.value;
+    meeting.description = this.editorContent;
+    meeting.date = MeetingUtil.stringToDate(this.date.value);
+    meeting.startTime = this.startTime.value;
+    meeting.endTime = this.endTime.value;
+    meeting.location = this.location.value;
+    meeting.costCenter = this.costCenter.value;
+    return meeting;
   }
 
   createMeeting() {
-    this.setDataAtMeeting();
-    this.meetingService.createMeeting(this.meeting).pipe(first()).subscribe((result: Meeting) => {
+    var meeting = this.createMeetingObject();
+    this.meetingService.createMeeting(meeting).pipe(first()).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
       this.navigateBack();
@@ -259,8 +262,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   updateMeeting() {
     this.uploadImage(this.meeting.mid);
-    this.setDataAtMeeting();
-    this.meetingService.updateMeeting(this.meeting).pipe(first()).subscribe((result) => {
+    var meeting = this.createMeetingObject();
+    this.meetingService.updateMeeting(meeting).pipe(first()).subscribe((result) => {
       this.navigateBack();
     });
   }
