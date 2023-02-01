@@ -33,7 +33,6 @@ import { UserInfoComponent } from './pages/user-info/user-info.component';
 import { UsersComponent } from './pages/users/users.component';
 import { NamePipe } from './pipes/name.pipe';
 import { meetingsReducer } from './reducers/meetings.reducer';
-import { selectMeetingReducer } from './reducers/selectMeeting.reducer';
 import { usersReducer } from './reducers/users.reducer';
 import { AuthenticationService } from './services/authentication.service';
 import { LoggedInGuardService } from './services/logged-in-guard.service';
@@ -104,7 +103,6 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     StoreModule.forRoot({
       meetings: meetingsReducer,
-      selectMeeting: selectMeetingReducer,
       users: usersReducer
     }),
     StoreDevtoolsModule.instrument({

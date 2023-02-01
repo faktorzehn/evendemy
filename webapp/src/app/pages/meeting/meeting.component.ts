@@ -78,7 +78,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       costCenter: ''
     });
 
-    this.subscribe = combineLatest(this.route.url, this.route.params).subscribe(([url, params]) => {
+    this.subscribe = combineLatest([this.route.url, this.route.params]).subscribe(([url, params]) => {
       const mid = params['mid'];
       const isIdea = url[0].toString() === 'idea';
 
@@ -86,26 +86,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
         this.initForExistingMeeting(mid);
       } else {
         this.initForCreation(isIdea);
-      }
-    });
-
-    this.store.select('selectMeeting').subscribe(res => {
-      if (res) {
-        this.meeting = res;
-        this.formGroup.patchValue({
-          title: res.title,
-          shortDescription: res.shortDescription,
-          courseOrEvent: res.courseOrEvent,
-          date: MeetingUtil.dateToString(res.date),
-          startTime: res.startTime,
-          endTime: res.endTime,
-          location: res.location,
-          costCenter: res.costCenter});
-        this.updateValidators(res);
-        this.steps = [
-          {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
-          {title: this.isNew ? 'new' : this.meeting.title }
-        ];
       }
     });
 
@@ -117,7 +97,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.meetingService.unloadMeeting();
     this.subscribe.unsubscribe();
   }
 
@@ -184,15 +163,18 @@ export class MeetingComponent implements OnInit, OnDestroy {
   private initForCreation(isIdea) {
     this.isNew = true;
 
-    const meeting = new Meeting();
+    this.meeting = new Meeting();
     this.courseOrEvent.patchValue('event');
-    meeting.numberOfAllowedExternals = 0;
-    meeting.isIdea = isIdea;
-    this.meetingService.selectMeeting(meeting);
+    this.meeting.numberOfAllowedExternals = 0;
+    this.meeting.isIdea = isIdea;
 
     this.isEditable = true;
-    this.editorContent = ''
+    this.editorContent = '';
 
+    this.steps = [
+      {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
+      {title: 'new'}
+    ];
   }
 
   public editorChanged(text: string){
@@ -207,10 +189,26 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   loadMeeting(mid) {
-    this.meetingService.getMeetingAndSelect(mid).subscribe((result) => {
+    this.meetingService.getMeeting(mid).pipe(first()).subscribe((meeting) => {
+      this.meeting = meeting;
       this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
       this.editorContent = this.meeting.description;
       this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
+    
+      this.formGroup.patchValue({
+        title: this.meeting.title,
+        shortDescription: this.meeting.shortDescription,
+        courseOrEvent: this.meeting.courseOrEvent,
+        date: MeetingUtil.dateToString(this.meeting.date),
+        startTime: this.meeting.startTime,
+        endTime: this.meeting.endTime,
+        location: this.meeting.location,
+        costCenter: this.meeting.costCenter});
+
+      this.steps = [
+        {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
+        {title: this.meeting.title }
+      ];
     });
   }
 
@@ -302,25 +300,21 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onCopy() {
-    const meeting = this.createCopy();
+    this.meeting = this.createCopy();
     this.potentialAttendees = [];
     this.isNew = true;
     this.userHasAccepted = false;
     this.userHasFinished = false;
-
-    this.meetingService.selectMeeting(meeting);
   }
 
   onMakeAMeeting() {
-    const meeting = this.createCopy();
-    meeting.isIdea = false;
+    this. meeting = this.createCopy();
+    this.meeting.isIdea = false;
 
     this.potentialAttendees = [];
     this.isNew = true;
     this.userHasAccepted = false;
     this.userHasFinished = false;
-
-    this.meetingService.selectMeeting(meeting);
   }
 
   onAcceptMeeting(external) {
@@ -360,7 +354,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onAddComment(comment: Comment) {
-    this.meetingService.addComment(this.meeting.mid, comment).pipe(first()).subscribe((result) => {});
+    this.meetingService.addComment(this.meeting.mid, comment).pipe(first()).subscribe((meeting) => {
+      this.meeting.comments = meeting.comments;
+    });
   }
 
   downloadCSV() {

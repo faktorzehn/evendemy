@@ -5,7 +5,6 @@ import { Comment } from '../model/comment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../appState';
 import { AddMeeting, RemoveMeeting, UpdateMeeting } from '../actions/meetings.actions';
-import { SelectMeeting, UnselectMeeting, UpdateComments } from '../actions/selectMeeting.actions';
 import { HttpClient, } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { MeetingUser } from '../model/meeting_user';
@@ -45,9 +44,7 @@ export class MeetingService extends BaseService {
     public addComment(mid: number, comment: Comment) {
       const headers = this.createHeaders();
       const url = this.url + '/meeting/' + mid + '/comment';
-      return this.http.post(url, comment, {headers: headers}).pipe(tap( (res: any) => {
-          this.store.dispatch(new UpdateComments({mid: mid, comments: res.comments}));
-        }), first());
+      return this.http.post<Meeting>(url, comment, {headers: headers});
     }
 
     public getCalendar(mid: number) {
@@ -65,21 +62,7 @@ export class MeetingService extends BaseService {
     public getMeeting(mid: number) {
       const headers = this.createHeaders();
       const url = this.url + '/meeting/' + mid;
-      return this.http.get(url, {headers: headers});
-    }
-
-    public getMeetingAndSelect(mid: number) {
-      return this.getMeeting(mid).pipe(tap((res: Meeting) => {
-        this.selectMeeting(res);
-      }), first());
-    }
-
-    public selectMeeting(meeting: Meeting) {
-        this.store.dispatch(new SelectMeeting(meeting));
-    }
-
-    public unloadMeeting() {
-        this.store.dispatch(new UnselectMeeting());
+      return this.http.get<Meeting>(url, {headers: headers});
     }
 
     public attendMeeting(mid: number, username: String, external: String) {
