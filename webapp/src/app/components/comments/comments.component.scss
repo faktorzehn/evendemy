@@ -1,49 +1,67 @@
-.comment-message{
-  position: relative;
-  width: 100%;
-  margin-top: 5px;
-}
-.comment-message-body{
-  white-space: pre-wrap;
-  background-color:#dadada;
-  width: 100%;
-  padding: 10px;
-  margin-left: 13px;
-}
+.comments {
 
-.comment-message-arrow {
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  background: transparent;
-  border: 7px solid #dadada;
-  top: 0px;
-  border-left-color: transparent;
-  border-bottom-color: transparent;
-}
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
-.comment-message-date {
-  text-align: right;
-  font-size: x-small;
-  color: #7a7a7a;
-  margin-top: 3px;
-  position: relative;
-  right: -10px;
-}
+    .comment {
+      display: flex;
 
-.comment-header{
-  text-align: center;
-  flex-basis: 120px;
-}
+      .user{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 10rem;
 
-.comment-row{
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-}
+        .name {
+          color: black;
+          text-align: center;
+        }
+      }
 
-.commentbox{
-  margin-top: 10px;
-  margin-bottom: 10px;
-  height: 100px;
+      .message {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .body {
+          background-color: hsl(0, 0%, 93%);
+          border-radius: 7px;
+          padding: 1.5rem;
+          position: relative;
+        }
+
+        .body:after {
+          content: " ";
+          position: absolute;
+          left: -8px;
+          top: 8px;
+          border-top: 8px solid transparent;
+          border-right: 8px solid hsl(0, 0%, 93%);
+          border-left: none;
+          border-bottom: 8px solid transparent;
+        }
+
+        .date {
+          text-align: right;
+          color: hsl(0, 0%, 88%);
+        }
+      }
+    }
+  }
+
+  .edit {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+
+    .button-container {
+      margin: 1rem 0;
+
+      button {
+        float: right;
+      }
+    }
+  }
 }

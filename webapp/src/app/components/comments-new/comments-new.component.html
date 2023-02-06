@@ -1,0 +1,21 @@
+<div class="comments">
+  <div class="list">
+    <div class="comment" *ngFor="let comment of comments">
+      <div class="header">
+        <evendemy-user-image [user]="getUser(comment.author)" width="20" height="20"></evendemy-user-image>
+        <div class="name" routerLink="/user-info/{{comment.author}}">{{getUser(comment.author) | name}}</div>
+        &#x2022;
+        <div class="date">{{comment.creationDate | date:'HH:mm dd.MM.yyyy'}}</div>
+      </div>
+      <div class="message">
+        {{comment.text}}
+      </div>
+    </div>
+  </div>
+  <div class="edit">
+    <textarea [(ngModel)]="commentbox" name="commentbox"></textarea>
+    <div class="button-container">
+      <button class="btn btn-info" (click)="onAddComment()">Add Comment</button>
+    </div>
+  </div>
+</div>

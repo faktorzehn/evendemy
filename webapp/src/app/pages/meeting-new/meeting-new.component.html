@@ -1,0 +1,264 @@
+<div class="page">
+  <div class="main">
+    <evendemy-breadcrump [steps]="steps"></evendemy-breadcrump>
+    <div class="content" *ngIf="meeting">
+      <div class="meeting">
+        <form #form="ngForm" [formGroup]="formGroup" name="form">
+          <!--Image-->
+          <div class="meeting-image" *ngIf="!tmpImgData">
+            <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}"
+              onError="this.src='assets/no-image.png'" />
+            <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" data-toggle="modal"
+              data-target="#evendemy-image-upload-dialog">change</button>
+          </div>
+          <div class="meeting-image" *ngIf="tmpImgData">
+            <img [src]="tmpImgData">
+            <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" data-toggle="modal"
+              data-target="#evendemy-image-upload-dialog">change</button>
+          </div>
+          <div class="section section-context-menu" *ngIf="!editMode">
+            <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
+            <evendemy-context-menu *ngIf="contexMenuIsOpen && isEditable">
+              <p (click)="editMode = true">Bearbeiten</p>
+              <p data-toggle="modal" data-target="#confirmDialog">Löschen</p>
+              <p data-toggle="modal" data-target="#copyDialog">Duplizieren</p>
+            </evendemy-context-menu>
+          </div>
+
+          <!--Tools-->
+          <div class="section-edit-bar" *ngIf="editMode">
+            <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()"
+              [disabled]="!form.form.valid">Veröffentlichen</button>
+            <button *ngIf="!isNew && isEditable" class="btn" data-toggle="modal" data-target="#cancelDialog">Abbrechen</button>
+          </div>
+
+          <div class="section section-header">
+            <evendemy-editable-text [editable]="editMode" style="font-size: 3rem; width: 100%; font-weight: 600;" [placeholder]="editMode ? 'Titel' : undefined"
+              formControlName="title"></evendemy-editable-text>
+            <evendemy-editable-text [editable]="editMode" style="font-size: 2rem; width: 100%" [placeholder]="editMode ? 'Untertitel' : undefined"
+              formControlName="shortDescription"></evendemy-editable-text>
+            <div style="margin-top: 2rem">
+              von 
+              <span style="margin-left: 5px;">
+                <evendemy-user-image [username]="meeting.username" [width]="25" [height]="25"></evendemy-user-image>
+                {{meeting.username}}
+              </span>
+            </div>
+            <div class="place">
+              <fa-icon [icon]="'location-dot'"></fa-icon>
+              <evendemy-editable-text [editable]="editMode" [placeholder]="editMode ? 'Ort' : undefined"
+                formControlName="location"></evendemy-editable-text>
+            </div>
+            <div class="time">
+              <fa-icon [icon]="'calendar'"></fa-icon>
+              <evendemy-editable-text [editable]="editMode" class="date" [placeholder]="editMode ? 'dd.MM.yyyy' : undefined"
+                formControlName="date"></evendemy-editable-text>
+              <evendemy-editable-text [editable]="editMode" class="start-time" [placeholder]="editMode ? 'mm:hh' : undefined"
+                formControlName="startTime"></evendemy-editable-text>
+              bis
+              <evendemy-editable-text [editable]="editMode" class="end-time" [placeholder]="editMode ? 'mm:hh' : undefined"
+                formControlName="endTime"></evendemy-editable-text>
+            </div>
+          </div>
+
+          <div class="section section-description">
+            <h6>Details</h6>
+            <evendemy-editable-input [editable]="editMode" [value]="editorContent" [placeholder]="'Beschreibung'">
+              <evendemy-editor [value]="meeting?.description" (change)="editorChanged($event)" [editable]="true"></evendemy-editor>
+            </evendemy-editable-input>
+          </div>
+
+          <div class="section section-more">
+            <h6>Weitere Informationen</h6>
+            <div class="more-field">
+              <div>Typ</div>
+              <evendemy-editable-input [editable]="editMode" class="courseOrEvent" [placeholder]="editMode ? 'Kurs oder Event' : undefined" [value]="formGroup.get('courseOrEvent')?.value === 'course' ? 'Kurs' : 'Event'">
+                <select formControlName="courseOrEvent" class="selectBox">
+                  <option value="course">Kurs</option>
+                  <option value="event">Event</option>
+                </select>
+              </evendemy-editable-input>
+            </div>
+            <div class="more-field">
+              <div>Tags</div>
+              <evendemy-editable-input [editable]="editMode" [placeholder]="'Tags'" [value]="tags">
+                <tag-input [(ngModel)]="tags" [ngModelOptions]="{standalone: true}" name="tag"
+                [removable]="isEditable" [modelAsStrings]="true" (onSelect)="onTagSelect($event)"
+                (onAdd)="onAddingTag($event)">
+                <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
+                </tag-input-dropdown>
+              </tag-input>
+              </evendemy-editable-input>
+            </div>
+            <div class="more-field">
+              <div>In der Freizeit</div>
+              <evendemy-editable-input [editable]="editMode" class="isFreetime" [placeholder]="editMode ? 'In der Freizeit?' : undefined" [value]="formGroup.get('isFreetime')?.value === 'true' ? 'Ja' : 'Nein'">
+                <select formControlName="isFreetime" class="selectBox">
+                  <option [value]="true">Ja</option>
+                  <option [value]="false">Nein</option>
+                </select>
+              </evendemy-editable-input>
+            </div>
+            <div class="more-field">
+              <div>Kostenstelle</div>
+              <evendemy-editable-text [editable]="editMode" class="costcenter" [placeholder]="editMode ? 'Kostenstelle' : undefined"
+                formControlName="costCenter"></evendemy-editable-text>
+            </div>
+            <div class="more-field">
+              <div>Externe erlaubt</div>
+              <evendemy-editable-input [editable]="editMode" class="externalsAreAllowed" [placeholder]="editMode ? 'Sind externe erlaubt?' : undefined" [value]="formGroup.get('numberOfAllowedExternals')?.value === '1' ? 'Ja' : 'Nein'">
+                <select formControlName="numberOfAllowedExternals" class="selectBox">
+                  <option value="1">Ja</option>
+                  <option value="0">Nein</option>
+                </select>
+              </evendemy-editable-input>
+            </div>
+            <div class="more-field">
+              <div>Erstellt am</div>
+              <div *ngIf="meeting?.creationDate" class="not-editbale-field">{{meeting.creationDate | date:'dd.MM.yyyy'}}</div>
+            </div>
+            <div class="more-field">
+              <div>Zuletzt aktualisiert</div>
+              <div *ngIf="meeting?.lastUpdateDate" class="not-editbale-field">{{meeting.lastUpdateDate | date:'dd.MM.yyyy'}}</div>
+            </div>
+          </div>
+
+          <!-- Todo zu entfernen-->
+          <div *ngIf="false">
+            <div class="row form-row">
+              <div class="col-md-4">Tags</div>
+              <div class="col-md-8" *ngIf="isEditable">
+                <tag-input [(ngModel)]="meeting.tags" [ngModelOptions]="{standalone: true}" name="tag"
+                  [removable]="isEditable" [modelAsStrings]="true" (onSelect)="onTagSelect($event)"
+                  (onAdd)="onAddingTag($event)">
+                  <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
+                  </tag-input-dropdown>
+                </tag-input>
+              </div>
+              <div class="col-md-8" *ngIf="!isEditable">
+                <a [routerLink]="['/meetings']" [queryParams]="{tags: tag}" style="display: inline-block;"
+                  *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+        <!--Attenees-List-->
+        <div class="section section-attendee-list" *ngIf="!isNew">
+          <div class="attendee-list-header">
+            <h5>{{numberOfParticipants()}} Participants</h5>
+            <div class="attendee-actions">
+              <a class="meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
+              <a [ngClass]="{'not-active-link': listView}" (click)="listView = false"><i
+                  class="fa fa-th-large fa-lg"></i></a>
+              <a [ngClass]="{'not-active-link': !listView}" (click)="listView = true"><i
+                  class="fa fa-list fa-lg"></i></a>
+            </div>
+          </div>
+          <div *ngIf="!listView">
+            <div style="display: flex; flex-wrap: wrap;">
+              <div *ngFor="let attendee of potentialAttendees; trackBy: attendee?.username">
+                <evendemy-attendee-card [additionalAttendee]="attendee.externals[0]" [tookPart]="attendee.tookPart"
+                  [username]="attendee.username"
+                  [firstname]="attendee.firstname"
+                  [lastname]="attendee.lastname"
+                  [showTakePartButton]="isEditable && !attendee.tookPart && meeting.startTime && meeting.endTime && !meeting.isIdea"
+                  [showRemoveButton]="isEditable && !attendee.tookPart"
+                  [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()" [small]="!isEditable"
+                  (tookPartClicked)="onHasTakenPart($event)" (removeAttendee)="onRemoveAttendee($event)">
+                </evendemy-attendee-card>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="listView">
+            <evendemy-attendee-table [showTakePartButton]="!meeting.isIdea" [attendees]="potentialAttendees"
+              [editable]="editMode" [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()"
+              (tookPartClicked)="onHasTakenPart($event)"></evendemy-attendee-table>
+          </div>
+        </div>
+
+        <div class="section" *ngIf="!isNew && meeting.isIdea">
+          <evendemy-idea-attendee-status [meeting]="meeting" [status]="getStatus()" (acceptMeeting)="onAcceptMeeting()"
+            (rejectMeeting)="onRejectMeeting()" (calendar)="onGetCalendar()">
+          </evendemy-idea-attendee-status>
+        </div>
+
+        <div class="section" *ngIf="!isNew && !meeting.isIdea">
+          <evendemy-meeting-attendee-status [meeting]="meeting" [status]="getStatus()"
+            (acceptMeeting)="onAcceptMeeting()" (rejectMeeting)="onRejectMeeting()" (calendar)="onGetCalendar()">
+          </evendemy-meeting-attendee-status>
+        </div>
+
+
+        <div *ngIf="isInThePast()">
+          <p class="meeting-participants-info" *ngIf="hasEveryoneTookPart()">
+            <i class="fa fa-info-circle fa-lg"></i> {{getAttendedNumber()}} took part.
+          </p>
+          <p class="meeting-participants-info" *ngIf="!hasEveryoneTookPart()">
+            <i class="fa fa-info-circle fa-lg"></i> {{getAttendedNumber()}} took part and {{getNotAttendedNumber()}}
+            didn´t showed up.
+          </p>
+        </div>
+
+        <!--COMMENTS-->
+        <div class="section section-comments" *ngIf="!isNew">
+          <h5 id="comments">Comments</h5>
+          <evendemy-comments-new [comments]="meeting.comments" (addComment)="onAddComment($event)"></evendemy-comments-new>
+        </div>
+
+        <evendemy-confirm-dialog title="Do you really want to cancel?" (confirm)="onCancel()"
+        dialogID="cancelDialog">
+          All your changed date will be lost.
+          <br />
+          <br /> Do you really want to cancel?
+        </evendemy-confirm-dialog>
+
+        <evendemy-confirm-dialog title="Do you really want to delete?" (confirm)="onDeleteMeeting()"
+          dialogID="confirmDialog">
+          You can not revert this action. The attendees will be informed that the meeting will not take place.
+          <br />
+          <br /> Do you really want to delete this meeting?
+        </evendemy-confirm-dialog>
+
+        <evendemy-confirm-dialog title="Do you really want to copy this meeting?" (confirm)="onCopy()"
+          dialogID="copyDialog">
+          With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
+          <br />
+          <br /> Do you really want to create this meeting?
+        </evendemy-confirm-dialog>
+
+        <evendemy-confirm-dialog title="Do you really want to make a meeting of your idea?" (confirm)="onMakeAMeeting()"
+          dialogID="copyToMeetingDialog">
+          With this action you will create a meeting of your idea! You can edit things before saving. Your image will
+          not be
+          copied!
+          <br />
+          <br /> Do you really want to copy this meeting?
+        </evendemy-confirm-dialog>
+
+        <evendemy-image-upload-dialog (data)="setTemporaryImage($event)"></evendemy-image-upload-dialog>
+
+      </div>
+      <div class="attend-info" *ngIf="!isNew">
+        <div class="not-attending" *ngIf="getStatus() === 'NOT_ATTENDING'">
+          <i class="fa fa-question fa-lg"></i>
+        </div>
+        <div class="attending" *ngIf="getStatus() === 'ATTENDING'">
+          <evendemy-user-image [username]="authService.getLoggedInUsername()" width="100" height="100"></evendemy-user-image>
+        </div>
+        <button class="btn btn-info" (click)="onAcceptMeeting(null)" *ngIf="getStatus() === 'NOT_ATTENDING'">
+          I want to participate
+        </button>
+
+        <button class="btn btn-danger" (click)="onRejectMeeting()" *ngIf="getStatus() === 'ATTENDING'">
+          I cannot participate anymore
+        </button>
+        <button class="btn btn-info" (click)="onGetCalendar()" [disabled]="!hasValidDateAndTime()" *ngIf="getStatus() === 'ATTENDING'">
+          <i class="fa fa-calendar fa-lg"></i> Calendar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

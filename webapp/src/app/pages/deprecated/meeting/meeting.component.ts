@@ -1,25 +1,24 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
-import { Store } from '@ngrx/store';
 import * as FileSaver from 'file-saver';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
-import { AppState } from '../../appState';
-import { Step } from '../../components/breadcrump/breadcrump.component';
-import { EditorComponent } from '../../components/editor/editor.component';
-import { Comment } from '../../model/comment';
-import { Meeting } from '../../model/meeting';
-import { MeetingUser } from '../../model/meeting_user';
-import { User } from '../../model/user';
-import { AuthenticationService } from '../../services/authentication.service';
-import { MeetingService } from '../../services/meeting.service';
-import { TagsService } from '../../services/tags.service';
+import { Step } from '../../../components/breadcrump/breadcrump.component';
+import { Comment } from '../../../model/comment';
+import { Meeting } from '../../../model/meeting';
+import { MeetingUser } from '../../../model/meeting_user';
+import { User } from '../../../model/user';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { MeetingService } from '../../../services/meeting.service';
+import { TagsService } from '../../../services/tags.service';
 import { MeetingUtil } from './meeting.util';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from '../../services/config.service';
-
+import { ConfigService } from '../../../services/config.service';
+import { BaseComponent } from '../../../components/base/base.component';
+import * as moment from 'moment';
+import { UsersStore } from '../../../core/store/user.store';
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
@@ -35,9 +34,8 @@ export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   templateUrl: './meeting.component.html',
   styleUrls: ['./meeting.component.scss']
 })
-export class MeetingComponent implements OnInit, OnDestroy {
+export class MeetingComponent extends BaseComponent implements OnInit {
   isNew: boolean;
-  subscribe: Subscription;
   meeting: Meeting;
   potentialAttendees: MeetingUser[] = new Array<MeetingUser>();
   isEditable = false;
@@ -45,6 +43,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   userHasFinished = false;
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
+  tags = [];
   allTags = [];
   formGroup: FormGroup;
   steps: Step[] = [];
@@ -57,13 +56,15 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthenticationService,
-     private meetingService: MeetingService,
-     private route: ActivatedRoute,
+    private meetingService: MeetingService,
+    private route: ActivatedRoute,
     private router: Router,
-    private store: Store<AppState>,
+    usersStore: UsersStore,
     private configService: ConfigService<any>,
     private tagsService: TagsService,
     private formBuilder: FormBuilder) {
+      super();
+      usersStore.users().pipe(first()).subscribe(users=>this.users=users);
   }
 
   ngOnInit() {
@@ -78,7 +79,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       costCenter: ''
     });
 
-    this.subscribe = combineLatest([this.route.url, this.route.params]).subscribe(([url, params]) => {
+    this.addSubscription(combineLatest([this.route.url, this.route.params]).subscribe(([url, params]) => {
       const mid = params['mid'];
       const isIdea = url[0].toString() === 'idea';
 
@@ -87,17 +88,11 @@ export class MeetingComponent implements OnInit, OnDestroy {
       } else {
         this.initForCreation(isIdea);
       }
-    });
+    }));
 
-    this.store.select('users').subscribe( res => this.users = res);
-
-    this.tagsService.getAllTags().subscribe((tags: string[]) => {
+    this.addSubscription(this.tagsService.getAllTags().subscribe((tags: string[]) => {
       this.allTags = tags;
-    });
-  }
-
-  ngOnDestroy() {
-    this.subscribe.unsubscribe();
+    }));
   }
 
   updateValidators(meeting) {
@@ -189,7 +184,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   loadMeeting(mid) {
-    this.meetingService.getMeeting(mid).pipe(first()).subscribe((meeting) => {
+    this.addSubscription(this.meetingService.getMeeting(mid).pipe(first()).subscribe((meeting) => {
       this.meeting = meeting;
       this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
       this.editorContent = this.meeting.description;
@@ -199,31 +194,33 @@ export class MeetingComponent implements OnInit, OnDestroy {
         title: this.meeting.title,
         shortDescription: this.meeting.shortDescription,
         courseOrEvent: this.meeting.courseOrEvent,
-        date: MeetingUtil.dateToString(this.meeting.date),
-        startTime: this.meeting.startTime,
-        endTime: this.meeting.endTime,
+        date: MeetingUtil.dateToString(this.meeting.startTime),
+        startTime: MeetingUtil.dateToTimeString(this.meeting.startTime),
+        endTime: MeetingUtil.dateToTimeString(this.meeting.endTime),
         location: this.meeting.location,
         costCenter: this.meeting.costCenter});
+
+      this.tags = meeting.tags;
 
       this.steps = [
         {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
         {title: this.meeting.title }
       ];
-    });
+    }));
   }
 
   loadPotentialAttendees(mid) {
     this.userHasAccepted = false;
     this.userHasFinished = false;
 
-    this.meetingService.getAllAttendingUsers(mid).subscribe((result) => {
+    this.addSubscription(this.meetingService.getAllAttendingUsers(mid).subscribe((result) => {
       this.potentialAttendees = result;
       const attendee = this.potentialAttendees.find(a => a.username === this.authService.getLoggedInUsername());
       if (attendee) {
         this.userHasAccepted = true;
         this.userHasFinished = attendee.tookPart;
       }
-    });
+    }));
   }
 
   onSaveMeeting() {
@@ -241,29 +238,35 @@ export class MeetingComponent implements OnInit, OnDestroy {
     meeting.shortDescription = this.shortDescription.value;
     meeting.courseOrEvent = this.courseOrEvent.value;
     meeting.description = this.editorContent;
-    meeting.date = MeetingUtil.stringToDate(this.date.value);
-    meeting.startTime = this.startTime.value;
-    meeting.endTime = this.endTime.value;
+    var date = MeetingUtil.stringToDate(this.date.value);
+    
+    var startTime = this.startTime.value.split(':');
+    meeting.startTime = moment(date).hours(startTime[0]).minutes(startTime[1]).toDate();
+    
+    var endTime = this.endTime.value.split(':');
+    meeting.endTime = moment(date).hours(endTime[0]).minutes(endTime[1]).toDate();
+
     meeting.location = this.location.value;
     meeting.costCenter = this.costCenter.value;
+    meeting.tags = this.tags;
     return meeting;
   }
 
   createMeeting() {
     var meeting = this.createMeetingObject();
-    this.meetingService.createMeeting(meeting).pipe(first()).subscribe((result: Meeting) => {
+    this.addSubscription(this.meetingService.createMeeting(meeting).pipe(first()).subscribe((result: Meeting) => {
       this.meeting = result;
       this.uploadImage(this.meeting.mid);
       this.navigateBack();
-    });
+    }));
   }
 
   updateMeeting() {
     this.uploadImage(this.meeting.mid);
     var meeting = this.createMeetingObject();
-    this.meetingService.updateMeeting(meeting).pipe(first()).subscribe((result) => {
+    this.addSubscription(this.meetingService.updateMeeting(meeting).pipe(first()).subscribe((result) => {
       this.navigateBack();
-    });
+    }));
   }
 
   private navigateBack() {
@@ -280,14 +283,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
         mid: mid,
         data: this.tmpImgData
       };
-      this.meetingService.addImage(mid, result).pipe(first()).subscribe((img_result) => {});
+      this.addSubscription(this.meetingService.addImage(mid, result).pipe(first()).subscribe((img_result) => {}));
     }
   }
 
   onDeleteMeeting() {
-    this.meetingService.deleteMeeting(this.meeting.mid).pipe(first()).subscribe((result) => {
+    this.addSubscription(this.meetingService.deleteMeeting(this.meeting.mid).pipe(first()).subscribe((result) => {
       this.router.navigate(['/meetings']);
-    });
+    }));
   }
 
   createCopy() {
@@ -318,45 +321,45 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onAcceptMeeting(external) {
-    this.meetingService.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external)
+    this.addSubscription(this.meetingService.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external)
       .pipe(first()).subscribe((result) => {
         this.userHasAccepted = true;
         this.userHasFinished = false;
         this.loadPotentialAttendees(this.meeting.mid);
-    });
+    }));
   }
 
   onRejectMeeting() {
-    this.meetingService.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername())
+    this.addSubscription(this.meetingService.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername())
       .pipe(first()).subscribe((result) => {
         this.userHasAccepted = false;
         this.userHasFinished = false;
         this.loadPotentialAttendees(this.meeting.mid);
-    });
+    }));
   }
 
-  onRemoveAttendee(user: User) {
-    this.meetingService.rejectAttendingMeeting(this.meeting.mid, user.username)
+  onRemoveAttendee(username: string) {
+    this.addSubscription(this.meetingService.rejectAttendingMeeting(this.meeting.mid, username)
       .pipe(first()).subscribe((result) => {
         this.loadPotentialAttendees(this.meeting.mid);
-    });
+    }));
   }
 
-  onHasTakenPart(attendee: MeetingUser) {
-    if (attendee && !attendee.tookPart) {
-      const foundedAttendee = this.potentialAttendees.find(p => p.username === attendee.username);
+  onHasTakenPart(username: string) {
+    if (username) {
+      const foundedAttendee = this.potentialAttendees.find(p => p.username === username);
       foundedAttendee.tookPart = true;
       if (foundedAttendee.username === this.authService.getLoggedInUsername()) {
         this.userHasFinished = true;
       }
-      this.meetingService.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).pipe(first()).subscribe((result) => { });
+      this.addSubscription(this.meetingService.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).pipe(first()).subscribe((result) => { }));
     }
   }
 
   onAddComment(comment: Comment) {
-    this.meetingService.addComment(this.meeting.mid, comment).pipe(first()).subscribe((meeting) => {
+    this.addSubscription(this.meetingService.addComment(this.meeting.mid, comment).pipe(first()).subscribe((meeting) => {
       this.meeting.comments = meeting.comments;
-    });
+    }));
   }
 
   downloadCSV() {
@@ -366,10 +369,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onGetCalendar() {
-    this.meetingService.getCalendar(this.meeting.mid).pipe(first()).subscribe( (cal: any) => {
+    this.addSubscription(this.meetingService.getCalendar(this.meeting.mid).pipe(first()).subscribe( (cal: any) => {
       const blob = new Blob([cal.content], { type: 'text/calendar;charset=utf-8' });
       FileSaver.saveAs(blob, 'calendar-for-meeting-' + this.meeting.mid + '.ics');
-    });
+    }));
   }
 
   setTemporaryImage(img: any) {
@@ -419,7 +422,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onAddingTag() {
-    this.meeting.tags = this.meeting.tags.map(tag => tag.toLowerCase()).map(tag => tag.replace(/ /g, '-'));
+    this.tags = this.tags.map(tag => tag.toLowerCase()).map(tag => tag.replace(/ /g, '-'));
   }
 
   getStatus() {

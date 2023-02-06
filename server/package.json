@@ -25,7 +25,6 @@
     "ldapauth-fork": "^3.0.0",
     "moment": "^2.21.0",
     "mongoose": "^6.5.2",
-    "mongoose-auto-increment": "^5.0.1",
     "mustache": "^2.3.0",
     "nodemailer": "^2.7.0",
     "restify": "^8.6.1",

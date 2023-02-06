@@ -2,6 +2,7 @@ module.exports = function (server, config, production_mode) {
     
     var userService = require('../services/userService');
     var imageService = require('../services/imageService');
+    var userModel = require('../models/user');
 
     server.get('/user/:username', function (req, res, next) {
 
@@ -31,7 +32,7 @@ module.exports = function (server, config, production_mode) {
             return next();
         }
 
-        if (!req.params.data) {
+        if (!req.body.data) {
             res.send(500, { error: 'No image' });
             return next();
         }
@@ -41,14 +42,20 @@ module.exports = function (server, config, production_mode) {
             return next();
         }
 
-        imageService.save(req.params.username, req.params.data, config.userImageFolder).then(function () {
-            res.send(req.params.data);
-            return next();
-        }).catch(function (err) {
-            console.log(err);
-            res.send(500, { error: 'Image could not be saved.' });
-            return next();
-        });
+        imageService.save(req.params.username, req.body.data, config.userImageFolder)
+            .then(data => {
+                var user = { avatar: true };
+                return userModel.findOneAndUpdate({ username: req.params.username }, { $set: user }, { upsert: true, new: true });
+            })
+            .then( user => {
+                res.send(req.params.data);
+                return next();
+            })
+            .catch(function (err) {
+                console.log(err);
+                res.send(500, { error: 'Image could not be saved.' });
+                return next();
+            });
     });
 
     server.put('/user/:username/settings', function (req, res, next) {
@@ -104,13 +111,19 @@ module.exports = function (server, config, production_mode) {
             return next();
         }
 
-        imageService.delete(req.params.username, config.userImageFolder).then(function () {
-            res.send(true);
-            return next();
-        }).catch(function (err) {
-            console.log(err);
-            res.send(500, { error: 'Image could not be deleted.' });
-            return next();
-        });
+        imageService.delete(req.params.username, config.userImageFolder)
+            .then(data => {
+                var user = { avatar: false };
+                return userModel.findOneAndUpdate({ username: req.params.username }, { $set: user }, { upsert: true, new: true });
+            })
+            .then( user => {
+                res.send(true);
+                return next();
+            })
+            .catch(function (err) {
+                console.log(err);
+                res.send(500, { error: 'Image could not be deleted.' });
+                return next();
+            });
     });
 }

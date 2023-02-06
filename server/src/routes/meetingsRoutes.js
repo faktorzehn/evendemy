@@ -25,7 +25,7 @@ module.exports = function (server, config, production_mode) {
                 }
                 throw Error('Not allowed');
             })
-            .then(meetingService.getMeetingUserForUserWhichTookPart)
+            .then(meetingService.getMeetingsForUserWhichTookPart)
             .then( meetings => res.send(meetings))
             .catch( err => res.send(500, { error: err })); 
         } else {
@@ -34,7 +34,7 @@ module.exports = function (server, config, production_mode) {
         }
     });
 
-    server.get('/meetings/attending/:username', function (req, res, next) {
+    server.get('/meetings/attending-information/:username', function (req, res, next) {
         if (req.params.username !== undefined) {
             userService.getUserByUsername(req.params.username)
             .then(user => {
@@ -46,7 +46,7 @@ module.exports = function (server, config, production_mode) {
                 }
                 throw Error('Not allowed');
             })
-            .then(meetingService.getAllMeetingUserForUser)
+            .then(meetingService.getAttendingInformationForUser)
             .then( meetings => res.send(meetings))
             .catch( err => res.send(500, { error: err })); 
         } else {

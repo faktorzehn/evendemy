@@ -1,21 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Meeting } from '../../model/meeting';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../appState';
+import { Meeting } from '../../../model/meeting';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MeetingsService } from '../../services/meetings.service';
-import { TagsService } from '../../services/tags.service';
-import { combineLatest } from 'rxjs';
+import { MeetingsService } from '../../../services/meetings.service';
+import { TagsService } from '../../../services/tags.service';
+import { combineLatest, Subscription } from 'rxjs';
 import { debounceTime, first } from 'rxjs/operators';
-import { AuthenticationService } from '../../services/authentication.service';
-import { MeetingUser } from '../../model/meeting_user';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { MeetingUser } from '../../../model/meeting_user';
+import { BaseComponent } from '../../../components/base/base.component';
 
 @Component({
   selector: 'evendemy-events',
   templateUrl: './events-or-courses.component.html',
   styleUrls: ['./events-or-courses.component.scss']
 })
-export class EventsOrCoursesComponent implements OnInit, OnDestroy {
+export class EventsOrCoursesComponent extends BaseComponent implements OnInit {
   public meetings: Meeting[] = [];
   public showNotAnnounced = true;
   public showOld = false;
@@ -26,24 +25,19 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
   public type = 'all';
   public isIdea = false;
   public loading = false;
-  private sub;
 
   constructor(
     private meetingsService: MeetingsService,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<AppState>,
     private tagsService: TagsService,
     private authService: AuthenticationService
-  ) {
-    this.store.select('meetings').subscribe(res => {
-      this.meetings = res;
-      this.loading = false;
-    });
+  ) { 
+    super();
   }
 
   ngOnInit() {
-    this.sub = combineLatest(this.route.url, this.route.queryParams).pipe(debounceTime(10)).subscribe(
+    this.addSubscription(combineLatest([this.route.url, this.route.queryParams]).pipe(debounceTime(10)).subscribe(
       ([url, queryParams]) => {
         this.isIdea = url[0].toString() === 'ideas';
 
@@ -75,19 +69,15 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
         }
 
         this.loadMeetings();
-        this.tagsService.getAllTags().pipe(first()).subscribe((tags: string[]) => {
+        this.addSubscription(this.tagsService.getAllTags().pipe(first()).subscribe((tags: string[]) => {
           this.allTags = tags;
-        });
+        }));
 
-        this.meetingsService.getMyAttendingMeetings(this.authService.getLoggedInUsername()).pipe(first()).subscribe(meeting_users => {
+        this.addSubscription(this.meetingsService.getAttendingInformationForMeetings(this.authService.getLoggedInUsername()).pipe(first()).subscribe(meeting_users => {
           this.attendedMeetings = meeting_users;
-        });
+        }));
       }
-    );
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
+    ));
   }
 
   public loadMeetings() {
@@ -101,7 +91,10 @@ export class EventsOrCoursesComponent implements OnInit, OnDestroy {
     };
     this.meetings = [];
     this.loading = true;
-    this.meetingsService.getAllMeetings(options);
+    this.addSubscription(this.meetingsService.getAllMeetings(options).pipe(first()).subscribe( meetings => {
+      this.meetings = meetings;
+      this.loading = false;
+    }));
   }
 
   public onShowNotAnnounced(state: boolean) {

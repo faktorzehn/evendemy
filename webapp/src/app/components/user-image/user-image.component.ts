@@ -10,12 +10,11 @@ import { UserService } from '../../services/user.service';
 })
 export class UserImageComponent implements OnInit, OnChanges {
   @Input() username: string;
+  @Input() user?: User;
   @Input() width: number;
   @Input() height: number;
 
-  error = false;
   folder = this.configService.config.user_image_folder;
-  user: User;
   palette = ['#5da5e2', '#e87f7f', '#f9d44c', '#c6e96e', '#8375b5'];
 
   constructor(

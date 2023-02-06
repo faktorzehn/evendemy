@@ -7,25 +7,28 @@ import { User } from '../../model/user';
   styleUrls: ['./attendee-card.component.scss']
 })
 export class AttendeeCardComponent implements OnInit {
-  @Input() user: User;
+  @Input() username: '';
+  @Input() firstname: '';
+  @Input() lastname: '';
+
   @Input() additionalAttendee: String;
   @Input() tookPart = false;
   @Input() showTakePartButton = false;
   @Input() showRemoveButton = false;
   @Input() disableTakePartButton = true;
   @Input() small = false;
-  @Output() tookPartClicked: EventEmitter<User> = new EventEmitter<User>();
-  @Output() removeAttendee: EventEmitter<User> = new EventEmitter<User>();
+  @Output() tookPartClicked: EventEmitter<String> = new EventEmitter<String>();
+  @Output() removeAttendee: EventEmitter<String> = new EventEmitter<String>();
 
   constructor() {}
 
   ngOnInit() {}
 
   onClickTakePartButton() {
-    this.tookPartClicked.emit(this.user);
+    this.tookPartClicked.emit(this.username);
   }
 
   onRemoveAttendee() {
-    this.removeAttendee.emit(this.user);
+    this.removeAttendee.emit(this.username);
   }
 }

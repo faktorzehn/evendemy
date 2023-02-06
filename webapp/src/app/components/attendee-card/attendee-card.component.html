@@ -5,14 +5,14 @@
         <div *ngIf="showRemoveButton" class="remove-button">
           <i class="fa fa-close fa-lg" (click)="onRemoveAttendee()"></i>
         </div>
-        <evendemy-user-image [username]="user?.username" width="100" height="100" routerLink="/user-info/{{user?.username}}"></evendemy-user-image>
+        <evendemy-user-image [username]="username" width="100" height="100" routerLink="/user-info/{{username}}"></evendemy-user-image>
         <div class="attendee-additional-badge" *ngIf="additionalAttendee">
           <div class="evendemy-tooltip">+1
             <span class="evendemy-tooltip-text right attendee-additional-badge-label">{{additionalAttendee}}</span>
           </div>
         </div>
       </div>
-      <h3 class="meeting-title">{{user.firstname}} {{user.lastname}}</h3>
+      <h3 class="meeting-title">{{firstname}} {{lastname}}</h3>
       <span class="meeting-tag" *ngIf="tookPart">confirmed</span>
     </div>
 

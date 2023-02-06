@@ -130,3 +130,29 @@ body {
 .evendemy-tools--centered{
   text-align: center;
 }
+
+tag-input ::ng-deep {
+  .ng2-tags-container {
+    align-items: center;
+  }
+
+  tag ::ng-deep{
+    height: unset;
+    line-height: unset;
+
+    .tag-wrapper {
+      align-items: center;
+      height: 22px;
+  
+    }
+  }
+
+  delete-icon ::ng-deep {
+    height: unset;
+    line-height: unset;
+  }
+
+  delete-icon:hover {
+    transform: none;
+  }
+}

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Store } from '@ngrx/store';
-import { AppState } from '../appState';
 import { map } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 
@@ -11,8 +9,7 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpClient,
-    private configService: ConfigService<any>,
-    private store: Store<AppState>
+    private configService: ConfigService<any>
   ) {}
 
   public loginUser(username: string, password: string) {

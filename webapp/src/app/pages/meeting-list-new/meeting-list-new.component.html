@@ -1,0 +1,72 @@
+<div class="event-or-course">
+    <!-- filter bar -->
+    <div class="tool-bar">
+      <div>
+        Type:
+        <select [(ngModel)]="type" class="tool-bar-select" (click)="onToolbarChange()">
+              <option value="all">All</option>
+              <option value="event">Events</option>
+              <option value="course">Courses</option>
+        </select>
+        Date:
+        <evendemy-checkbox *ngIf="isIdea" [label]="'not announced'" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
+        <evendemy-checkbox [label]="'old'" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
+        <evendemy-checkbox [label]="'new'" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
+        Tags:
+        <tag-input [(ngModel)]="selectedTags" name="tag" [modelAsStrings]="true"
+          [onlyFromAutocomplete]="true"
+          [placeholder]="'+tags'"
+          [secondaryPlaceholder]="'tags to be shown'"
+          [maxItems]="5" (onAdd)="onToolbarChange()" (onRemove)="onToolbarChange()"
+          class="tag-input">
+          <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
+          </tag-input-dropdown>
+        </tag-input>
+      </div>
+    </div>
+  
+    <!-- meetings -->
+    <div  class="event-or-course-meetings">
+      <div class="loading-label" *ngIf="loading">loading...</div>
+        <div class="list" *ngIf="!loading">
+            <div class="create-card" [routerLink]="isIdea? '/idea2': '/meeting2'">
+                <p style="font-size: 3rem;">+</p>
+                <p>create a new {{isIdea ? 'idea' : 'meeting'}}</p>
+                <button class="btn">create</button>
+            </div>
+            <ng-container *ngFor="let meeting of meetings">
+                <div class="card" [routerLink]="(isIdea? '/idea2/' : '/meeting2/')+meeting.mid">
+                    <div class="image-container">
+                        <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
+                        <div class="new-tag" *ngIf="isMeetingNew(meeting)">Neu</div>
+                    </div>
+                    <div class="info-container">
+                        <div class="date">
+                            <div class="day">
+                                {{meeting.startTime | date : 'dd'}}
+                            </div>
+                            <div class="month">
+                                {{meeting.startTime | date : 'MMMM'}}
+                            </div>
+                            <div class="time">
+                                {{meeting.startTime | date : 'HH:mm'}} - {{meeting.endTime | date : 'HH:mm'}}
+                            </div>
+                        </div>
+                        <div class="info">
+                            <p class="title">{{meeting.title}}</p>
+                            <p class="short-description">{{meeting.shortDescription}}</p>
+                            <div class="place">Wien</div>
+                            <div class="place">Stephansplatz 1</div>
+                        </div>
+                    </div>
+                    
+                    <div class="number-of-attendees">
+                        2 TeilnehmerInnen
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+    </div>
+  
+  </div>

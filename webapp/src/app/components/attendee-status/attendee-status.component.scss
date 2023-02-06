@@ -1,11 +1,12 @@
 .info-box{
+  display: flex;
+  flex-direction: column;
   background-color: #dddddd;
   border-radius: 5px;
   padding: 10px;
 
   .info-box-buttons{
-    float: right;
-    padding-top: 10px;
+    text-align: right;
 
     > .btn {
       margin-right: 5px;

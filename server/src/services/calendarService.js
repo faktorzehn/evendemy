@@ -6,7 +6,6 @@ module.exports = {
 			domain: config.domain,
 			prodId: {company: config.company, product: config.product},
 			name: config.name,
-			timezone: config.timezone,
 			method: 'request'
 		});
 
@@ -17,25 +16,14 @@ module.exports = {
 
 	createICalAttachment: function(config, meeting){
 		var attachment;
-		var moment = require('moment');
 
-        if (meeting.date && meeting.startTime && meeting.endTime) {
-
-            var startDate = moment(meeting.date);
-            var time = meeting.startTime.split(':');
-            startDate.hour(time[0]);
-            startDate.minute(time[1]);
-
-            var endDate = moment(meeting.date);
-            time = meeting.endTime.split(':');
-            endDate.hour(time[0]);
-            endDate.minute(time[1]);
+        if (meeting.startTime && meeting.endTime) {
 
             if (config.calendar !== null) {
 
                 var evendemy_event = {
-                    start: startDate.toDate(),
-                    end: endDate.toDate(),
+                    start: meeting.startTime,
+                    end: meeting.endTime,
                     timestamp: new Date(),
                     summary: 'Evendemy:' + meeting.title,
                     organizer: config.calendar.organizer

@@ -1,7 +1,7 @@
 import { MeetingUtil } from './meeting.util';
 import * as moment from 'moment';
-import { AttendeeStatus } from '../../components/attendee-status/attendee-status.component';
-import { Meeting } from '../../model/meeting';
+import { AttendeeStatus } from '../../../components/attendee-status/attendee-status.component';
+import { Meeting } from '../../../model/meeting';
 describe('MeetingUtil', () => {
 
   const FORMAT = 'DD.MM.YYYY';
@@ -93,57 +93,34 @@ describe('MeetingUtil', () => {
   describe('hasValidDateAndTime', () => {
     it('should be true', () => {
       const m = new Meeting();
-      m.date = moment().toDate();
-      m.startTime = '12:00';
-      m.endTime = '13:00';
+      m.startTime = moment().toDate();
+      m.endTime = moment().toDate();
       expect(MeetingUtil.hasValidDateAndTime(m)).toBeTruthy();
     });
 
     it('should be false, no start time', () => {
       const m = new Meeting();
-      m.date = moment().toDate();
-      m.endTime = '13:00';
+      m.endTime = moment().toDate();
       expect(MeetingUtil.hasValidDateAndTime(m)).toBeFalsy();
     });
 
     it('should be false, no end time', () => {
       const m = new Meeting();
-      m.date = moment().toDate();
-      m.startTime = '12:00';
+      m.startTime = moment().toDate();
       expect(MeetingUtil.hasValidDateAndTime(m)).toBeFalsy();
-    });
-
-    it('should be false, no date', () => {
-      const m = new Meeting();
-      m.startTime = '12:00';
-      m.endTime = '13:00';
-      expect(MeetingUtil.hasValidDateAndTime(m)).toBeFalsy();
-    });
-  });
-
-  describe('hasValidDate', () => {
-    it('should be true', () => {
-      const m = new Meeting();
-      m.date = moment().toDate();
-      expect(MeetingUtil.hasValidDate(m)).toBeTruthy();
-    });
-
-    it('should be false', () => {
-      const m = new Meeting();
-      expect(MeetingUtil.hasValidDate(m)).toBeFalsy();
     });
   });
 
   describe('isInThePast', () => {
     it('should be false', () => {
       const m = new Meeting();
-      m.date = moment().toDate();
+      m.startTime = moment().toDate();
       expect(MeetingUtil.isInThePast(m)).toBeFalsy();
     });
 
     it('should be true', () => {
       const m = new Meeting();
-      m.date = moment().subtract(1, 'day').toDate();
+      m.startTime = moment().subtract(1, 'day').toDate();
       expect(MeetingUtil.isInThePast(m)).toBeTruthy();
     });
   });
@@ -151,19 +128,19 @@ describe('MeetingUtil', () => {
   describe('hasValidDate', () => {
     it('should be false', () => {
       const m = new Meeting();
-      m.date = moment().add(1, 'day').toDate();
+      m.startTime = moment().add(1, 'day').toDate();
       expect(MeetingUtil.isInThePastOrToday(m)).toBeFalsy();
     });
 
     it('should be true because its today', () => {
       const m = new Meeting();
-      m.date = moment().toDate();
+      m.startTime = moment().toDate();
       expect(MeetingUtil.isInThePastOrToday(m)).toBeTruthy();
     });
 
     it('should be true because its yesterday', () => {
       const m = new Meeting();
-      m.date = moment().subtract(1, 'day').toDate();
+      m.startTime = moment().subtract(1, 'day').toDate();
       expect(MeetingUtil.isInThePastOrToday(m)).toBeTruthy();
     });
   });

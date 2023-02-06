@@ -57,7 +57,7 @@ export abstract class AbstractAttendeeStatusComponent implements OnInit {
   }
 
   hasValidDate() {
-    return this.meeting.startTime && this.meeting.endTime && this.meeting.date;
+    return this.meeting.startTime != null && this.meeting.endTime != null;
   }
 
 }

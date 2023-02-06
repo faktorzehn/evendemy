@@ -1,4 +1,4 @@
-@import './../../../variables';
+@import './../../../../variables';
 
 .meeting-row{
   margin: 0px;
@@ -71,10 +71,13 @@
 }
 
 @import '~pretty-checkbox/src/scss/variables';
-@import './../../../variables';
+@import './../../../../variables';
 
 $pretty--colors:(
   primary: $evendemy-primary,
 );
 
 @import '~pretty-checkbox/src/pretty-checkbox.scss';
+
+@import './../../../override-tags-styling';
+

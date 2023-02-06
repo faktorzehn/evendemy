@@ -1,0 +1,26 @@
+:host {
+    display: inline-block;
+}
+
+.text {
+    width:100%;
+    padding: 0.5rem;
+    border-radius: 2px;
+
+    &.editable:hover {
+        outline: 1px solid hsl(0, 0%, 78%);
+    }
+}
+
+.placeholder {
+    color: #aaaaaa;
+}
+
+input {
+    width:100%;
+    border-radius: 2px;
+    outline: 1px solid hsl(0, 0%, 78%);
+    border: none;
+    background-color: hsl(0, 0%, 97%);
+    padding: 0.5rem;
+}

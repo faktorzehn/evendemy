@@ -8,6 +8,7 @@ const UserSchema = mongoose.Schema({
     lastname: {type: String, default: ''},
     email: {type: String, default: ''},
     deleted: {type: Boolean, default: false},
+    avatar: {type: Boolean, default: false},
     options: {
         additional_info_visible: {type: Boolean, default: false},
         summary_of_meetings_visible: {type: Boolean, default: false}

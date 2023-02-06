@@ -78,7 +78,7 @@
       <div class="row form-row">
         <div class="col-md-4">Tags</div>
         <div class="col-md-8" *ngIf="isEditable">
-          <tag-input [(ngModel)]="meeting.tags" [ngModelOptions]="{standalone: true}" name="tag"
+          <tag-input [(ngModel)]="tags" [ngModelOptions]="{standalone: true}" name="tag"
           [removable]="isEditable"
           [modelAsStrings]="true"
           (onSelect)="onTagSelect($event)"
@@ -108,7 +108,7 @@
           </div>
         </div>
         <div *ngIf="!isEditable" class="col-md-8">
-          {{meeting.date | date:'dd.MM.yyyy'}}
+          {{meeting.startTime | date:'dd.MM.yyyy'}}
         </div>
       </div>
       <div class="row form-row">
@@ -201,8 +201,10 @@
               <evendemy-attendee-card
                 [additionalAttendee]="attendee.externals[0]"
                 [tookPart]="attendee.tookPart"
-                [user]="getUser(attendee.username)"
-                [showTakePartButton]="isEditable && !attendee.tookPart && meeting.date && !meeting.isIdea"
+                [username]="attendee.username"
+                [firstname]="attendee.firstname"
+                [lastname]="attendee.lastname"
+                [showTakePartButton]="isEditable && !attendee.tookPart && meeting.startTime && meeting.endTime && !meeting.isIdea"
                 [showRemoveButton]="isEditable && !attendee.tookPart"
                 [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()"
                 [small]="!isEditable"
@@ -215,7 +217,7 @@
         </div>
 
         <div class="row" *ngIf="listView">
-          <evendemy-attendee-table [showTakePartButton]="!meeting.isIdea" [attendees]="potentialAttendees" [users]="users" [editable]="isEditable" [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()" (tookPartClicked)="onHasTakenPart($event)"></evendemy-attendee-table>
+          <evendemy-attendee-table [showTakePartButton]="!meeting.isIdea" [attendees]="potentialAttendees" [editable]="isEditable" [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()" (tookPartClicked)="onHasTakenPart($event)"></evendemy-attendee-table>
         </div>
       </div>
 

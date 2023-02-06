@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
-import { UsersService } from './services/users.service';
+import { Event, NavigationEnd, Router } from '@angular/router';
 import { animate, AnimationControls } from "motion";
 @Component({
   selector: 'evendemy-root',
@@ -15,17 +14,14 @@ export class AppComponent {
   animation: AnimationControls;
   firstTime = true;
 
-  constructor(userService: UsersService, private router: Router) {
-    try {
-      userService.loadAllUsers().subscribe( res => res);
-    } catch (e) {}
+  constructor(private router: Router) {
   }
 
   ngOnInit() {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.showNavbar = true;
-        if(event.url === '/login') {
+        if(event.url.includes('login')) {
           this.showNavbar = false;
         }
       }

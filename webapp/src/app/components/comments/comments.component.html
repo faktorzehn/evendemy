@@ -1,19 +1,22 @@
-<div>
-    <div *ngFor="let comment of comments" class="comment-row" >
-        <a class="comment-header" routerLink="/user-info/{{comment.author}}">
-          <evendemy-user-image [username]="comment.author" width="50" height="50" ></evendemy-user-image>
-          <div style="color:black;">{{getUser(comment.author) | name}}</div>
-        </a>
-        <div class="comment-message">
-          <div>
-            <span class="comment-message-arrow"></span>
-            <div class="comment-message-body">{{comment.text}}</div>
-          </div>
-          <div class="comment-message-date">{{comment.creationDate  | date:'HH:mm dd.MM.yyyy'}}</div>
+<div class="comments">
+  <div class="list">
+    <div class="comment" *ngFor="let comment of comments">
+      <a class="user" routerLink="/user-info/{{comment.author}}">
+        <evendemy-user-image [username]="comment.author" width="50" height="50"></evendemy-user-image>
+        <div class="name">{{getUser(comment.author) | name}}</div>
+      </a>
+      <div class="message">
+        <div class="body">
+          {{comment.text}}
         </div>
+        <div class="date">{{comment.creationDate | date:'HH:mm dd.MM.yyyy'}}</div>
+      </div>
     </div>
-    <div class="row">
-        <textarea class="col-xs-12 commentbox" [(ngModel)]="commentbox" name="commentbox"></textarea>
-        <button class="btn btn-info col-md-offset-9 col-md-3" (click)="onAddComment()" style="float: right;">Add Comment</button>
+  </div>
+  <div class="edit">
+    <textarea [(ngModel)]="commentbox" name="commentbox"></textarea>
+    <div class="button-container">
+      <button class="btn btn-info" (click)="onAddComment()">Add Comment</button>
     </div>
+  </div>
 </div>

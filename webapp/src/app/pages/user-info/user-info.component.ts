@@ -65,21 +65,10 @@ export class UserInfoComponent implements OnInit {
   private loadMeetings(username) {
     this.meetingsService
     .getMyConfirmedMeetings(username)
-    .subscribe((meeting_user_list: MeetingUser[]) => {
-      if (meeting_user_list) {
-        for (const meeting_user of meeting_user_list) {
-          this.meetingService.getMeeting(meeting_user.mid)
-            .subscribe((meeting_result: Meeting) => {
-              const meeting: Meeting = meeting_result;
-              if (meeting) {
-                if (meeting.courseOrEvent === 'course') {
-                  this.courses.push(meeting);
-                } else {
-                  this.events.push(meeting);
-                }
-              }
-            });
-        }
+    .subscribe((meetings: Meeting[]) => {
+      if (meetings) {
+        this.courses = [...this.courses, ...meetings.filter(m => m.courseOrEvent === 'course')];
+        this.events = [...this.events, ...meetings.filter(m => m.courseOrEvent !== 'course')];
       }
     });
 

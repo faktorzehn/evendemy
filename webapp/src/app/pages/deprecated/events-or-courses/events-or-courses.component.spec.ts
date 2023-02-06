@@ -2,20 +2,19 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EventsOrCoursesComponent } from './events-or-courses.component';
 import { Component, Input, Output } from '@angular/core';
-import { EvendemyCheckboxComponent } from '../../components/checkbox/checkbox.component';
+import { EvendemyCheckboxComponent } from '../../../components/checkbox/checkbox.component';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/observable/of';
-import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { MeetingsService } from '../../services/meetings.service';
+import { MeetingsService } from '../../../services/meetings.service';
 import { TagInputModule } from 'ngx-chips';
-import { TagsService } from '../../services/tags.service';
+import { TagsService } from '../../../services/tags.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MeetingUser } from '../../model/meeting_user';
-import { AuthenticationServiceTestBuilder } from '../../test-utils/authentication-service-test-builder';
-import { AuthenticationService } from '../../services/authentication.service';
-import { Meeting } from '../../model/meeting';
+import { MeetingUser } from '../../../model/meeting_user';
+import { AuthenticationServiceTestBuilder } from '../../../test-utils/authentication-service-test-builder';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { Meeting } from '../../../model/meeting';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('EventsOrCoursesComponent', () => {
@@ -66,7 +65,6 @@ describe('EventsOrCoursesComponent', () => {
           queryParams: of({type: 'course'})
         }},
         {provide: Router, useValue: _routerSpy},
-        {provide: Store, useValue: _storeSpy},
         {provide: TagsService, useValue: _tagsServiceSpy},
         {provide: AuthenticationService, useValue: authServiceSpy}
       ]

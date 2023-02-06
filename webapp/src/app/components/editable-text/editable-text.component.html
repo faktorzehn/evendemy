@@ -1,0 +1,4 @@
+<div class="text" (click)="onEdit()" *ngIf="!edit" [ngClass]="{placeholder: noValue(), editable: editable}">
+    {{noValue() ? placeholder: value}}
+</div>
+<input *ngIf="edit" #input [(ngModel)]="value" autofocus>

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../appState';
+import { Component } from '@angular/core';
+import { BaseComponent } from '../../components/base/base.component';
+import { UsersStore } from '../../core/store/user.store';
 import { User } from '../../model/user';
 
 @Component({
@@ -8,14 +8,13 @@ import { User } from '../../model/user';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent extends BaseComponent {
 
   users: User[] = [];
 
-  constructor(private store: Store<AppState>) { }
-
-  ngOnInit() {
-    this.store.select('users').subscribe( res => this.users = res);
+  constructor(usersStore: UsersStore) { 
+    super();
+    this.addSubscription(usersStore.users().subscribe( users => this.users=users));
   }
 
 }

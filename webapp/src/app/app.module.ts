@@ -3,8 +3,6 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
@@ -14,6 +12,7 @@ import { AttendeeTableComponent } from './components/attendee-table/attendee-tab
 import { BreadcrumpComponent } from './components/breadcrump/breadcrump.component';
 import { EvendemyCheckboxComponent } from './components/checkbox/checkbox.component';
 import { CommentsComponent } from './components/comments/comments.component';
+import { CommentsNewComponent } from './components/comments-new/comments-new.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -26,21 +25,18 @@ import { TagComponent } from './components/tag/tag.component';
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { UserImageComponent } from './components/user-image/user-image.component';
 import { ErrorComponent } from './pages/error/error.component';
-import { EventsOrCoursesComponent } from './pages/events-or-courses/events-or-courses.component';
+import { EventsOrCoursesComponent } from './pages/deprecated/events-or-courses/events-or-courses.component';
 import { LoginComponent } from './pages/login/login.component';
-import { MeetingComponent } from './pages/meeting/meeting.component';
+import { MeetingNewComponent } from './pages/meeting-new/meeting-new.component';
 import { UserInfoComponent } from './pages/user-info/user-info.component';
 import { UsersComponent } from './pages/users/users.component';
 import { NamePipe } from './pipes/name.pipe';
-import { meetingsReducer } from './reducers/meetings.reducer';
-import { usersReducer } from './reducers/users.reducer';
 import { AuthenticationService } from './services/authentication.service';
 import { LoggedInGuardService } from './services/logged-in-guard.service';
 import { MeetingService } from './services/meeting.service';
 import { MeetingsService } from './services/meetings.service';
 import { TagsService } from './services/tags.service';
 import { UserService } from './services/user.service';
-import { UsersService } from './services/users.service';
 import { MeetingAttendeeStatusComponent } from './components/attendee-status/meeting-attendee-status/meeting-attendee-status.component';
 import { IdeaAttendeeStatusComponent } from './components/attendee-status/idea-attendee-status/idea-attendee-status.component';
 import { ConfigService } from './services/config.service';
@@ -48,16 +44,35 @@ import { TagInputModule } from 'ngx-chips';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faAngleLeft, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faBars, faCalendar, faEllipsis, faLocationDot, faTag } from '@fortawesome/free-solid-svg-icons';
+import { EditableTextComponent } from './components/editable-text/editable-text.component';
+import { MeetingComponent } from './pages/deprecated/meeting/meeting.component';
+import { ContextMenuComponent } from './components/context-menu/context-menu.component';
+import { MeetingListNewComponent } from './pages/meeting-list-new/meeting-list-new.component';
+import { BaseComponent } from './components/base/base.component';
+import { EditableInputComponent } from './components/editable-input/editable-input.component';
+import interceptors from './core/http-interceptor';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
+  
+  // deprecated -> replace with new components
   { path: 'meetings', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
   { path: 'ideas', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting', component: MeetingComponent, canActivate: [LoggedInGuardService]},
-  { path: 'idea/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
-  { path: 'idea', component: MeetingComponent, canActivate: [LoggedInGuardService]},
+
+  { path: 'meetings2', component: MeetingListNewComponent, canActivate: [LoggedInGuardService]},
+  { path: 'meeting2/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
+  { path: 'meeting2', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
+  { path: 'ideas2', component: MeetingListNewComponent, canActivate: [LoggedInGuardService]},
+  { path: 'idea2/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
+  { path: 'idea2', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
+  
+  // deprecated -> replace with new components
+  { path: 'idea/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
+  { path: 'idea', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
+
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
   { path: 'user-info/:username', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
   { path: 'users', component: UsersComponent, canActivate: [LoggedInGuardService]},
@@ -72,6 +87,7 @@ const appRoutes: Routes = [
     UserInfoComponent,
     LoginComponent,
     MeetingComponent,
+    MeetingNewComponent,
     EditorComponent,
     ErrorComponent,
     FooterComponent,
@@ -86,6 +102,7 @@ const appRoutes: Routes = [
     UserCardComponent,
     AttendeeCardComponent,
     CommentsComponent,
+    CommentsNewComponent,
     PageComponent,
     SummaryCoursesEventsComponent,
     AttendeeTableComponent,
@@ -93,7 +110,12 @@ const appRoutes: Routes = [
     BreadcrumpComponent,
     MeetingAttendeeStatusComponent,
     IdeaAttendeeStatusComponent,
-    SidebarComponent
+    SidebarComponent,
+    EditableTextComponent,
+    ContextMenuComponent,
+    MeetingListNewComponent,
+    BaseComponent,
+    EditableInputComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -101,13 +123,6 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({
-      meetings: meetingsReducer,
-      users: usersReducer
-    }),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25
-    }),
     // NgxDatatableModule,
     ImageCropperModule,
     TagInputModule,
@@ -118,11 +133,11 @@ const appRoutes: Routes = [
     MeetingService,
     MeetingsService,
     UserService,
-    UsersService,
     AuthenticationService,
     TagsService,
     ConfigService,
-    { provide: APP_INITIALIZER, useFactory: (config: ConfigService<any>) => config.load(), deps: [ConfigService], multi: true}
+    { provide: APP_INITIALIZER, useFactory: (config: ConfigService<any>) => config.load(), deps: [ConfigService], multi: true},
+    [...interceptors]
   ],
   bootstrap: [AppComponent]
 })
@@ -130,5 +145,9 @@ export class AppModule {
   constructor(library: FaIconLibrary) {
     library.addIcons(faBars);
     library.addIcons(faAngleLeft);
+    library.addIcons(faCalendar);
+    library.addIcons(faLocationDot);
+    library.addIcons(faTag);
+    library.addIcons(faEllipsis);
   }
 }

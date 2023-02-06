@@ -38,16 +38,16 @@ module.exports = {
 
         if (showNew) {
             currentDate = moment({ h: 0, m: 0, s: 0, ms: 0 }).toDate();
-            filter.$or.push({ 'date': { '$gte': currentDate } });
+            filter.$or.push({ 'startTime': { '$gte': currentDate } });
         }
 
         if (showOld) {
             currentDate = moment({ h: 0, m: 0, s: 0, ms: 0 }).toDate();
-            filter.$or.push({ 'date': { '$lt': currentDate } });
+            filter.$or.push({ 'startTime': { '$lt': currentDate } });
         }
 
         if (showNotAnnounced) {
-            filter.$or.push({ 'date': null });
+            filter.$or.push({ 'startTime': null });
         }
 
         return new Promise(function (resolve, reject) {
@@ -127,9 +127,6 @@ module.exports = {
         if (request.isFreetime !== undefined) {
             meeting.isFreetime = request.isFreetime;
         }
-        if (request.date !== undefined) {
-            meeting.date = request.date;
-        }
         if (request.numberOfAllowedExternals !== undefined) {
             meeting.numberOfAllowedExternals = request.numberOfAllowedExternals;
         }
@@ -177,9 +174,6 @@ module.exports = {
         }
         if (request.isFreetime !== undefined) {
             updateMeeting.isFreetime = request.isFreetime;
-        }
-        if (request.date !== undefined) {
-            updateMeeting.date = request.date;
         }
         if (request.numberOfAllowedExternals !== undefined) {
             updateMeeting.numberOfAllowedExternals = request.numberOfAllowedExternals;
@@ -243,18 +237,56 @@ module.exports = {
 
     getAttendingUsersForMid: function(mid){
         var MeetingUser = require('../models/meeting_user');
+        var User = require('../models/user');
         var _ = require('underscore');
         mid = mid*1;
-        return MeetingUser.find({mid: mid, deleted: false}).exec();
+        return MeetingUser.aggregate([
+            {
+                $match: {
+                  mid: mid,
+                  deleted: false
+                },
+            },
+            {
+                $lookup: {
+                    from: User.collection.name,
+                    localField: 'username',
+                    foreignField: 'username',
+                    as: 'user'
+                }
+            }
+        ]).exec().then( attendees => {
+            if(attendees.length > 0 ) {
+                return attendees.map( a => {
+                    a.firstname = (a.user && a.user.length > 0 ) ? a.user[0].firstname : undefined;
+                    a.lastname = (a.user && a.user.length > 0 ) ? a.user[0].lastname : undefined;
+                    a.user = undefined;
+                    return a;
+                })
+            }
+
+            return [];
+        });
     },
 
-    getMeetingUserForUserWhichTookPart: function(username){
+    getMeetingsForUserWhichTookPart: function(username){
         var MeetingUser = require('../models/meeting_user');
+        var Meeting = require('../models/meeting');
         username = username.toLowerCase();
-        return MeetingUser.find({username: username, tookPart: true}).where('deleted').eq(false).exec();
+        return MeetingUser
+            .find({username: username, tookPart: true})
+            .where('deleted').eq(false).exec()
+            .then( meetingusers => {
+                var mids = meetingusers.map( m => m.mid);
+                return Meeting.find({
+                    mid: {
+                        "$in": mids
+                    }
+                }).exec();
+            })
     },
 
-    getAllMeetingUserForUser: function(username){
+    getAttendingInformationForUser: function(username){
         var MeetingUser = require('../models/meeting_user');
         username = username.toLowerCase();
         return MeetingUser.find({username: username}).where('deleted').eq(false).exec();

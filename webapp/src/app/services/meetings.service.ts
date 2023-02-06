@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Meeting } from '../model/meeting';
-import { Store } from '@ngrx/store';
-import { AppState } from '../appState';
-import { InitMeetings} from '../actions/meetings.actions';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
@@ -12,7 +9,7 @@ import { ConfigService } from './config.service';
 @Injectable()
 export class MeetingsService extends BaseService {
 
-    constructor(private http: HttpClient, private store: Store<AppState>, configService: ConfigService<any>) {
+    constructor(private http: HttpClient, configService: ConfigService<any>) {
       super(configService);
     }
 
@@ -56,21 +53,19 @@ export class MeetingsService extends BaseService {
               params = params.append('tags', options.tags.toString());
             }
         }
-        this.http.get(url, { params: params, headers: headers }).subscribe((result: Meeting[]) => {
-            this.store.dispatch(new InitMeetings(result));
-        });
+        return this.http.get<Meeting[]>(url, { params: params, headers: headers });
     }
 
-  public getMyConfirmedMeetings(username: string): Observable<MeetingUser[]> {
+  public getMyConfirmedMeetings(username: string): Observable<Meeting[]> {
       const headers = this.createHeaders();
       const url = this.url + '/meetings/attending/confirmed/' + username;
 
-      return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
+      return this.http.get<Meeting[]>(url, { headers: headers });
   }
 
-  public getMyAttendingMeetings(username: string): Observable<MeetingUser[]> {
+  public getAttendingInformationForMeetings(username: string): Observable<MeetingUser[]> {
     const headers = this.createHeaders();
-    const url = this.url + '/meetings/attending/' + username;
+    const url = this.url + '/meetings/attending-information/' + username;
 
     return this.http.get(url, { headers: headers }) as Observable<MeetingUser[]>;
   }

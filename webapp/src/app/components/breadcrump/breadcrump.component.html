@@ -1,7 +1,5 @@
-<div class="evendemy-breadcrump">
-  <ng-container *ngFor="let step of steps; let i = index">
-    <a *ngIf="step.href" [routerLink]="'/'+step.href">{{step.title}}</a>
-    <p *ngIf="!step.href" style="display: inline;">{{step.title}}</p>
-    <i *ngIf="steps.length > 1 && i != steps?.length-1" class="fa fa-angle-right" aria-hidden="true"></i>
-  </ng-container>
-</div>
+<ng-container *ngFor="let step of steps; let i = index">
+  <a *ngIf="step.href" [routerLink]="'/'+step.href">{{step.title}}</a>
+  <p *ngIf="!step.href" style="display: inline;">{{step.title}}</p>
+  <i *ngIf="steps.length > 1 && i != steps?.length-1" class="fa fa-angle-right" aria-hidden="true"></i>
+</ng-container>

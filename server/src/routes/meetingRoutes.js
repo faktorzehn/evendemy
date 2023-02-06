@@ -108,15 +108,12 @@ module.exports = function (server, config, production_mode) {
             meetingService.getMeeting(req.params.mid).then(function(oldMeeting){
                 meetingService.updateMeeting(req.params.mid, req.body).then(function (meeting) {
                     var diffResult = diffService.diff(oldMeeting.toJSON(), meeting.toJSON());
-                    if(diffResult['startTime']!= null || diffResult['endTime'] || diffResult['date']){
+                    if(diffResult['startTime']!= null || diffResult['endTime']){
                         //something important changed
                         let text = '';
                         if(meeting.startTime && meeting.endTime){
-                            text = meeting.startTime + '-' + meeting.endTime + ' - ';
-                        }
-
-                        if(meeting.date){
-                            text += moment(meeting.date).format("MM.DD.YYYY");
+                            text = moment(meeting.startTime).format("hh.mm") + '-' + moment(meeting.endTime).format("hh.mm") + ' - ';
+                            text += moment(meeting.startTime).format("MM.DD.YYYY");
                         }
                         
                         const iCal = calendarService.createICalAttachment(config, meeting);
@@ -290,7 +287,7 @@ module.exports = function (server, config, production_mode) {
     function confirmAttendee(meeting, user) {
         var template = meeting.isIdea ? mailConfig.confirmIdea : mailConfig.confirmMeeting;
         var view = mailService.renderAllTemplates(template, meeting, user);
-        if (!meeting.date || !meeting.startTime || !meeting.endTime) {
+        if (!meeting.startTime || !meeting.endTime) {
             view.body = mailService.renderTemplate(template.body_no_calendar, meeting, user);
         }
 
