@@ -1,23 +1,23 @@
 @import './../../../variables';
 
-.thumbnail{
-  margin: 5px;
+.box{
   width: 180px;
-  height: 250px;
+  height: 200px;
   padding:10px;
-}
-
-.thumbnail-container{
-  display:flex;
+  border-radius: 5px;
+  background-color: white;
+  display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 5px;
+  
+  h3{
+    color: black;
+    font-size: 1.5rem;
+    padding-top: 5px;
+  }
 }
 
-h3{
-  padding-top: 5px;
-}
-
-.user-more-button{
-  margin-top: 20px;
-}
