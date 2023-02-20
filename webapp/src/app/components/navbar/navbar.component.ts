@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { DialogService } from '../../core/services/dialog.service';
 import { User } from '../../model/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserService } from '../../services/user.service';
@@ -16,7 +17,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   user: User;
   popupMenuIsOpen = false;
 
-  constructor(private userService: UserService, private authService: AuthenticationService) { }
+  constructor(private userService: UserService, private authService: AuthenticationService, private dialogService: DialogService) { }
 
   ngOnInit() {
     this.sub = this.userService.getUserByUsername( this.authService.getLoggedInUsername()).subscribe( (user: User) => {
@@ -34,5 +35,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onBurgerMenuClick() {
     this.byMenuClick.emit();
+  }
+
+  showDialog() {
+    this.dialogService.show('info-dialog');
   }
 }

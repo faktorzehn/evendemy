@@ -44,7 +44,7 @@ import { TagInputModule } from 'ngx-chips';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faAngleLeft, faBars, faCalendar, faEllipsis, faLocationDot, faTag } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faBars, faCalendar, faClose, faEllipsis, faLocationDot, faTag } from '@fortawesome/free-solid-svg-icons';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { MeetingComponent } from './pages/deprecated/meeting/meeting.component';
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
@@ -52,10 +52,11 @@ import { MeetingListNewComponent } from './pages/meeting-list-new/meeting-list-n
 import { BaseComponent } from './components/base/base.component';
 import { EditableInputComponent } from './components/editable-input/editable-input.component';
 import interceptors from './core/http-interceptor';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-  
+
   // deprecated -> replace with new components
   { path: 'meetings', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
   { path: 'ideas', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
@@ -68,7 +69,7 @@ const appRoutes: Routes = [
   { path: 'ideas2', component: MeetingListNewComponent, canActivate: [LoggedInGuardService]},
   { path: 'idea2/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
   { path: 'idea2', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
-  
+
   // deprecated -> replace with new components
   { path: 'idea/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
   { path: 'idea', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
@@ -115,7 +116,8 @@ const appRoutes: Routes = [
     ContextMenuComponent,
     MeetingListNewComponent,
     BaseComponent,
-    EditableInputComponent
+    EditableInputComponent,
+    DialogComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -141,7 +143,7 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
   constructor(library: FaIconLibrary) {
     library.addIcons(faBars);
     library.addIcons(faAngleLeft);
@@ -149,5 +151,6 @@ export class AppModule {
     library.addIcons(faLocationDot);
     library.addIcons(faTag);
     library.addIcons(faEllipsis);
+    library.addIcons(faClose);
   }
 }

@@ -1,0 +1,40 @@
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  opacity: 0.3;
+}
+
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 5px;
+  opacity: 1;
+  z-index: 200;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  .close-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 2rem 2rem 0 0;
+  }
+
+  &.medium {
+    width: 50%;
+    height: 50%;
+  }
+
+  &.large {
+    width: 80%;
+    height: 80%;
+  }
+}

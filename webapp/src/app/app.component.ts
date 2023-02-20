@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { Event, NavigationEnd, Router } from '@angular/router';
 import { animate, AnimationControls } from "motion";
+import { ConfigService } from './services/config.service';
+import packageJson from '../../package.json';
 @Component({
   selector: 'evendemy-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 
@@ -14,7 +16,12 @@ export class AppComponent {
   animation: AnimationControls;
   firstTime = true;
 
-  constructor(private router: Router) {
+  usageNotices = '';
+  version='';
+
+  constructor(private router: Router, configService: ConfigService<any>) {
+    this.usageNotices = configService.config.usage_notice;
+    this.version = packageJson.version;
   }
 
   ngOnInit() {

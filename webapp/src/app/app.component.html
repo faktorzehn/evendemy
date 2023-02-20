@@ -3,3 +3,18 @@
 <evendemy-navbar *ngIf="showNavbar" (byMenuClick)="onMenuClick()"></evendemy-navbar>
 <router-outlet></router-outlet>
 <evendemy-footer></evendemy-footer>
+
+<!--dialogs-->
+<evendemy-dialog id="info-dialog" size="medium">
+  <div class="content">
+    <div class="header">
+      <img src="assets/evendemy_logo.png">
+      <p>Evendemy 3</p>
+    </div>
+    <h2>Info</h2>
+    <p>Version: {{version}}</p>
+    <p>Github Seite: <a href="https://github.com/faktorzehn/evendemy"> https://github.com/faktorzehn/evendemy</a></p>
+    <h2>Nutzungshinweise</h2>
+    <div class="usage-notices" [innerHTML]="usageNotices"></div>
+  </div>
+</evendemy-dialog>
