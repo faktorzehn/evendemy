@@ -21,5 +21,11 @@
 			"name": "Evendemy",
 			"timezone": "Europe/Berlin",
 			"organizer": ""
-	}
+	}, 	
+	"locations": [
+		{"name": "Wien", "color": ""},
+		{"name": "Paris", "color": ""},
+		{"name": "London", "color": ""},
+		{"name": "Digital", "color": ""}
+	]
 }

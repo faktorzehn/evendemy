@@ -21,5 +21,8 @@
 			"name": "Evendemy",
 			"timezone": "Europe/Berlin",
 			"organizer": ""
-	}
+	},
+	"locations": [
+		{"name": "digital", "color": ""}
+	]
 }

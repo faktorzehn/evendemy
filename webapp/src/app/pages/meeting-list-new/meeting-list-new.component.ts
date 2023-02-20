@@ -35,7 +35,7 @@ export class MeetingListNewComponent extends BaseComponent implements OnInit {
     private router: Router,
     private tagsService: TagsService,
     private authService: AuthenticationService,
-    private configService: ConfigService<any>,
+    private configService: ConfigService<any>
   ) {
     super();
   }
