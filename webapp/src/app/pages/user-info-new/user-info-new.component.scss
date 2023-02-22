@@ -1,0 +1,131 @@
+.page {
+    margin: 4rem;
+}
+
+.block-container{
+    display: flex; 
+    justify-content: center;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 5px;
+
+    &.block-user {
+        padding-bottom: 2rem;
+        width: 60rem;
+    }  
+}
+
+.meeting-container {
+    margin: 0 10rem;
+
+    h4 {
+        margin: 5rem 0 1rem;
+    }
+    
+    .meetings {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+}
+
+.section-context-menu {
+    position: relative;
+    text-align: right;
+    margin: 1rem 2rem !important;
+
+    evendemy-context-menu {
+        position: absolute;
+        top: 15px;
+        right: 0;
+
+        p {
+            padding: 0.5rem 2rem;
+            margin: 0;
+            cursor: pointer;
+
+            &:hover {
+                background-color: hsl(0, 0%, 93%);
+            }
+        }
+    }
+}
+
+.section-edit-bar {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 1rem;
+    padding: 1rem;
+    border-top: 1px solid white;
+    border-bottom: 1px solid #d9d9d9;
+    margin-bottom: 1rem;
+}
+
+.section-user {
+    margin: 0 2rem 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+
+    .username {
+        font-size: 3rem;
+        width: 100%;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .jobTitle {
+        width: 100%;
+    }
+
+    .summary {
+        display: flex;
+        gap: 2rem;
+        margin-top: 2rem;
+
+        .column {
+            display: flex;
+            gap: 1rem;
+
+            .circle {
+                border-radius: 1rem;
+                border: 1px solid grey;
+                padding: 0 10px;
+            }
+        }
+    }
+}
+
+.section-description {
+    margin: 1rem 2rem;
+    padding: 1rem;
+    border-radius: 5px;
+    width: 50rem;
+    position: relative;
+    background-color: #ebebeb;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: -14px;
+        left: 35px;
+        width: 0;
+        border-bottom: 15px solid #ebebeb;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+    }
+}
+
+@media screen and (max-width: 700px){
+    .meeting-container {
+        margin: 0;
+    }
+
+    .section-description {
+        width: unset;
+    }
+}

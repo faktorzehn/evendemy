@@ -27,7 +27,6 @@ export class MeetingListNewComponent extends BaseComponent implements OnInit {
   public type = 'all';
   public isIdea = false;
   public loading = false;
-  private imageFolder = this.configService.config.meeting_image_folder;
 
   constructor(
     private meetingsService: MeetingsService,
@@ -131,17 +130,5 @@ export class MeetingListNewComponent extends BaseComponent implements OnInit {
         tags: this.selectedTags.join(',')
       }
     });
-  }
-
-  getImage(mid: number) {
-    if (!this.imageFolder) {
-      return;
-    }
-    return this.imageFolder + '/' + mid + '.jpg';
-  }
-
-  isMeetingNew(meeting: Meeting): boolean {
-    const now = moment();
-    return moment(meeting.creationDate).isSame(now, 'day');
   }
 }

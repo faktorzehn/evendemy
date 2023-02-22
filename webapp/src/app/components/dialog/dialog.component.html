@@ -1,8 +1,6 @@
 <div class="background" [style]="{ display: visible ? 'block' : 'none' }" (click)="closable && onClose($event)"></div>
 <div #dialog class="dialog" [class]="size" [style]="{ display: visible ? 'flex' : 'none' }">
-  <div class="close-container">
-    <fa-icon icon="close" (click)="onClose()" *ngIf="closeButton"></fa-icon>
-  </div>
+  <fa-icon class="close-icon" icon="close" (click)="onClose()" *ngIf="closeButton"></fa-icon>
   <ng-content></ng-content>
 </div>
 

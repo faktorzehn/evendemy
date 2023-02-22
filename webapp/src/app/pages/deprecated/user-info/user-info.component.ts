@@ -1,14 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { User } from '../../model/user';
-import { Meeting } from '../../model/meeting';
-import { UserService } from '../../services/user.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { EditorComponent } from '../../components/editor/editor.component';
-import { AuthenticationService } from '../../services/authentication.service';
-import { MeetingService } from '../../services/meeting.service';
-import { MeetingsService } from '../../services/meetings.service';
-import { tap, first } from 'rxjs/operators';
-import { MeetingUser } from '../../model/meeting_user';
+import { User } from '../../../model/user';
+import { Meeting } from '../../../model/meeting';
+import { UserService } from '../../../services/user.service';
+import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { MeetingService } from '../../../services/meeting.service';
+import { MeetingsService } from '../../../services/meetings.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'evendemy-user-info',

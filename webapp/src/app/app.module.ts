@@ -28,7 +28,7 @@ import { ErrorComponent } from './pages/error/error.component';
 import { EventsOrCoursesComponent } from './pages/deprecated/events-or-courses/events-or-courses.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MeetingNewComponent } from './pages/meeting-new/meeting-new.component';
-import { UserInfoComponent } from './pages/user-info/user-info.component';
+import { UserInfoComponent } from './pages/deprecated/user-info/user-info.component';
 import { UsersComponent } from './pages/users/users.component';
 import { NamePipe } from './pipes/name.pipe';
 import { AuthenticationService } from './services/authentication.service';
@@ -52,7 +52,10 @@ import { MeetingListNewComponent } from './pages/meeting-list-new/meeting-list-n
 import { BaseComponent } from './components/base/base.component';
 import { EditableInputComponent } from './components/editable-input/editable-input.component';
 import interceptors from './core/http-interceptor';
+import { UserInfoNewComponent } from './pages/user-info-new/user-info-new.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { SettingsComponent } from './pages/settings/settings.component';
+import { MeetingCardComponent } from './components/meeting-card/meeting-card.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -76,7 +79,11 @@ const appRoutes: Routes = [
 
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
   { path: 'user-info/:username', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
+  
+  { path: 'user-info2', component: UserInfoNewComponent, canActivate: [LoggedInGuardService] },
+  { path: 'user-info2/:username', component: UserInfoNewComponent, canActivate: [LoggedInGuardService] },
   { path: 'users', component: UsersComponent, canActivate: [LoggedInGuardService]},
+  { path: 'settings', component: SettingsComponent, canActivate: [LoggedInGuardService] },
   { path: '', redirectTo: '/meetings', pathMatch: 'full' },
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
@@ -117,7 +124,10 @@ const appRoutes: Routes = [
     MeetingListNewComponent,
     BaseComponent,
     EditableInputComponent,
-    DialogComponent
+    UserInfoNewComponent,
+    DialogComponent,
+    SettingsComponent,
+    MeetingCardComponent
   ],
   imports: [
     BrowserAnimationsModule,

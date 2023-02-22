@@ -1,0 +1,51 @@
+<div class="page">
+    <div class="block-container">
+        <div class="block block-user">
+            <div class="section-context-menu" *ngIf="!editMode">
+                <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
+                <evendemy-context-menu *ngIf="contexMenuIsOpen && isEditable">
+                    <p (click)="editMode = true">Bearbeiten</p>
+                </evendemy-context-menu>
+            </div>
+    
+            <!--Tools-->
+            <div class="section-edit-bar" *ngIf="editMode">
+                <button class="btn btn-info" (click)="onSave()">Speichern</button>
+                <button class="btn" (click)="onCancel()">Abbrechen</button>
+            </div>
+    
+            <div class="section-user">
+                <evendemy-user-image [user]="user" width="100" height="100"></evendemy-user-image>
+                <form [formGroup]="form">
+                    <p class="username">{{user?.firstname}} {{user?.lastname}}</p>
+                    <evendemy-editable-text class="jobTitle" [editable]="editMode" [placeholder]="isEditable ? 'Job Titel' : undefined" formControlName="jobTitle"></evendemy-editable-text>
+                    <div class="summary">
+                        <div class="column">
+                            <p class="circle">2</p>
+                            <p>erstellt</p>
+                        </div>
+                        <div class="column">
+                            <p class="circle">5</p>
+                            <p>teilgenommen</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <evendemy-editable-input class="section-description" *ngIf="editorContent" [editable]="editMode" [value]="editorContent" [placeholder]="'Beschreibung'">
+                <evendemy-editor [value]="editorContent" (change)="editorChanged($event)" [editable]="true"></evendemy-editor>
+            </evendemy-editable-input>
+        </div>
+    </div>
+
+    <div class="meeting-container">
+        <h4>Erstellte Treffen</h4>
+        <div class="meetings">
+            <evendemy-meeting-card *ngFor="let meeting of createMeetings" [meeting]="meeting"></evendemy-meeting-card>
+        </div>
+    
+        <h4>Teilgenommene Treffen</h4>
+        <div class="meetings">
+            <evendemy-meeting-card *ngFor="let meeting of attendedMeetings" [meeting]="meeting"></evendemy-meeting-card>
+        </div>
+    </div>
+</div>

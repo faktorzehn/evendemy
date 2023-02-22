@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { ConfigService } from './config.service';
+import { User } from '../model/user';
 
 @Injectable()
 export class UserService extends BaseService {
@@ -13,7 +14,7 @@ export class UserService extends BaseService {
   public getUserByUsername(username: string) {
       const headers = this.createHeaders();
       const url = this.url + '/user/' + username;
-      return this.http.get(url, { headers: headers });
+      return this.http.get<User>(url, { headers: headers });
   }
 
   public addImage(username: string, data: any) {

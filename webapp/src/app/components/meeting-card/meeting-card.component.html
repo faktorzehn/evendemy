@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="image-container">
+        <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
+        <div class="new-tag" *ngIf="isMeetingNew(meeting)">Neu</div>
+    </div>
+    <div class="info-container">
+        <div class="date">
+            <div class="day">
+                {{meeting.startTime | date : 'dd'}}
+            </div>
+            <div class="month">
+                {{meeting.startTime | date : 'MMMM'}}
+            </div>
+            <div class="time">
+                {{meeting.startTime | date : 'HH:mm'}} - {{meeting.endTime | date : 'HH:mm'}}
+            </div>
+        </div>
+        <div class="info">
+            <p class="title">{{meeting.title}}</p>
+            <p class="short-description">{{meeting.shortDescription}}</p>
+            <div class="place">Wien</div>
+            <div class="place">Stephansplatz 1</div>
+        </div>
+    </div>
+    
+    <div class="number-of-attendees">
+        2 TeilnehmerInnen
+    </div>
+</div>

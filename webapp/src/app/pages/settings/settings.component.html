@@ -1,0 +1,22 @@
+<div class="page">
+    <div class="block">
+        <h4>Einstellungen</h4>
+        <form [formGroup]="form">
+            <div class="settings-field">
+                <p>Meetings auf der Profilseite:</p> 
+                <select formControlName="meetings_visible" class="selectBox">
+                    <option value="true">Sichtbar</option>
+                    <option value="false">Nicht sichtbar</option>
+                </select>
+            </div>
+        </form>
+        <button class="btn btn-info" (click)="onSave()">Speichern</button>
+    </div>
+</div>
+<evendemy-dialog id="success-dialog">
+    <div class="dialog-content">
+        <h4>Gespeichert</h4>
+        <p>Deine Einstellungen wurden gespeichert.</p>
+        <button class="btn btn-info" (click)="closeDialog()">Okay</button>
+    </div>
+  </evendemy-dialog>

@@ -36,96 +36,9 @@
     flex-wrap: wrap;
     gap: 1rem;
 
-    .card {
-        width: 270px;
-        height: 350px;
-        background-color: white;
-        padding: 1rem;
+    evendemy-meeting-card {
         transition: all .2s ease-in-out;
-        cursor: pointer;
-        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-        border-radius: 5px;
-
-        .image-container {
-            position: relative;
-
-            img {
-                width: 100%;
-            }
-
-            .new-tag {
-                position: absolute;
-                right: 5px;
-                top: 5px;
-                background-color: white;
-                color: #37bc9b;
-                border-radius: 2rem;
-                padding: 0.1rem 1rem;
-                font-size: 11px;
-            }
-        }
-
-        .number-of-attendees {
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .button-container {
-
-            button {
-                width: 100%;
-            }
-        }
-
-        .info-container {
-            display: flex;
-            gap: 2rem;
-            padding: 2rem 0;
-
-            .date {
-                font-family: sans-serif;
-                font-weight: 600;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
-                color: #8b8b8b;
-
-                .day {    
-                    line-height: 5rem;
-                    font-size: 6rem;
-                }
-
-                .month {
-                    font-size: 2.2rem;
-                }
-
-                .time {
-                    font-size: 1.1rem;
-                }
-            }
-
-            .info {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-
-                .title {
-                    font-size: 2rem;
-                    font-weight: 600;
-                    margin: 0;
-                }
-
-                .short-description {
-                    font-size: 1.5rem;
-                    height: 1.5rem;
-                }
-            }
-
-            .complete-date, .place {
-                color: #9e9e9e;
-            }
-        }
-
+        
         &:hover {
             scale: 1.05;
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -133,8 +46,8 @@
     }
 
     .create-card {
-        width: 270px;
-        height: 350px;
+        width: 250px;
+        height: 340px;
         display: flex;
         flex-direction: column;
         align-items: center;

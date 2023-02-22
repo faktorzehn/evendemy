@@ -1,0 +1,30 @@
+.page {
+    margin: 4rem;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 5px; 
+    padding: 1rem;
+
+    .settings-field {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    button {
+        margin-top: 2rem;
+        width: 10rem;
+    }
+}
+
+.dialog-content{
+    padding: 2rem 3rem;
+}
