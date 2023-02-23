@@ -205,7 +205,7 @@
         <!--COMMENTS-->
         <div class="section section-comments" *ngIf="!isNew">
           <h5 id="comments">Comments</h5>
-          <evendemy-comments-new [comments]="meeting.comments" (addComment)="onAddComment($event)"></evendemy-comments-new>
+          <evendemy-comments [comments]="meeting.comments" (addComment)="onAddComment($event)"></evendemy-comments>
         </div>
 
         <evendemy-confirm-dialog title="Do you really want to cancel?" (confirm)="onCancel()"

@@ -1,20 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Meeting } from '../../../model/meeting';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MeetingsService } from '../../../services/meetings.service';
-import { TagsService } from '../../../services/tags.service';
-import { combineLatest, Subscription } from 'rxjs';
-import { debounceTime, first } from 'rxjs/operators';
-import { AuthenticationService } from '../../../services/authentication.service';
-import { MeetingUser } from '../../../model/meeting_user';
-import { BaseComponent } from '../../../components/base/base.component';
+import * as moment from 'moment';
+import { combineLatest, debounceTime, first } from 'rxjs';
+import { BaseComponent } from '../../components/base/base.component';
+import { Meeting } from '../../model/meeting';
+import { MeetingUser } from '../../model/meeting_user';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ConfigService } from '../../services/config.service';
+import { MeetingsService } from '../../services/meetings.service';
+import { TagsService } from '../../services/tags.service';
 
 @Component({
-  selector: 'evendemy-events',
-  templateUrl: './events-or-courses.component.html',
-  styleUrls: ['./events-or-courses.component.scss']
+  selector: 'evendemy-meeting-list',
+  templateUrl: './meeting-list.component.html',
+  styleUrls: ['./meeting-list.component.scss']
 })
-export class EventsOrCoursesComponent extends BaseComponent implements OnInit {
+export class MeetingListComponent extends BaseComponent implements OnInit {
+
   public meetings: Meeting[] = [];
   public showNotAnnounced = true;
   public showOld = false;
@@ -31,15 +33,16 @@ export class EventsOrCoursesComponent extends BaseComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private tagsService: TagsService,
-    private authService: AuthenticationService
-  ) { 
+    private authService: AuthenticationService,
+    private configService: ConfigService<any>
+  ) {
     super();
   }
 
   ngOnInit() {
     this.addSubscription(combineLatest([this.route.url, this.route.queryParams]).pipe(debounceTime(10)).subscribe(
       ([url, queryParams]) => {
-        this.isIdea = url[0].toString() === 'ideas';
+        this.isIdea = url[0].toString().includes('ideas');
 
         if (queryParams['type']) {
           if (queryParams['type'] === 'event') {

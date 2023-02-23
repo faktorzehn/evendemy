@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import moment from 'moment';
 import { Meeting } from '../../model/meeting';
 import { ConfigService } from '../../services/config.service';

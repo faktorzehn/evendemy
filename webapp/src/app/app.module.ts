@@ -3,7 +3,6 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-// import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { AppComponent } from './app.component';
@@ -12,23 +11,17 @@ import { AttendeeTableComponent } from './components/attendee-table/attendee-tab
 import { BreadcrumpComponent } from './components/breadcrump/breadcrump.component';
 import { EvendemyCheckboxComponent } from './components/checkbox/checkbox.component';
 import { CommentsComponent } from './components/comments/comments.component';
-import { CommentsNewComponent } from './components/comments-new/comments-new.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
-import { MeetingListComponent } from './components/meeting-list/meeting-list.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { PageComponent } from './components/page/page.component';
-import { SummaryCoursesEventsComponent } from './components/summary-courses-events/summary-courses-events.component';
 import { TagComponent } from './components/tag/tag.component';
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { UserImageComponent } from './components/user-image/user-image.component';
 import { ErrorComponent } from './pages/error/error.component';
-import { EventsOrCoursesComponent } from './pages/deprecated/events-or-courses/events-or-courses.component';
 import { LoginComponent } from './pages/login/login.component';
-import { MeetingNewComponent } from './pages/meeting-new/meeting-new.component';
-import { UserInfoComponent } from './pages/deprecated/user-info/user-info.component';
+import { MeetingComponent } from './pages/meeting/meeting.component';
 import { UsersComponent } from './pages/users/users.component';
 import { NamePipe } from './pipes/name.pipe';
 import { AuthenticationService } from './services/authentication.service';
@@ -46,42 +39,26 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faBars, faCalendar, faClose, faEllipsis, faLocationDot, faTag } from '@fortawesome/free-solid-svg-icons';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
-import { MeetingComponent } from './pages/deprecated/meeting/meeting.component';
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
-import { MeetingListNewComponent } from './pages/meeting-list-new/meeting-list-new.component';
+import { MeetingListComponent } from './pages/meeting-list/meeting-list.component';
 import { BaseComponent } from './components/base/base.component';
 import { EditableInputComponent } from './components/editable-input/editable-input.component';
 import interceptors from './core/http-interceptor';
-import { UserInfoNewComponent } from './pages/user-info-new/user-info-new.component';
+import { UserInfoComponent } from './pages/user-info/user-info.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { MeetingCardComponent } from './components/meeting-card/meeting-card.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-
-  // deprecated -> replace with new components
-  { path: 'meetings', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
-  { path: 'ideas', component: EventsOrCoursesComponent, canActivate: [LoggedInGuardService]},
+  { path: 'meetings', component: MeetingListComponent, canActivate: [LoggedInGuardService]},
+  { path: 'ideas', component: MeetingListComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting', component: MeetingComponent, canActivate: [LoggedInGuardService]},
-
-  { path: 'meetings2', component: MeetingListNewComponent, canActivate: [LoggedInGuardService]},
-  { path: 'meeting2/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
-  { path: 'meeting2', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
-  { path: 'ideas2', component: MeetingListNewComponent, canActivate: [LoggedInGuardService]},
-  { path: 'idea2/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
-  { path: 'idea2', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
-
-  // deprecated -> replace with new components
-  { path: 'idea/:mid', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
-  { path: 'idea', component: MeetingNewComponent, canActivate: [LoggedInGuardService]},
-
+  { path: 'idea/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
+  { path: 'idea', component: MeetingComponent, canActivate: [LoggedInGuardService]},
   { path: 'user-info', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
   { path: 'user-info/:username', component: UserInfoComponent, canActivate: [LoggedInGuardService] },
-  
-  { path: 'user-info2', component: UserInfoNewComponent, canActivate: [LoggedInGuardService] },
-  { path: 'user-info2/:username', component: UserInfoNewComponent, canActivate: [LoggedInGuardService] },
   { path: 'users', component: UsersComponent, canActivate: [LoggedInGuardService]},
   { path: 'settings', component: SettingsComponent, canActivate: [LoggedInGuardService] },
   { path: '', redirectTo: '/meetings', pathMatch: 'full' },
@@ -92,15 +69,12 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     NavbarComponent,
-    UserInfoComponent,
     LoginComponent,
     MeetingComponent,
-    MeetingNewComponent,
     EditorComponent,
     ErrorComponent,
     FooterComponent,
     ConfirmDialogComponent,
-    EventsOrCoursesComponent,
     MeetingListComponent,
     ImageUploadDialogComponent,
     NamePipe,
@@ -110,9 +84,6 @@ const appRoutes: Routes = [
     UserCardComponent,
     AttendeeCardComponent,
     CommentsComponent,
-    CommentsNewComponent,
-    PageComponent,
-    SummaryCoursesEventsComponent,
     AttendeeTableComponent,
     TagComponent,
     BreadcrumpComponent,
@@ -121,13 +92,12 @@ const appRoutes: Routes = [
     SidebarComponent,
     EditableTextComponent,
     ContextMenuComponent,
-    MeetingListNewComponent,
+    MeetingListComponent,
+    MeetingCardComponent,
     BaseComponent,
     EditableInputComponent,
-    UserInfoNewComponent,
-    DialogComponent,
-    SettingsComponent,
-    MeetingCardComponent
+    UserInfoComponent,
+    DialogComponent
   ],
   imports: [
     BrowserAnimationsModule,

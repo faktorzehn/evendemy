@@ -29,13 +29,13 @@
     <div  class="event-or-course-meetings">
       <div class="loading-label" *ngIf="loading">loading...</div>
         <div class="list" *ngIf="!loading">
-            <div class="create-card" [routerLink]="isIdea? '/idea2': '/meeting2'">
+            <div class="create-card" [routerLink]="isIdea? '/idea': '/meeting'">
                 <p style="font-size: 3rem;">+</p>
                 <p>create a new {{isIdea ? 'idea' : 'meeting'}}</p>
                 <button class="btn">create</button>
             </div>
             <ng-container *ngFor="let meeting of meetings">
-                <evendemy-meeting-card [meeting]="meeting" [routerLink]="(isIdea? '/idea2/' : '/meeting2/')+meeting.mid"></evendemy-meeting-card>
+                <evendemy-meeting-card [meeting]="meeting" [routerLink]="(isIdea? '/idea/' : '/meeting/')+meeting.mid"></evendemy-meeting-card>
             </ng-container>
         </div>
 

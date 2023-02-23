@@ -4,21 +4,20 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import * as FileSaver from 'file-saver';
 import { combineLatest } from 'rxjs';
 
-import { Step } from '../../../components/breadcrump/breadcrump.component';
-import { Comment } from '../../../model/comment';
-import { Meeting } from '../../../model/meeting';
-import { MeetingUser } from '../../../model/meeting_user';
-import { User } from '../../../model/user';
-import { AuthenticationService } from '../../../services/authentication.service';
-import { MeetingService } from '../../../services/meeting.service';
-import { TagsService } from '../../../services/tags.service';
+import { Step } from '../../components/breadcrump/breadcrump.component';
+import { Comment } from '../../model/comment';
+import { Meeting } from '../../model/meeting';
+import { MeetingUser } from '../../model/meeting_user';
+import { AuthenticationService } from '../../services/authentication.service';
+import { MeetingService } from '../../services/meeting.service';
+import { TagsService } from '../../services/tags.service';
 import { MeetingUtil } from './meeting.util';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from '../../../services/config.service';
-import { BaseComponent } from '../../../components/base/base.component';
+import { ConfigService } from '../../services/config.service';
+import { BaseComponent } from '../../components/base/base.component';
 import * as moment from 'moment';
-import { UsersStore } from '../../../core/store/user.store';
+
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
@@ -34,7 +33,7 @@ export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   templateUrl: './meeting.component.html',
   styleUrls: ['./meeting.component.scss']
 })
-export class MeetingComponent extends BaseComponent implements OnInit {
+export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy {
   isNew: boolean;
   meeting: Meeting;
   potentialAttendees: MeetingUser[] = new Array<MeetingUser>();
@@ -47,36 +46,38 @@ export class MeetingComponent extends BaseComponent implements OnInit {
   allTags = [];
   formGroup: FormGroup;
   steps: Step[] = [];
-  
+
   imageFolder = this.configService.config.meeting_image_folder;
   tmpImgData: any;
 
-  users: User[] = [];
   editorContent = "";
+
+  contexMenuIsOpen = false;
+  editMode = false;
 
   constructor(
     private authService: AuthenticationService,
     private meetingService: MeetingService,
     private route: ActivatedRoute,
     private router: Router,
-    usersStore: UsersStore,
     private configService: ConfigService<any>,
     private tagsService: TagsService,
     private formBuilder: FormBuilder) {
       super();
-      usersStore.users().pipe(first()).subscribe(users=>this.users=users);
   }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       title: '',
       shortDescription: '',
-      courseOrEvent: '',
+      courseOrEvent: 'event',
       date: '',
       startTime: '',
       endTime: '',
       location: '',
-      costCenter: ''
+      costCenter: '',
+      numberOfAllowedExternals: 0,
+      isFreetime: true
     });
 
     this.addSubscription(combineLatest([this.route.url, this.route.params]).subscribe(([url, params]) => {
@@ -93,6 +94,7 @@ export class MeetingComponent extends BaseComponent implements OnInit {
     this.addSubscription(this.tagsService.getAllTags().subscribe((tags: string[]) => {
       this.allTags = tags;
     }));
+
   }
 
   updateValidators(meeting) {
@@ -159,10 +161,13 @@ export class MeetingComponent extends BaseComponent implements OnInit {
     this.isNew = true;
 
     this.meeting = new Meeting();
-    this.courseOrEvent.patchValue('event');
+    this.meeting.username = this.authService.getLoggedInUsername();
     this.meeting.numberOfAllowedExternals = 0;
-    this.meeting.isIdea = isIdea;
+    this.meeting.isFreetime = true;
+    this.meeting.isIdea = !!isIdea;
+    this.courseOrEvent.patchValue('event');
 
+    this.editMode = true;
     this.isEditable = true;
     this.editorContent = '';
 
@@ -190,16 +195,7 @@ export class MeetingComponent extends BaseComponent implements OnInit {
       this.editorContent = this.meeting.description;
       this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
     
-      this.formGroup.patchValue({
-        title: this.meeting.title,
-        shortDescription: this.meeting.shortDescription,
-        courseOrEvent: this.meeting.courseOrEvent,
-        date: MeetingUtil.dateToString(this.meeting.startTime),
-        startTime: MeetingUtil.dateToTimeString(this.meeting.startTime),
-        endTime: MeetingUtil.dateToTimeString(this.meeting.endTime),
-        location: this.meeting.location,
-        costCenter: this.meeting.costCenter});
-
+      this.setForm(this.meeting);
       this.tags = meeting.tags;
 
       this.steps = [
@@ -207,6 +203,21 @@ export class MeetingComponent extends BaseComponent implements OnInit {
         {title: this.meeting.title }
       ];
     }));
+  }
+
+  setForm(meeting: Meeting) {
+    this.formGroup.patchValue({
+      title: meeting.title,
+      shortDescription: meeting.shortDescription,
+      courseOrEvent: meeting.courseOrEvent,
+      date: MeetingUtil.dateToString(this.meeting.startTime),
+      startTime: MeetingUtil.dateToTimeString(this.meeting.startTime),
+      endTime: MeetingUtil.dateToTimeString(this.meeting.endTime),
+      location: meeting.location,
+      costCenter: meeting.costCenter,
+      numberOfParticipants: meeting.numberOfAllowedExternals,
+      isFreetime: meeting.isFreetime
+    });
   }
 
   loadPotentialAttendees(mid) {
@@ -231,6 +242,11 @@ export class MeetingComponent extends BaseComponent implements OnInit {
     }
   }
 
+  onCancel() {
+    this.setForm(this.meeting);
+    this.editMode = false;
+  }
+
   createMeetingObject(): Meeting {
     var meeting = new Meeting();
     meeting.mid = this.meeting.mid;
@@ -239,7 +255,7 @@ export class MeetingComponent extends BaseComponent implements OnInit {
     meeting.courseOrEvent = this.courseOrEvent.value;
     meeting.description = this.editorContent;
     var date = MeetingUtil.stringToDate(this.date.value);
-    
+
     var startTime = this.startTime.value.split(':');
     meeting.startTime = moment(date).hours(startTime[0]).minutes(startTime[1]).toDate();
     
@@ -248,6 +264,9 @@ export class MeetingComponent extends BaseComponent implements OnInit {
 
     meeting.location = this.location.value;
     meeting.costCenter = this.costCenter.value;
+    meeting.numberOfAllowedExternals = this.formGroup.get('numberOfAllowedExternals').value;
+    meeting.username = this.authService.getLoggedInUsername();
+    meeting.isFreetime = this.formGroup.get('isFreetime').value; 
     meeting.tags = this.tags;
     return meeting;
   }
@@ -363,7 +382,7 @@ export class MeetingComponent extends BaseComponent implements OnInit {
   }
 
   downloadCSV() {
-    const csv = MeetingUtil.generateCSV(this.potentialAttendees, this.users);
+    const csv = MeetingUtil.generateCSV(this.potentialAttendees);
     const blob = new Blob([csv], { type: 'text/csv' });
     FileSaver.saveAs(blob, 'attendees-for-meeting-' + this.meeting.mid + '.csv');
   }
@@ -377,11 +396,6 @@ export class MeetingComponent extends BaseComponent implements OnInit {
 
   setTemporaryImage(img: any) {
     this.tmpImgData = img;
-  }
-
-  getUser(username: string) {
-    const res = this.users.find( user => user.username === username);
-    return res ? res : username;
   }
 
   getAttendedNumber() {
@@ -406,10 +420,6 @@ export class MeetingComponent extends BaseComponent implements OnInit {
 
   hasEveryoneTookPart() {
     return this.potentialAttendees.length === this.getAttendedNumber();
-  }
-
-  checkboxChanged() {
-    this.meeting.numberOfAllowedExternals === 0 ? this.meeting.numberOfAllowedExternals = 1 : this.meeting.numberOfAllowedExternals = 0;
   }
 
   numberOfParticipants() {

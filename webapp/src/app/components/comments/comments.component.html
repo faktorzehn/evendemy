@@ -1,15 +1,14 @@
 <div class="comments">
   <div class="list">
     <div class="comment" *ngFor="let comment of comments">
-      <a class="user" routerLink="/user-info/{{comment.author}}">
-        <evendemy-user-image [username]="comment.author" width="50" height="50"></evendemy-user-image>
-        <div class="name">{{getUser(comment.author) | name}}</div>
-      </a>
-      <div class="message">
-        <div class="body">
-          {{comment.text}}
-        </div>
+      <div class="header">
+        <evendemy-user-image [user]="getUser(comment.author)" width="20" height="20"></evendemy-user-image>
+        <div class="name" routerLink="/user-info/{{comment.author}}">{{getUser(comment.author) | name}}</div>
+        &#x2022;
         <div class="date">{{comment.creationDate | date:'HH:mm dd.MM.yyyy'}}</div>
+      </div>
+      <div class="message">
+        {{comment.text}}
       </div>
     </div>
   </div>

@@ -10,11 +10,11 @@ import { MeetingsService } from '../../services/meetings.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'evendemy-user-info-new',
-  templateUrl: './user-info-new.component.html',
-  styleUrls: ['./user-info-new.component.scss']
+  selector: 'evendemy-user-info',
+  templateUrl: './user-info.component.html',
+  styleUrls: ['./user-info.component.scss']
 })
-export class UserInfoNewComponent extends BaseComponent{
+export class UserInfoComponent extends BaseComponent{
 
   contexMenuIsOpen = false;
   editMode = false;
