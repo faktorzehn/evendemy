@@ -15,12 +15,15 @@
 	},
 	"serverconfig":{},
 	"calendar":{
-			"domain": "evendemy.domain.at",
+			"domain": "evendemy.com",
 			"company": "Your Company",
 			"product": "Evendemy",
 			"name": "Evendemy",
 			"timezone": "Europe/Berlin",
-			"organizer": ""
+			"organizer": {
+				"name": "Evendemy",
+				"email": "info@evendemy.com"
+			}
 	}, 	
 	"locations": [
 		{"name": "Wien", "color": ""},

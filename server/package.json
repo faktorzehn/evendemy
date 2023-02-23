@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "basic-auth": "^1.1.0",
-    "ical-generator": "^0.2.9",
+    "ical-generator": "^3.6.1",
     "ldapauth-fork": "^3.0.0",
     "moment": "^2.21.0",
     "mongoose": "^6.5.2",

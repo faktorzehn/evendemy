@@ -20,7 +20,10 @@
 			"product": "Evendemy",
 			"name": "Evendemy",
 			"timezone": "Europe/Berlin",
-			"organizer": ""
+			"organizer": {
+				"name": "Evendemy",
+				"email": "info@evendemy.com"
+			}
 	},
 	"locations": [
 		{"name": "digital", "color": ""}

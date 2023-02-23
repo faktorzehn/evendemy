@@ -10,6 +10,10 @@ module.exports = {
 		});
 
 		var event = cal.createEvent(cal_event);
+        event.organizer({
+            name: config.organizer.name,
+            email: config.organizer.email
+        });
 
 		return cal.toString();
 	},
@@ -21,12 +25,17 @@ module.exports = {
 
             if (config.calendar !== null) {
 
+                var summary = 'Evendemy: ' + meeting.title;
+                if(meeting.shortDescription) {
+                    summary += ' - ' + meeting.shortDescription;
+                }
+
                 var evendemy_event = {
                     start: meeting.startTime,
                     end: meeting.endTime,
                     timestamp: new Date(),
-                    summary: 'Evendemy:' + meeting.title,
-                    organizer: config.calendar.organizer
+                    summary: summary,
+                    location: meeting.location
                 };
 
                 if (meeting.location) {
