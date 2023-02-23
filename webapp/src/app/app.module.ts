@@ -11,7 +11,6 @@ import { AttendeeTableComponent } from './components/attendee-table/attendee-tab
 import { BreadcrumpComponent } from './components/breadcrump/breadcrump.component';
 import { EvendemyCheckboxComponent } from './components/checkbox/checkbox.component';
 import { CommentsComponent } from './components/comments/comments.component';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
@@ -48,6 +47,7 @@ import { UserInfoComponent } from './pages/user-info/user-info.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { MeetingCardComponent } from './components/meeting-card/meeting-card.component';
+import { ConfirmDialogContentComponent } from './components/dialog/confirm-dialog-content/confirm-dialog-content.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -74,7 +74,6 @@ const appRoutes: Routes = [
     EditorComponent,
     ErrorComponent,
     FooterComponent,
-    ConfirmDialogComponent,
     MeetingListComponent,
     ImageUploadDialogComponent,
     NamePipe,
@@ -97,7 +96,8 @@ const appRoutes: Routes = [
     BaseComponent,
     EditableInputComponent,
     UserInfoComponent,
-    DialogComponent
+    DialogComponent,
+    ConfirmDialogContentComponent
   ],
   imports: [
     BrowserAnimationsModule,

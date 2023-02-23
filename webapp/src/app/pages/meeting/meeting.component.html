@@ -8,20 +8,20 @@
           <div class="meeting-image" *ngIf="!tmpImgData">
             <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}"
               onError="this.src='assets/no-image.png'" />
-            <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" data-toggle="modal"
-              data-target="#evendemy-image-upload-dialog">change</button>
+            <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
+              (click)="openDialog('evendemy-image-upload-dialog')">change</button>
           </div>
           <div class="meeting-image" *ngIf="tmpImgData">
             <img [src]="tmpImgData">
-            <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" data-toggle="modal"
-              data-target="#evendemy-image-upload-dialog">change</button>
+            <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
+              (click)="openDialog('evendemy-image-upload-dialog')">change</button>
           </div>
           <div class="section section-context-menu" *ngIf="!editMode">
             <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
             <evendemy-context-menu *ngIf="contexMenuIsOpen && isEditable">
-              <p (click)="editMode = true">Bearbeiten</p>
-              <p data-toggle="modal" data-target="#confirmDialog">Löschen</p>
-              <p data-toggle="modal" data-target="#copyDialog">Duplizieren</p>
+              <p (click)="closeContextMenu(); editMode = true">Bearbeiten</p>
+              <p (click)="closeContextMenu(); openDialog('confirmDialog')">Löschen</p>
+              <p (click)="closeContextMenu(); openDialog('copyDialog')">Duplizieren</p>
             </evendemy-context-menu>
           </div>
 
@@ -29,7 +29,7 @@
           <div class="section-edit-bar" *ngIf="editMode">
             <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()"
               [disabled]="!form.form.valid">Veröffentlichen</button>
-            <button *ngIf="!isNew && isEditable" class="btn" data-toggle="modal" data-target="#cancelDialog">Abbrechen</button>
+            <button *ngIf="!isNew && isEditable" class="btn"  (click)="openDialog('cancelDialog')">Abbrechen</button>
           </div>
 
           <div class="section section-header">
@@ -208,35 +208,44 @@
           <evendemy-comments [comments]="meeting.comments" (addComment)="onAddComment($event)"></evendemy-comments>
         </div>
 
-        <evendemy-confirm-dialog title="Do you really want to cancel?" (confirm)="onCancel()"
-        dialogID="cancelDialog">
+        <evendemy-dialog (confirm)="onCancel()"
+        id="cancelDialog">
+        <evendemy-confirm-dialog-content (byConfirm)="onCancel()" (byCancel)="closeDialog('cancelDialog')">
+          <h4>Do you really want to cancel?</h4>
           All your changed date will be lost.
           <br />
           <br /> Do you really want to cancel?
-        </evendemy-confirm-dialog>
+        </evendemy-confirm-dialog-content>
+        </evendemy-dialog>
 
-        <evendemy-confirm-dialog title="Do you really want to delete?" (confirm)="onDeleteMeeting()"
-          dialogID="confirmDialog">
-          You can not revert this action. The attendees will be informed that the meeting will not take place.
-          <br />
-          <br /> Do you really want to delete this meeting?
-        </evendemy-confirm-dialog>
+        <evendemy-dialog id="confirmDialog">
+          <evendemy-confirm-dialog-content (byConfirm)="onDeleteMeeting()" (byCancel)="closeDialog('confirmDialog')">
+            <h4>Do you really want to delete?</h4>
+            You can not revert this action. The attendees will be informed that the meeting will not take place.
+            <br />
+            <br /> Do you really want to delete this meeting?
+          </evendemy-confirm-dialog-content>
+        </evendemy-dialog>
 
-        <evendemy-confirm-dialog title="Do you really want to copy this meeting?" (confirm)="onCopy()"
-          dialogID="copyDialog">
-          With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
-          <br />
-          <br /> Do you really want to create this meeting?
-        </evendemy-confirm-dialog>
+        <evendemy-dialog id="copyDialog">
+          <evendemy-confirm-dialog-content (byConfirm)="onCopy()" (byCancel)="closeDialog('copyDialog')">
+            <h4>Do you really want to copy this meeting?</h4>
+            With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
+            <br />
+            <br /> Do you really want to create this meeting?
+          </evendemy-confirm-dialog-content>
+        </evendemy-dialog>
 
-        <evendemy-confirm-dialog title="Do you really want to make a meeting of your idea?" (confirm)="onMakeAMeeting()"
-          dialogID="copyToMeetingDialog">
-          With this action you will create a meeting of your idea! You can edit things before saving. Your image will
-          not be
-          copied!
-          <br />
-          <br /> Do you really want to copy this meeting?
-        </evendemy-confirm-dialog>
+        <evendemy-dialog id="copyToMeetingDialog">
+          <evendemy-confirm-dialog-content (byConfirm)="onMakeAMeeting()" (byCancel)="closeDialog('copyToMeetingDialog')">
+            <h4>Do you really want to make a meeting of your idea?</h4>
+            With this action you will create a meeting of your idea! You can edit things before saving. Your image will
+            not be
+            copied!
+            <br />
+            <br /> Do you really want to copy this meeting?
+          </evendemy-confirm-dialog-content>
+        </evendemy-dialog>
 
         <evendemy-image-upload-dialog (data)="setTemporaryImage($event)"></evendemy-image-upload-dialog>
 

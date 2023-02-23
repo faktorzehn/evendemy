@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../../services/config.service';
 import { BaseComponent } from '../../components/base/base.component';
 import * as moment from 'moment';
+import { DialogService } from '../../core/services/dialog.service';
 
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
@@ -62,7 +63,8 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     private router: Router,
     private configService: ConfigService<any>,
     private tagsService: TagsService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private dialogService: DialogService) {
       super();
   }
 
@@ -245,6 +247,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   onCancel() {
     this.setForm(this.meeting);
     this.editMode = false;
+    this.dialogService.hide('cancelDialog');
   }
 
   createMeetingObject(): Meeting {
@@ -327,6 +330,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.isNew = true;
     this.userHasAccepted = false;
     this.userHasFinished = false;
+    this.dialogService.hide('copyDialog');
   }
 
   onMakeAMeeting() {
@@ -437,5 +441,17 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
 
   getStatus() {
     return MeetingUtil.mapStatus(this.isNew,  this.userHasAccepted, this.userHasFinished);
+  }
+
+  openDialog(id: string) {
+    this.dialogService.show(id);
+  }
+
+  closeDialog(id: string) {
+    this.dialogService.hide(id);
+  }
+
+  closeContextMenu() {
+    this.contexMenuIsOpen = false;
   }
 }

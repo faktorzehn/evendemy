@@ -3,9 +3,8 @@
     <button class="btn btn-info" (click)="onAccept(null)">
       <i class="fa fa-thumbs-up fa-lg"></i> I am interested
     </button>
-    <button *ngIf="meeting.numberOfAllowedExternals > 0" class="btn" data-toggle="modal"
-      data-target="#externalDialog">
-      <i class="fa fa-user-plus fa-lg"></i> I am interested with a friend
+    <button *ngIf="meeting.numberOfAllowedExternals > 0" class="btn" (click)="openDialog()">
+      I am interested with a friend
     </button>
   </div>
 
@@ -33,8 +32,11 @@
   </div>
 </div>
 
-<evendemy-confirm-dialog title="Do you want to take some friend with you?" (confirm)="onAccept(external.value)" dialogID="externalDialog">
-  This idea allows you to take some friend with you. If you want, please enter a name.
-  <br/>
-  <input type="text" class="form-control" #external style="margin-top:10px;" />
-</evendemy-confirm-dialog>
+<evendemy-dialog id="idea-external-dialog">
+  <evendemy-confirm-dialog-content (byCancel)="closeDialog()" (byConfirm)="onAccept(external.value)">
+    <h4>Do you want to take some friend with you?</h4>
+    This idea allows you to take some friend with you. If you want, please enter a name.
+    <br/>
+    <input type="text" class="form-control" #external style="margin-top:10px;" />
+  </evendemy-confirm-dialog-content>
+</evendemy-dialog>
