@@ -1,23 +1,75 @@
 @import './../../../variables';
 
-.evendemy-title{
-    text-align: center; font-size: 80px;
-    color: $evendemy-primary;
-}
+.background {
+    background-color: $evendemy-primary;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-@media(max-width: 768px){
-    .evendemy-title{
-        font-size: 4em;
+    .block {
+        background-color: white;
+        max-width: 50rem;
+        border-radius: 5px;
+        padding: 3rem;
+        margin: 3rem auto;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .logo {
+                text-align: center;
+    
+                img {
+                    width: 10rem;
+                }
+        
+                .title{
+                    text-align: center; font-size: 3rem;
+                    color: $evendemy-primary;
+                }
+            }
+    
+            .label-with-input {
+                
+                p {
+                    margin: 0;
+                }
+    
+                input {
+                    width: 100%;
+                    border: 1px solid #a6a6a6;
+                    border-radius: 2px;
+                    padding: 5px;
+                }
+    
+            }
+
+            .btn {
+                margin-top: 1rem;
+                width: 100%;
+            }
+        }
     }
 }
 
-.evendemy-invalid-info{
-    margin: 10px;
-    padding: 10px;
-    background-color: rgb(197, 197, 197);
-    width: 100%;
+
+@media(max-width: 500px){
+    .title{
+        font-size: 4em;
+    }
+
+    .background > .block {
+        margin: 3rem 2rem;
+    }
 }
 
-.evendemy-login-button{
-    width: 100%;
+.error{
+    padding: 10px;
+    background-color: #ffe893;
+    color: #938656;
 }

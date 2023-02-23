@@ -4,28 +4,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { BaseComponent } from '../../components/base/base.component';
 
 @Component({
   selector: 'evendemy-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent extends BaseComponent {
 
   private returnLink = '';
   public invalidLogin = false;
-  private subscription: Subscription;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthenticationService) { }
-
-  ngOnInit() {
-    this.subscription = this.route.queryParams.subscribe(params => this.returnLink = params['return'] || '/meetings');
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    private authService: AuthenticationService) { 
+      super();
+      this.addSubscription(this.route.queryParams.subscribe(params => this.returnLink = params['return'] || '/meetings'));
   }
 
   login(username: string, password: string) {
@@ -41,5 +36,4 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.invalidLogin = true;
     });
   }
-
 }
