@@ -1,5 +1,5 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, ElementRef, HostListener, Inject, Injector, Input, OnInit, Optional, Self, ViewChild } from '@angular/core';
+import { ControlValueAccessor, FormControl, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'evendemy-editable-text',
@@ -13,7 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
-export class EditableTextComponent implements ControlValueAccessor {
+export class EditableTextComponent implements OnInit, ControlValueAccessor {
 
   @Input() 
   placeholder = '';
@@ -39,7 +39,13 @@ export class EditableTextComponent implements ControlValueAccessor {
     this.onTouch(val)
   }
 
-  constructor(private elementRef: ElementRef) {
+  private controll: NgControl;
+
+  constructor(private elementRef: ElementRef, @Inject(Injector) private injector: Injector) {
+  }
+
+  ngOnInit(): void {
+    this.controll = this.injector.get(NgControl);
   }
 
   @HostListener('document:click', ['$event'])
@@ -87,6 +93,10 @@ export class EditableTextComponent implements ControlValueAccessor {
 
   noValue(): boolean {
     return this.value === '' || !this.value;
+  }
+
+  get invalid(): boolean {
+    return this.controll.invalid;
   }
 
 }

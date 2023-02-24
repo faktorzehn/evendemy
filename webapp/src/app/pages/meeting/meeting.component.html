@@ -26,10 +26,16 @@
           </div>
 
           <!--Tools-->
-          <div class="section-edit-bar" *ngIf="editMode">
-            <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()"
-              [disabled]="!form.form.valid">Veröffentlichen</button>
-            <button *ngIf="!isNew && isEditable" class="btn"  (click)="openDialog('cancelDialog')">Abbrechen</button>
+          <div class="section-edit-bar" [ngClass]="{'invalid':!form.form.valid}" *ngIf="editMode">
+            <div class="message" *ngIf="!form.form.valid">
+              <fa-icon icon="triangle-exclamation"></fa-icon>Es gibt Fehler. Siehe rot umrandete Felder.
+            </div>
+            <div *ngIf="form.form.valid"></div>
+            <div class="right">
+              <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()"
+                [disabled]="!form.form.valid">Veröffentlichen</button>
+              <button *ngIf="!isNew && isEditable" class="btn"  (click)="openDialog('cancelDialog')">Abbrechen</button>
+            </div>
           </div>
 
           <div class="section section-header">

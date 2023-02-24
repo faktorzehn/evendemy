@@ -71,12 +71,26 @@ h6 {
 
         .section-edit-bar {
           display: flex;
-          flex-direction: row-reverse;
-          gap: 1rem;
+          justify-content: space-between;
+          align-items: center;
           padding: 1rem;
           border-top: 1px solid white;
           border-bottom: 1px solid #d9d9d9;
           margin-bottom: 1rem;
+
+          .message {
+            color: #ff4000;
+            
+            fa-icon {
+              margin-right: 1rem;
+            }
+          }
+
+          .right {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 1rem;
+          }
         }
 
         .section {
@@ -86,8 +100,13 @@ h6 {
 
             .place {
               display: flex;
+              align-items: center;
               gap: 1rem;
               margin-top: 2rem;
+
+              fa-icon {
+                margin-right: 2px;
+              }
 
               evendemy-editable-text {
                 width: 20rem;

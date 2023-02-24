@@ -36,7 +36,7 @@ import { TagInputModule } from 'ngx-chips';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faAngleLeft, faBars, faCalendar, faClose, faEllipsis, faLocationDot, faTag } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faBars, faCalendar, faClose, faEllipsis, faLocationDot, faTag, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
 import { MeetingListComponent } from './pages/meeting-list/meeting-list.component';
@@ -132,5 +132,6 @@ export class AppModule {
     library.addIcons(faTag);
     library.addIcons(faEllipsis);
     library.addIcons(faClose);
+    library.addIcons(faTriangleExclamation);
   }
 }

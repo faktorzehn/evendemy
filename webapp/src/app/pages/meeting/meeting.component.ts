@@ -173,6 +173,8 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.isEditable = true;
     this.editorContent = '';
 
+    this.updateValidators(this.meeting);
+
     this.steps = [
       {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
       {title: 'new'}
@@ -199,6 +201,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     
       this.setForm(this.meeting);
       this.tags = meeting.tags;
+      this.updateValidators(meeting);
 
       this.steps = [
         {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
@@ -255,15 +258,20 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     meeting.mid = this.meeting.mid;
     meeting.title = this.title.value;
     meeting.shortDescription = this.shortDescription.value;
+    meeting.isIdea = this.meeting.isIdea;
     meeting.courseOrEvent = this.courseOrEvent.value;
     meeting.description = this.editorContent;
     var date = MeetingUtil.stringToDate(this.date.value);
 
-    var startTime = this.startTime.value.split(':');
-    meeting.startTime = moment(date).hours(startTime[0]).minutes(startTime[1]).toDate();
+    if(this.date.value && this.startTime.value) {
+      var startTime = this.startTime.value.split(':');
+      meeting.startTime = moment(date).hours(startTime[0]).minutes(startTime[1]).toDate();
+    }
     
-    var endTime = this.endTime.value.split(':');
-    meeting.endTime = moment(date).hours(endTime[0]).minutes(endTime[1]).toDate();
+    if(this.date.value && this.endTime.value) {
+      var endTime = this.endTime.value.split(':');
+      meeting.endTime = moment(date).hours(endTime[0]).minutes(endTime[1]).toDate();
+    }
 
     meeting.location = this.location.value;
     meeting.costCenter = this.costCenter.value;
