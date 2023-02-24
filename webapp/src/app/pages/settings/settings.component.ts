@@ -14,8 +14,7 @@ import { UserService } from '../../services/user.service';
 export class SettingsComponent extends BaseComponent{
 
   form = this.fb.group({
-    'meetings_visible': [true],
-    'locations_filter_for_mails': [[]]
+    'meetings_visible': 'true'
   });
 
   user?: User;

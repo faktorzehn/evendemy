@@ -92,6 +92,7 @@ const appRoutes: Routes = [
     EditableTextComponent,
     ContextMenuComponent,
     MeetingListComponent,
+    SettingsComponent,
     MeetingCardComponent,
     BaseComponent,
     EditableInputComponent,
