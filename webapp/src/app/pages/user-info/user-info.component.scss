@@ -1,5 +1,5 @@
 .page {
-    margin: 4rem;
+    margin: 2rem;
 }
 
 .block-container{
@@ -20,10 +20,9 @@
 }
 
 .meeting-container {
-    margin: 0 10rem;
 
     h4 {
-        margin: 5rem 0 1rem;
+        margin: 3rem 0 1rem;
     }
     
     .meetings {
@@ -36,7 +35,7 @@
 .section-context-menu {
     position: relative;
     text-align: right;
-    margin: 1rem 2rem !important;
+    margin: 1rem 1rem 0 !important;
 
     evendemy-context-menu {
         position: absolute;
@@ -66,30 +65,30 @@
 }
 
 .section-user {
-    margin: 0 2rem 2rem;
+    margin: 0 2rem 1rem;
     display: flex;
     gap: 2rem;
     align-items: center;
 
     .username {
-        font-size: 3rem;
+        font-size: 2rem;
         width: 100%;
         font-weight: 600;
         margin: 0;
     }
-
+    
     .jobTitle {
         width: 100%;
+        margin-left: -0.5rem;
     }
 
     .summary {
         display: flex;
         gap: 2rem;
-        margin-top: 2rem;
-
+        
         .column {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
 
             .circle {
                 border-radius: 1rem;
@@ -101,7 +100,7 @@
 }
 
 .section-description {
-    margin: 1rem 2rem;
+    margin: 0 2rem;
     padding: 1rem;
     border-radius: 5px;
     width: 50rem;

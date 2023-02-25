@@ -1,0 +1,25 @@
+<div class="dialog-content">
+  <div>
+      <h5 class="title">Upload Image</h5>
+      <div>
+          <div class="file-upload">
+              <input id="custom-input" type="file" (change)="fileSelected($event)">
+          </div>
+          <image-cropper
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="ratio"
+                format="jpeg"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()"
+                (loadImageFailed)="loadImageFailed()"
+            ></image-cropper>
+          <!-- <img-cropper #cropper [image]="_data" [settings]="cropperSettings"></img-cropper> -->
+      </div>
+      <div class="footer">
+        <button type="button" class="btn btn-info" (click)="onConfirm()">Apply</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Close</button>
+      </div>
+  </div>
+</div>

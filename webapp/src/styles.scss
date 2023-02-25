@@ -1,4 +1,5 @@
 @import "variables";
+@import "assets/style.css";
 
 html {
   height: 100%;
@@ -7,6 +8,60 @@ html {
 body {
   height: 100%;
   background-color: $evendemy-background !important;
+  margin: 0;
+}
+
+a {
+  color: #3bafda;
+  text-decoration: none;
+}
+
+input, select {
+  font-size: 1rem;
+  padding: 0.4rem;
+  border-radius: 2px;
+  min-height: 1rem;
+  outline: 1px solid hsl(0, 0%, 78%);
+  border: none;
+}
+
+.btn {
+  padding: 6px 12px;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: #aab2bd;
+  border-color: #aab2bd;
+  color: #fff;
+
+  &:hover {
+    background-color: #ccd1d9;
+    border-color: #ccd1d9;
+    outline: 0!important;
+  }
+
+  &.btn-info {
+    background-color: #37bc9b;
+    border-color: #37bc9b;
+    color: white;
+
+    &:hover {
+      background-color: #48cfad;
+      border-color: #48cfad;
+    }
+  }
+
+  &.btn-danger {
+    background-color: #da4453;
+    border-color: #da4453;
+    color: white;
+
+    &:hover {
+      background-color: #ed5565;
+      border-color: #ed5565;
+    }
+  }
 }
 
 .evendemy-badge {

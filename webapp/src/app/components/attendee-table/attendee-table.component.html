@@ -19,7 +19,7 @@
     </td>
     <td>{{row.dateOfRegistration | date:'dd.MM.yyyy'}}</td>
     <td>
-        <button class="btn btn-success" (click)="onClickTakeParteButton(row)" [disabled]="disableTakePartButton" *ngIf="!row.tookPart">
+        <button class="btn btn-info" (click)="onClickTakeParteButton(row)" [disabled]="disableTakePartButton" *ngIf="!row.tookPart">
           <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
           has taken part
         </button>

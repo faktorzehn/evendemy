@@ -9,12 +9,12 @@
             <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}"
               onError="this.src='assets/no-image.png'" />
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
-              (click)="openDialog('evendemy-image-upload-dialog')">change</button>
+              (click)="openDialog('image-upload')">change</button>
           </div>
           <div class="meeting-image" *ngIf="tmpImgData">
             <img [src]="tmpImgData">
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
-              (click)="openDialog('evendemy-image-upload-dialog')">change</button>
+              (click)="openDialog('image-upload')">change</button>
           </div>
           <div class="section section-context-menu" *ngIf="!editMode">
             <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
@@ -39,11 +39,11 @@
           </div>
 
           <div class="section section-header">
-            <evendemy-editable-text [editable]="editMode" style="font-size: 3rem; width: 100%; font-weight: 600;" [placeholder]="editMode ? 'Titel' : undefined"
+            <evendemy-editable-text [editable]="editMode" class="title" [placeholder]="editMode ? 'Titel' : undefined"
               formControlName="title"></evendemy-editable-text>
-            <evendemy-editable-text [editable]="editMode" style="font-size: 2rem; width: 100%" [placeholder]="editMode ? 'Untertitel' : undefined"
+            <evendemy-editable-text [editable]="editMode" class="subtitle" [placeholder]="editMode ? 'Untertitel' : undefined"
               formControlName="shortDescription"></evendemy-editable-text>
-            <div style="margin-top: 2rem">
+            <div style="margin-left: 0.5rem; margin-top: 1rem">
               von 
               <span style="margin-left: 5px;">
                 <evendemy-user-image [username]="meeting.username" [width]="25" [height]="25"></evendemy-user-image>
@@ -68,14 +68,14 @@
           </div>
 
           <div class="section section-description">
-            <h6>Details</h6>
+            <h4>Details</h4>
             <evendemy-editable-input [editable]="editMode" [value]="editorContent" [placeholder]="'Beschreibung'">
               <evendemy-editor [value]="meeting?.description" (change)="editorChanged($event)" [editable]="true"></evendemy-editor>
             </evendemy-editable-input>
           </div>
 
           <div class="section section-more">
-            <h6>Weitere Informationen</h6>
+            <h4>Weitere Informationen</h4>
             <div class="more-field">
               <div>Typ</div>
               <evendemy-editable-input [editable]="editMode" class="courseOrEvent" [placeholder]="editMode ? 'Kurs oder Event' : undefined" [value]="formGroup.get('courseOrEvent')?.value === 'course' ? 'Kurs' : 'Event'">
@@ -253,7 +253,9 @@
           </evendemy-confirm-dialog-content>
         </evendemy-dialog>
 
-        <evendemy-image-upload-dialog (data)="setTemporaryImage($event)"></evendemy-image-upload-dialog>
+        <evendemy-dialog id="image-upload">
+          <evendemy-image-upload-dialog-content (byConfirm)="getImageDataFromDialog($event)" (byClose)="closeDialog('image-upload')"></evendemy-image-upload-dialog-content>
+        </evendemy-dialog>
 
       </div>
       <div class="attend-info" *ngIf="!isNew">

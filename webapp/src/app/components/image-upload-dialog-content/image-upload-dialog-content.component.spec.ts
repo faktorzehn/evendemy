@@ -1,22 +1,22 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImageUploadDialogComponent } from './image-upload-dialog.component';
+import { ImageUploadDialogContentComponent } from './image-upload-dialog-content.component';
 import { ImageCropperComponent } from 'ngx-img-cropper';
 
-describe('ImageUploadDialogComponent', () => {
-  let component: ImageUploadDialogComponent;
-  let fixture: ComponentFixture<ImageUploadDialogComponent>;
+describe('ImageUploadDialogContentComponent', () => {
+  let component: ImageUploadDialogContentComponent;
+  let fixture: ComponentFixture<ImageUploadDialogContentComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImageUploadDialogComponent, ImageCropperComponent ]
+      declarations: [ ImageUploadDialogContentComponent, ImageCropperComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ImageUploadDialogComponent);
+    fixture = TestBed.createComponent(ImageUploadDialogContentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

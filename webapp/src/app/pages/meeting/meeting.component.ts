@@ -406,8 +406,9 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     }));
   }
 
-  setTemporaryImage(img: any) {
+  getImageDataFromDialog(img: any) {
     this.tmpImgData = img;
+    this.dialogService.hide('image-upload');
   }
 
   getAttendedNumber() {

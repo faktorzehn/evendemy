@@ -27,10 +27,14 @@ h6 {
       align-items: flex-start;
 
       .meeting {
-        width: 65rem;
+        width: 40rem;
         background-color: white;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
         border-radius: 5px;
+
+        h4 {
+          margin: 0 0 0.5rem 0;
+        }
 
         .meeting-image {
           position: relative;
@@ -94,15 +98,27 @@ h6 {
         }
 
         .section {
-          margin: 0 3rem 3rem;
+          margin: 0 2rem 2rem;
 
           &.section-header {
+
+            .title {
+              font-size: 2rem; 
+              width: 100%; 
+              font-weight: 600;
+            }
+
+            .subtitle {
+              font-size: 1.5rem; 
+              width: 100%
+            }
 
             .place {
               display: flex;
               align-items: center;
               gap: 1rem;
               margin-top: 2rem;
+              margin-left: 0.5rem;
 
               fa-icon {
                 margin-right: 2px;
@@ -122,26 +138,32 @@ h6 {
               display: flex;
               gap: 1rem;
               align-items: center;
+              margin-left: 0.5rem;
 
               .date{
-                width: 8rem;
+                width: 6rem;
               }
 
               .start-time,
               .end-time {
-                width: 5rem;
+                width: 3rem;
               }
             }
           }
 
           &.section-description {
-            min-height: 10rem;
+            min-height: 8rem;
+
+            h4 {
+              margin-left: 0.5rem;
+            }
           }
 
           &.section-more {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            margin-left: 2.5rem;
 
             h6 {
               margin-bottom: 0;
@@ -153,8 +175,8 @@ h6 {
               align-items: center;
 
               &>div:first-of-type {
-                width: 14rem;
-                min-width: 14rem;
+                width: 10rem;
+                min-width: 10rem;
               }
 
               &div:not(:first-of-type) {
@@ -163,11 +185,11 @@ h6 {
 
               .selectBox {
                 width: 100%;
-                padding: 0.5rem 0.5rem 0.5rem 0;
+                padding: 0.4rem 0.4rem 0.4rem 0.2rem;
               }
 
               .not-editbale-field {
-                padding: 0.5rem;
+                padding: 0.4rem;
               }
 
               evendemy-editable-text {
@@ -201,12 +223,12 @@ h6 {
 
       .attend-info {
         background-color: white;
-        width: 250px;
+        width: 200px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 2rem 1rem;
+        padding: 1rem 1rem;
         gap: 1rem;    
         position: sticky;
         top: 5px;
@@ -270,3 +292,16 @@ $pretty--colors: (
 @import '~pretty-checkbox/src/pretty-checkbox.scss';
 
 @import './../../override-tags-styling';
+
+@media screen and (max-width:900px) {
+  .page .main .content {
+    .meeting {
+      width: 100%;
+    }
+
+    .attend-info {
+      display: none;
+    }
+  }
+  
+}

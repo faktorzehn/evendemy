@@ -1,8 +1,8 @@
 .card {
     width: 250px;
-    height: 340px;
+    height: 320px;
     background-color: white;
-    padding: 1rem;
+    padding: 0.8rem;
     cursor: pointer;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border-radius: 5px;
@@ -40,8 +40,8 @@
 
     .info-container {
         display: flex;
-        gap: 2rem;
-        padding: 2rem 0;
+        gap: 1rem;
+        padding: 0.5rem 0;
 
         .date {
             font-family: sans-serif;
@@ -52,16 +52,16 @@
             color: #8b8b8b;
 
             .day {    
-                line-height: 5rem;
-                font-size: 6rem;
+                line-height: 3.5rem;
+                font-size: 3.5rem;
             }
 
             .month {
-                font-size: 2.2rem;
+                font-size: 1.3rem;
             }
 
             .time {
-                font-size: 1.1rem;
+                font-size: 0.65rem;
             }
         }
 
@@ -71,14 +71,15 @@
             justify-content: space-between;
 
             .title {
-                font-size: 2rem;
+                font-size: 1.2rem;
                 font-weight: 600;
                 margin: 0;
             }
 
             .short-description {
-                font-size: 1.5rem;
-                height: 1.5rem;
+                font-size: 1rem;
+                height: 1rem;
+                margin: 0 0 1rem 0;
             }
         }
 

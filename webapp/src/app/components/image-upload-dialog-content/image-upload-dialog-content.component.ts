@@ -2,17 +2,16 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, Input, ElementRef }
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 
 @Component({
-  selector: 'evendemy-image-upload-dialog',
-  templateUrl: './image-upload-dialog.component.html',
-  styleUrls: ['./image-upload-dialog.component.scss']
+  selector: 'evendemy-image-upload-dialog-content',
+  templateUrl: './image-upload-dialog-content.component.html',
+  styleUrls: ['./image-upload-dialog-content.component.scss']
 })
-export class ImageUploadDialogComponent implements OnInit {
+export class ImageUploadDialogContentComponent implements OnInit {
 
-  @Input()
-  forMeeting = true;
-
-  @Output()
-  private data = new EventEmitter<any>();
+  @Input()forMeeting = true;
+  
+  @Output() byConfirm: EventEmitter<any> = new EventEmitter();
+  @Output() byCancel: EventEmitter<void> = new EventEmitter();
 
   imageChangedEvent: any;
   croppedImage: any = '';
@@ -57,8 +56,12 @@ export class ImageUploadDialogComponent implements OnInit {
       // show message
   }
 
-  apply() {
-    this.data.emit(this.croppedImage);
+  onConfirm() {
+    this.byConfirm.emit(this.croppedImage);
+  }
+
+  onCancel() {
+    this.byCancel.emit();
   }
 
 }

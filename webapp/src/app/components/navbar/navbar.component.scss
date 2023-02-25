@@ -17,6 +17,7 @@
       >a {
         color: #26816a;
         padding: 17px;
+        text-decoration: none;
 
         &.active {
           color: #fff;
@@ -34,6 +35,7 @@
       color: #26816a;
       padding: 15px;
       font-size: 18px;
+      text-decoration: none;
       cursor: pointer;
 
       &:hover {
@@ -89,7 +91,8 @@
       a {
         padding: 10px;
         color: white;
-
+        text-decoration: none;
+        
         &:hover {
           background-color: #656d78;
 

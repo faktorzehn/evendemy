@@ -13,7 +13,7 @@ import { EvendemyCheckboxComponent } from './components/checkbox/checkbox.compon
 import { CommentsComponent } from './components/comments/comments.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { ImageUploadDialogComponent } from './components/image-upload-dialog/image-upload-dialog.component';
+import { ImageUploadDialogContentComponent } from './components/image-upload-dialog-content/image-upload-dialog-content.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TagComponent } from './components/tag/tag.component';
 import { UserCardComponent } from './components/user-card/user-card.component';
@@ -75,7 +75,7 @@ const appRoutes: Routes = [
     ErrorComponent,
     FooterComponent,
     MeetingListComponent,
-    ImageUploadDialogComponent,
+    ImageUploadDialogContentComponent,
     NamePipe,
     EvendemyCheckboxComponent,
     UserImageComponent,

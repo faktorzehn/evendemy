@@ -30,7 +30,7 @@
       <div class="loading-label" *ngIf="loading">loading...</div>
         <div class="list" *ngIf="!loading">
             <div class="create-card" [routerLink]="isIdea? '/idea': '/meeting'">
-                <p style="font-size: 3rem;">+</p>
+                <p class="plus">+</p>
                 <p>create a new {{isIdea ? 'idea' : 'meeting'}}</p>
                 <button class="btn">create</button>
             </div>

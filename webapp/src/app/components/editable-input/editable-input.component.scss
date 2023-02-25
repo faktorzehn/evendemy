@@ -4,9 +4,9 @@
 }
 
 .text {
-    padding: 0.5rem;
+    padding: 0.4rem;
     border-radius: 2px;
-    min-height: 2rem;
+    min-height: 1rem;
     
     &.editable:hover {
         outline: 1px solid hsl(0, 0%, 78%);
