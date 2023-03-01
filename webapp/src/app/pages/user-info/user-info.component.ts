@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs';
 import { BaseComponent } from '../../components/base/base.component';
+import { DialogService } from '../../core/services/dialog.service';
 import { Meeting } from '../../model/meeting';
 import { User } from '../../model/user';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -24,6 +25,7 @@ export class UserInfoComponent extends BaseComponent{
   createMeetings: Meeting[] = [];
   attendedMeetings: Meeting[] = [];
   editorContent = "";
+  img: any;
 
   form = this.fb.group({
     jobTitle: '',
@@ -34,12 +36,14 @@ export class UserInfoComponent extends BaseComponent{
     private userService: UserService,
     private route: ActivatedRoute,
     private meetingsService: MeetingsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialogService: DialogService
     ) { 
     super();
     this.route.params.pipe(first()).subscribe(params => {
       if (params['username']) {
         this.username = params['username'];
+        this.isEditable = this.username === this.authService.getLoggedInUsername();
       } else {
         this.username = this.authService.getLoggedInUsername();
         this.isEditable = true;
@@ -93,6 +97,38 @@ export class UserInfoComponent extends BaseComponent{
   onCancel() {
     this.editMode = false;
     this.setForm(this.user);
+  }
+
+  changePicture() {
+    this.dialogService.show('image-upload');
+  }
+
+  openDeletePictureDialog() {
+    this.dialogService.show('delete-image');
+  }
+
+  deletePicture() {
+    this.userService.deleteImage(this.username).pipe(first()).subscribe( _ => {
+      window.location.reload();
+    });
+    this.closeDialog('delete-image');
+  }
+
+  closeDialog(id: string) {
+    this.dialogService.hide(id);
+  }
+
+  getImageDataFromDialog(img: any) {
+    this.userService.addImage(this.username, {
+      data: img
+    }).pipe(first()).subscribe( _ => {
+      window.location.reload();
+    });
+    this.closeDialog('image-upload');
+  }
+
+  closeContextMenu() {
+    this.contexMenuIsOpen = false;
   }
 
 

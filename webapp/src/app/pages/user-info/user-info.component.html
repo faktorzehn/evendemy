@@ -1,13 +1,15 @@
 <div class="page">
     <div class="block-container">
-        <div class="block block-user">
-            <div class="section-context-menu" *ngIf="!editMode">
+        <div class="block block-user" [ngStyle]="{'padding-top': isEditable ? '0' :'2rem'}">
+            <div class="section-context-menu" *ngIf="isEditable && !editMode">
                 <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
                 <evendemy-context-menu *ngIf="contexMenuIsOpen && isEditable">
-                    <p (click)="editMode = true">Bearbeiten</p>
+                    <p (click)="closeContextMenu(); editMode = true">Bearbeiten</p>
+                    <p (click)="closeContextMenu(); changePicture()">Profilbild ändern</p>
+                    <p (click)="closeContextMenu(); openDeletePictureDialog()">Profilbild löschen</p>
                 </evendemy-context-menu>
             </div>
-    
+
             <!--Tools-->
             <div class="section-edit-bar" *ngIf="editMode">
                 <button class="btn btn-info" (click)="onSave()">Speichern</button>
@@ -48,4 +50,15 @@
             <evendemy-meeting-card *ngFor="let meeting of attendedMeetings" [meeting]="meeting"></evendemy-meeting-card>
         </div>
     </div>
+
+    <evendemy-dialog id="image-upload">
+        <evendemy-image-upload-dialog-content (byConfirm)="getImageDataFromDialog($event)" (byCancel)="closeDialog('image-upload')" [forMeeting]="false"></evendemy-image-upload-dialog-content>
+    </evendemy-dialog>
+
+    <evendemy-dialog id="delete-image">
+        <evendemy-confirm-dialog-content (byConfirm)="deletePicture()" (byCancel)="closeDialog('delete-image')">
+            <h4>Profilbild löschen?</h4>
+            Möchtest du wirklich das Profilbild löschen? Die Aktion kann nicht rückgängig gemacht werden.
+        </evendemy-confirm-dialog-content>
+    </evendemy-dialog>
 </div>

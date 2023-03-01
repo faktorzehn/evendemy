@@ -102,6 +102,10 @@ h6 {
 
           &.section-header {
 
+            &.not-editable {
+              margin-top: 2rem;
+            }
+
             .title {
               font-size: 2rem; 
               width: 100%; 

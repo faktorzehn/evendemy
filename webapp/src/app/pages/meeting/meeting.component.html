@@ -16,7 +16,7 @@
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
               (click)="openDialog('image-upload')">change</button>
           </div>
-          <div class="section section-context-menu" *ngIf="!editMode">
+          <div class="section section-context-menu" *ngIf="!editMode && isEditable">
             <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
             <evendemy-context-menu *ngIf="contexMenuIsOpen && isEditable">
               <p (click)="closeContextMenu(); editMode = true">Bearbeiten</p>
@@ -38,7 +38,7 @@
             </div>
           </div>
 
-          <div class="section section-header">
+          <div class="section section-header" [ngClass]="{'not-editable': !isEditable}">
             <evendemy-editable-text [editable]="editMode" class="title" [placeholder]="editMode ? 'Titel' : undefined"
               formControlName="title"></evendemy-editable-text>
             <evendemy-editable-text [editable]="editMode" class="subtitle" [placeholder]="editMode ? 'Untertitel' : undefined"
