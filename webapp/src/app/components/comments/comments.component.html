@@ -1,4 +1,4 @@
-<div class="comments">
+<div class="comments" *transloco="let t">
   <div class="list">
     <div class="comment" *ngFor="let comment of comments">
       <div class="header">
@@ -15,7 +15,7 @@
   <div class="edit">
     <textarea [(ngModel)]="commentbox" name="commentbox"></textarea>
     <div class="button-container">
-      <button class="btn btn-info" (click)="onAddComment()">Add Comment</button>
+      <button class="btn btn-info" (click)="onAddComment()">{{t("T:ADD_COMMENT")}}</button>
     </div>
   </div>
 </div>

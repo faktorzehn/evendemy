@@ -1,6 +1,6 @@
-<div class="dialog-content">
+<div class="dialog-content" *transloco="let t">
   <div>
-      <h5 class="title">Upload Image</h5>
+      <h5 class="title">{{t("T:UPLOAD_IMAGE")}}</h5>
       <div>
           <div class="file-upload">
               <input id="custom-input" type="file" (change)="fileSelected($event)">
@@ -15,11 +15,10 @@
                 (cropperReady)="cropperReady()"
                 (loadImageFailed)="loadImageFailed()"
             ></image-cropper>
-          <!-- <img-cropper #cropper [image]="_data" [settings]="cropperSettings"></img-cropper> -->
       </div>
       <div class="footer">
-        <button type="button" class="btn btn-info" (click)="onConfirm()">Apply</button>
-        <button type="button" class="btn btn-secondary" (click)="onCancel()">Close</button>
+        <button type="button" class="btn btn-info" (click)="onConfirm()">{{t("T:APPLY")}}</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">{{t("T:CANCEL")}}</button>
       </div>
   </div>
 </div>

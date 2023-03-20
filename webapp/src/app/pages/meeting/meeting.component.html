@@ -1,5 +1,5 @@
 <div class="page">
-  <div class="main">
+  <div class="main" *transloco="let t">
     <evendemy-breadcrump [steps]="steps"></evendemy-breadcrump>
     <div class="content" *ngIf="meeting">
       <div class="meeting">
@@ -9,42 +9,42 @@
             <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}"
               onError="this.src='assets/no-image.png'" />
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
-              (click)="openDialog('image-upload')">change</button>
+              (click)="openDialog('image-upload')">{{t("T:CHANGE_IMAGE")}}</button>
           </div>
           <div class="meeting-image" *ngIf="tmpImgData">
             <img [src]="tmpImgData">
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
-              (click)="openDialog('image-upload')">change</button>
+              (click)="openDialog('image-upload')">{{t("T:CHANGE_IMAGE")}}</button>
           </div>
           <div class="section section-context-menu" *ngIf="!editMode && isEditable">
             <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
             <evendemy-context-menu *ngIf="contexMenuIsOpen && isEditable">
-              <p (click)="closeContextMenu(); editMode = true">Bearbeiten</p>
-              <p (click)="closeContextMenu(); openDialog('confirmDialog')">Löschen</p>
-              <p (click)="closeContextMenu(); openDialog('copyDialog')">Duplizieren</p>
+              <p (click)="closeContextMenu(); editMode = true">{{t("T:EDIT")}}</p>
+              <p (click)="closeContextMenu(); openDialog('confirmDialog')">{{t("T:DELETE")}}</p>
+              <p (click)="closeContextMenu(); openDialog('copyDialog')">{{t("T:DUPLICATE")}}</p>
             </evendemy-context-menu>
           </div>
 
           <!--Tools-->
           <div class="section-edit-bar" [ngClass]="{'invalid':!form.form.valid}" *ngIf="editMode">
             <div class="message" *ngIf="!form.form.valid">
-              <fa-icon icon="triangle-exclamation"></fa-icon>Es gibt Fehler. Siehe rot umrandete Felder.
+              <fa-icon icon="triangle-exclamation"></fa-icon>{{t("T:MEETING_FIELD_ERROR")}}
             </div>
             <div *ngIf="form.form.valid"></div>
             <div class="right">
               <button *ngIf="isEditable" class="btn btn-info" (click)="onSaveMeeting()"
-                [disabled]="!form.form.valid">Veröffentlichen</button>
-              <button *ngIf="!isNew && isEditable" class="btn"  (click)="openDialog('cancelDialog')">Abbrechen</button>
+                [disabled]="!form.form.valid">{{t("T:PUBLISH")}}</button>
+              <button *ngIf="!isNew && isEditable" class="btn"  (click)="openDialog('cancelDialog')">{{t("T:CANCEL")}}</button>
             </div>
           </div>
 
           <div class="section section-header" [ngClass]="{'not-editable': !isEditable}">
-            <evendemy-editable-text [editable]="editMode" class="title" [placeholder]="editMode ? 'Titel' : undefined"
+            <evendemy-editable-text [editable]="editMode" class="title" [placeholder]="editMode ? t('T:MEETING_TITLE') : undefined"
               formControlName="title"></evendemy-editable-text>
-            <evendemy-editable-text [editable]="editMode" class="subtitle" [placeholder]="editMode ? 'Untertitel' : undefined"
+            <evendemy-editable-text [editable]="editMode" class="subtitle" [placeholder]="editMode ? t('T:MEETING_SUBTITLE') : undefined"
               formControlName="shortDescription"></evendemy-editable-text>
             <div style="margin-left: 0.5rem; margin-top: 1rem">
-              von 
+              {{t("T:MEETING_FROM_AUTHOR")}}
               <span style="margin-left: 5px;">
                 <evendemy-user-image [username]="meeting.username" [width]="25" [height]="25"></evendemy-user-image>
                 {{meeting.username}}
@@ -61,27 +61,27 @@
                 formControlName="date"></evendemy-editable-text>
               <evendemy-editable-text [editable]="editMode" class="start-time" [placeholder]="editMode ? 'mm:hh' : undefined"
                 formControlName="startTime"></evendemy-editable-text>
-              bis
+              {{t("T:MEETING_UNTIL")}}
               <evendemy-editable-text [editable]="editMode" class="end-time" [placeholder]="editMode ? 'mm:hh' : undefined"
                 formControlName="endTime"></evendemy-editable-text>
             </div>
           </div>
 
           <div class="section section-description">
-            <h4>Details</h4>
-            <evendemy-editable-input [editable]="editMode" [value]="editorContent" [placeholder]="'Beschreibung'">
+            <h4>{{t("T:MEETING_DETAILS")}}</h4>
+            <evendemy-editable-input [editable]="editMode" [value]="editorContent" [placeholder]="t('T:MEETING_DESCRIPTION')">
               <evendemy-editor [value]="meeting?.description" (change)="editorChanged($event)" [editable]="true"></evendemy-editor>
             </evendemy-editable-input>
           </div>
 
           <div class="section section-more">
-            <h4>Weitere Informationen</h4>
+            <h4>{{t("T:MEETING_MORE_DETAILS")}}</h4>
             <div class="more-field">
-              <div>Typ</div>
-              <evendemy-editable-input [editable]="editMode" class="courseOrEvent" [placeholder]="editMode ? 'Kurs oder Event' : undefined" [value]="formGroup.get('courseOrEvent')?.value === 'course' ? 'Kurs' : 'Event'">
+              <div>{{t("T:MEETING_TYPE")}}</div>
+              <evendemy-editable-input [editable]="editMode" class="courseOrEvent" [placeholder]="editMode ? t('MEETING_COURSE_OR_EVENT') : undefined" [value]="formGroup.get('courseOrEvent')?.value === 'course' ? t('T:COURSE') : t('T:EVENT')">
                 <select formControlName="courseOrEvent" class="selectBox">
-                  <option value="course">Kurs</option>
-                  <option value="event">Event</option>
+                  <option value="course">{{t("T:COURSE")}}</option>
+                  <option value="event">{{t("T:EVENT")}}</option>
                 </select>
               </evendemy-editable-input>
             </div>
@@ -97,11 +97,11 @@
               </evendemy-editable-input>
             </div>
             <div class="more-field">
-              <div>In der Freizeit</div>
-              <evendemy-editable-input [editable]="editMode" class="isFreetime" [placeholder]="editMode ? 'In der Freizeit?' : undefined" [value]="formGroup.get('isFreetime')?.value === 'true' ? 'Ja' : 'Nein'">
+              <div>{{t("T:MEETING_IN_FREETIME")}}</div>
+              <evendemy-editable-input [editable]="editMode" class="isFreetime" [placeholder]="editMode ? t('T:MEETING_IN_FREETIME_PLACEHOLDER') : undefined" [value]="formGroup.get('isFreetime')?.value === 'true' ? t('T:YES') : t('T:NO')">
                 <select formControlName="isFreetime" class="selectBox">
-                  <option [value]="true">Ja</option>
-                  <option [value]="false">Nein</option>
+                  <option [value]="true">{{t("T:YES")}}</option>
+                  <option [value]="false">{{t("T:NO")}}</option>
                 </select>
               </evendemy-editable-input>
             </div>
@@ -111,51 +111,31 @@
                 formControlName="costCenter"></evendemy-editable-text>
             </div>
             <div class="more-field">
-              <div>Externe erlaubt</div>
-              <evendemy-editable-input [editable]="editMode" class="externalsAreAllowed" [placeholder]="editMode ? 'Sind externe erlaubt?' : undefined" [value]="formGroup.get('numberOfAllowedExternals')?.value === '1' ? 'Ja' : 'Nein'">
+              <div>{{t("T:EXTERNAL_ALLOWED")}}</div>
+              <evendemy-editable-input [editable]="editMode" class="externalsAreAllowed" [value]="formGroup.get('numberOfAllowedExternals')?.value === '1' ? t('T:ALLOWED') : t('T:NOT_ALLOWED')">
                 <select formControlName="numberOfAllowedExternals" class="selectBox">
-                  <option value="1">Ja</option>
-                  <option value="0">Nein</option>
+                  <option value="1">{{t("T:ALLOWED")}}</option>
+                  <option value="0">{{t("T:NOT_ALLOWED")}}</option>
                 </select>
               </evendemy-editable-input>
             </div>
             <div class="more-field">
-              <div>Erstellt am</div>
+              <div>{{t("T:MEETING_CREATED_AT")}}</div>
               <div *ngIf="meeting?.creationDate" class="not-editbale-field">{{meeting.creationDate | date:'dd.MM.yyyy'}}</div>
             </div>
             <div class="more-field">
-              <div>Zuletzt aktualisiert</div>
+              <div>{{t("T:MEETING_LAST_UPDATE")}}</div>
               <div *ngIf="meeting?.lastUpdateDate" class="not-editbale-field">{{meeting.lastUpdateDate | date:'dd.MM.yyyy'}}</div>
             </div>
           </div>
-
-          <!-- Todo zu entfernen-->
-          <div *ngIf="false">
-            <div class="row form-row">
-              <div class="col-md-4">Tags</div>
-              <div class="col-md-8" *ngIf="isEditable">
-                <tag-input [(ngModel)]="meeting.tags" [ngModelOptions]="{standalone: true}" name="tag"
-                  [removable]="isEditable" [modelAsStrings]="true" (onSelect)="onTagSelect($event)"
-                  (onAdd)="onAddingTag($event)">
-                  <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
-                  </tag-input-dropdown>
-                </tag-input>
-              </div>
-              <div class="col-md-8" *ngIf="!isEditable">
-                <a [routerLink]="['/meetings']" [queryParams]="{tags: tag}" style="display: inline-block;"
-                  *ngFor="let tag of meeting.tags; let last = last">{{tag}}{{last?'':','}}</a>
-              </div>
-            </div>
-          </div>
-
         </form>
 
         <!--Attenees-List-->
         <div class="section section-attendee-list" *ngIf="!isNew">
           <div class="attendee-list-header">
-            <h5>{{numberOfParticipants()}} Participants</h5>
+            <h5>{{numberOfParticipants()}} {{t("T:ATTENDEES")}}</h5>
             <div class="attendee-actions">
-              <a class="meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">download csv</a>
+              <a class="meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">{{t("T:DOWNLOAD_CSV")}}</a>
               <a [ngClass]="{'not-active-link': listView}" (click)="listView = false"><i
                   class="fa fa-th-large fa-lg"></i></a>
               <a [ngClass]="{'not-active-link': !listView}" (click)="listView = true"><i
@@ -200,56 +180,45 @@
 
         <div *ngIf="isInThePast()">
           <p class="meeting-participants-info" *ngIf="hasEveryoneTookPart()">
-            <i class="fa fa-info-circle fa-lg"></i> {{getAttendedNumber()}} took part.
+            <i class="fa fa-info-circle fa-lg"></i> {{t("T:MEETING_NUMBER_TOOK_PART", {attendedNumber: getAttendedNumber()})}}
           </p>
           <p class="meeting-participants-info" *ngIf="!hasEveryoneTookPart()">
-            <i class="fa fa-info-circle fa-lg"></i> {{getAttendedNumber()}} took part and {{getNotAttendedNumber()}}
-            didn´t showed up.
+            <i class="fa fa-info-circle fa-lg"></i> {{t("T:MEETING_NUMBER_TOOK_PART_BUT_DIDNT_SHOW_UP", {attendedNumber: getAttendedNumber(), notAttendedNumber: getNotAttendedNumber()})}}
           </p>
         </div>
 
         <!--COMMENTS-->
         <div class="section section-comments" *ngIf="!isNew">
-          <h5 id="comments">Comments</h5>
+          <h5 id="comments">{{t("T:COMMENTS")}}</h5>
           <evendemy-comments [comments]="meeting.comments" (addComment)="onAddComment($event)"></evendemy-comments>
         </div>
 
         <evendemy-dialog (confirm)="onCancel()"
         id="cancelDialog">
         <evendemy-confirm-dialog-content (byConfirm)="onCancel()" (byCancel)="closeDialog('cancelDialog')">
-          <h4>Do you really want to cancel?</h4>
-          All your changed date will be lost.
-          <br />
-          <br /> Do you really want to cancel?
+          <h4>{{t("T:MEETING_DIALOG_CANCEL_TITEL")}}</h4>
+          {{t("T:MEETING_DIALOG_CANCEL_DESCRIPTION")}}
         </evendemy-confirm-dialog-content>
         </evendemy-dialog>
 
         <evendemy-dialog id="confirmDialog">
           <evendemy-confirm-dialog-content (byConfirm)="onDeleteMeeting()" (byCancel)="closeDialog('confirmDialog')">
-            <h4>Do you really want to delete?</h4>
-            You can not revert this action. The attendees will be informed that the meeting will not take place.
-            <br />
-            <br /> Do you really want to delete this meeting?
+            <h4>{{t("T:MEETING_DIALOG_DELETE_TITEL")}}</h4>
+            {{t("T:MEETING_DIALOG_DELETE_DESCRIPTION")}}
           </evendemy-confirm-dialog-content>
         </evendemy-dialog>
 
         <evendemy-dialog id="copyDialog">
           <evendemy-confirm-dialog-content (byConfirm)="onCopy()" (byCancel)="closeDialog('copyDialog')">
-            <h4>Do you really want to copy this meeting?</h4>
-            With this action you will copy this meeting! You can edit things before saving. Your image will not be copied!
-            <br />
-            <br /> Do you really want to create this meeting?
+            <h4>{{t("T:MEETING_DIALOG_COPY_TITEL")}}</h4>
+            {{t("T:MEETING_DIALOG_COPY_DESCRIPTION")}}
           </evendemy-confirm-dialog-content>
         </evendemy-dialog>
 
         <evendemy-dialog id="copyToMeetingDialog">
           <evendemy-confirm-dialog-content (byConfirm)="onMakeAMeeting()" (byCancel)="closeDialog('copyToMeetingDialog')">
-            <h4>Do you really want to make a meeting of your idea?</h4>
-            With this action you will create a meeting of your idea! You can edit things before saving. Your image will
-            not be
-            copied!
-            <br />
-            <br /> Do you really want to copy this meeting?
+            <h4>{{t("T:MEETING_DIALOG_CREATE_MEETING_FROM_IDEA_TITEL")}}</h4>
+            {{t("T:MEETING_DIALOG_CREATE_MEETING_FROM_IDEA_DESCRIPTION")}}
           </evendemy-confirm-dialog-content>
         </evendemy-dialog>
 
@@ -266,14 +235,14 @@
           <evendemy-user-image [username]="authService.getLoggedInUsername()" width="100" height="100"></evendemy-user-image>
         </div>
         <button class="btn btn-info" (click)="onAcceptMeeting(null)" *ngIf="getStatus() === 'NOT_ATTENDING'">
-          I want to participate
+          {{t("T:I_WANT_TO_PARTICIPATE")}}
         </button>
 
         <button class="btn btn-danger" (click)="onRejectMeeting()" *ngIf="getStatus() === 'ATTENDING'">
-          I cannot participate anymore
+          {{t("T:I_CANNOT_ATTEND")}}
         </button>
         <button class="btn btn-info" (click)="onGetCalendar()" [disabled]="!hasValidDateAndTime()" *ngIf="getStatus() === 'ATTENDING'">
-          <i class="fa fa-calendar fa-lg"></i> Calendar
+          <i class="fa fa-calendar fa-lg"></i> {{t("T:CALENDAR")}}
         </button>
       </div>
     </div>

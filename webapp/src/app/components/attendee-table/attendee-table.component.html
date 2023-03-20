@@ -1,27 +1,27 @@
-<table>
+<table *transloco="let t">
   <tr>
-    <th>Name</th>
-    <th>External</th>
-    <th>State</th>
-    <th>Date of Registration</th>
-    <th>Action</th>
+    <th>{{t("T:NAME")}}</th>
+    <th>{{t("T:EXTERNAL")}}</th>
+    <th>{{t("T:STATE")}}</th>
+    <th>{{t("T:DATE_OF_REGISTRATION")}}</th>
+    <th>{{t("T:ACTION")}}</th>
   </tr>
   <tr *ngFor="let row of attendees;">
     <td>{{getUser(row.username) | name}}</td>
     <td>{{row.externals}}</td>
     <td>
       <div *ngIf="row.tookPart">
-        <span class="meeting-tag">confirmed</span>
+        <span class="meeting-tag">{{t("T:CONFIRMED")}}</span>
       </div>
       <div *ngIf="!row.tookPart">
-        takes part
+        {{t("T:TAKES_PART")}}
       </div>
     </td>
     <td>{{row.dateOfRegistration | date:'dd.MM.yyyy'}}</td>
     <td>
         <button class="btn btn-info" (click)="onClickTakeParteButton(row)" [disabled]="disableTakePartButton" *ngIf="!row.tookPart">
           <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
-          has taken part
+          {{t("T:HAS_TAKEN_PART")}}
         </button>
     </td>
   </tr>

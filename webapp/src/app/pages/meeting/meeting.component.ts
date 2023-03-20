@@ -18,7 +18,7 @@ import { ConfigService } from '../../services/config.service';
 import { BaseComponent } from '../../components/base/base.component';
 import * as moment from 'moment';
 import { DialogService } from '../../core/services/dialog.service';
-
+import { TranslocoService } from '@ngneat/transloco'
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
@@ -64,6 +64,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     private configService: ConfigService<any>,
     private tagsService: TagsService,
     private formBuilder: FormBuilder,
+    private translationService: TranslocoService,
     private dialogService: DialogService) {
       super();
   }
@@ -176,8 +177,8 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.updateValidators(this.meeting);
 
     this.steps = [
-      {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
-      {title: 'new'}
+      {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? this.translationService.translate('T:IDEAS') : this.translationService.translate('T:MEETINGS')},
+      {title: this.translationService.translate('T:NEW')}
     ];
   }
 

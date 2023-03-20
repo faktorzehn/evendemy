@@ -1,42 +1,41 @@
-<div class="attendee-status">
+<div class="attendee-status" *transloco="let t">
   <div *ngIf="isNotAttending()"  class="evendemy-tools evendemy-tools--centered">
     <button class="btn btn-info" (click)="onAccept(null)">
-      I want to participate
+      {{t("T:I_WANT_TO_PARTICIPATE")}}
     </button>
     <button *ngIf="meeting.numberOfAllowedExternals > 0" class="btn" (click)="openDialog()">
-      I want to participate with a friend
+      {{t("T:I_WANT_TO_PARTICIPATE_WITH_A_FRIEND")}}
     </button>
   </div>
 
   <div class="info-box" *ngIf="isAttending()">
-    <h4>Have a great time!</h4>
-    <p>You registered for the event and can take part. Your host and you will get a mail. If something will change, you
-      will be informed. Enjoy your meeting!</p>
+    <h4>{{t("T:MEETING_ATTENDING_INFO_TITLE")}}</h4>
+    <p>{{t("T:MEETING_ATTENDING_INFO_BODY")}}</p>
     <div class="info-box-buttons">
       <button class="btn btn-danger" (click)="onReject()">
-        I cannot participate anymore
+        {{t("T:I_CANNOT_ATTEND")}}
       </button>
       <button class="btn btn-info" (click)="onCalendar()" [disabled]="!hasValidDate()">
-        <i class="fa fa-calendar fa-lg"></i> Calendar
+        <i class="fa fa-calendar fa-lg"></i> {{t("T:CALENDAR")}}
       </button>
     </div>
   </div>
 
   <div class="info-box" *ngIf="isConfirmed()">
-    <h4>Thank you for taking part!</h4>
-    <p>You have been confirmed that you have participated.</p>
+    <h4>{{t("T:MEETING_CONFIRMED_INFO_TITLE")}}</h4>
+    <p>{{t("T:MEETING_CONFIRMED_INFO_BODY")}}</p>
     <div class="info-box-buttons">
       <button class="btn btn-info" (click)="onCalendar()" [disabled]="!hasValidDate()">
-        <i class="fa fa-calendar fa-lg"></i> Calendar
+        <i class="fa fa-calendar fa-lg"></i> {{t("T:CALENDAR")}}
       </button>
     </div>
   </div>
 </div>
 
-<evendemy-dialog id="meeting-external-dialog">
+<evendemy-dialog id="meeting-external-dialog" *transloco="let t">
   <evendemy-confirm-dialog-content (byCancel)="closeDialog()" (byConfirm)="onAccept(external.value)">
-    <h4>Do you want to take some friend with you?</h4>
-    This meeting allows you to take some friend with you. If you want, please enter a name.
+    <h4>{{t("T:MEETING_PARTICIPATE_WITH_A_FRIEND_DIALOG_TITLE")}}</h4>
+    {{t("T:MEETING_PARTICIPATE_WITH_A_FRIEND_DIALOG_BODY")}}
     <br/>
     <input type="text" class="form-control" #external style="margin-top:10px;" />
   </evendemy-confirm-dialog-content>

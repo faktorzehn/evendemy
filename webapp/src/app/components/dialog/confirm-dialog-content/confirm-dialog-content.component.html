@@ -2,8 +2,8 @@
     <div>
         <ng-content></ng-content>
     </div>
-    <div class="buttons">
-        <button type="button" class="btn btn-info confirm-button" (click)="onConfirm()">Yes</button>
-        <button type="button" class="btn btn-secondary" (click)="onCancel()">Close</button>
+    <div class="buttons" *transloco="let t">
+        <button type="button" class="btn btn-info confirm-button" (click)="onConfirm()">{{t("T:YES")}}</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">{{t("T:CANCEL")}}</button>
     </div>
 </div>

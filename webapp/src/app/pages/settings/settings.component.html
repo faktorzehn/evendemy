@@ -1,22 +1,24 @@
-<div class="page">
-    <div class="block">
-        <h4>Einstellungen</h4>
-        <form [formGroup]="form">
-            <div class="settings-field">
-                <p>Meetings auf der Profilseite:</p> 
-                <select formControlName="meetings_visible" class="selectBox">
-                    <option value="true">Sichtbar</option>
-                    <option value="false">Nicht sichtbar</option>
-                </select>
-            </div>
-        </form>
-        <button class="btn btn-info" (click)="onSave()">Speichern</button>
+<ng-container *transloco="let t">
+    <div class="page">
+        <div class="block">
+            <h4>{{t("T:SETTINGS")}}</h4>
+            <form [formGroup]="form">
+                <div class="settings-field">
+                    <p>{{t("T:SETTINGS_MEETINGS_ON_PROFILE_PAGE")}}</p> 
+                    <select formControlName="meetings_visible" class="selectBox">
+                        <option value="true">{{t("T:VISIBLE")}}</option>
+                        <option value="false">{{t("T:NOT_VISIBLE")}}</option>
+                    </select>
+                </div>
+            </form>
+            <button class="btn btn-info" (click)="onSave()">{{t("T:SAVE")}}</button>
+        </div>
     </div>
-</div>
-<evendemy-dialog id="success-dialog">
-    <div class="dialog-content">
-        <h4>Gespeichert</h4>
-        <p>Deine Einstellungen wurden gespeichert.</p>
-        <button class="btn btn-info" (click)="closeDialog()">Okay</button>
-    </div>
-  </evendemy-dialog>
+    <evendemy-dialog id="success-dialog" >
+        <div class="dialog-content">
+            <h4>{{t("T:SETTINGS_DIALOG_SAVED_TITLE")}}</h4>
+            <p>{{t("T:SETTINGS_DIALOG_SAVED_DESCRIPTION")}}</p>
+            <button class="btn btn-info" (click)="closeDialog()">{{t("T:OKAY")}}</button>
+        </div>
+      </evendemy-dialog>
+</ng-container>

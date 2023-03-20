@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *transloco="let t">
     <div class="image-container">
         <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
         <div class="new-tag" *ngIf="isMeetingNew(meeting)">Neu</div>
@@ -24,6 +24,6 @@
     </div>
     
     <div class="number-of-attendees">
-        2 TeilnehmerInnen
+        2 {{t("T:ATTENDEES")}}
     </div>
 </div>

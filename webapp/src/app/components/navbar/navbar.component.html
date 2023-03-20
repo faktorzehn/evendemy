@@ -1,11 +1,11 @@
-<nav class="navbar">
+<nav class="navbar" *transloco="let t">
   <div class="left">
     <fa-icon class="burger-menu" [icon]="'bars'" (click)="onBurgerMenuClick()"></fa-icon>
     <a class="logo" routerLink="/meetings">Evendemy</a>
     <div class="page-links">
-      <a routerLink="/meetings" routerLinkActive="active">Meetings</a>
-      <a routerLink="/ideas" routerLinkActive="active">Ideas</a>
-      <a routerLink="/users" routerLinkActive="active">Users</a>
+      <a routerLink="/meetings" routerLinkActive="active">{{t("T:MEETINGS")}}</a>
+      <a routerLink="/ideas" routerLinkActive="active">{{t("T:IDEAS")}}</a>
+      <a routerLink="/users" routerLinkActive="active">{{t("T:USERS")}}</a>
     </div>
   </div>
   <div class="profile-menu" (click)="popupMenuIsOpen = !popupMenuIsOpen">
@@ -13,10 +13,10 @@
     <evendemy-user-image class="menu-user-image" [username]="user?.username" width="30" height="30"></evendemy-user-image>
     <span class="caret"></span>
     <div class="popup-menu" *ngIf="popupMenuIsOpen">
-        <a routerLink="/user-info">Account</a>
-        <a routerLink="/settings">Einstellungen</a>
-        <a (click)="showDialog()">Infos & Nutzungshinweise</a>
-        <a routerLink="/login" (click)="onLogout()">Log out</a>
+        <a routerLink="/user-info">{{t("T:ACCOUNT")}}</a>
+        <a routerLink="/settings">{{t("T:SETTINGS")}}</a>
+        <a (click)="showDialog()">{{t("T:INFOS_AND_USAGE_NOTICE")}}</a>
+        <a routerLink="/login" (click)="onLogout()">{{t("T:LOGOUT")}}</a>
     </div>
   </div>
 </nav>

@@ -1,4 +1,4 @@
-<div class="thumbnail" [ngClass]="{'thumbnail-small': small}">
+<div class="thumbnail" [ngClass]="{'thumbnail-small': small}" *transloco="let t">
   <div class="caption text-center thumbnail-container">
     <div>
       <div style="position:relative;">
@@ -13,12 +13,12 @@
         </div>
       </div>
       <h3 class="meeting-title">{{firstname}} {{lastname}}</h3>
-      <span class="meeting-tag" *ngIf="tookPart">confirmed</span>
+      <span class="meeting-tag" *ngIf="tookPart">{{t('T:CONFIRMED')}}</span>
     </div>
 
     <button class="btn btn-info" (click)="onClickTakePartButton()" *ngIf="showTakePartButton" [disabled]="disableTakePartButton">
       <span class="glyphicon glyphicon-ok" aria-hidden="true" style="padding-right: 5px;"></span>
-      has taken part
+      {{t('T:HAS_TAKEN_PART')}}
     </button>
   </div>
 </div>

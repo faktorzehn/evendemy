@@ -1,17 +1,17 @@
-<div class="event-or-course">
+<div class="event-or-course" *transloco="let t">
     <!-- filter bar -->
     <div class="tool-bar">
       <div>
-        Type:
+        {{t("T:MEETING_TYPE")}}:
         <select [(ngModel)]="type" class="tool-bar-select" (click)="onToolbarChange()">
-              <option value="all">All</option>
-              <option value="event">Events</option>
-              <option value="course">Courses</option>
+              <option value="all">{{t("T:ALL")}}</option>
+              <option value="event">{{t("T:EVENT")}}</option>
+              <option value="course">{{t("T:COURSE")}}</option>
         </select>
-        Date:
-        <evendemy-checkbox *ngIf="isIdea" [label]="'not announced'" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
-        <evendemy-checkbox [label]="'old'" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
-        <evendemy-checkbox [label]="'new'" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
+        {{t("T:DATE")}}:
+        <evendemy-checkbox *ngIf="isIdea" [label]="t('T:WITHOUT_DATE')" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
+        <evendemy-checkbox [label]="t('T:OLD')" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
+        <evendemy-checkbox [label]="t('T:NEW')" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
         Tags:
         <tag-input [(ngModel)]="selectedTags" name="tag" [modelAsStrings]="true"
           [onlyFromAutocomplete]="true"
@@ -31,8 +31,8 @@
         <div class="list" *ngIf="!loading">
             <div class="create-card" [routerLink]="isIdea? '/idea': '/meeting'">
                 <p class="plus">+</p>
-                <p>create a new {{isIdea ? 'idea' : 'meeting'}}</p>
-                <button class="btn">create</button>
+                <p>{{isIdea ? t('T:CREAT_A_NEW_IDEA') : t('T:CREAT_A_NEW_MEETING')}}</p>
+                <button class="btn">{{t('T:CREATE')}}</button>
             </div>
             <ng-container *ngFor="let meeting of meetings">
                 <evendemy-meeting-card [meeting]="meeting" [routerLink]="(isIdea? '/idea/' : '/meeting/')+meeting.mid"></evendemy-meeting-card>
