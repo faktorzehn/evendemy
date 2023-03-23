@@ -8,10 +8,14 @@
               <option value="event">{{t("T:EVENT")}}</option>
               <option value="course">{{t("T:COURSE")}}</option>
         </select>
+      </div>
+      <div>
         {{t("T:DATE")}}:
         <evendemy-checkbox *ngIf="isIdea" [label]="t('T:WITHOUT_DATE')" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
         <evendemy-checkbox [label]="t('T:OLD')" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
         <evendemy-checkbox [label]="t('T:NEW')" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
+      </div>
+      <div>
         Tags:
         <tag-input [(ngModel)]="selectedTags" name="tag" [modelAsStrings]="true"
           [onlyFromAutocomplete]="true"

@@ -136,7 +136,7 @@
           <div class="attendee-list-header">
             <h5>{{numberOfParticipants()}} {{t("T:ATTENDEES")}}</h5>
             <div class="attendee-actions">
-              <a class="meeting-csv-link" *ngIf="isEditable" (click)="downloadCSV()">{{t("T:DOWNLOAD_CSV")}}</a>
+              <a class="csv-link" *ngIf="isEditable" (click)="downloadCSV()">{{t("T:DOWNLOAD_CSV")}}</a>
               <a [ngClass]="{'not-active-link': listView}" (click)="listView = false"><i
                   class="fa fa-th-large fa-lg"></i></a>
               <a [ngClass]="{'not-active-link': !listView}" (click)="listView = true"><i
@@ -144,9 +144,11 @@
             </div>
           </div>
           <div *ngIf="!listView">
-            <div style="display: flex; flex-wrap: wrap;">
-              <div *ngFor="let attendee of potentialAttendees; trackBy: attendee?.username">
-                <evendemy-attendee-card [additionalAttendee]="attendee.externals[0]" [tookPart]="attendee.tookPart"
+            <div class="attendee-cards">
+                <evendemy-attendee-card 
+                  *ngFor="let attendee of potentialAttendees; trackBy: attendee?.username"
+                  [additionalAttendee]="attendee.externals[0]" 
+                  [tookPart]="attendee.tookPart"
                   [username]="attendee.username"
                   [firstname]="attendee.firstname"
                   [lastname]="attendee.lastname"
@@ -155,7 +157,6 @@
                   [disableTakePartButton]="!isInThePastOrToday() || !hasValidDateAndTime()" [small]="!isEditable"
                   (tookPartClicked)="onHasTakenPart($event)" (removeAttendee)="onRemoveAttendee($event)">
                 </evendemy-attendee-card>
-              </div>
             </div>
           </div>
 
