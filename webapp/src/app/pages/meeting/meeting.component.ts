@@ -342,6 +342,8 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.isNew = true;
     this.userHasAccepted = false;
     this.userHasFinished = false;
+    this.editMode = true;
+    this.refreshBreadcrumb();
     this.dialogService.hide('copyDialog');
   }
 
