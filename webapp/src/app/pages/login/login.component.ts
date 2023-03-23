@@ -24,6 +24,7 @@ export class LoginComponent extends BaseComponent {
   }
 
   login(username: string, password: string) {
+    this.invalidLogin = false;
     this.authService.loginUser(username, password).pipe(first()).subscribe((result) => {
       if (result === true) {
         // login successful
