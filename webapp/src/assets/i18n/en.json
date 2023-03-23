@@ -108,5 +108,17 @@
     "T:USER_INFO_DIALOG_DELETE_PICTURE_TITLE": "Delete profile picture?",
     "T:USER_INFO_DIALOG_DELETE_PICTURE_DESCRIPTION": "Do you really want to delete the profile picture? The action cannot be undone.",
     "T:DATE": "Date",
-    "T:CREATE_MEETING_FROM_IDEA": "Create Meeting from Idea"
+    "T:CREATE_MEETING_FROM_IDEA": "Create Meeting from Idea",
+    "T:MONTH_1":"JAN",
+    "T:MONTH_2":"FEB",
+    "T:MONTH_3":"MAY",
+    "T:MONTH_4":"APR",
+    "T:MONTH_5":"MAI",
+    "T:MONTH_6":"JUN",
+    "T:MONTH_7":"JUL",
+    "T:MONTH_8":"AUG",
+    "T:MONTH_9":"SEP",
+    "T:MONTH_10":"OCT",
+    "T:MONTH_11":"NOV",
+    "T:MONTH_12":"DEC"
 }

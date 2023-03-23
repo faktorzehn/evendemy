@@ -109,5 +109,17 @@
     "T:USER_INFO_DIALOG_DELETE_PICTURE_TITLE": "Profilbild löschen?",
     "T:USER_INFO_DIALOG_DELETE_PICTURE_DESCRIPTION": "Möchtest du wirklich das Profilbild löschen? Die Aktion kann nicht rückgängig gemacht werden.",
     "T:DATE": "Datum",
-    "T:CREATE_MEETING_FROM_IDEA": "Treffen aus Idee erstellen"
+    "T:CREATE_MEETING_FROM_IDEA": "Treffen aus Idee erstellen",
+    "T:MONTH_1":"JAN",
+    "T:MONTH_2":"FEB",
+    "T:MONTH_3":"MÄR",
+    "T:MONTH_4":"APR",
+    "T:MONTH_5":"MAI",
+    "T:MONTH_6":"JUN",
+    "T:MONTH_7":"JUL",
+    "T:MONTH_8":"AUG",
+    "T:MONTH_9":"SEP",
+    "T:MONTH_10":"OKT",
+    "T:MONTH_11":"NOV",
+    "T:MONTH_12":"DEZ"
 }

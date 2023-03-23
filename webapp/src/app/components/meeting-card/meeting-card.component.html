@@ -9,7 +9,7 @@
                 {{meeting.startTime | date : 'dd'}}
             </div>
             <div class="month">
-                {{meeting.startTime | date : 'MMMM'}}
+                {{t('T:MONTH_'+ (meeting.startTime | date : 'M'))}}
             </div>
             <div class="time">
                 {{meeting.startTime | date : 'HH:mm'}} - {{meeting.endTime | date : 'HH:mm'}}
