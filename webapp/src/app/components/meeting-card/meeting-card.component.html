@@ -4,7 +4,7 @@
         <div class="new-tag" *ngIf="isMeetingNew(meeting)">Neu</div>
     </div>
     <div class="info-container">
-        <div class="date">
+        <div class="date" *ngIf="meeting.startTime">
             <div class="day">
                 {{meeting.startTime | date : 'dd'}}
             </div>
@@ -18,8 +18,9 @@
         <div class="info">
             <p class="title">{{meeting.title}}</p>
             <p class="short-description">{{meeting.shortDescription}}</p>
-            <div class="place">Wien</div>
-            <div class="place">Stephansplatz 1</div>
+            <!-- TODO: Feature will be implemented in the future-->
+            <!-- <div class="place">Wien</div> -->
+            <div class="place">{{meeting.location}}</div>
         </div>
     </div>
     
