@@ -107,5 +107,6 @@
     "T:USER_INFO_ATTENDED_MEETINGS":"Attended Meetings",
     "T:USER_INFO_DIALOG_DELETE_PICTURE_TITLE": "Delete profile picture?",
     "T:USER_INFO_DIALOG_DELETE_PICTURE_DESCRIPTION": "Do you really want to delete the profile picture? The action cannot be undone.",
-    "T:DATE": "Date"
+    "T:DATE": "Date",
+    "T:CREATE_MEETING_FROM_IDEA": "Create Meeting from Idea"
 }

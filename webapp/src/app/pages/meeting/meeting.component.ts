@@ -176,10 +176,15 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
 
     this.updateValidators(this.meeting);
 
+    this.refreshBreadcrumb();
+  }
+
+  private refreshBreadcrumb() {
     this.steps = [
       {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? this.translationService.translate('T:IDEAS') : this.translationService.translate('T:MEETINGS')},
-      {title: this.translationService.translate('T:NEW')}
+      {title: this.isNew ? this.translationService.translate('T:NEW') : this.meeting.title }
     ];
+
   }
 
   public editorChanged(text: string){
@@ -196,6 +201,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   loadMeeting(mid) {
     this.addSubscription(this.meetingService.getMeeting(mid).pipe(first()).subscribe((meeting) => {
       this.meeting = meeting;
+      this.isNew = false;
       this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
       this.editorContent = this.meeting.description;
       this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
@@ -204,10 +210,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       this.tags = meeting.tags;
       this.updateValidators(meeting);
 
-      this.steps = [
-        {href: this.meeting.isIdea ? 'ideas' : 'meetings', title: this.meeting.isIdea ? 'Ideas' : 'Meetings'},
-        {title: this.meeting.title }
-      ];
+      this.refreshBreadcrumb();
     }));
   }
 
@@ -350,6 +353,9 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.isNew = true;
     this.userHasAccepted = false;
     this.userHasFinished = false;
+    this.editMode = true;
+    this.refreshBreadcrumb();
+    this.dialogService.hide('copyToMeetingDialog');
   }
 
   onAcceptMeeting(external) {
