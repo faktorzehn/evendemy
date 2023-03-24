@@ -44,7 +44,7 @@
               formControlName="title"></evendemy-editable-text>
             <evendemy-editable-text [editable]="editMode" class="subtitle" [placeholder]="editMode ? t('T:MEETING_SUBTITLE') : undefined"
               formControlName="shortDescription"></evendemy-editable-text>
-            <div style="margin-left: 0.5rem; margin-top: 1rem">
+            <div class="created-by">
               {{t("T:MEETING_FROM_AUTHOR")}}
               <span style="margin-left: 5px;">
                 <evendemy-user-image [username]="meeting.username" [width]="25" [height]="25"></evendemy-user-image>

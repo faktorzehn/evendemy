@@ -117,11 +117,15 @@ h6 {
               width: 100%
             }
 
+            .created-by {
+              margin-left: 0.5rem; margin-top: 0.5rem
+            }
+
             .place {
               display: flex;
               align-items: center;
               gap: 1rem;
-              margin-top: 2rem;
+              margin-top: 1.5rem;
               margin-left: 0.5rem;
 
               fa-icon {
