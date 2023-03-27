@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { DialogService } from '../../core/services/dialog.service';
 import { User } from '../../model/user';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -9,7 +9,7 @@ import { UserService } from '../../services/user.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements AfterViewInit, OnDestroy {
 
   @Output() byMenuClick: EventEmitter<void> = new EventEmitter();
 
@@ -19,14 +19,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService, private authService: AuthenticationService, private dialogService: DialogService) { }
 
-  ngOnInit() {
-    this.sub = this.userService.getUserByUsername( this.authService.getLoggedInUsername()).subscribe( (user: User) => {
-      this.user = user;
-    });
+  ngAfterViewInit() {
+    if(this.authService.getLoggedInUsername()){
+      this.sub = this.userService.getUserByUsername(this.authService.getLoggedInUsername()).subscribe( (user: User) => {
+        this.user = user;
+      });
+    }
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if(this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   onLogout() {

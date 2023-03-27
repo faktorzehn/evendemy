@@ -39,7 +39,7 @@ export class AuthenticationService {
   }
 
   public getLoggedInUsername() {
-    return localStorage.getItem('username').toLowerCase();
+    return localStorage.getItem('username')?.toLowerCase();
   }
 
 }
