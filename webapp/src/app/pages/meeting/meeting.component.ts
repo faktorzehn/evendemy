@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {  Component,  OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import * as FileSaver from 'file-saver';
@@ -19,6 +19,7 @@ import { BaseComponent } from '../../components/base/base.component';
 import * as moment from 'moment';
 import { DialogService } from '../../core/services/dialog.service';
 import { TranslocoService } from '@ngneat/transloco'
+import { FormTabberService } from '../../core/services/form-tabber.service';
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
@@ -43,7 +44,6 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   userHasFinished = false;
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
-  tags = [];
   allTags = [];
   formGroup: FormGroup;
   steps: Step[] = [];
@@ -55,6 +55,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
 
   contexMenuIsOpen = false;
   editMode = false;
+  focusEditor = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -65,7 +66,8 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     private tagsService: TagsService,
     private formBuilder: FormBuilder,
     private translationService: TranslocoService,
-    private dialogService: DialogService) {
+    private dialogService: DialogService,
+    private tabber: FormTabberService) {
       super();
   }
 
@@ -73,14 +75,16 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.formGroup = this.formBuilder.group({
       title: '',
       shortDescription: '',
-      courseOrEvent: 'event',
+      location: '',
       date: '',
       startTime: '',
       endTime: '',
-      location: '',
+      description: '',
+      courseOrEvent: 'event',
+      tags: [],
+      isFreetime: true,
       costCenter: '',
       numberOfAllowedExternals: 0,
-      isFreetime: true
     });
 
     this.addSubscription(combineLatest([this.route.url, this.route.params]).subscribe(([url, params]) => {
@@ -98,6 +102,11 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       this.allTags = tags;
     }));
 
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.tabber.unregister(); 
   }
 
   updateValidators(meeting) {
@@ -152,12 +161,20 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     return this.formGroup.get('courseOrEvent');
   }
 
+  get tags() {
+    return this.formGroup.get('tags');
+  }
+
   get location() {
     return this.formGroup.get('location');
   }
 
   get costCenter() {
     return this.formGroup.get('costCenter');
+  }
+
+  get description() {
+    return this.formGroup.get('description');
   }
 
   private initForCreation(isIdea) {
@@ -170,9 +187,9 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.meeting.isIdea = !!isIdea;
     this.courseOrEvent.patchValue('event');
 
-    this.editMode = true;
+    this.setEditMode(true);
     this.isEditable = true;
-    this.editorContent = '';
+    this.description.setValue('');
 
     this.updateValidators(this.meeting);
 
@@ -188,7 +205,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   public editorChanged(text: string){
-    this.editorContent = text;
+    this.formGroup.get('description').setValue(text);
   }
 
   public initForExistingMeeting(mid: string) {
@@ -203,11 +220,11 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       this.meeting = meeting;
       this.isNew = false;
       this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
-      this.editorContent = this.meeting.description;
+      this.description.patchValue(this.meeting.description);
       this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
     
       this.setForm(this.meeting);
-      this.tags = meeting.tags;
+      this.tags.patchValue(meeting.tags);
       this.updateValidators(meeting);
 
       this.refreshBreadcrumb();
@@ -218,14 +235,16 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.formGroup.patchValue({
       title: meeting.title,
       shortDescription: meeting.shortDescription,
-      courseOrEvent: meeting.courseOrEvent,
+      location: meeting.location,
       date: MeetingUtil.dateToString(this.meeting.startTime),
       startTime: MeetingUtil.dateToTimeString(this.meeting.startTime),
       endTime: MeetingUtil.dateToTimeString(this.meeting.endTime),
-      location: meeting.location,
+      description: meeting.description,
+      courseOrEvent: meeting.courseOrEvent,
+      tags: meeting.tags,
+      isFreetime: meeting.isFreetime,
       costCenter: meeting.costCenter,
-      numberOfParticipants: meeting.numberOfAllowedExternals,
-      isFreetime: meeting.isFreetime
+      numberOfParticipants: meeting.numberOfAllowedExternals
     });
   }
 
@@ -253,8 +272,49 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
 
   onCancel() {
     this.setForm(this.meeting);
-    this.editMode = false;
+    this.setEditMode(false);
     this.dialogService.hide('cancelDialog');
+  }
+
+  setEditMode(editMode: boolean) {
+    this.editMode = editMode;
+    if(this.editMode) {
+      this.tabber.register(Object.keys(this.formGroup.controls), (key: string)=> {
+        var el;
+        if(key==='description') {
+          el = document.getElementById('description');
+          if(el) {
+            var textNodes = el.getElementsByClassName('text') as any;
+            if(textNodes && textNodes.length > 0) {
+                textNodes[0].click();
+            }
+            setTimeout(()=>this.focusEditor = true);
+          }
+          
+          return;
+        } else {
+          this.focusEditor = false;
+        }
+
+        el = document.querySelector(`[formControlName="${key}"]`) as any;
+
+        if(el) {
+            if(el.tagName === 'EVENDEMY-EDITABLE-TEXT') {
+                var textNodes = el.getElementsByClassName('text');
+                if(textNodes && textNodes.length > 0) {
+                    textNodes[0].click();
+                }
+            } else if(el.parentElement.parentElement.tagName === 'EVENDEMY-EDITABLE-INPUT') {
+                    var textNodes =el.parentElement.parentElement.getElementsByClassName('text');
+                    if(textNodes && textNodes.length > 0) {
+                        textNodes[0].click();
+                    }
+            }
+        }
+      });
+    } else {
+      this.tabber.unregister();
+    }
   }
 
   createMeetingObject(): Meeting {
@@ -264,7 +324,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     meeting.shortDescription = this.shortDescription.value;
     meeting.isIdea = this.meeting.isIdea;
     meeting.courseOrEvent = this.courseOrEvent.value;
-    meeting.description = this.editorContent;
+    meeting.description = this.description.value;
     var date = MeetingUtil.stringToDate(this.date.value);
 
     if(this.date.value && this.startTime.value) {
@@ -282,7 +342,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     meeting.numberOfAllowedExternals = this.formGroup.get('numberOfAllowedExternals').value;
     meeting.username = this.authService.getLoggedInUsername();
     meeting.isFreetime = this.formGroup.get('isFreetime').value; 
-    meeting.tags = this.tags;
+    meeting.tags = this.tags.value;
     return meeting;
   }
 
@@ -342,7 +402,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.isNew = true;
     this.userHasAccepted = false;
     this.userHasFinished = false;
-    this.editMode = true;
+    this.setEditMode(true);
     this.refreshBreadcrumb();
     this.dialogService.hide('copyDialog');
   }
@@ -355,7 +415,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.isNew = true;
     this.userHasAccepted = false;
     this.userHasFinished = false;
-    this.editMode = true;
+    this.setEditMode(true);
     this.refreshBreadcrumb();
     this.dialogService.hide('copyToMeetingDialog');
   }
@@ -454,7 +514,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   onAddingTag() {
-    this.tags = this.tags.map(tag => tag.toLowerCase()).map(tag => tag.replace(/ /g, '-'));
+    this.tags.patchValue(this.tags.value.map(tag => tag.toLowerCase()).map(tag => tag.replace(/ /g, '-')));
   }
 
   getStatus() {
@@ -471,5 +531,13 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
 
   closeContextMenu() {
     this.contexMenuIsOpen = false;
+  }
+
+  /**
+   * Inform formTabberService that some field was clicked, so that the tabbing logic can proceed from there.
+   * @param id 
+   */
+  formControlClicked(id: string) {
+    this.tabber.setTo(id);
   }
 }

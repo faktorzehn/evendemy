@@ -10,6 +10,11 @@ export class EditorComponent implements OnInit {
   @Input() value: String = '';
   @Input() editable = false;
   @Input() headlines = true;
+  @Input() set focus(val:boolean) {
+    if(val) {
+      this.quill.focus();
+    }
+  }
   @Output() change = new EventEmitter<string>();
 
   quill: any;

@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Inject, Injector, Input, OnInit, Optional, Self, ViewChild } from '@angular/core';
-import { ControlValueAccessor, FormControl, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'evendemy-editable-text',
@@ -41,7 +41,9 @@ export class EditableTextComponent implements OnInit, ControlValueAccessor {
 
   private controll: NgControl;
 
-  constructor(private elementRef: ElementRef, @Inject(Injector) private injector: Injector) {
+  constructor(
+    private elementRef: ElementRef, 
+    @Inject(Injector) private injector: Injector) {
   }
 
   ngOnInit(): void {

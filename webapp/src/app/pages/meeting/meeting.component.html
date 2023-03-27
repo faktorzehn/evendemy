@@ -19,7 +19,7 @@
           <div class="section section-context-menu" *ngIf="!editMode && isEditable">
             <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
             <evendemy-context-menu *ngIf="contexMenuIsOpen && isEditable">
-              <p (click)="closeContextMenu(); editMode = true">{{t("T:EDIT")}}</p>
+              <p (click)="closeContextMenu(); setEditMode(true)">{{t("T:EDIT")}}</p>
               <p (click)="closeContextMenu(); openDialog('confirmDialog')">{{t("T:DELETE")}}</p>
               <p (click)="closeContextMenu(); openDialog('copyDialog')">{{t("T:DUPLICATE")}}</p>
               <p (click)="closeContextMenu(); openDialog('copyToMeetingDialog')">{{t("T:CREATE_MEETING_FROM_IDEA")}}</p>
@@ -41,9 +41,9 @@
 
           <div class="section section-header" [ngClass]="{'not-editable': !isEditable}">
             <evendemy-editable-text [editable]="editMode" class="title" [placeholder]="editMode ? t('T:MEETING_TITLE') : undefined"
-              formControlName="title"></evendemy-editable-text>
+              formControlName="title" (click)="formControlClicked('title')"></evendemy-editable-text>
             <evendemy-editable-text [editable]="editMode" class="subtitle" [placeholder]="editMode ? t('T:MEETING_SUBTITLE') : undefined"
-              formControlName="shortDescription"></evendemy-editable-text>
+              formControlName="shortDescription" (click)="formControlClicked('shortDescription')"></evendemy-editable-text>
             <div class="created-by">
               {{t("T:MEETING_FROM_AUTHOR")}}
               <span style="margin-left: 5px;">
@@ -54,24 +54,24 @@
             <div class="place">
               <fa-icon [icon]="'location-dot'"></fa-icon>
               <evendemy-editable-text [editable]="editMode" [placeholder]="editMode ? 'Ort' : undefined"
-                formControlName="location"></evendemy-editable-text>
+                formControlName="location" (click)="formControlClicked('location')"></evendemy-editable-text>
             </div>
             <div class="time">
               <fa-icon [icon]="'calendar'"></fa-icon>
               <evendemy-editable-text [editable]="editMode" class="date" [placeholder]="editMode ? 'dd.MM.yyyy' : undefined"
-                formControlName="date"></evendemy-editable-text>
+                formControlName="date" (click)="formControlClicked('date')"></evendemy-editable-text>
               <evendemy-editable-text [editable]="editMode" class="start-time" [placeholder]="editMode ? 'mm:hh' : undefined"
-                formControlName="startTime"></evendemy-editable-text>
+                formControlName="startTime" (click)="formControlClicked('startTime')"></evendemy-editable-text>
               {{t("T:MEETING_UNTIL")}}
               <evendemy-editable-text [editable]="editMode" class="end-time" [placeholder]="editMode ? 'mm:hh' : undefined"
-                formControlName="endTime"></evendemy-editable-text>
+                formControlName="endTime" (click)="formControlClicked('endTime')"></evendemy-editable-text>
             </div>
           </div>
 
           <div class="section section-description">
             <h4>{{t("T:MEETING_DETAILS")}}</h4>
-            <evendemy-editable-input [editable]="editMode" [value]="editorContent" [placeholder]="t('T:MEETING_DESCRIPTION')">
-              <evendemy-editor [value]="meeting?.description" (change)="editorChanged($event)" [editable]="true"></evendemy-editor>
+            <evendemy-editable-input id="description" [editable]="editMode" [value]="description.value" [placeholder]="t('T:MEETING_DESCRIPTION')" (click)="formControlClicked('description')">
+              <evendemy-editor [value]="meeting?.description" (change)="editorChanged($event)" [editable]="true" [focus]="focusEditor"></evendemy-editor>
             </evendemy-editable-input>
           </div>
 
@@ -79,7 +79,7 @@
             <h4>{{t("T:MEETING_MORE_DETAILS")}}</h4>
             <div class="more-field">
               <div>{{t("T:MEETING_TYPE")}}</div>
-              <evendemy-editable-input [editable]="editMode" class="courseOrEvent" [placeholder]="editMode ? t('MEETING_COURSE_OR_EVENT') : undefined" [value]="formGroup.get('courseOrEvent')?.value === 'course' ? t('T:COURSE') : t('T:EVENT')">
+              <evendemy-editable-input [editable]="editMode" class="courseOrEvent" [placeholder]="editMode ? t('T:MEETING_COURSE_OR_EVENT') : undefined" [value]="formGroup.get('courseOrEvent')?.value === 'course' ? t('T:COURSE') : t('T:EVENT')" (click)="formControlClicked('courseOrEvent')">
                 <select formControlName="courseOrEvent" class="selectBox">
                   <option value="course">{{t("T:COURSE")}}</option>
                   <option value="event">{{t("T:EVENT")}}</option>
@@ -88,8 +88,8 @@
             </div>
             <div class="more-field">
               <div>Tags</div>
-              <evendemy-editable-input [editable]="editMode" [placeholder]="'Tags'" [value]="tags">
-                <tag-input [(ngModel)]="tags" [ngModelOptions]="{standalone: true}" name="tag"
+              <evendemy-editable-input [editable]="editMode" [placeholder]="'Tags'" [value]="formGroup?.get('tags')?.value" (click)="formControlClicked('tags')">
+                <tag-input name="tag" formControlName="tags"
                 [removable]="isEditable" [modelAsStrings]="true" (onSelect)="onTagSelect($event)"
                 (onAdd)="onAddingTag($event)">
                 <tag-input-dropdown [autocompleteItems]="allTags" [showDropdownIfEmpty]="true">
@@ -99,7 +99,10 @@
             </div>
             <div class="more-field">
               <div>{{t("T:MEETING_IN_FREETIME")}}</div>
-              <evendemy-editable-input [editable]="editMode" class="isFreetime" [placeholder]="editMode ? t('T:MEETING_IN_FREETIME_PLACEHOLDER') : undefined" [value]="formGroup.get('isFreetime')?.value === 'true' ? t('T:YES') : t('T:NO')">
+              <evendemy-editable-input [editable]="editMode" class="isFreetime" 
+              [placeholder]="editMode ? t('T:MEETING_IN_FREETIME_PLACEHOLDER') : undefined" 
+              [value]="formGroup.get('isFreetime')?.value === true ? t('T:YES') : t('T:NO')"
+              (click)="formControlClicked('isFreetime')">
                 <select formControlName="isFreetime" class="selectBox">
                   <option [value]="true">{{t("T:YES")}}</option>
                   <option [value]="false">{{t("T:NO")}}</option>
@@ -109,11 +112,14 @@
             <div class="more-field">
               <div>Kostenstelle</div>
               <evendemy-editable-text [editable]="editMode" class="costcenter" [placeholder]="editMode ? 'Kostenstelle' : undefined"
-                formControlName="costCenter"></evendemy-editable-text>
+                formControlName="costCenter" (click)="formControlClicked('costCenter')"></evendemy-editable-text>
             </div>
             <div class="more-field">
               <div>{{t("T:EXTERNAL_ALLOWED")}}</div>
-              <evendemy-editable-input [editable]="editMode" class="externalsAreAllowed" [value]="formGroup.get('numberOfAllowedExternals')?.value === '1' ? t('T:ALLOWED') : t('T:NOT_ALLOWED')">
+              <evendemy-editable-input 
+                [editable]="editMode" class="externalsAreAllowed" 
+                [value]="formGroup.get('numberOfAllowedExternals')?.value === '1' ? t('T:ALLOWED') : t('T:NOT_ALLOWED')"
+                (click)="formControlClicked('numberOfAllowedExternals')">
                 <select formControlName="numberOfAllowedExternals" class="selectBox">
                   <option value="1">{{t("T:ALLOWED")}}</option>
                   <option value="0">{{t("T:NOT_ALLOWED")}}</option>
