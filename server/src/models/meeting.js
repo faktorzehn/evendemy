@@ -20,7 +20,8 @@ const MeetingSchema = mongoose.Schema({
     comments: { type: [Comment.schema], default: [] },
     numberOfAllowedExternals: { type: Number, default: 0},
     tags: {type:[String], default:[]},
-    deleted: { type: Boolean, default: false }
+    deleted: { type: Boolean, default: false },
+    images: { type: [String], default: [] }
 });
 
 IdentityCounters.createIndex(MeetingSchema, 'Meeting', 'mid');

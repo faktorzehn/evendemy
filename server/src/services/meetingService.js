@@ -133,6 +133,9 @@ module.exports = {
         if (request.tags !== undefined) {
             meeting.tags = request.tags;
         }
+        if (request.images !== undefined) {
+            meeting.images = request.images;
+        }
 
         if(username){
             meeting.username = username.toLowerCase();   
@@ -180,6 +183,9 @@ module.exports = {
         }
         if (request.tags !== undefined) {
             updateMeeting.tags = request.tags;
+        }
+        if (request.images !== undefined) {
+            updateMeeting.images = request.images;
         }
 
         updateMeeting.lastUpdateDate = new Date();

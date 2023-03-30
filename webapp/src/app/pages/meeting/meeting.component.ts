@@ -480,6 +480,13 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.dialogService.hide('image-upload');
   }
 
+  getImage() {
+    if (!this.imageFolder || !this.meeting?.images || this.meeting?.images.length === 0) {
+      return 'assets/no-image.png';
+    }
+    return this.imageFolder + '/' + this.meeting?.images[0] + '.jpg';
+  }
+
   getAttendedNumber() {
     return this.potentialAttendees.filter( p => p.tookPart === true).length;
   }

@@ -330,18 +330,45 @@ module.exports = function (server, config, production_mode) {
     }
 
     server.post('/meeting/:mid/image', function (req, res, next) {
+        const mongoose = require('mongoose');
+
         if (!req.params.mid) {
             res.send(500, { error: 'No mid' });
             return next();
         }
 
-        if (!req.params.data) {
+        if (!req.body.data) {
             res.send(500, { error: 'No image' });
             return next();
         }
 
-        imageService.save(req.params.mid, req.params.data, config.meetingImageFolder).then(function () {
-            res.send(req.params.data);
+        var newId = new mongoose.mongo.ObjectId();
+
+        while(imageService.exists(newId, config.meetingImageFolder)) {
+            console.warn(newId + ' is already in use. searching for another id...');
+            newId = new mongoose.mongo.ObjectId();
+        }
+
+        meetingService.getMeeting(req.params.mid).then(meeting => {
+            if(meeting.images != undefined && meeting.images.length > 0) {
+                // image already exists - delete first the existing one
+                return imageService.delete(meeting.images[0], config.meetingImageFolder).catch( () => {
+                    // if deleting goes wrong - we still want to keep going on
+                    console.warn(`Meeting image with id ${meeting.images[0]} could not be deleted.`);
+                    return meeting;
+                }).then(() => meeting);
+            }
+            return meeting;
+        }).then(meeting => {
+            //save the new image
+            return imageService.save(newId, req.body.data, config.meetingImageFolder).then(() => meeting)
+        }).then(meeting => {
+            // update meeting with new id
+            meeting.images = [newId];
+            return meetingService.updateMeeting(req.params.mid, meeting)
+        }).then(meeting => {
+            // return the new meeting object
+            res.send(meeting);
             return next();
         }).catch(function (err) {
             console.log(err);

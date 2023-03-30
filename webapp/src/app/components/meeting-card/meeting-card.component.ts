@@ -16,11 +16,11 @@ export class MeetingCardComponent {
 
   constructor(private configService: ConfigService<any>) { }
 
-  getImage(mid: number) {
-    if (!this.imageFolder) {
-      return;
+  getImage() {
+    if (!this.imageFolder || !this.meeting?.images || this.meeting?.images.length === 0) {
+      return 'assets/no-image.png';
     }
-    return this.imageFolder + '/' + mid + '.jpg';
+    return this.imageFolder + '/' + this.meeting?.images[0] + '.jpg';
   }
 
   isMeetingNew(meeting: Meeting): boolean {

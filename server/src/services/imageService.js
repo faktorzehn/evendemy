@@ -30,5 +30,17 @@ module.exports = {
                 resolve();
             });
         })
+    },
+
+    exists: function (name, folder) {
+        var fs = require('fs');
+
+        try {
+            if (fs.existsSync(path)) {
+              return true;
+            }
+        } catch(err) {
+            return false;
+        }
     }
 }

@@ -19,20 +19,9 @@ export class ImageUploadDialogContentComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.forMeeting) {
-      this.ratio = 4/3;
-
-      // this.cropperSettings.canvasWidth = 500;
-      // this.cropperSettings.canvasHeight = 300;
-      // this.cropperSettings.croppedWidth = 1600;
-      // this.cropperSettings.croppedHeight = 1200;
-      // this.cropperSettings.compressRatio = 10;
+      this.ratio = 16/9;
     } else {
       this.ratio = 1;
-
-      // this.cropperSettings.canvasWidth = 500;
-      // this.cropperSettings.canvasHeight = 300;
-      // this.cropperSettings.croppedWidth = 500;
-      // this.cropperSettings.croppedHeight = 500;
     }
   }
 

@@ -1,6 +1,6 @@
 <div class="card" *transloco="let t">
     <div class="image-container">
-        <img [src]="getImage(meeting.mid)" onError="this.src='assets/no-image.png'"/>
+        <img [src]="getImage(meeting.mid)"/>
         <div class="new-tag" *ngIf="isMeetingNew(meeting)">Neu</div>
     </div>
     <div class="info-container">

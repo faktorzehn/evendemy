@@ -6,8 +6,7 @@
         <form #form="ngForm" [formGroup]="formGroup" name="form">
           <!--Image-->
           <div class="meeting-image" *ngIf="!tmpImgData">
-            <img src="{{imageFolder}}/{{meeting.mid}}.jpg?r={{randomizedNumber}}"
-              onError="this.src='assets/no-image.png'" />
+            <img [src]="getImage()"/>
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
               (click)="openDialog('image-upload')">{{t("T:CHANGE_IMAGE")}}</button>
           </div>
