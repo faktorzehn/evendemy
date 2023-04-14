@@ -173,14 +173,14 @@
         </div>
 
         <div class="section" *ngIf="!isNew && meeting.isIdea">
-          <evendemy-idea-attendee-status [meeting]="meeting" [status]="getStatus()" (acceptMeeting)="onAcceptMeeting()"
+          <evendemy-idea-attendee-status [meeting]="meeting" [status]="getStatus()" (acceptMeeting)="onAcceptMeeting($event)"
             (rejectMeeting)="onRejectMeeting()" (calendar)="onGetCalendar()">
           </evendemy-idea-attendee-status>
         </div>
 
         <div class="section" *ngIf="!isNew && !meeting.isIdea">
           <evendemy-meeting-attendee-status [meeting]="meeting" [status]="getStatus()"
-            (acceptMeeting)="onAcceptMeeting()" (rejectMeeting)="onRejectMeeting()" (calendar)="onGetCalendar()">
+            (acceptMeeting)="onAcceptMeeting($event)" (rejectMeeting)="onRejectMeeting()" (calendar)="onGetCalendar()">
           </evendemy-meeting-attendee-status>
         </div>
 

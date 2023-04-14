@@ -182,7 +182,7 @@ module.exports = function (server, config, production_mode) {
             return next();
         }
 
-        meetingService.attendingToMeeting(req.params.mid, req.params.username, req.params.externals).then(function (meeting_user) {
+        meetingService.attendingToMeeting(req.params.mid, req.params.username, req.body.externals).then(function (meeting_user) {
             //send mail to the new attendee
             meetingService.getMeeting(req.params.mid).then(function (meeting) {
                 if (meeting !== null) {
