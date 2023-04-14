@@ -230,7 +230,7 @@
         </evendemy-dialog>
 
         <evendemy-dialog id="image-upload">
-          <evendemy-image-upload-dialog-content (byConfirm)="getImageDataFromDialog($event)" (byClose)="closeDialog('image-upload')"></evendemy-image-upload-dialog-content>
+          <evendemy-image-upload-dialog-content (byConfirm)="getImageDataFromDialog($event)" (byClose)="closeDialog('image-upload')" (byCancel)="closeDialog('image-upload')"></evendemy-image-upload-dialog-content>
         </evendemy-dialog>
 
       </div>
