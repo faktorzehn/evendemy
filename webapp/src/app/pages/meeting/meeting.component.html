@@ -5,15 +5,26 @@
       <div class="meeting">
         <form #form="ngForm" [formGroup]="formGroup" name="form">
           <!--Image-->
-          <div class="meeting-image" *ngIf="!tmpImgData">
-            <img [src]="getImage()"/>
+          <div class="meeting-image">
+            <img [src]="getImage()" *ngIf="!tmpImgData"/>
+            <img [src]="tmpImgData" *ngIf="tmpImgData">
+            <div class="image-overlay"></div>
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
               (click)="openDialog('image-upload')">{{t("T:CHANGE_IMAGE")}}</button>
-          </div>
-          <div class="meeting-image" *ngIf="tmpImgData">
-            <img [src]="tmpImgData">
-            <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
-              (click)="openDialog('image-upload')">{{t("T:CHANGE_IMAGE")}}</button>
+            <div class="section section-header" [ngClass]="{'not-editable': !isEditable}">
+                <evendemy-editable-text [editable]="editMode" class="title" [placeholder]="editMode ? t('T:MEETING_TITLE') : undefined"
+                  formControlName="title" (click)="formControlClicked('title')"></evendemy-editable-text>
+                <evendemy-editable-text [editable]="editMode" class="subtitle" 
+                  [placeholder]="editMode ? t('T:MEETING_SUBTITLE') : undefined"
+                  formControlName="shortDescription" 
+                  (click)="formControlClicked('shortDescription')"
+                  *ngIf="editMode || shortDescription?.value!==''"
+                  ></evendemy-editable-text>
+                <div class="created-by">
+                  <evendemy-user-image [username]="meeting.username" [width]="25" [height]="25"></evendemy-user-image>
+                  {{meeting.username}}
+                </div>
+              </div>
           </div>
           <div class="section section-context-menu" *ngIf="!editMode && isEditable">
             <fa-icon [icon]="'ellipsis'" (click)="contexMenuIsOpen = !contexMenuIsOpen"></fa-icon>
@@ -38,18 +49,7 @@
             </div>
           </div>
 
-          <div class="section section-header" [ngClass]="{'not-editable': !isEditable}">
-            <evendemy-editable-text [editable]="editMode" class="title" [placeholder]="editMode ? t('T:MEETING_TITLE') : undefined"
-              formControlName="title" (click)="formControlClicked('title')"></evendemy-editable-text>
-            <evendemy-editable-text [editable]="editMode" class="subtitle" [placeholder]="editMode ? t('T:MEETING_SUBTITLE') : undefined"
-              formControlName="shortDescription" (click)="formControlClicked('shortDescription')"></evendemy-editable-text>
-            <div class="created-by">
-              {{t("T:MEETING_FROM_AUTHOR")}}
-              <span style="margin-left: 5px;">
-                <evendemy-user-image [username]="meeting.username" [width]="25" [height]="25"></evendemy-user-image>
-                {{meeting.username}}
-              </span>
-            </div>
+          <div class="section section-place-time" [ngClass]="{'not-editable': !isEditable}">
             <div class="place">
               <fa-icon [icon]="'location-dot'"></fa-icon>
               <evendemy-editable-text [editable]="editMode" [placeholder]="editMode ? 'Ort' : undefined"

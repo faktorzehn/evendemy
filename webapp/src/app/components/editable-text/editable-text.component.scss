@@ -6,6 +6,7 @@
     width:100%;
     padding: 0.4rem;
     border-radius: 2px;
+    min-height: 1em;
 
     &.editable:hover {
         outline: 1px solid hsl(0, 0%, 78%);
