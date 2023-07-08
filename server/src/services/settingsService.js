@@ -2,7 +2,16 @@ module.exports = {
 
     getSettings: function(username) {
         var Settings = require('../models/settings');
-        return Settings.findOne({username: username}).exec();
+        return Settings.findOne({username: username}).exec().then(settings => {
+            if(settings) {
+                return settings;
+            }
+
+            return {
+                username: username,
+                summary_of_meetings_visible: false
+            }
+        });
     },
 
     saveSettings: function(username, options){
