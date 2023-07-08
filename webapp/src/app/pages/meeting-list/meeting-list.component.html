@@ -11,9 +11,12 @@
       </div>
       <div>
         {{t("T:DATE")}}:
-        <evendemy-checkbox *ngIf="isIdea" [label]="t('T:WITHOUT_DATE')" (checkboxChanged)="onShowNotAnnounced($event)" [value]="showNotAnnounced"></evendemy-checkbox>
-        <evendemy-checkbox [label]="t('T:OLD')" (checkboxChanged)="onShowOld($event)" [value]="showOld"></evendemy-checkbox>
-        <evendemy-checkbox [label]="t('T:NEW')" (checkboxChanged)="onShowNew($event)" [value]="showNew"></evendemy-checkbox>
+        <select [(ngModel)]="date" class="tool-bar-select" (click)="onToolbarChange()">
+              <option value="all">{{t("T:ALL")}}</option>
+              <option value="old">{{t("T:OLD")}}</option>
+              <option value="new">{{t("T:NEW")}}</option>
+              <option value="without" *ngIf="isIdea">{{t("T:WITHOUT_DATE")}}</option>
+        </select>
       </div>
       <div>
         Tags:

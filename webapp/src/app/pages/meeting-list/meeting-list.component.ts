@@ -19,12 +19,11 @@ export class MeetingListComponent extends BaseComponent implements OnInit {
 
   public meetings: Meeting[] = [];
   public showNotAnnounced = true;
-  public showOld = false;
-  public showNew = true;
   public selectedTags = [];
   public allTags = [];
   public attendedMeetings: MeetingUser[] = [];
   public type = 'all';
+  public date: 'all' | 'new' | 'old' | 'without' = 'all';
   public isIdea = false;
   public loading = false;
 
@@ -59,16 +58,16 @@ export class MeetingListComponent extends BaseComponent implements OnInit {
           this.selectedTags = queryParams['tags'].split(',');
         }
 
-        if (queryParams['new']) {
-          this.showNew = queryParams['new'] === 'true';
-        }
-
-        if (queryParams['not-announced']) {
-          this.showNotAnnounced = queryParams['not-announced'] === 'true';
-        }
-
-        if (queryParams['old']) {
-          this.showOld = queryParams['old'] === 'true';
+        if (queryParams['date']) {
+          if (queryParams['date'] === 'old') {
+            this.date = 'old';
+          } else if (queryParams['date'] === 'new') {
+            this.date = 'new';
+          } else if (queryParams['date'] === 'without') {
+            this.date = 'without';
+          } else {
+            this.date = 'all';
+          }
         }
 
         this.loadMeetings();
@@ -87,9 +86,9 @@ export class MeetingListComponent extends BaseComponent implements OnInit {
     const options = {
       type: this.type,
       idea: this.isIdea,
-      showNew: this.showNew,
-      showOld: this.showOld,
-      showNotAnnounced: this.showNotAnnounced,
+      showNew: this.date === 'all' || this.date === 'new',
+      showOld: this.date === 'all' || this.date === 'old',
+      showNotAnnounced: this.date === 'all' || this.date === 'without',
       tags: this.selectedTags
     };
     this.meetings = [];
@@ -98,21 +97,6 @@ export class MeetingListComponent extends BaseComponent implements OnInit {
       this.meetings = meetings;
       this.loading = false;
     }));
-  }
-
-  public onShowNotAnnounced(state: boolean) {
-    this.showNotAnnounced = state;
-    this.changeQuery();
-  }
-
-  public onShowNew(state: boolean) {
-    this.showNew = state;
-    this.changeQuery();
-  }
-
-  public onShowOld(state: boolean) {
-    this.showOld = state;
-    this.changeQuery();
   }
 
   public onToolbarChange() {
@@ -124,8 +108,7 @@ export class MeetingListComponent extends BaseComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         type: this.type,
-        new: this.showNew,
-        old: this.showOld,
+        date: this.date,
         'not-announced': this.showNotAnnounced,
         tags: this.selectedTags.join(',')
       }
