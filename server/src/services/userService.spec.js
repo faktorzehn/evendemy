@@ -77,14 +77,6 @@ describe("userService", function() {
     sinon.assert.calledWith(User.update, {username: 'john' }, { $set: {options: { additional_info_visible: true }} }, { upsert: true });
   });
 
-  it("saveSettings will save summary_of_meetings_visible", () => {
-    const userService = require("./userService");
-
-    userService.saveSettings('john',{ summary_of_meetings_visible: true });
-
-    sinon.assert.calledWith(User.update, {username: 'john' }, { $set: {options: { summary_of_meetings_visible: true }} }, { upsert: true });
-  });
-
   it("saveSettings will save description", () => {
     const userService = require("./userService");
 

@@ -5,10 +5,6 @@ export class User {
     public avatar: boolean = false,
     public firstname?: string,
     public lastname?: string,
-    public options?: {
-      additional_info_visible: boolean,
-      summary_of_meetings_visible: boolean
-    },
     public additional_info?: {
       job_title: string,
       description: string,

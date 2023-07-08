@@ -58,27 +58,6 @@ module.exports = function (server, config, production_mode) {
             });
     });
 
-    server.put('/user/:username/settings', function (req, res, next) {
-        if (!req.params.username) {
-            res.send(500, { error: 'No username' });
-            return next();
-        }
-
-        if (req.params.username !== req.user.uid) {
-            res.send(500, { error: 'Not allowed' });
-            return next();
-        }
-
-        userService.saveSettings(req.user.uid, req.body).then(function (user) {
-            res.send(user);
-            return next();
-        }, function (err) {
-            console.log(err);
-            res.send(500, { error: 'Settings could not be saved.' });
-            return next();
-        });
-    });
-
     server.put('/user/:username/additional_info', function (req, res, next) {
         if (!req.params.username) {
             res.send(500, { error: 'No username' });

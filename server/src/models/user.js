@@ -9,10 +9,6 @@ const UserSchema = mongoose.Schema({
     email: {type: String, default: ''},
     deleted: {type: Boolean, default: false},
     avatar: {type: Boolean, default: false},
-    options: {
-        additional_info_visible: {type: Boolean, default: false},
-        summary_of_meetings_visible: {type: Boolean, default: false}
-    },
     additional_info: {
         job_title: {type: String, default: ''},
         description:  {type: String, default: ''},

@@ -55,18 +55,6 @@ describe ('UserService', () => {
     verifyRequest('DELETE', '/user/john/image');
   });
 
-  it('updateSettings should call PUT request', () => {
-    const options = {
-      additional_info_visible: true,
-      summary_of_meetings_visible: false
-    };
-    const username = 'john';
-
-    userService.updateSettings(username, options).subscribe(() => {});
-
-    verifyRequest('PUT', '/user/john/settings', options);
-  });
-
   it('updateAdditionalInfo should call PUT request', () => {
     const options = {
       additional_info_visible: true,

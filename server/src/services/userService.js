@@ -21,21 +21,6 @@ module.exports = {
         return newUser.save();
     },
 
-    saveSettings: function(username, options){
-        var User = require('../models/user');
-        var updateAttributes = {};
-
-        if(options.additional_info_visible!==null && options.additional_info_visible!== undefined ){
-            updateAttributes['additional_info_visible'] = options.additional_info_visible;
-        }
-
-        if(options.summary_of_meetings_visible !== null && options.summary_of_meetings_visible !== undefined) {
-            updateAttributes['summary_of_meetings_visible'] = options.summary_of_meetings_visible;
-        }
-
-        return User.update({username: username }, { $set: {options: updateAttributes} }, { upsert: true });
-    },
-
     saveAdditionalInfo: function(username, info){
         var User = require('../models/user');
         var updateAttributes = {};

@@ -29,15 +29,6 @@ export class UserService extends BaseService {
     return this.http.delete(url, {headers: headers});
   }
 
-  public updateSettings(username: string, options: {
-    additional_info_visible: boolean,
-    summary_of_meetings_visible: boolean
-  }) {
-    const headers = this.createHeaders();
-    const url = this.url + '/user/' + username + '/settings';
-    return this.http.put(url, options, {headers: headers});
-  }
-
   public updateAdditionalInfo(username: string, options: any) {
     const headers = this.createHeaders();
     const url = this.url + '/user/' + username + '/additional_info';

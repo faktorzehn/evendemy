@@ -2,6 +2,7 @@ module.exports = function (server, config, production_mode) {
 
     var meetingService = require('../services/meetingService');
     var userService = require('../services/userService');
+    var settingsService = require('../services/settingsService');
 
     server.get('/meetings', function (req, res, next) {
         meetingService.getMeetings(req.query).then(function (meetings) {
@@ -15,13 +16,13 @@ module.exports = function (server, config, production_mode) {
 
     server.get('/meetings/attending/confirmed/:username', function (req, res, next) {
         if (req.params.username !== undefined) {
-            userService.getUserByUsername(req.params.username)
-            .then(user => {
+            settingsService.getSettings(req.params.username)
+            .then(settings => {
                 if(req.params.username===req.user.uid){
-                    return user.username;
+                    return req.params.username;
                 }
-                if(user && user.options && user.options.summary_of_meetings_visible === true){
-                    return user.username;
+                if(settings && settings.summary_of_meetings_visible === true){
+                    return req.params.username;
                 }
                 throw Error('Not allowed');
             })
@@ -36,13 +37,13 @@ module.exports = function (server, config, production_mode) {
 
     server.get('/meetings/attending-information/:username', function (req, res, next) {
         if (req.params.username !== undefined) {
-            userService.getUserByUsername(req.params.username)
-            .then(user => {
+            settingsService.getSettings(req.params.username)
+            .then(settings => {
                 if(req.params.username===req.user.uid){
-                    return user.username;
+                    return req.params.username;
                 }
-                if(user && user.options && user.options.summary_of_meetings_visible === true){
-                    return user.username;
+                if(settings && settings.summary_of_meetings_visible === true){
+                    return req.params.username;
                 }
                 throw Error('Not allowed');
             })
@@ -57,13 +58,13 @@ module.exports = function (server, config, production_mode) {
 
     server.get('/meetings/author/:username', function (req, res, next) {
         if (req.params.username !== undefined) {
-            userService.getUserByUsername(req.params.username)
-            .then(user => {
+            settingsService.getSettings(req.params.username)
+            .then(settings => {
                 if(req.params.username===req.user.uid){
-                    return user.username;
+                    return req.params.username;
                 }
-                if(user && user.options && user.options.summary_of_meetings_visible === true){
-                    return user.username;
+                if(settings && settings.summary_of_meetings_visible === true){
+                    return req.params.username;
                 }
                 throw Error('Not allowed');
             })
