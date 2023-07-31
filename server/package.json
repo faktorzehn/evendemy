@@ -29,5 +29,8 @@
     "nodemailer": "^2.7.0",
     "restify": "^8.6.1",
     "underscore": "^1.8.3"
+  },
+  "volta": {
+    "node": "16.20.1"
   }
 }
