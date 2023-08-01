@@ -15,6 +15,17 @@ services:
   evendemy:
     image: node:latest
     restart: unless-stopped
+    environment:
+      - MAIL_ENABLED=${MAIL_ENABLED}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_ADDRESS=${MAIL_ADDRESS}
+      - CALENDAR_COMPANY=${CALENDAR_COMPANY}
+      - CALENDAR_TIMEZONE=${CALENDAR_TIMEZONE}
+      - CALENDAR_ORGANIZER_NAME=${CALENDAR_ORGANIZER_NAME}
+      - CALENDAR_ORGANIZER_MAIL=${CALENDAR_ORGANIZER_MAIL}
     build: 
       context: ./backend
       dockerfile: Dockerfile
@@ -22,7 +33,7 @@ services:
       - /bin/bash
       - -c 
       - |
-        cd /usr/src
+        cd /usr/src/backend
         npm run start
     env_file:
       - .env
@@ -31,5 +42,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend:/usr/src/
+      - ./backend:/usr/src/backend
+      - ./webapp:/usr/src/webapp
       - /usr/src/backend/node_modules
+      - ${USER_IMAGE_PATH}:/usr/src/webapp/src/assets/user_images
+      - ${MEETING_IMAGE_PATH}:/usr/src/webapp/src/assets/meeting_images
