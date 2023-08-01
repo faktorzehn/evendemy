@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConfigTokens } from './config.tokens';
 import * as Joi from 'joi';
+import { UIMiddleWare } from './core/middleware/ui.middleware';
 
 @Module({
   imports: [    
@@ -63,6 +64,9 @@ export class AppModule implements NestModule {
     consumer
       .apply(AuthMiddleware)
       .forRoutes('*'); // register all modules that should be validated  
+    consumer
+      .apply(UIMiddleWare)
+      .forRoutes('/ui/**'); // Send user to the ui middleware module.
   }
 
 }
