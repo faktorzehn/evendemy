@@ -70,7 +70,7 @@ export class MeetingController {
         this.imageService.save(newId, data, this.path);
 
         meeting.images = [newId];
-        return this.meetingsService.updateByEntity(meeting);
+        return this.meetingsService.updateByEntity(meeting).then(MeetingEntity.toDTO);
   }
 
   @Delete(":mid/image")
@@ -84,7 +84,7 @@ export class MeetingController {
         }
 
         meeting.images = [];
-        return this.meetingsService.updateByEntity(meeting);
+        return this.meetingsService.updateByEntity(meeting).then(MeetingEntity.toDTO);
   }
 
   @Delete(":mid")
@@ -95,7 +95,7 @@ export class MeetingController {
         throw new HttpException('Not allowed to delete meeting', HttpStatus.FORBIDDEN);
       }
 
-      return this.meetingsService.delete(+mid);
+      return this.meetingsService.delete(+mid).then(MeetingEntity.toDTO);
   }
 
 }

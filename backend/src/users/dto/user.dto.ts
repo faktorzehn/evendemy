@@ -1,7 +1,7 @@
 /**
  * The User object that will be used in the responses of the API.  
  */
-export class User {
+export class UserDto {
     username: string;
     firstname: string;
     lastname: string;

@@ -67,7 +67,6 @@ export class MeetingEntity {
             return null;
         }
         return {
-            // update-meeting.dto
             mid: +entity.mid,
             title: entity.title,
             shortDescription:  entity.shortDescription,
@@ -80,15 +79,12 @@ export class MeetingEntity {
             isIdea:  entity.isIdea,
             isFreetime: entity.isFreetime,
             numberOfAllowedExternals: entity.numberOfAllowedExternals,
-
-            // meeting.dto
             creationDate: entity.creationDate,
             lastUpdateDate: entity.lastUpdateDate,
             username: entity.username,
-            comments: [],
+            comments: entity.comments ? entity.comments.map(CommentEntity.toDTO) : [],
             tags: entity.tags,
-            deleted: entity.deleted,
             images: entity.images
-        } as MeetingDto
+        }
     }
 }

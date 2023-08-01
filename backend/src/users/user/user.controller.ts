@@ -5,6 +5,7 @@ import { EvendemyRequest } from 'src/core/evendemy-request';
 import { ImageService } from 'src/core/image.service';
 import { ConfigService } from '@nestjs/config';
 import { ConfigTokens } from 'src/config.tokens';
+import { UserEntity } from '../entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -15,7 +16,7 @@ export class UserController {
 
     @Get(':username')
     getOneUser(@Param('username') username: string) {
-        return this.usersService.findOne(username);
+        return this.usersService.findOne(username).then(UserEntity.toDTO);
     }
 
     @Post(':username/image')
@@ -50,7 +51,9 @@ export class UserController {
     saveAdditionalInfos(@Req() req: EvendemyRequest, @Body() dto: UpdateUserDto, @Param('username') username: string) {
         this.checkIfLoggedInUser(req, username);
         // TODO remove username from API path -not needed - only logged in user can change his/her own data
-        return this.usersService.update(req.user.username, dto).then( _ => this.usersService.findOne(req.user.username));
+        return this.usersService.update(req.user.username, dto)
+            .then( _ => this.usersService.findOne(req.user.username))
+            .then(UserEntity.toDTO);
     }
 
     private checkIfLoggedInUser(req: EvendemyRequest, username: string) {

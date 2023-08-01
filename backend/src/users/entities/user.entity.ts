@@ -1,5 +1,6 @@
 import { SettingsEntity } from "src/users/entities/setting.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { UserDto } from "../dto/user.dto";
 
 @Entity("user")
 export class UserEntity {
@@ -30,4 +31,20 @@ export class UserEntity {
     @OneToOne(() => SettingsEntity, { cascade: ["remove"]})
     @JoinColumn()
     settings: SettingsEntity
+
+    public static toDTO(entity: UserEntity): UserDto{
+        if(!entity){
+            return null;
+        }
+
+        return {
+            username: entity.username,
+            firstname: entity.firstname,
+            lastname: entity.lastname,
+            email: entity.email,
+            avatar: entity.avatar,
+            jobTitle: entity.jobTitle,
+            description: entity.description
+        }
+    }
 }

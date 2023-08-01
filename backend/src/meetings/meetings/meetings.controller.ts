@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseBoolPipe, DefaultValuePipe, ParseArrayPipe } from '@nestjs/common';
 import { MeetingsService } from '../meetings.service';
 import { UpdateMeetingDto } from '../dto/update-meeting.dto';
+import { MeetingEntity } from '../entities/meeting.entity';
 
 @Controller('meetings')
 export class MeetingsController {
@@ -24,21 +25,6 @@ export class MeetingsController {
       courseOrEvent: courseOrEvent,
       idea: idea,
       tags: tags
-    });
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.meetingsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMeetingDto: UpdateMeetingDto) {
-    return this.meetingsService.update(+id, updateMeetingDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.meetingsService.delete(+id);
+    }).then(meetings => meetings.map(MeetingEntity.toDTO));
   }
 }

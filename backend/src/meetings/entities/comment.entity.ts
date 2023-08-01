@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { CommentDto } from "../dto/comment.dto";
 
 @Entity("comment")
 export class CommentEntity {
@@ -14,4 +15,16 @@ export class CommentEntity {
 
     @Column()
     author: string;
+
+    public static toDTO(entity: CommentEntity): CommentDto{
+        if(!entity){
+            return null;
+        }
+
+        return {
+            text: entity.text,
+            creationDate: entity.creationDate,
+            author: entity.author
+        }
+    }
 }

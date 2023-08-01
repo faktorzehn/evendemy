@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Req, Put } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { SettingsDto } from '../dto/settings.dto';
 import { EvendemyRequest } from 'src/core/evendemy-request';
+import { SettingsEntity } from '../entities/setting.entity';
 
 @Controller('settings')
 export class SettingsController {
@@ -9,12 +10,12 @@ export class SettingsController {
 
   @Get()
   get(@Req() req: EvendemyRequest) {
-    return this.settingsService.findOne(req.user.username);
+    return this.settingsService.findOne(req.user.username).then(SettingsEntity.toDTO);
   }
 
   @Put()
   update(@Req() req: EvendemyRequest, @Body() updateSettingDto: SettingsDto) {
-    return this.settingsService.update(req.user.username, updateSettingDto);
+    return this.settingsService.update(req.user.username, updateSettingDto).then(SettingsEntity.toDTO);
   }
 
 }
