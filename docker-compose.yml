@@ -1,17 +1,21 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:latest
+  db:
+    image: postgres:${PG_IMAGE_VERSION}
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
-    volumes:
-      - db:/var/lib/postgresql/data
-  
-volumes:
-  db:
-    driver: local
+
+  evendemy:
+    image: node:latest
+    command: "node main.js"
+    restart: always
+    ports:
+      - "${EVENDEMY_PORT}:8080"
+
+    depends_on:
+      - db
