@@ -4,14 +4,14 @@ module.exports = function (server, config, production_mode) {
 
     var imageService = require('../services/imageService');
     var userService = require('../services/userService');
-    var meetingService = require('../services/meetingService');
+    var meetingService = require('../services/api/meetingService');
     var mailService = require('../services/mailService');
     var calendarService = require('../services/calendarService');
     var diffService = require('../services/diffService');
 
     var mailConfig = config.mail.config;
 
-    server.get('/meeting/:mid', function (req, res, next) {
+    server.get('/api/meeting/:mid', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
             res.send(meeting);
             return next();
@@ -25,7 +25,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.get('/meeting/:mid/calendar', function (req, res, next) {
+    server.get('/api/meeting/:mid/calendar', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
             const attachment =  calendarService.createICalAttachment(config, meeting);
             res.send(attachment);
@@ -46,7 +46,7 @@ module.exports = function (server, config, production_mode) {
         return _.map(dbUsers, function (x) { return x.email; })
     }
 
-    server.post('/meeting', function (req, res, next) {
+    server.post('/api/meeting', function (req, res, next) {
         meetingService.saveMeeting(req.body, req.username).then(function (meeting) {
             console.log('saved');
             //inform all users about the new meeting entry
@@ -87,7 +87,7 @@ module.exports = function (server, config, production_mode) {
         });
     }
 
-    server.post('/meeting/:mid/comment', function (req, res, next) {
+    server.post('/api/meeting/:mid/comment', function (req, res, next) {
         meetingService.addComment(req.params.mid, req.body).then(function (meeting) {
             if(meeting.isIdea){
                 notifyAllAttendingUsers(meeting, req.user.uid, mailConfig.commentAddedToIdea, req.body.text, null);
@@ -102,7 +102,7 @@ module.exports = function (server, config, production_mode) {
         })
     });
 
-    server.put('/meeting/:mid', function (req, res, next) {
+    server.put('/api/meeting/:mid', function (req, res, next) {
 
         if (req.params.mid !== undefined) {
             meetingService.getMeeting(req.params.mid).then(function(oldMeeting){
@@ -141,7 +141,7 @@ module.exports = function (server, config, production_mode) {
         }
     });
 
-    server.del('/meeting/:mid', function (req, res, next) {
+    server.del('/api/meeting/:mid', function (req, res, next) {
         meetingService.getMeeting(req.params.mid).then(function (meeting) {
             if (meeting.isIdea) {
                 notifyAllAttendingUsers(meeting, meeting.username, mailConfig.ideaDeleted, null, null);
@@ -160,7 +160,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.get('/meeting/:mid/attendees', function (req, res, next) {
+    server.get('/api/meeting/:mid/attendees', function (req, res, next) {
         if (req.params.mid !== undefined) {
             meetingService.getAttendingUsersForMid(req.params.mid).then(function (meeting_users) {
                 res.send(meeting_users);
@@ -175,7 +175,7 @@ module.exports = function (server, config, production_mode) {
         }
     });
 
-    server.put('/meeting/:mid/attendee/:username/attend', function (req, res, next) {
+    server.put('/api/meeting/:mid/attendee/:username/attend', function (req, res, next) {
         console.log('try to attend');
         if (req.params.mid === undefined || req.params.username === undefined ) {
             res.send(500, { error: 'no mid or username' });
@@ -206,7 +206,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.del('/meeting/:mid/attendee/:username/attend', function (req, res, next) {
+    server.del('/api/meeting/:mid/attendee/:username/attend', function (req, res, next) {
 
         if (req.params.mid === undefined || req.params.username === undefined) {
             res.send(500, { error: 'No mid or username specified' });
@@ -252,7 +252,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.put('/meeting/:mid/attendee/:username/confirm', function (req, res, next) {
+    server.put('/api/meeting/:mid/attendee/:username/confirm', function (req, res, next) {
 
         if (req.params.mid === undefined || req.params.username === undefined ) {
             res.send(500, { error: 'no mid or username' });
@@ -268,7 +268,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.del('/meeting/:mid/attendee/:username/confirm', function (req, res, next) {
+    server.del('/api/meeting/:mid/attendee/:username/confirm', function (req, res, next) {
 
         if (req.params.mid === undefined || req.params.username === undefined ) {
             res.send(500, { error: 'no mid or username' });
@@ -329,7 +329,7 @@ module.exports = function (server, config, production_mode) {
             mailService.sendMail(config, user.email, view, null, production_mode);
     }
 
-    server.post('/meeting/:mid/image', function (req, res, next) {
+    server.post('/api/meeting/:mid/image', function (req, res, next) {
         const mongoose = require('mongoose');
 
         if (!req.params.mid) {

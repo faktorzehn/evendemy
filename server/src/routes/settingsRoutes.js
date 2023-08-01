@@ -1,8 +1,8 @@
 module.exports = function (server, config, production_mode) {
     
-    var settingsService = require('../services/settingsService');
+    var settingsService = require('../services/api/settingsService');
 
-    server.put('/settings', function (req, res, next) {
+    server.put('/api/settings', function (req, res, next) {
         settingsService.saveSettings(req.user.uid, req.body).then(function (settings) {
             res.send(settings);
             return next();
@@ -13,7 +13,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.get('/settings', function (req, res, next) {
+    server.get('/api/settings', function (req, res, next) {
         settingsService.getSettings(req.user.uid).then(function (settings) {
             res.send(settings);
             return next();

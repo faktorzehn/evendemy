@@ -9,6 +9,8 @@ import { CoreModule } from './core/core.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConfigTokens } from './config.tokens';
 import * as Joi from 'joi';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [    
@@ -21,8 +23,8 @@ import * as Joi from 'joi';
         [ConfigTokens.DB_USERNAME]: Joi.string().required(),
         [ConfigTokens.DB_PASSWORD]: Joi.string().required(),
         [ConfigTokens.DB_DATABASE]: Joi.string().required(),
-        [ConfigTokens.USER_IMAGE_FOLDER]: Joi.string().required(),
-        [ConfigTokens.MEETING_IMAGE_FOLDER]: Joi.string().required(),
+        [ConfigTokens.USER_IMAGE_FOLDER]: Joi.string().default("/usr/src/user_images"),
+        [ConfigTokens.MEETING_IMAGE_FOLDER]: Joi.string().default("/usr/src/meeting_images"),
         [ConfigTokens.MAIL_ENABLED]: Joi.boolean().required(),
         [ConfigTokens.MAIL_ADDRESS]: Joi.string(),
         [ConfigTokens.MAIL_HOST]: Joi.string(),
@@ -53,7 +55,10 @@ import * as Joi from 'joi';
     MeetingsModule, 
     UsersModule,
     AuthModule,
-
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname,"../../webapp"),
+      exclude: ["api/*"],
+    }),
   ],
   providers: [ImageService]
 })

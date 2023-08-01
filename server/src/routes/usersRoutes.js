@@ -2,7 +2,7 @@ module.exports = function (server, config, production_mode) {
     
     var userService = require('../services/userService');
 
-    server.get('/users', function (req, res, next) {
+    server.get('/api/users', function (req, res, next) {
 
         userService.getAllUsers().then(function (users) {
             if (users !== null) {
