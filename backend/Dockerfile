@@ -7,24 +7,23 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-FROM node:latest as buildFrontend
-
-WORKDIR /usr/src/webapp
-COPY package*.json ./
-
-COPY . .
-RUN npm install
-RUN npm run build
-
 FROM node:slim as run
 
 RUN useradd -ms /bin/bash serviceUser
 
 WORKDIR /home/serviceUser
 COPY --from=buildBackend /usr/src/backend ./
-COPY --from=buildFrontend /usr/src/webapp ./
-RUN chmod -wx -R ./
-RUN chmod +rw -R /home/serviceUser/webapp/src/assets/*_images
+
+RUN chmod -wx -R .
+
+VOLUME /usr/share/meeting_images
+VOLUME /usr/share/user_images
+
+RUN chmod +rw -R /usr/share/meeting_images
+RUN chmod +rw -R /usr/share/user_images
 
 COPY . .
-CMD "bash" "-c" "cd /home/serviceUser && npm run start" 
+
+# Change user here otherwise chmod will crash
+USER serviceUser
+CMD "bash" "-c" "cd /home/serviceUser/backend/   && npm run start" 
