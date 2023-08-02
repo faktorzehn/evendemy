@@ -66,7 +66,10 @@ export class AppModule implements NestModule {
       .forRoutes('*'); // register all modules that should be validated  
     consumer
       .apply(UIMiddleWare)
-      .forRoutes('/ui/**'); // Send user to the ui middleware module.
+      .forRoutes({
+        path: '/ui/**',
+        method: RequestMethod.ALL
+      }); // Send user to the ui middleware module.
   }
 
 }
