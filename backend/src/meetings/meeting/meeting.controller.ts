@@ -11,6 +11,7 @@ import { MeetingEntity } from '../entities/meeting.entity';
 import { Repository } from 'typeorm';
 import { MeetingDto } from '../dto/meeting.dto';
 import { CalendarService } from '../calendar.service';
+import { join } from 'path';
 
 @Controller('meeting')
 export class MeetingController {
@@ -45,6 +46,21 @@ export class MeetingController {
   @Get(':mid/calendar')
   async getCalendarForMeeting(@Req() request: EvendemyRequest, @Param('mid') mid: string) {
     return this.meetingsService.findOne(+mid).then(m => this.calendarService.createICAL(m));
+  }
+
+  @Get(":mid/image")
+  async getPicture(@Req() req: EvendemyRequest, @Param('mid') mid: String){
+    const meeting = await this.meetingsService.findOne(+mid);
+
+    if(meeting.images && meeting.images.length > 0) {
+      try{
+        return this.imageService.read(meeting.images[0],this.path)
+      } catch (err) {
+        throw new HttpException("No image found for meeting", HttpStatus.NOT_FOUND);
+      }
+    } else {
+      throw new HttpException("No image found for meeting", HttpStatus.NOT_FOUND);
+    }
   }
 
   @Post(":mid/image")
