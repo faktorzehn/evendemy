@@ -22,7 +22,7 @@ export class UserController {
     async getUserImage(@Req() req: EvendemyRequest, @Param('username') username: string) {
         var user = await this.usersService.findOne(username);
         if(user.avatar) {
-            var user_image_data = this.imageService.read(req.user.username,this.path);
+            var user_image_data = this.imageService.read(username,this.path);
             return user_image_data;
         }
         throw new HttpException("User has no Avatar", HttpStatus.NOT_FOUND);
