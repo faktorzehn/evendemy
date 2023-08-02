@@ -29,12 +29,6 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    command: 
-      - /bin/bash
-      - -c 
-      - |
-        cd /usr/src/backend
-        npm run start
     env_file:
       - .env
     ports:
