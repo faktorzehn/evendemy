@@ -47,7 +47,7 @@ export class MeetingEntity {
     @Column()
     username: string;
 
-    @OneToMany(() => CommentEntity, (comment) => comment.id)
+    @OneToMany(() => CommentEntity, (comment) => comment.id, {cascade: true})
     comments: CommentEntity[];
 
     @Column()

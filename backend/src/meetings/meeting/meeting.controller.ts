@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Req, HttpException, HttpStatus, Delete, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Req, HttpException, HttpStatus, Delete, Get, Put } from '@nestjs/common';
 import { MeetingsService } from '../meetings.service';
 import { UpdateMeetingDto } from '../dto/update-meeting.dto';
 import { EvendemyRequest } from 'src/shared/evendemy-request';
@@ -8,6 +8,9 @@ import { ConfigService } from '@nestjs/config';
 import { IdService } from 'src/core/id.service';
 import { MeetingEntity } from '../entities/meeting.entity';
 import { CalendarService } from '../calendar.service';
+import { MeetingUserEntity } from '../entities/meeting_user.entity';
+import { CommentDto } from '../dto/comment.dto';
+import { CommentEntity } from '../entities/comment.entity';
 
 @Controller('meeting')
 export class MeetingController {
@@ -77,6 +80,36 @@ export class MeetingController {
         return this.meetingsService.updateByEntity(meeting).then(MeetingEntity.toDTO);
   }
 
+  @Post(":mid/comment")
+  async postComment(@Param('mid') mid: string, @Body() CommentEntity){
+    console.log('Received comment data:', CommentEntity, "Mid: ", mid);
+    const meetingId = parseInt(mid, 10);
+    if (isNaN(meetingId)){
+      throw new HttpException('Meeting id is not a number', HttpStatus.BAD_REQUEST);
+    }
+    if (!CommentEntity.text){
+      throw new HttpException('No comment', HttpStatus.NOT_ACCEPTABLE);
+    }
+    await this.meetingsService.addComment(meetingId, CommentEntity);
+    return {message: 'Comment posted successfully'};
+  }
+
+  @Put(":mid")
+  async putMid(@Param('mid') mid: string, @Body() updateMeetingDto : UpdateMeetingDto){
+    const meetingID = parseInt(mid, 10);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting id is not a number', HttpStatus.BAD_REQUEST);
+    }
+    const existingMeeting = await this.meetingsService.findOne(meetingID);
+    console.log(existingMeeting);
+    if (!existingMeeting){
+      throw new HttpException('Meeting does not exist', HttpStatus.NOT_FOUND);
+    }
+    
+    await this.meetingsService.update(meetingID, updateMeetingDto);
+    return {message: 'Meeting updated successfully'}
+  }
+
   @Delete(":mid")
   async delete(@Req() req: EvendemyRequest, @Param('mid') mid: string) {
       const meeting = await this.meetingsService.findOne(+mid);
@@ -86,6 +119,41 @@ export class MeetingController {
       }
 
       return this.meetingsService.delete(+mid).then(MeetingEntity.toDTO);
+  }
+
+  @Get(":mid/attendees")
+  async getAttendess(@Param('mid') mid : string): Promise<MeetingUserEntity[]>{
+    try{
+      const meetingID = parseInt(mid, 10);
+
+      if (isNaN(meetingID)){
+        throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+      }
+      const attendees = await this.meetingsService.getAttendeesByMeetingID(meetingID);
+      return attendees;
+    } catch (error){
+        throw new HttpException('Couldnt get attendees by meeting id', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get(":mid/attendee/:username/attend")
+  async getAttendesUsername(){
+
+  }
+
+  @Delete(":mid/attendee/:username/attend")
+  async deleteAttendesUsername(){
+
+  }
+
+  @Put(":mid/attendee/:username/confirm")
+  async putConfirm(){
+
+  }
+
+  @Delete(":mid/attendee/:username/confirm")
+  async deleteConfirm(){
+    
   }
 
 }

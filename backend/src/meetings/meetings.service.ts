@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateMeetingDto } from './dto/update-meeting.dto';
 import { MeetingEntity } from './entities/meeting.entity';
 import { FindOptionsWhere, Repository, MoreThanOrEqual, LessThan, IsNull, Admin, FindOperator, ArrayContains, And, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationAboutMeetingsService } from './notfication-about-meetings.service';
+import { MeetingUserEntity } from './entities/meeting_user.entity';
+import { CommentDto } from './dto/comment.dto';
+import { CommentEntity } from './entities/comment.entity';
 
 class MeetingsFilter {
   showNotAnnounced: boolean;
@@ -21,6 +24,8 @@ export class MeetingsService {
   constructor(
     @InjectRepository(MeetingEntity)
     private meetingRepository: Repository<MeetingEntity>,
+    @InjectRepository(MeetingUserEntity)
+    public meetingUserRepository: Repository<MeetingUserEntity>,
     private notificationAboutMeetingsService: NotificationAboutMeetingsService,
     private dataSource: DataSource)
   { }
@@ -76,7 +81,7 @@ export class MeetingsService {
     return this.meetingRepository.findBy(options);
   }
 
-  findOne(id: number) {
+  findOne(id: number){
     return this.meetingRepository.findOneBy({mid: id, deleted: false});
   }
 
@@ -89,9 +94,35 @@ export class MeetingsService {
   }
 
   async delete(id: number) {
-    const meeting = await this.findOne(id);
+    const meeting = await this.meetingRepository.findOne({where: {mid: id}});
     meeting.deleted = true;
     return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.deletedMeeting(m));
+  }
+
+  async addComment(id: number, data: CommentEntity): Promise<MeetingEntity>{
+    const meeting = await this.meetingRepository.findOne({where: {mid: id}});
+    console.log(meeting);
+    if(!meeting){
+      throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
+    }
+    const comment = new CommentEntity;
+    comment.text = data.text;
+    comment.creationDate = data.creationDate;
+    comment.author = data.author;
+    if(!meeting.comments){
+      meeting.comments = [];
+    }
+    meeting.comments.push(comment);
+    return this.meetingRepository.save(meeting);
+  }
+
+  async getAttendeesByMeetingID(id: number): Promise<MeetingUserEntity[]>{
+    const meeting = await this.meetingRepository.findOne({where: {mid: id}});
+    if (!meeting){
+      throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
+    }
+    const attendees = await this.meetingUserRepository.find({where: {mid: id}});
+    return attendees;
   }
 
   getAllTags(): Promise<string[]> {
