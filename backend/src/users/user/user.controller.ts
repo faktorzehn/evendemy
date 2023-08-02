@@ -17,6 +17,16 @@ export class UserController {
     getOneUser(@Param('username') username: string) {
         return this.usersService.findOne(username);
     }
+    
+    @Get(':username/image')
+    async getUserImage(@Req() req: EvendemyRequest, @Param('username') username: string) {
+        var user = await this.usersService.findOne(username);
+        if(user.avatar) {
+            var user_image_data = this.imageService.read(req.user.username,this.path);
+            return user_image_data;
+        }
+        throw new HttpException("User has no Avatar", HttpStatus.NOT_FOUND);
+    }
 
     @Post(':username/image')
     async saveUserImage(@Req() req: EvendemyRequest, @Param('username') username: string) {
