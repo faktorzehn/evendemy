@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:${DB_VERSION}
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "${DB_PORT}:5432"
-
   evendemy:
     image: node:latest
     restart: unless-stopped
@@ -33,11 +22,9 @@ services:
       - .env
     ports:
       - "${EVENDEMY_PORT}:3000"
-    depends_on:
-      - db
     volumes:
       - ./backend:/usr/src/backend
       - ./webapp:/usr/src/webapp
       - /usr/src/backend/node_modules
-      - ${USER_IMAGE_PATH}:/home/serviceUser/webapp/src/assets/user_images
-      - ${MEETING_IMAGE_PATH}:/home/serviceUser/webapp/src/assets/meeting_images
+      - ${USER_IMAGE_PATH}:/usr/share/user_images
+      - ${MEETING_IMAGE_PATH}:/usr/share/meeting_images
