@@ -21,7 +21,7 @@ export class UserController {
     @Get(':username/image')
     async getUserImage(@Req() req: EvendemyRequest, @Param('username') username: string) {
         var user = await this.usersService.findOne(username);
-        if(user.avatar) {
+        if(user && user.avatar) {
             var user_image_data = this.imageService.read(username,this.path);
             return user_image_data;
         }
