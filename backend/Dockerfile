@@ -8,7 +8,7 @@ RUN npm install
 RUN npm run build
 
 
-FROM node:latest as run
+FROM node:slim as run
 
 WORKDIR /usr/src/backend
 COPY --from=build /usr/src/backend ./
