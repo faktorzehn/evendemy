@@ -26,5 +26,5 @@ services:
       - ./backend:/usr/src/backend
       - ./webapp:/usr/src/webapp
       - /usr/src/backend/node_modules
-      - ${USER_IMAGE_PATH}:/usr/share/user_images
-      - ${MEETING_IMAGE_PATH}:/usr/share/meeting_images
+      - ${USER_IMAGE_PATH}:/usr/src/user_images
+      - ${MEETING_IMAGE_PATH}:/usr/src/meeting_images
