@@ -39,5 +39,5 @@ services:
       - ./backend:/usr/src/backend
       - ./webapp:/usr/src/webapp
       - /usr/src/backend/node_modules
-      - ${USER_IMAGE_PATH}:/usr/src/webapp/src/assets/user_images
-      - ${MEETING_IMAGE_PATH}:/usr/src/webapp/src/assets/meeting_images
+      - ${USER_IMAGE_PATH}:/home/serviceUser/webapp/src/assets/user_images
+      - ${MEETING_IMAGE_PATH}:/home/serviceUser/webapp/src/assets/meeting_images
