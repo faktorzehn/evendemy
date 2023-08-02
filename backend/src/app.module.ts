@@ -9,7 +9,8 @@ import { CoreModule } from './core/core.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConfigTokens } from './config.tokens';
 import * as Joi from 'joi';
-import { UIMiddleWare } from './core/middleware/ui.middleware';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [    
@@ -54,7 +55,9 @@ import { UIMiddleWare } from './core/middleware/ui.middleware';
     MeetingsModule, 
     UsersModule,
     AuthModule,
-
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname,"../../../webapp", "dist"),
+    }),
   ],
   providers: [ImageService]
 })
@@ -64,12 +67,13 @@ export class AppModule implements NestModule {
     consumer
       .apply(AuthMiddleware)
       .forRoutes('*'); // register all modules that should be validated  
-    consumer
+    /* consumer
       .apply(UIMiddleWare)
       .forRoutes({
         path: '/ui/**',
         method: RequestMethod.ALL
       }); // Send user to the ui middleware module.
+      */
   }
 
 }
