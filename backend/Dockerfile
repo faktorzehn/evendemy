@@ -13,9 +13,10 @@ FROM node:slim as run
 
 RUN useradd -ms /bin/bash serviceUser
 
-WORKDIR /home/serviceUser
+WORKDIR /usr/src/backend
 COPY --from=buildBackend /usr/src/backend ./
+COPY . .
+USER serviceUser
 
 # Change user here otherwise chmod will crash
-USER serviceUser
-CMD "bash" "-c" "cd /home/serviceUser/backend/ && npm run start" 
+CMD "bash" "-c" "cd /usr/src/backend/ && npm run start" 
