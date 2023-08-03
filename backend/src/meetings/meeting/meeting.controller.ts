@@ -81,18 +81,18 @@ export class MeetingController {
   }
 
   @Post(":mid/comment")
-  async postComment(@Param('mid') mid: string, @Body() CommentEntity){
-    console.log('Received comment data:', CommentEntity, "Mid: ", mid);
+  async postComment(@Param('mid') mid: string, @Body() commentDto: CommentDto) {
     const meetingId = parseInt(mid, 10);
-    if (isNaN(meetingId)){
+    if (isNaN(meetingId)) {
       throw new HttpException('Meeting id is not a number', HttpStatus.BAD_REQUEST);
     }
-    if (!CommentEntity.text){
+    if (!commentDto.text) {
       throw new HttpException('No comment', HttpStatus.NOT_ACCEPTABLE);
     }
-    await this.meetingsService.addComment(meetingId, CommentEntity);
-    return {message: 'Comment posted successfully'};
+    await this.meetingsService.addComment(meetingId, commentDto);
+    return { message: 'Comment posted successfully' };
   }
+
 
   @Put(":mid")
   async putMid(@Param('mid') mid: string, @Body() updateMeetingDto : UpdateMeetingDto){

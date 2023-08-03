@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { CommentDto } from "../dto/comment.dto";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from "typeorm";
+import { MeetingEntity } from "./meeting.entity";
 
 @Entity("comment")
 export class CommentEntity {
@@ -10,21 +10,12 @@ export class CommentEntity {
     @Column()
     text: string;
 
-    @Column()
+    @CreateDateColumn()
     creationDate: Date;
 
     @Column()
     author: string;
 
-    public static toDTO(entity: CommentEntity): CommentDto{
-        if(!entity){
-            return null;
-        }
-
-        return {
-            text: entity.text,
-            creationDate: entity.creationDate,
-            author: entity.author
-        }
-    }
+    @ManyToOne(() => MeetingEntity, (meeting) => meeting.comments)
+    meeting: MeetingEntity;
 }

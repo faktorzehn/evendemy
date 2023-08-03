@@ -25,7 +25,7 @@ export class MeetingsService {
     @InjectRepository(MeetingEntity)
     private meetingRepository: Repository<MeetingEntity>,
     @InjectRepository(MeetingUserEntity)
-    public meetingUserRepository: Repository<MeetingUserEntity>,
+    private meetingUserRepository: Repository<MeetingUserEntity>,
     private notificationAboutMeetingsService: NotificationAboutMeetingsService,
     private dataSource: DataSource)
   { }
@@ -99,13 +99,12 @@ export class MeetingsService {
     return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.deletedMeeting(m));
   }
 
-  async addComment(id: number, data: CommentEntity): Promise<MeetingEntity>{
-    const meeting = await this.meetingRepository.findOne({where: {mid: id}});
-    console.log(meeting);
+  async addComment(id: number, data: CommentDto): Promise<MeetingEntity>{
+    const meeting = await this.meetingRepository.findOne({where: {mid: id}, relations: {comments: true}});
     if(!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
     }
-    const comment = new CommentEntity;
+    const comment = new CommentEntity();
     comment.text = data.text;
     comment.creationDate = data.creationDate;
     comment.author = data.author;
@@ -113,7 +112,8 @@ export class MeetingsService {
       meeting.comments = [];
     }
     meeting.comments.push(comment);
-    return this.meetingRepository.save(meeting);
+
+    return this.meetingRepository.save(meeting)/*.then(m => this.notificationAboutMeetingsService.newComment(m))*/;
   }
 
   async getAttendeesByMeetingID(id: number): Promise<MeetingUserEntity[]>{

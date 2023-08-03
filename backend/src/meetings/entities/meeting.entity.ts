@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CommentEntity } from "./comment.entity";
 import { MeetingDto } from "../dto/meeting.dto";
 
@@ -47,7 +47,7 @@ export class MeetingEntity {
     @Column()
     username: string;
 
-    @OneToMany(() => CommentEntity, (comment) => comment.id, {cascade: true})
+    @OneToMany(() => CommentEntity, (comment) => comment.meeting, { cascade: ['insert'] })
     comments: CommentEntity[];
 
     @Column()

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
 
 @Entity("meeting_user")
 export class MeetingUserEntity{
@@ -14,7 +14,7 @@ export class MeetingUserEntity{
     @Column({default: false})
     tookPart: boolean;
 
-    @Column()
+    @CreateDateColumn()
     dateOfRegistration: Date;
 
     @Column({nullable: true})
