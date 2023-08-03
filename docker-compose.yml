@@ -4,6 +4,7 @@ services:
   evendemy:
     image: node:latest
     restart: unless-stopped
+    network_mode: "host"
     environment:
       - MAIL_ENABLED=${MAIL_ENABLED}
       - MAIL_HOST=${MAIL_HOST}
