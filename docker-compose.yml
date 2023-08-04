@@ -4,7 +4,6 @@ services:
   evendemy:
     image: node:latest
     restart: unless-stopped
-    network_mode: "host"
     environment:
       - MAIL_ENABLED=${MAIL_ENABLED}
       - MAIL_HOST=${MAIL_HOST}
@@ -24,8 +23,9 @@ services:
     ports:
       - "${EVENDEMY_PORT}:3000"
     volumes:
-      - ./backend:/usr/src/backend
-      - ./webapp:/usr/src/webapp
+      - ./backend/:/usr/src/backend/
+      - ./webapp/:/usr/src/webapp/
       - /usr/src/backend/node_modules
       - ${USER_IMAGE_PATH}:/usr/src/webapp/src/assets/user_images
       - ${MEETING_IMAGE_PATH}:/usr/src/webapp/src/assets/meeting_images
+      - ${PLUGIN_PATH}:/usr/src/backend/plugins/
