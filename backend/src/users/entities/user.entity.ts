@@ -1,11 +1,14 @@
+import { AttendingEntity } from "src/meetings/entities/attending.entity";
 import { SettingsEntity } from "src/users/entities/setting.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { UserDto } from "../dto/user.dto";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn} from "typeorm";
 
 @Entity("user")
 export class UserEntity {
     @PrimaryColumn()
     username: string;
+
+    @ManyToOne(() => AttendingEntity, (user) => user.username)
+    unames: AttendingEntity;
   
     @Column()
     firstname: string;
@@ -30,7 +33,7 @@ export class UserEntity {
 
     @OneToOne(() => SettingsEntity, { cascade: ["remove"]})
     @JoinColumn()
-    settings: SettingsEntity
+    settings: SettingsEntity;
 
     public static toDTO(entity: UserEntity): UserDto{
         if(!entity){

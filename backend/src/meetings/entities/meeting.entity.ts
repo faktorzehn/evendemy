@@ -1,6 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CommentEntity } from "./comment.entity";
 import { MeetingDto } from "../dto/meeting.dto";
+import { AttendingEntity } from "./attending.entity";
+import { UserEntity } from "src/users/entities/user.entity";
 
 @Entity("meeting")
 export class MeetingEntity {
@@ -49,6 +51,12 @@ export class MeetingEntity {
 
     @OneToMany(() => CommentEntity, (comment) => comment.meeting, { cascade: ['insert'] })
     comments: CommentEntity[];
+
+    @OneToMany(() => AttendingEntity, (attending) => attending.attendee, {cascade: ['insert']})
+    attendees: AttendingEntity[];
+
+    @OneToMany(() => UserEntity, (user) => user.username)
+    users: UserEntity[];
 
     @Column()
     numberOfAllowedExternals: number;

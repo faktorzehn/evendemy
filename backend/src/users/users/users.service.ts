@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
@@ -28,6 +28,12 @@ export class UsersService {
 
   update(username: string, updateUserDto: UpdateUserDto) {
     return this.usersRepository.update(username, updateUserDto);
+  }
+
+  findByUsernames(usernames: string[]): Promise<UserEntity[]> {
+    return this.usersRepository.find({
+      where: { username: In(usernames), deleted: false },
+    });
   }
 
   async imageSaved(username: string, imageSaved: boolean) {

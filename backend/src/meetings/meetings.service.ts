@@ -4,9 +4,10 @@ import { MeetingEntity } from './entities/meeting.entity';
 import { FindOptionsWhere, Repository, MoreThanOrEqual, LessThan, IsNull, Admin, FindOperator, ArrayContains, And, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationAboutMeetingsService } from './notfication-about-meetings.service';
-import { MeetingUserEntity } from './entities/meeting_user.entity';
+import { AttendingEntity } from './entities/attending.entity';
 import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
+import { MeetingUserDto } from './dto/meeting_user.dto';
 
 class MeetingsFilter {
   showNotAnnounced: boolean;
@@ -24,8 +25,8 @@ export class MeetingsService {
   constructor(
     @InjectRepository(MeetingEntity)
     private meetingRepository: Repository<MeetingEntity>,
-    @InjectRepository(MeetingUserEntity)
-    private meetingUserRepository: Repository<MeetingUserEntity>,
+    @InjectRepository(AttendingEntity)
+    private meetingUserRepository: Repository<AttendingEntity>,
     private notificationAboutMeetingsService: NotificationAboutMeetingsService,
     private dataSource: DataSource)
   { }
@@ -112,11 +113,11 @@ export class MeetingsService {
       meeting.comments = [];
     }
     meeting.comments.push(comment);
-
-    return this.meetingRepository.save(meeting)/*.then(m => this.notificationAboutMeetingsService.newComment(m))*/;
+    const attendees = await this.meetingUserRepository.find({where: {mid: id}});
+    return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.newComment(meeting, comment, attendees));
   }
 
-  async getAttendeesByMeetingID(id: number): Promise<MeetingUserEntity[]>{
+  async getAttendeesByMeetingID(id: number): Promise<AttendingEntity[]>{
     const meeting = await this.meetingRepository.findOne({where: {mid: id}});
     if (!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);

@@ -8,6 +8,9 @@ import * as mailConfig from '../../assets/mail.json';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { readFileSync } from 'fs';
 import * as nodemailer from 'nodemailer';
+import { CommentEntity } from './entities/comment.entity';
+import { AttendingEntity } from './entities/attending.entity';
+
 
 class MailParts {
       header: string;
@@ -88,6 +91,18 @@ export class NotificationAboutMeetingsService {
     return transporter.sendMail(mailOptions);
   }
 
+  async newComment(meeting: MeetingEntity, comment: CommentEntity, attendees: AttendingEntity[]): Promise<MeetingEntity>{
+    if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
+      return Promise.reject('mail service is not enabled');
+    }
+    const attendeeUsernames = attendees.map(att => att.username);
+    const users = await this.usersService.findByUsernames(attendeeUsernames);
+    const mailAdresses = users.map(u => u.email);
+    var parts = this.renderPartsComment(meeting.isIdea ? mailConfig.informAboutIdea : mailConfig.informAboutMeeting, meeting, null, null);
+    var html = this.renderMailComment(parts, comment, comment.author);
+    return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
+  }
+
   private renderParts(template: any, meeting?: MeetingEntity, user?: UserEntity, text?: string): MailParts {
     return {
       header: this.renderString(template.header, meeting, user, text),
@@ -99,13 +114,36 @@ export class NotificationAboutMeetingsService {
     };
   }
   
+  private renderPartsComment(template: any, meeting?: MeetingEntity, comment?: string, author?: string): MailParts {
+    return {
+      header: this.renderStringComment(template.header, meeting, comment, author),
+      title: this.renderStringComment(template.header, meeting, comment, author),
+      body: this.renderStringComment(template.header, meeting, comment, author),
+      button_href: this.renderStringComment(template.header, meeting, comment, author),
+      button_label: this.renderStringComment(template.header, meeting, comment, author),
+      foot: this.renderStringComment(template.header, meeting, comment, author)
+    };
+  }
+
   private renderMail(parts: MailParts) {
     var html = readFileSync('./assets/mail.html', 'utf8');//'../../assets/mail.html', 'utf8');
     return mustache.render(html, parts);
+  }
+
+  private renderMailComment(parts: MailParts, comment: CommentEntity, author: string){
+    var html = readFileSync('./assets/mail.html', 'utf8');
+    return mustache.render(html, {
+      ...parts,
+      comment: comment.text,
+      author: author
+    });
   }
 
   private renderString(template: any, meeting?: MeetingEntity, user?: UserEntity, text?: string): string {
     return mustache.render(template, { meeting, user, text });
   }
 
+  private renderStringComment(template: any, meeting?: MeetingEntity, comment?: string, author?: string): string{
+    return mustache.renden(template, {meeting, comment, author});
+  }
 }

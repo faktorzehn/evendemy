@@ -8,9 +8,10 @@ import { ConfigService } from '@nestjs/config';
 import { IdService } from 'src/core/id.service';
 import { MeetingEntity } from '../entities/meeting.entity';
 import { CalendarService } from '../calendar.service';
-import { MeetingUserEntity } from '../entities/meeting_user.entity';
+import { AttendingEntity } from '../entities/attending.entity';
 import { CommentDto } from '../dto/comment.dto';
 import { CommentEntity } from '../entities/comment.entity';
+import { MeetingUserDto } from '../dto/meeting_user.dto';
 
 @Controller('meeting')
 export class MeetingController {
@@ -101,11 +102,9 @@ export class MeetingController {
       throw new HttpException('Meeting id is not a number', HttpStatus.BAD_REQUEST);
     }
     const existingMeeting = await this.meetingsService.findOne(meetingID);
-    console.log(existingMeeting);
     if (!existingMeeting){
       throw new HttpException('Meeting does not exist', HttpStatus.NOT_FOUND);
     }
-    
     await this.meetingsService.update(meetingID, updateMeetingDto);
     return {message: 'Meeting updated successfully'}
   }
@@ -122,18 +121,18 @@ export class MeetingController {
   }
 
   @Get(":mid/attendees")
-  async getAttendess(@Param('mid') mid : string): Promise<MeetingUserEntity[]>{
-    try{
-      const meetingID = parseInt(mid, 10);
-
-      if (isNaN(meetingID)){
-        throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
-      }
-      const attendees = await this.meetingsService.getAttendeesByMeetingID(meetingID);
-      return attendees;
-    } catch (error){
-        throw new HttpException('Couldnt get attendees by meeting id', HttpStatus.INTERNAL_SERVER_ERROR);
+  async getAttendess(@Param('mid') mid : string): Promise<MeetingUserDto[]>{
+    const meetingID = parseInt(mid, 10);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
     }
+    const existingMeeting = await this.meetingsService.findOne(meetingID);
+    if (!existingMeeting){
+      throw new HttpException('Meeting does not exist', HttpStatus.NOT_FOUND);
+    }
+    const attendees = await this.meetingsService.getAttendeesByMeetingID(meetingID);
+    const attendeesDTO: MeetingUserDto[] = attendees.map((attendee) => AttendingEntity.toDTO(attendee))
+    return attendeesDTO;
   }
 
   @Get(":mid/attendee/:username/attend")
