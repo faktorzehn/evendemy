@@ -1,5 +1,5 @@
 import { Controller, Get, Logger, Post, Req } from '@nestjs/common';
-import { EvendemyRequest } from 'src/core/evendemy-request';
+import { EvendemyRequest } from 'src/shared/evendemy-request';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users/users.service';
 

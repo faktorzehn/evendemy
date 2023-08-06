@@ -1,15 +1,12 @@
 import { Controller, Post, Body, Param, Req, HttpException, HttpStatus, Delete, Get } from '@nestjs/common';
 import { MeetingsService } from '../meetings.service';
 import { UpdateMeetingDto } from '../dto/update-meeting.dto';
-import { EvendemyRequest } from 'src/core/evendemy-request';
+import { EvendemyRequest } from 'src/shared/evendemy-request';
 import { ImageService } from 'src/core/image.service';
 import { ConfigTokens } from 'src/config.tokens';
 import { ConfigService } from '@nestjs/config';
 import { IdService } from 'src/core/id.service';
-import { InjectRepository } from '@nestjs/typeorm';
 import { MeetingEntity } from '../entities/meeting.entity';
-import { Repository } from 'typeorm';
-import { MeetingDto } from '../dto/meeting.dto';
 import { CalendarService } from '../calendar.service';
 
 @Controller('meeting')
@@ -32,14 +29,7 @@ export class MeetingController {
 
   @Get(':mid')
   async getOne(@Req() request: EvendemyRequest, @Param('mid') mid: string) {
-    return this.meetingsService.findOne(+mid).then(MeetingEntity.toDTO).then(this.checkIfPresent);
-  }
-
-  private checkIfPresent(meeting: MeetingEntity): MeetingEntity {
-    if(!meeting) {
-      throw new HttpException("No meeting found.", HttpStatus.NOT_FOUND)
-    }
-    return meeting;
+    return this.meetingsService.findOne(+mid).then(MeetingEntity.toDTO);
   }
 
   @Get(':mid/calendar')

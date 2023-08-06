@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Req, Put } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { SettingsDto } from '../dto/settings.dto';
-import { EvendemyRequest } from 'src/core/evendemy-request';
+import { EvendemyRequest } from 'src/shared/evendemy-request';
 import { SettingsEntity } from '../entities/setting.entity';
 
 @Controller('settings')

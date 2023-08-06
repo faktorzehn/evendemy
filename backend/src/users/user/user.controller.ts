@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Req } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { EvendemyRequest } from 'src/core/evendemy-request';
+import { EvendemyRequest } from 'src/shared/evendemy-request';
 import { ImageService } from 'src/core/image.service';
 import { ConfigService } from '@nestjs/config';
 import { ConfigTokens } from 'src/config.tokens';

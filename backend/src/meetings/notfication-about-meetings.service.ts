@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { MeetingEntity } from './entities/meeting.entity';
 import { UsersService } from 'src/users/users/users.service';
 import { ConfigService } from '@nestjs/config';
@@ -21,11 +21,17 @@ class MailParts {
 @Injectable()
 export class NotificationAboutMeetingsService {
 
-  constructor(private configService: ConfigService, private usersService: UsersService) { }
+  private readonly logger = new Logger(NotificationAboutMeetingsService.name);
+
+
+  constructor(
+    private configService: ConfigService, 
+    private usersService: UsersService) { }
 
   async newMeeting(meeting: MeetingEntity): Promise<MeetingEntity> {
     if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
-      return Promise.reject('mail service is not enabled');
+      this.logger.warn("Mail is not enabled!");
+      return Promise.resolve(meeting);
     }
 
     const users = await this.usersService.findAll();
