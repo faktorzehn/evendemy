@@ -52,11 +52,8 @@ export class MeetingEntity {
     @OneToMany(() => CommentEntity, (comment) => comment.meeting, { cascade: ['insert'] })
     comments: CommentEntity[];
 
-    @OneToMany(() => AttendingEntity, (attending) => attending.attendee, {cascade: ['insert']})
+    @OneToMany(() => AttendingEntity, (attending) => attending.meeting, {cascade: ['insert']})
     attendees: AttendingEntity[];
-
-    @OneToMany(() => UserEntity, (user) => user.username)
-    users: UserEntity[];
 
     @Column()
     numberOfAllowedExternals: number;

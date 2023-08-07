@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, OneToMany, ManyToOne, OneToOne } from "typeorm";
 import { MeetingEntity } from "./meeting.entity";
 import { UserEntity } from "src/users/entities/user.entity";
-import { MeetingUserDto } from "../dto/meeting_user.dto";
+import { AttendingDto } from "../dto/attending.dto";
 
-@Entity("meeting_user")
+@Entity("attending")
 export class AttendingEntity{
     @PrimaryGeneratedColumn()
     id: number;
@@ -12,13 +12,10 @@ export class AttendingEntity{
     mid: number;
 
     @ManyToOne(() => MeetingEntity, (meeting) => meeting.attendees)
-    attendee: MeetingEntity;
+    meeting: MeetingEntity;
 
     @Column()
     username: string;
-
-    @ManyToOne(() => UserEntity, (user) => user.unames)
-    uname: UserEntity;
 
     @Column({default: false})
     tookPart: boolean;
@@ -35,20 +32,23 @@ export class AttendingEntity{
     @Column({default: false})
     deleted: boolean;
 
-    public static toDTO(entity: AttendingEntity): MeetingUserDto {
+    @ManyToOne(() => UserEntity, (user) => user.meetings)
+    user: UserEntity;
+
+    public static toDTO(entity: AttendingEntity): AttendingDto {
         if (!entity) {
             return null;
         }
 
-        const dto = new MeetingUserDto();
-        dto.id = entity.id;
+        const dto = new (AttendingDto);
         dto.mid = entity.mid;
         dto.username = entity.username;
         dto.tookPart = entity.tookPart;
         dto.dateOfRegistration = entity.dateOfRegistration;
         dto.dateOfConfirmation = entity.dateOfConfirmation;
         dto.externals = entity.externals;
-        dto.deleted = entity.deleted;
+        dto.firstname = entity.user.firstname;
+        dto.lastname = entity.user.lastname;
 
         return dto;
     }

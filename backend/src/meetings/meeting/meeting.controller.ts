@@ -11,7 +11,8 @@ import { CalendarService } from '../calendar.service';
 import { AttendingEntity } from '../entities/attending.entity';
 import { CommentDto } from '../dto/comment.dto';
 import { CommentEntity } from '../entities/comment.entity';
-import { MeetingUserDto } from '../dto/meeting_user.dto';
+import { AttendingDto } from '../dto/attending.dto';
+import { UpdateCommentDto } from '../dto/update-comment.dto';
 
 @Controller('meeting')
 export class MeetingController {
@@ -34,6 +35,13 @@ export class MeetingController {
   @Get(':mid')
   async getOne(@Req() request: EvendemyRequest, @Param('mid') mid: string) {
     return this.meetingsService.findOne(+mid).then(MeetingEntity.toDTO);
+  }
+
+  private checkIfPresent(meeting: MeetingEntity): MeetingEntity {
+    if(!meeting) {
+      throw new HttpException("No meeting found.", HttpStatus.NOT_FOUND)
+    }
+    return meeting;
   }
 
   @Get(':mid/calendar')
@@ -82,15 +90,15 @@ export class MeetingController {
   }
 
   @Post(":mid/comment")
-  async postComment(@Param('mid') mid: string, @Body() commentDto: CommentDto) {
-    const meetingId = parseInt(mid, 10);
+  async postComment(@Param('mid') mid: string, @Body() updateCommentDto: UpdateCommentDto, @Req() req: EvendemyRequest) {
+    const meetingId = parseInt(mid);
     if (isNaN(meetingId)) {
       throw new HttpException('Meeting id is not a number', HttpStatus.BAD_REQUEST);
     }
-    if (!commentDto.text) {
+    if (!updateCommentDto.text) {
       throw new HttpException('No comment', HttpStatus.NOT_ACCEPTABLE);
     }
-    await this.meetingsService.addComment(meetingId, commentDto);
+    await this.meetingsService.addComment(meetingId, req.user.username, updateCommentDto.text);
     return { message: 'Comment posted successfully' };
   }
 
@@ -121,8 +129,8 @@ export class MeetingController {
   }
 
   @Get(":mid/attendees")
-  async getAttendess(@Param('mid') mid : string): Promise<MeetingUserDto[]>{
-    const meetingID = parseInt(mid, 10);
+  async getAttendess(@Param('mid') mid : string): Promise<AttendingDto[]>{
+    const meetingID = parseInt(mid);
     if (isNaN(meetingID)){
       throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
     }
@@ -130,13 +138,11 @@ export class MeetingController {
     if (!existingMeeting){
       throw new HttpException('Meeting does not exist', HttpStatus.NOT_FOUND);
     }
-    const attendees = await this.meetingsService.getAttendeesByMeetingID(meetingID);
-    const attendeesDTO: MeetingUserDto[] = attendees.map((attendee) => AttendingEntity.toDTO(attendee))
-    return attendeesDTO;
+    return this.meetingsService.getAttendeesByMeetingID(meetingID).then(attendees => attendees.map(AttendingEntity.toDTO));
   }
 
   @Get(":mid/attendee/:username/attend")
-  async getAttendesUsername(){
+  async getAttendesUsername(@Param('mid') mid : string, @Param('username') username : string){
 
   }
 
@@ -154,5 +160,4 @@ export class MeetingController {
   async deleteConfirm(){
     
   }
-
 }

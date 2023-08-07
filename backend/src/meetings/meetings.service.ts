@@ -7,7 +7,7 @@ import { NotificationAboutMeetingsService } from './notfication-about-meetings.s
 import { AttendingEntity } from './entities/attending.entity';
 import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
-import { MeetingUserDto } from './dto/meeting_user.dto';
+import { AttendingDto } from './dto/attending.dto';
 
 class MeetingsFilter {
   showNotAnnounced: boolean;
@@ -26,7 +26,7 @@ export class MeetingsService {
     @InjectRepository(MeetingEntity)
     private meetingRepository: Repository<MeetingEntity>,
     @InjectRepository(AttendingEntity)
-    private meetingUserRepository: Repository<AttendingEntity>,
+    private AttedingRepository: Repository<AttendingEntity>,
     private notificationAboutMeetingsService: NotificationAboutMeetingsService,
     private dataSource: DataSource)
   { }
@@ -100,21 +100,21 @@ export class MeetingsService {
     return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.deletedMeeting(m));
   }
 
-  async addComment(id: number, data: CommentDto): Promise<MeetingEntity>{
+  async addComment(id: number, username: string, text: string): Promise<MeetingEntity>{
+    console.log(username);
     const meeting = await this.meetingRepository.findOne({where: {mid: id}, relations: {comments: true}});
     if(!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
     }
     const comment = new CommentEntity();
-    comment.text = data.text;
-    comment.creationDate = data.creationDate;
-    comment.author = data.author;
+    comment.text = text;
+    comment.username = username;
     if(!meeting.comments){
       meeting.comments = [];
     }
     meeting.comments.push(comment);
-    const attendees = await this.meetingUserRepository.find({where: {mid: id}});
-    return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.newComment(meeting, comment, attendees));
+    const attendees = await this.getAttendeesByMeetingID(id);
+    return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.newComment(m, comment, attendees));
   }
 
   async getAttendeesByMeetingID(id: number): Promise<AttendingEntity[]>{
@@ -122,7 +122,8 @@ export class MeetingsService {
     if (!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
     }
-    const attendees = await this.meetingUserRepository.find({where: {mid: id}});
+    const attendees = await this.AttedingRepository.find({ where: { mid: id }, relations: {user: true}});
+    await this.AttedingRepository.save(attendees);
     return attendees;
   }
 

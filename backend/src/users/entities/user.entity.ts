@@ -6,9 +6,6 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColu
 export class UserEntity {
     @PrimaryColumn()
     username: string;
-
-    @ManyToOne(() => AttendingEntity, (user) => user.username)
-    unames: AttendingEntity;
   
     @Column()
     firstname: string;
@@ -35,19 +32,6 @@ export class UserEntity {
     @JoinColumn()
     settings: SettingsEntity;
 
-    public static toDTO(entity: UserEntity): UserDto{
-        if(!entity){
-            return null;
-        }
-
-        return {
-            username: entity.username,
-            firstname: entity.firstname,
-            lastname: entity.lastname,
-            email: entity.email,
-            avatar: entity.avatar,
-            jobTitle: entity.jobTitle,
-            description: entity.description
-        }
-    }
+    @OneToMany(() => AttendingEntity, (attending) => attending.user)
+    meetings: AttendingEntity[];
 }

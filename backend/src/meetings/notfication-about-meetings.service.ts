@@ -96,10 +96,16 @@ export class NotificationAboutMeetingsService {
       return Promise.reject('mail service is not enabled');
     }
     const attendeeUsernames = attendees.map(att => att.username);
-    const users = await this.usersService.findByUsernames(attendeeUsernames);
+    const users = await this.usersService.findByUsername(attendeeUsernames);
     const mailAdresses = users.map(u => u.email);
-    var parts = this.renderPartsComment(meeting.isIdea ? mailConfig.informAboutIdea : mailConfig.informAboutMeeting, meeting, null, null);
-    var html = this.renderMailComment(parts, comment, comment.author);
+    console.log(mailAdresses);
+    const parts = this.renderParts(
+      mailConfig.commentAddedToMeeting,
+      meeting,
+      users.find(u => u.username === comment.username),
+      comment.text
+    );
+    var html = this.renderMail(parts);
     return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
   }
 
@@ -113,37 +119,13 @@ export class NotificationAboutMeetingsService {
       foot: this.renderString(template.foot, meeting, user, text)
     };
   }
-  
-  private renderPartsComment(template: any, meeting?: MeetingEntity, comment?: string, author?: string): MailParts {
-    return {
-      header: this.renderStringComment(template.header, meeting, comment, author),
-      title: this.renderStringComment(template.header, meeting, comment, author),
-      body: this.renderStringComment(template.header, meeting, comment, author),
-      button_href: this.renderStringComment(template.header, meeting, comment, author),
-      button_label: this.renderStringComment(template.header, meeting, comment, author),
-      foot: this.renderStringComment(template.header, meeting, comment, author)
-    };
-  }
 
   private renderMail(parts: MailParts) {
     var html = readFileSync('./assets/mail.html', 'utf8');//'../../assets/mail.html', 'utf8');
     return mustache.render(html, parts);
   }
 
-  private renderMailComment(parts: MailParts, comment: CommentEntity, author: string){
-    var html = readFileSync('./assets/mail.html', 'utf8');
-    return mustache.render(html, {
-      ...parts,
-      comment: comment.text,
-      author: author
-    });
-  }
-
   private renderString(template: any, meeting?: MeetingEntity, user?: UserEntity, text?: string): string {
     return mustache.render(template, { meeting, user, text });
-  }
-
-  private renderStringComment(template: any, meeting?: MeetingEntity, comment?: string, author?: string): string{
-    return mustache.renden(template, {meeting, comment, author});
   }
 }
