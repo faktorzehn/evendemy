@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { existsSync, readFileSync, unlinkSync, writeFileSync,  } from 'fs';
+import { Injectable, StreamableFile } from '@nestjs/common';
+import { createReadStream, existsSync, readFileSync, unlinkSync, writeFileSync,  } from 'fs';
 
 @Injectable()
 export class ImageService {
@@ -18,18 +18,9 @@ export class ImageService {
         }
     }
 
-    read(name: string, folder: string): string {
-        let img_data: string;
-        try {
-            img_data = readFileSync(`${folder}/${name}.jpg`, {
-                encoding: "base64",
-                flag: "r+"
-            });
-        } catch(err) {
-            throw err;
-        }
-
-        return img_data;
+    read(name: string, folder: string): StreamableFile {
+        const file = createReadStream(`${folder}/${name}.jpg`);
+        return new StreamableFile(file);
     }
 
     delete(name: string, folder: string): boolean {
