@@ -57,6 +57,7 @@ import { join } from 'path';
     AuthModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname,"../../../webapp", "dist"),
+      exclude: ["api/*"],
     }),
   ],
   providers: [ImageService]
