@@ -16,7 +16,8 @@ export class AuthenticationService {
     const token = 'Basic ' + window.btoa(username + ':' + password);
     const headers = new HttpHeaders({
       Authorization: token,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:8080'
     });
     const url = this.url + '/auth';
     return this.http.post(url, {}, { headers: headers }).pipe(map(res => {
