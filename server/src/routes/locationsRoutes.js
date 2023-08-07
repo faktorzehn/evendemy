@@ -2,7 +2,7 @@ module.exports = function (server, config, production_mode) {
     
     var locationService = require('../services/locationsService');
 
-    server.get('/locations', function (req, res, next) {
+    server.get('/api/locations', function (req, res, next) {
         locationService.getAllLocations(config).then(function (locations) {
             if (locations !== null) {
                 res.send(locations.sort());

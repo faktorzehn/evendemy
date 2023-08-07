@@ -4,7 +4,7 @@ module.exports = function (server, config, production_mode) {
     var userService = require('../services/userService');
     var settingsService = require('../services/settingsService');
 
-    server.get('/meetings', function (req, res, next) {
+    server.get('/api/meetings', function (req, res, next) {
         meetingService.getMeetings(req.query).then(function (meetings) {
             res.send(meetings);
             return next();
@@ -14,7 +14,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.get('/meetings/attending/confirmed/:username', function (req, res, next) {
+    server.get('/api/meetings/attending/confirmed/:username', function (req, res, next) {
         if (req.params.username !== undefined) {
             settingsService.getSettings(req.params.username)
             .then(settings => {
@@ -35,7 +35,7 @@ module.exports = function (server, config, production_mode) {
         }
     });
 
-    server.get('/meetings/attending-information/:username', function (req, res, next) {
+    server.get('/api/meetings/attending-information/:username', function (req, res, next) {
         if (req.params.username !== undefined) {
             settingsService.getSettings(req.params.username)
             .then(settings => {
@@ -56,7 +56,7 @@ module.exports = function (server, config, production_mode) {
         }
     });
 
-    server.get('/meetings/author/:username', function (req, res, next) {
+    server.get('/api/meetings/author/:username', function (req, res, next) {
         if (req.params.username !== undefined) {
             settingsService.getSettings(req.params.username)
             .then(settings => {

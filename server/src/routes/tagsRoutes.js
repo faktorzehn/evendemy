@@ -2,7 +2,7 @@ module.exports = function (server, config, production_mode) {
     
     var tagsService = require('../services/tagsService');
 
-    server.get('/tags', function (req, res, next) {
+    server.get('/api/tags', function (req, res, next) {
 
         tagsService.getAllTags().then(function (tags) {
             if (tags !== null) {
