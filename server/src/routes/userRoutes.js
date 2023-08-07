@@ -1,10 +1,10 @@
 module.exports = function (server, config, production_mode) {
     
-    var userService = require('../services/userService');
+    var userService = require('../services/api/userService');
     var imageService = require('../services/imageService');
-    var userModel = require('../models/user');
+    var userModel = require('../models/api/user');
 
-    server.get('/user/:username', function (req, res, next) {
+    server.get('/api/user/:username', function (req, res, next) {
 
         userService.getUserByUsername(req.params.username).then(function (user) {
             if (!user) {
@@ -26,7 +26,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.post('/user/:username/image', function (req, res, next) {
+    server.post('/api/user/:username/image', function (req, res, next) {
         if (!req.params.username) {
             res.send(500, { error: 'No username' });
             return next();
@@ -58,7 +58,7 @@ module.exports = function (server, config, production_mode) {
             });
     });
 
-    server.put('/user/:username/additional_info', function (req, res, next) {
+    server.put('/api/user/:username/additional_info', function (req, res, next) {
         if (!req.params.username) {
             res.send(500, { error: 'No username' });
             return next();
@@ -79,7 +79,7 @@ module.exports = function (server, config, production_mode) {
         });
     });
 
-    server.del('/user/:username/image', function (req, res, next) {
+    server.del('/api/user/:username/image', function (req, res, next) {
         if (!req.params.username) {
             res.send(500, { error: 'No username' });
             return next();
