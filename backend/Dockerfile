@@ -12,4 +12,4 @@ RUN useradd -ms /bin/bash serviceUser
 USER serviceUser
 
 # Change user here otherwise chmod will crash
-CMD "bash" "-c" "cd /usr/src/backend/ && ls && npm run start" 
+CMD "bash" "-c" "cd /usr/src/backend/ && npm run start" 
