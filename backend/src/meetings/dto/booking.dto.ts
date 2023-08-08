@@ -1,4 +1,4 @@
-export class AttendingDto {
+export class BookingDto {
     mid: number;
     username: string;
     firstname: string;

@@ -1,21 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, OneToMany, ManyToOne, OneToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 import { MeetingEntity } from "./meeting.entity";
 import { UserEntity } from "src/users/entities/user.entity";
-import { AttendingDto } from "../dto/attending.dto";
+import { BookingDto } from "../dto/booking.dto";
 
-@Entity("attending")
-export class AttendingEntity{
+@Entity("booking")
+export class BookingEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
     mid: number;
 
-    @ManyToOne(() => MeetingEntity, (meeting) => meeting.attendees)
+    @ManyToOne(() => MeetingEntity, (meeting) => meeting.bookings)
     meeting: MeetingEntity;
-
-    @Column()
-    username: string;
 
     @Column({default: false})
     tookPart: boolean;
@@ -32,17 +29,18 @@ export class AttendingEntity{
     @Column({default: false})
     deleted: boolean;
 
-    @ManyToOne(() => UserEntity, (user) => user.meetings)
+    @ManyToOne(() => UserEntity, (user) => user.bookings)
+    @JoinColumn({name: "username"})
     user: UserEntity;
 
-    public static toDTO(entity: AttendingEntity): AttendingDto {
+    public static toDTO(entity: BookingEntity): BookingDto {
         if (!entity) {
             return null;
         }
 
-        const dto = new (AttendingDto);
+        const dto = new (BookingDto);
         dto.mid = entity.mid;
-        dto.username = entity.username;
+        dto.username = entity.user.username;
         dto.tookPart = entity.tookPart;
         dto.dateOfRegistration = entity.dateOfRegistration;
         dto.dateOfConfirmation = entity.dateOfConfirmation;

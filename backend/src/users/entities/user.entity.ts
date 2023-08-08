@@ -1,4 +1,4 @@
-import { AttendingEntity } from "src/meetings/entities/attending.entity";
+import { BookingEntity } from "src/meetings/entities/booking.entity";
 import { SettingsEntity } from "src/users/entities/setting.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn} from "typeorm";
 import { UserDto } from "../dto/user.dto";
@@ -33,8 +33,8 @@ export class UserEntity {
     @JoinColumn()
     settings: SettingsEntity;
 
-    @OneToMany(() => AttendingEntity, (attending) => attending.user)
-    meetings: AttendingEntity[];
+    @OneToMany(() => BookingEntity, (booking) => booking.user)
+    bookings: BookingEntity[];
 
     public static toDTO(entity: UserEntity): UserDto{
         if (!entity){

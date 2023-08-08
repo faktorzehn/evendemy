@@ -4,10 +4,12 @@ import { MeetingEntity } from './entities/meeting.entity';
 import { FindOptionsWhere, Repository, MoreThanOrEqual, LessThan, IsNull, Admin, FindOperator, ArrayContains, And, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationAboutMeetingsService } from './notfication-about-meetings.service';
-import { AttendingEntity } from './entities/attending.entity';
+import { BookingEntity } from './entities/booking.entity';
 import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
-import { AttendingDto } from './dto/attending.dto';
+import { BookingDto } from './dto/booking.dto';
+import { boolean } from 'joi';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 class MeetingsFilter {
   showNotAnnounced: boolean;
@@ -25,8 +27,8 @@ export class MeetingsService {
   constructor(
     @InjectRepository(MeetingEntity)
     private meetingRepository: Repository<MeetingEntity>,
-    @InjectRepository(AttendingEntity)
-    private AttedingRepository: Repository<AttendingEntity>,
+    @InjectRepository(BookingEntity)
+    private bookingRepository: Repository<BookingEntity>,
     private notificationAboutMeetingsService: NotificationAboutMeetingsService,
     private dataSource: DataSource)
   { }
@@ -86,8 +88,83 @@ export class MeetingsService {
     return this.meetingRepository.findOneBy({mid: id, deleted: false});
   }
 
-  update(id: number, updateMeetingDto: UpdateMeetingDto) {
-    return `This action updates a #${id} meeting`;
+  async update(id: number, newMeeting: MeetingEntity): Promise<MeetingEntity> {
+    const meeting = await this.meetingRepository.findOne({where: {mid: id}});
+    const attendees = meeting.bookings;
+    if(this.checkIsDiff(meeting, newMeeting)){
+      this.updateMeeting(meeting, newMeeting);
+      if ((meeting.startTime != newMeeting.startTime)){
+        //send mail for starttime changed
+        //also send new calender entry
+        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, attendees));
+      }
+      else if (meeting.endTime != newMeeting.endTime){
+        //send mail for endtime changed
+        //also send new calender entry
+        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, attendees));
+      } 
+      else if (meeting.location != newMeeting.location){
+        //send mail for location changed
+        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.locationChanged(m, attendees))
+      }
+    }
+    return;
+  }
+
+  private checkIsDiff(meeting: MeetingEntity, newMeeting: MeetingEntity): boolean{
+    const oldMeetingJson = JSON.stringify(meeting);
+    const newMeetingJson = JSON.stringify(newMeeting);
+    if (oldMeetingJson != newMeetingJson){
+      return true;
+    }
+    return false;
+  }
+
+  async updateMeeting(meeting: MeetingEntity, request: MeetingEntity): Promise<MeetingEntity>{
+    const updatedFields: Partial<MeetingEntity> = {};
+    if (request.title != undefined){
+      updatedFields.title = request.title;
+    }
+    if(request.shortDescription != undefined){
+      updatedFields.shortDescription = request.shortDescription;
+    }
+    if (request.description != undefined){
+      updatedFields.description = request.description;
+    }
+    if (request.startTime != undefined){
+      updatedFields.startTime = request.startTime;
+    }
+    if(request.endTime != undefined){
+      updatedFields.endTime = request.endTime;
+    }
+    if(request.location != undefined){
+      updatedFields.location = request.location;
+    }
+    if(request.costCenter != undefined){
+      updatedFields.costCenter = request.costCenter;
+    }
+    if(request.courseOrEvent != undefined){
+      updatedFields.courseOrEvent = request.courseOrEvent;
+    }
+    if(request.isIdea != undefined){
+      updatedFields.isIdea = request.isIdea;
+    }
+    if (request.isFreetime != undefined){
+      updatedFields.isFreetime = request.isFreetime;
+    }
+    if(request.numberOfAllowedExternals != undefined){
+      updatedFields.numberOfAllowedExternals = request.numberOfAllowedExternals;
+    }
+    if(request.tags != undefined){
+      updatedFields.tags = request.tags;
+    }
+    if(request.images != undefined){
+      updatedFields.images = request.images;
+    }
+    //merge the current and new meetingObject
+    Object.assign(meeting, updatedFields);
+    console.log(updatedFields);
+    return this.meetingRepository.save(meeting);
   }
 
   updateByEntity(meetingEntity: MeetingEntity) {
@@ -101,7 +178,6 @@ export class MeetingsService {
   }
 
   async addComment(id: number, username: string, text: string): Promise<MeetingEntity>{
-    console.log(username);
     const meeting = await this.meetingRepository.findOne({where: {mid: id}, relations: {comments: true}});
     if(!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
@@ -117,14 +193,12 @@ export class MeetingsService {
     return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.newComment(m, comment, attendees));
   }
 
-  async getAttendeesByMeetingID(id: number): Promise<AttendingEntity[]>{
+  async getAttendeesByMeetingID(id: number): Promise<BookingEntity[]>{
     const meeting = await this.meetingRepository.findOne({where: {mid: id}});
     if (!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
     }
-    const attendees = await this.AttedingRepository.find({ where: { mid: id }, relations: {user: true}});
-    await this.AttedingRepository.save(attendees);
-    return attendees;
+    return this.bookingRepository.save(await this.bookingRepository.find({ where: { mid: id }, relations: {user: true}}));
   }
 
   getAllTags(): Promise<string[]> {

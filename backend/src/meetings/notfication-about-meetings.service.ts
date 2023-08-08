@@ -9,7 +9,7 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { readFileSync } from 'fs';
 import * as nodemailer from 'nodemailer';
 import { CommentEntity } from './entities/comment.entity';
-import { AttendingEntity } from './entities/attending.entity';
+import { BookingEntity } from './entities/booking.entity';
 
 
 class MailParts {
@@ -91,19 +91,51 @@ export class NotificationAboutMeetingsService {
     return transporter.sendMail(mailOptions);
   }
 
-  async newComment(meeting: MeetingEntity, comment: CommentEntity, attendees: AttendingEntity[]): Promise<MeetingEntity>{
+  async newComment(meeting: MeetingEntity, comment: CommentEntity, attendees: BookingEntity[]): Promise<MeetingEntity>{
     if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
-      return Promise.reject('mail service is not enabled');
+      this.logger.warn("Mail is not enabled!");
+      return Promise.resolve(meeting);
     }
-    const attendeeUsernames = attendees.map(att => att.username);
+    const attendeeUsernames = attendees.map(att => att.user.username);
     const users = await this.usersService.findByUsername(attendeeUsernames);
     const mailAdresses = users.map(u => u.email);
-    console.log(mailAdresses);
     const parts = this.renderParts(
       mailConfig.commentAddedToMeeting,
       meeting,
       users.find(u => u.username === comment.username),
       comment.text
+    );
+    var html = this.renderMail(parts);
+    return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
+  }
+
+  async timeChanged(meeting: MeetingEntity, attendees: BookingEntity[]): Promise<MeetingEntity>{
+    if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
+      this.logger.warn("Mail is not enabled!");
+      return Promise.resolve(meeting);
+    }
+    const attendeeUsernames = attendees.map(att => att.user.username);
+    const users = await this.usersService.findByUsername(attendeeUsernames);
+    const mailAdresses = users.map(u => u.email);
+    const parts = this.renderParts(
+      mailConfig.commentAddedToMeeting,
+      meeting
+    );
+    var html = this.renderMail(parts);
+    return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
+  }
+
+  async locationChanged(meeting: MeetingEntity, attendees: BookingEntity[]): Promise<MeetingEntity>{
+    if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
+      this.logger.warn("Mail is not enabled!");
+      return Promise.resolve(meeting);
+    }
+    const attendeeUsernames = attendees.map(att => att.user.username);
+    const users = await this.usersService.findByUsername(attendeeUsernames);
+    const mailAdresses = users.map(u => u.email);
+    const parts = this.renderParts(
+      mailConfig.dateChangedFromMeeting,
+      meeting
     );
     var html = this.renderMail(parts);
     return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
