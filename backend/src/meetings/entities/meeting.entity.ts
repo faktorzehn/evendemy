@@ -89,7 +89,8 @@ export class MeetingEntity {
             username: entity.username,
             comments: entity.comments ? entity.comments.map(CommentEntity.toDTO) : [],
             tags: entity.tags,
-            images: entity.images
+            images: entity.images,
+            deleted: entity.deleted
         }
     }
 }

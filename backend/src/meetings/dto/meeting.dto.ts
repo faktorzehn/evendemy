@@ -8,5 +8,6 @@ export class MeetingDto extends UpdateMeetingDto{
     username: string;
     comments: CommentDto[];
     tags: string[];
+    deleted: boolean;
     images: string[];
 }

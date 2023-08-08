@@ -105,7 +105,7 @@ export class MeetingController {
 
   @Put(":mid")
   async putMid(@Param('mid') mid: string, @Body() updateMeetingDto : UpdateMeetingDto){
-    const meetingID = parseInt(mid, 10);
+    const meetingID = parseInt(mid);
     if (isNaN(meetingID)){
       throw new HttpException('Meeting id is not a number', HttpStatus.BAD_REQUEST);
     }
