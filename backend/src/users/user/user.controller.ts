@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Header, HttpException, HttpStatus, Param, Post, Put, Req } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { EvendemyRequest } from 'src/shared/evendemy-request';
@@ -33,6 +33,16 @@ export class UserController {
         } else {
             throw new HttpException('Image could not be saved.', HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Get(':username/image')
+    @Header('Content-Type', 'image/jpeg')
+    async getUserImage(@Req() req: EvendemyRequest, @Param('username') username: string) {
+        var user = await this.usersService.findOne(username);
+        if(user && user.avatar) {
+            return this.imageService.read(username,this.path);
+        }
+        throw new HttpException("User has no Avatar", HttpStatus.NOT_FOUND);
     }
 
     @Delete(':username/image')

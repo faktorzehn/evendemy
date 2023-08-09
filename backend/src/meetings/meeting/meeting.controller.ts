@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Req, HttpException, HttpStatus, Delete, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Req, HttpException, HttpStatus, Delete, Get, Header } from '@nestjs/common';
 import { MeetingsService } from '../meetings.service';
 import { UpdateMeetingDto } from '../dto/update-meeting.dto';
 import { EvendemyRequest } from 'src/shared/evendemy-request';
@@ -63,9 +63,24 @@ export class MeetingController {
         return this.meetingsService.updateByEntity(meeting).then(MeetingEntity.toDTO);
   }
 
+  @Get(":mid/image")
+  @Header('Content-Type', 'image/jpeg')
+  async getPicture(@Req() req: EvendemyRequest, @Param('mid') mid: String){
+    const meeting = await this.meetingsService.findOne(+mid);
+
+    if(meeting.images && meeting.images.length > 0) {
+      try{
+        return this.imageService.read(meeting.images[0],this.path);
+      } catch (err) {
+        throw new HttpException("No image found for meeting", HttpStatus.NOT_FOUND);
+      }
+    } else {
+      throw new HttpException("No image found for meeting", HttpStatus.NOT_FOUND);
+    }
+  }
+
   @Delete(":mid/image")
   async deletePicture(@Req() req: EvendemyRequest, @Param('mid') mid: string) {
-        
         const meeting = await this.meetingsService.findOne(+mid);
 
         if(meeting.images && meeting.images.length > 0){
