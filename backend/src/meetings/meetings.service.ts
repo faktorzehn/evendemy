@@ -5,11 +5,9 @@ import { FindOptionsWhere, Repository, MoreThanOrEqual, LessThan, IsNull, Admin,
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationAboutMeetingsService } from './notfication-about-meetings.service';
 import { BookingEntity } from './entities/booking.entity';
-import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
-import { BookingDto } from './dto/booking.dto';
-import { boolean } from 'joi';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { UsersService } from 'src/users/users/users.service';
+import { CalendarService } from './calendar.service';
 
 class MeetingsFilter {
   showNotAnnounced: boolean;
@@ -30,6 +28,8 @@ export class MeetingsService {
     @InjectRepository(BookingEntity)
     private bookingRepository: Repository<BookingEntity>,
     private notificationAboutMeetingsService: NotificationAboutMeetingsService,
+    private calenderService: CalendarService,
+    private usersService: UsersService,
     private dataSource: DataSource)
   { }
 
@@ -90,25 +90,19 @@ export class MeetingsService {
 
   async update(id: number, newMeeting: MeetingEntity): Promise<MeetingEntity> {
     const meeting = await this.meetingRepository.findOne({where: {mid: id}});
+    console.log(typeof meeting.startTime);
     const attendees = meeting.bookings;
     if(this.checkIsDiff(meeting, newMeeting)){
       this.updateMeeting(meeting, newMeeting);
-      if ((meeting.startTime != newMeeting.startTime)){
-        //send mail for starttime changed
-        //also send new calender entry
-        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, attendees));
+      if ((meeting.startTime != newMeeting.startTime) || (meeting.endTime != newMeeting.endTime)){
+        const iCal = this.calenderService.createICAL(meeting);
+        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, attendees, iCal));
       }
-      else if (meeting.endTime != newMeeting.endTime){
-        //send mail for endtime changed
-        //also send new calender entry
-        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, attendees));
-      } 
       else if (meeting.location != newMeeting.location){
-        //send mail for location changed
         return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.locationChanged(m, attendees))
       }
     }
-    return;
+    return this.meetingRepository.save(meeting);
   }
 
   private checkIsDiff(meeting: MeetingEntity, newMeeting: MeetingEntity): boolean{
@@ -163,7 +157,6 @@ export class MeetingsService {
     }
     //merge the current and new meetingObject
     Object.assign(meeting, updatedFields);
-    console.log(updatedFields);
     return this.meetingRepository.save(meeting);
   }
 
@@ -182,9 +175,11 @@ export class MeetingsService {
     if(!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
     }
+    const user = await this.usersService.findOne(username);
     const comment = new CommentEntity();
     comment.text = text;
     comment.username = username;
+    comment._user = user;
     if(!meeting.comments){
       meeting.comments = [];
     }

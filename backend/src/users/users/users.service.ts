@@ -30,12 +30,6 @@ export class UsersService {
     return this.usersRepository.update(username, updateUserDto);
   }
 
-  findByUsername(usernames: string[]): Promise<UserEntity[]> {
-    return this.usersRepository.find({
-      where: { username: In(usernames), deleted: false },
-    });
-  }
-
   async imageSaved(username: string, imageSaved: boolean) {
     const user = await this.findOne(username);
     user.avatar = imageSaved;
