@@ -1,5 +1,6 @@
+import { BookingEntity } from "src/meetings/entities/booking.entity";
 import { SettingsEntity } from "src/users/entities/setting.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn} from "typeorm";
 import { UserDto } from "../dto/user.dto";
 
 @Entity("user")
@@ -30,13 +31,15 @@ export class UserEntity {
 
     @OneToOne(() => SettingsEntity, { cascade: ["remove"]})
     @JoinColumn()
-    settings: SettingsEntity
+    settings: SettingsEntity;
+
+    @OneToMany(() => BookingEntity, (booking) => booking.user)
+    bookings: BookingEntity[];
 
     public static toDTO(entity: UserEntity): UserDto{
-        if(!entity){
+        if (!entity){
             return null;
         }
-
         return {
             username: entity.username,
             firstname: entity.firstname,
