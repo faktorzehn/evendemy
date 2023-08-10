@@ -11,6 +11,7 @@ import { CalendarService } from '../calendar.service';
 import { BookingEntity } from '../entities/booking.entity';
 import { BookingDto } from '../dto/booking.dto';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
+import { MeetingDto } from '../dto/meeting.dto';
 
 @Controller('meeting')
 export class MeetingController {
@@ -104,12 +105,12 @@ export class MeetingController {
     if (!updateCommentDto.text) {
       throw new HttpException('No comment', HttpStatus.NOT_ACCEPTABLE);
     }
-    return this.meetingsService.addComment(meetingId, req.user.username, updateCommentDto.text);
+    return this.meetingsService.addComment(meetingId, req.user.username, updateCommentDto.text).then(MeetingEntity.toDTO);
   }
 
 
   @Put(":mid")
-  async updateMeeting(@Param('mid') mid: string, @Body() meetingEntity : MeetingEntity): Promise<MeetingEntity>{
+  async updateMeeting(@Param('mid') mid: string, @Body() meetingEntity : MeetingEntity): Promise<MeetingDto>{
     const meetingID = parseInt(mid);
     if (isNaN(meetingID)){
       throw new HttpException('Meeting id is not a number', HttpStatus.BAD_REQUEST);
@@ -118,7 +119,7 @@ export class MeetingController {
     if (!existingMeeting){
       throw new HttpException('Meeting does not exist', HttpStatus.NOT_FOUND);
     }
-    return await this.meetingsService.update(meetingID, meetingEntity);
+    return await this.meetingsService.update(meetingID, meetingEntity).then(MeetingEntity.toDTO);
   }
 
   @Delete(":mid")

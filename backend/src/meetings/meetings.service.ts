@@ -81,81 +81,75 @@ export class MeetingsService {
       });
     }
 
-    return this.meetingRepository.findBy(options);
+    return this.meetingRepository.find({ where: options, relations: {
+      comments: true
+    }});
   }
 
   findOne(id: number){
-    return this.meetingRepository.findOneBy({mid: id, deleted: false});
+    return this.meetingRepository.findOne({
+      where:{mid: id, deleted: false},
+      relations: {
+        comments: true
+      }
+    });
   }
 
   async update(id: number, newMeeting: MeetingEntity): Promise<MeetingEntity> {
     const meeting = await this.meetingRepository.findOne({where: {mid: id}});
     const bookings = await this.getBookingsByMeetingID(id); //meeting.bookings doesnt work -> undefined
-    if(this.checkIsDiff(meeting, newMeeting)){
-      if ((meeting.startTime != newMeeting.startTime) || (meeting.endTime != newMeeting.endTime)){
-        const iCal = this.calenderService.createICAL(meeting);
-        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, bookings, iCal));
-      }
-      if (meeting.location != newMeeting.location){
-        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.locationChanged(m, bookings));
-      }
-      this.updateMeeting(meeting, newMeeting);
+    if ((meeting.startTime != newMeeting.startTime) || (meeting.endTime != newMeeting.endTime)){
+      const iCal = this.calenderService.createICAL(newMeeting);
+      await this.notificationAboutMeetingsService.timeChanged(newMeeting, bookings, iCal);
     }
-    return this.meetingRepository.save(meeting);
+    if (meeting.location != newMeeting.location){
+      await this.notificationAboutMeetingsService.locationChanged(newMeeting, bookings);
+    }
+    const updatedMeeting = this.setMeetingFields(meeting, newMeeting);
+    return this.meetingRepository.save(updatedMeeting);
   }
 
-  private checkIsDiff(meeting: MeetingEntity, newMeeting: MeetingEntity): boolean{
-    const oldMeetingJson = JSON.stringify(meeting);
-    const newMeetingJson = JSON.stringify(newMeeting);
-    if (oldMeetingJson != newMeetingJson){
-      return true;
-    }
-    return false;
-  }
 
-  async updateMeeting(meeting: MeetingEntity, request: MeetingEntity): Promise<MeetingEntity>{
+  private setMeetingFields(oldMeeting: MeetingEntity, newMeeting: MeetingEntity): MeetingEntity{
     const updatedFields: Partial<MeetingEntity> = {};
-    if (request.title != undefined){
-      updatedFields.title = request.title;
+    if (newMeeting.title != undefined){
+      updatedFields.title = newMeeting.title;
     }
-    if(request.shortDescription != undefined){
-      updatedFields.shortDescription = request.shortDescription;
+    if(newMeeting.shortDescription != undefined){
+      updatedFields.shortDescription = newMeeting.shortDescription;
     }
-    if (request.description != undefined){
-      updatedFields.description = request.description;
+    if (newMeeting.description != undefined){
+      updatedFields.description = newMeeting.description;
     }
-    if (request.startTime != undefined){
-      updatedFields.startTime = request.startTime;
+    if (newMeeting.startTime != undefined){
+      updatedFields.startTime = newMeeting.startTime;
     }
-    if(request.endTime != undefined){
-      updatedFields.endTime = request.endTime;
+    if(newMeeting.endTime != undefined){
+      updatedFields.endTime = newMeeting.endTime;
     }
-    if(request.location != undefined){
-      updatedFields.location = request.location;
+    if(newMeeting.location != undefined){
+      updatedFields.location = newMeeting.location;
     }
-    if(request.costCenter != undefined){
-      updatedFields.costCenter = request.costCenter;
+    if(newMeeting.costCenter != undefined){
+      updatedFields.costCenter = newMeeting.costCenter;
     }
-    if(request.courseOrEvent != undefined){
-      updatedFields.courseOrEvent = request.courseOrEvent;
+    if(newMeeting.courseOrEvent != undefined){
+      updatedFields.courseOrEvent = newMeeting.courseOrEvent;
     }
-    if(request.isIdea != undefined){
-      updatedFields.isIdea = request.isIdea;
+    if(newMeeting.isIdea != undefined){
+      updatedFields.isIdea = newMeeting.isIdea;
     }
-    if (request.isFreetime != undefined){
-      updatedFields.isFreetime = request.isFreetime;
+    if (newMeeting.isFreetime != undefined){
+      updatedFields.isFreetime = newMeeting.isFreetime;
     }
-    if(request.numberOfAllowedExternals != undefined){
-      updatedFields.numberOfAllowedExternals = request.numberOfAllowedExternals;
+    if(newMeeting.numberOfAllowedExternals != undefined){
+      updatedFields.numberOfAllowedExternals = newMeeting.numberOfAllowedExternals;
     }
-    if(request.tags != undefined){
-      updatedFields.tags = request.tags;
+    if(newMeeting.tags != undefined){
+      updatedFields.tags = newMeeting.tags;
     }
-    if(request.images != undefined){
-      updatedFields.images = request.images;
-    }
-    Object.assign(meeting, updatedFields);
-    return this.meetingRepository.save(meeting);
+    Object.assign(oldMeeting, updatedFields);
+    return oldMeeting;
   }
 
   updateByEntity(meetingEntity: MeetingEntity) {
@@ -177,8 +171,7 @@ export class MeetingsService {
     const user = await this.usersService.findOne(username);
     const comment = new CommentEntity();
     comment.text = text;
-    comment.username = username;
-    comment._user = user;
+    comment.user = user;
     if(!meeting.comments){
       meeting.comments = [];
     }

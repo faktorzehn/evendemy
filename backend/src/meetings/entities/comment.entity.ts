@@ -16,14 +16,12 @@ export class CommentEntity {
     @CreateDateColumn()
     creationDate: Date;
 
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity, {eager: true})
     @JoinColumn({name: "username"})
-    _user: UserEntity;
-
-    @Column()
-    username: string;
+    user: UserEntity;
 
     @ManyToOne(() => MeetingEntity, (meeting) => meeting.comments)
+    @JoinColumn({name: "mid"})
     meeting: MeetingEntity;
 
     public static toDTO(entity: CommentEntity): CommentDto {
@@ -33,7 +31,7 @@ export class CommentEntity {
         return {
             text: entity.text,
             creationDate: entity.creationDate,
-            author: entity.username,
+            author: entity.user.username,
         };
     }
 }

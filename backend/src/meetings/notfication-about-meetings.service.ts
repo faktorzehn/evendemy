@@ -26,7 +26,6 @@ export class NotificationAboutMeetingsService {
 
   private readonly logger = new Logger(NotificationAboutMeetingsService.name);
 
-
   constructor(
     private configService: ConfigService, 
     private usersService: UsersService) { }
@@ -92,11 +91,11 @@ export class NotificationAboutMeetingsService {
       this.logger.warn("Mail is not enabled!");
       return Promise.resolve(meeting);
     }
-    const attendeeEmails = bookings.filter(att => att.user.username !== comment.username).map(att => att.user.email);
+    const attendeeEmails = bookings.filter(att => att.user.username !== comment.user.username).map(att => att.user.email);
     const parts = this.renderParts(
       mailConfig.commentAddedToMeeting,
       meeting,
-      comment._user,
+      comment.user,
       comment.text
     );
     const html = this.renderMail(parts);

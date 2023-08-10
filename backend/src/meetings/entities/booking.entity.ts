@@ -12,7 +12,8 @@ export class BookingEntity{
     mid: number;
 
     @ManyToOne(() => MeetingEntity, (meeting) => meeting.bookings)
-    meeting: MeetingEntity;
+    @JoinColumn({name: "mid"})
+    _meeting: MeetingEntity;
 
     @Column({default: false})
     tookPart: boolean;
@@ -29,7 +30,7 @@ export class BookingEntity{
     @Column({default: false})
     deleted: boolean;
 
-    @ManyToOne(() => UserEntity, (user) => user.bookings)
+    @ManyToOne(() => UserEntity, (user) => user.bookings, {eager: true})
     @JoinColumn({name: "username"})
     user: UserEntity;
 
