@@ -8,6 +8,9 @@ import * as mailConfig from '../../assets/mail.json';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { readFileSync } from 'fs';
 import * as nodemailer from 'nodemailer';
+import { CommentEntity } from './entities/comment.entity';
+import { BookingEntity } from './entities/booking.entity';
+
 
 class MailParts {
       header: string;
@@ -43,17 +46,13 @@ export class NotificationAboutMeetingsService {
     return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
   }
 
-  async deletedMeeting(meeting: MeetingEntity): Promise<MeetingEntity> {
+  async deletedMeeting(meeting: MeetingEntity, bookings: BookingEntity[]): Promise<MeetingEntity> {
     if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
       return Promise.reject('mail service is not enabled');
     }
-
-    const attendingUsers = await this.usersService.findAll(); // TODO only attending users
-    const mailAdresses = attendingUsers.map(u => u.email);
-
+    const mailAdresses = bookings.map(u => u.user.email);
     var parts = this.renderParts(meeting.isIdea ? mailConfig.ideaDeleted : mailConfig.meetingDeleted, meeting, null, null);
     var html = this.renderMail(parts);
-
     return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
   }
 
@@ -88,6 +87,58 @@ export class NotificationAboutMeetingsService {
     return transporter.sendMail(mailOptions);
   }
 
+  async newComment(meeting: MeetingEntity, comment: CommentEntity, bookings: BookingEntity[]): Promise<MeetingEntity> {
+    if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
+      this.logger.warn("Mail is not enabled!");
+      return Promise.resolve(meeting);
+    }
+    const attendeeEmails = bookings.filter(att => att.user.username !== comment.username).map(att => att.user.email);
+    const parts = this.renderParts(
+      mailConfig.commentAddedToMeeting,
+      meeting,
+      comment._user,
+      comment.text
+    );
+    const html = this.renderMail(parts);
+    return this.sendMail(attendeeEmails, parts.title, html).then(_ => meeting);
+  }
+  
+  async timeChanged(meeting: MeetingEntity, bookings: BookingEntity[], ical: any): Promise<MeetingEntity>{
+    if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
+      this.logger.warn("Mail is not enabled!");
+      return Promise.resolve(meeting);
+    }
+    const creatorUsername = meeting.username;
+    const creator = await this.usersService.findOne(creatorUsername);
+    const attendeeEmails = bookings.filter(att => att.user.username !== meeting.username).map(att => att.user.email);
+    const parts = this.renderParts(
+      meeting.isIdea ? mailConfig.dateChangedFromMeeting : mailConfig.dateChangedFromIdea,
+      meeting,
+      creator,
+      null
+    )
+    var html = this.renderMail(parts);
+    return this.sendMail(attendeeEmails, parts.title, html, ical).then(_ => meeting);
+  }
+
+  async locationChanged(meeting: MeetingEntity, bookings: BookingEntity[]): Promise<MeetingEntity>{
+    if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
+      this.logger.warn("Mail is not enabled!");
+      return Promise.resolve(meeting);
+    }
+    const creatorUsername = meeting.username;
+    const creator = await this.usersService.findOne(creatorUsername);
+    const attendeeEmails = bookings.filter(att => att.user.username !== meeting.username).map(att => att.user.email);
+    const parts = this.renderParts(
+      meeting.isIdea ? mailConfig.locationChangedFromMeeting : mailConfig.locationChangedFromMeeting,
+      meeting,
+      creator, 
+      null
+    )
+    var html = this.renderMail(parts);
+    return this.sendMail(attendeeEmails, parts.title, html).then(_ => meeting);
+  }
+
   private renderParts(template: any, meeting?: MeetingEntity, user?: UserEntity, text?: string): MailParts {
     return {
       header: this.renderString(template.header, meeting, user, text),
@@ -98,7 +149,7 @@ export class NotificationAboutMeetingsService {
       foot: this.renderString(template.foot, meeting, user, text)
     };
   }
-  
+
   private renderMail(parts: MailParts) {
     var html = readFileSync('./assets/mail.html', 'utf8');//'../../assets/mail.html', 'utf8');
     return mustache.render(html, parts);
@@ -107,5 +158,4 @@ export class NotificationAboutMeetingsService {
   private renderString(template: any, meeting?: MeetingEntity, user?: UserEntity, text?: string): string {
     return mustache.render(template, { meeting, user, text });
   }
-
 }

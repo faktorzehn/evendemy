@@ -1,5 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, JoinColumn, RelationId } from "typeorm";
+import { MeetingEntity } from "./meeting.entity";
+import { UserEntity } from "src/users/entities/user.entity";
 import { CommentDto } from "../dto/comment.dto";
+import { UpdateCommentDto } from "../dto/update-comment.dto";
 
 @Entity("comment")
 export class CommentEntity {
@@ -10,21 +13,27 @@ export class CommentEntity {
     @Column()
     text: string;
 
-    @Column()
+    @CreateDateColumn()
     creationDate: Date;
 
-    @Column()
-    author: string;
+    @ManyToOne(() => UserEntity)
+    @JoinColumn({name: "username"})
+    _user: UserEntity;
 
-    public static toDTO(entity: CommentEntity): CommentDto{
-        if(!entity){
+    @Column()
+    username: string;
+
+    @ManyToOne(() => MeetingEntity, (meeting) => meeting.comments)
+    meeting: MeetingEntity;
+
+    public static toDTO(entity: CommentEntity): CommentDto {
+        if (!entity) {
             return null;
         }
-
         return {
             text: entity.text,
             creationDate: entity.creationDate,
-            author: entity.author
-        }
+            author: entity.username,
+        };
     }
 }

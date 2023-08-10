@@ -1,6 +1,8 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CommentEntity } from "./comment.entity";
 import { MeetingDto } from "../dto/meeting.dto";
+import { BookingEntity} from "./booking.entity";
+import { UserEntity } from "src/users/entities/user.entity";
 
 @Entity("meeting")
 export class MeetingEntity {
@@ -47,8 +49,11 @@ export class MeetingEntity {
     @Column()
     username: string;
 
-    @OneToMany(() => CommentEntity, (comment) => comment.id)
+    @OneToMany(() => CommentEntity, (comment) => comment.meeting, { cascade: true})
     comments: CommentEntity[];
+
+    @OneToMany(() => BookingEntity, (booking) => booking.user, {cascade: true})
+    bookings: BookingEntity[];
 
     @Column()
     numberOfAllowedExternals: number;
@@ -84,7 +89,7 @@ export class MeetingEntity {
             username: entity.username,
             comments: entity.comments ? entity.comments.map(CommentEntity.toDTO) : [],
             tags: entity.tags,
-            images: entity.images
+            images: entity.images,
         }
     }
 }

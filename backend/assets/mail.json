@@ -115,6 +115,22 @@
         "button_label": "Idee ansehen",
         "foot": "Evendemy"
     },
+    "locationChangedFromMeeting":{
+        "header": "Evendemy - Die Location für {{{meeting.title}}} wurde geändert",
+        "title": "Evendemy: Die Location für {{{meeting.title}}} wurde geändert",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat die Location für '{{{meeting.title}}}' geändert:\n {{text}}. Falls der Termin bekannt ist, schicken wir dir sicherheitshalber nochmals den Kalendareintrag.",
+        "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
+        "button_label": "Meeting ansehen",
+        "foot": "Evendemy"
+    },
+    "locationChangedFromIdea":{
+        "header": "Evendemy - Die Location für {{{meeting.title}}} wurde geändert",
+        "title": "Evendemy: Die Location für {{{meeting.title}}} wurde geändert",
+        "body": "Hi!\n {{user.firstname}} {{user.lastname}} hat die Location für '{{{meeting.title}}}' geändert:\n {{text}}. Falls der Termin bekannt ist, schicken wir dir sicherheitshalber nochmals den Kalendareintrag.",
+        "button_href": "https://your-evendemy-app/meeting/{{meeting.mid}}",
+        "button_label": "Meeting ansehen",
+        "foot": "Evendemy"
+    },
     "meetingDeleted":{
         "header": "Evendemy - Das Meeting {{{meeting.title}}} findet nicht statt!",
         "title": "Evendemy: Das Meeting {{{meeting.title}}} findet nicht statt",

@@ -1,5 +1,3 @@
-import { CommentDto } from "./comment.dto";
-
 export class UpdateMeetingDto {
     mid: number;
     title: string;
