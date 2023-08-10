@@ -46,17 +46,13 @@ export class NotificationAboutMeetingsService {
     return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
   }
 
-  async deletedMeeting(meeting: MeetingEntity): Promise<MeetingEntity> {
+  async deletedMeeting(meeting: MeetingEntity, bookings: BookingEntity[]): Promise<MeetingEntity> {
     if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
       return Promise.reject('mail service is not enabled');
     }
-
-    const attendingUsers = await this.usersService.findAll(); // TODO only attending users
-    const mailAdresses = attendingUsers.map(u => u.email);
-
+    const mailAdresses = bookings.map(u => u.user.email);
     var parts = this.renderParts(meeting.isIdea ? mailConfig.ideaDeleted : mailConfig.meetingDeleted, meeting, null, null);
     var html = this.renderMail(parts);
-
     return this.sendMail(mailAdresses, parts.title, html).then(_ => meeting);
   }
 
@@ -126,15 +122,12 @@ export class NotificationAboutMeetingsService {
   }
 
   async locationChanged(meeting: MeetingEntity, bookings: BookingEntity[]): Promise<MeetingEntity>{
-    const creatorUsername = meeting.username;
-    const creator = await this.usersService.findOne(creatorUsername);
-    console.log(creator);
     if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
       this.logger.warn("Mail is not enabled!");
       return Promise.resolve(meeting);
     }
-    //const creatorUsername = meeting.username;
-    //const creator = await this.usersService.findOne(creatorUsername);
+    const creatorUsername = meeting.username;
+    const creator = await this.usersService.findOne(creatorUsername);
     const attendeeEmails = bookings.filter(att => att.user.username !== meeting.username).map(att => att.user.email);
     const parts = this.renderParts(
       meeting.isIdea ? mailConfig.locationChangedFromMeeting : mailConfig.locationChangedFromMeeting,

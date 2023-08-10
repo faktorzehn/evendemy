@@ -127,7 +127,7 @@ export class MeetingController {
     if (!existingMeeting){
       throw new HttpException('Meeting does not exist', HttpStatus.NOT_FOUND);
     }
-    return this.meetingsService.getAttendeesByMeetingID(meetingID).then(attendees => attendees.map(BookingEntity.toDTO));
+    return this.meetingsService.getBookingsByMeetingID(meetingID).then(attendees => attendees.map(BookingEntity.toDTO));
   }
 
   @Get(":mid/attendee/:username/attend")

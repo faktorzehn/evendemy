@@ -90,17 +90,16 @@ export class MeetingsService {
 
   async update(id: number, newMeeting: MeetingEntity): Promise<MeetingEntity> {
     const meeting = await this.meetingRepository.findOne({where: {mid: id}});
-    console.log(typeof meeting.startTime);
-    const attendees = meeting.bookings;
+    const bookings = await this.getBookingsByMeetingID(id); //meeting.bookings doesnt work -> undefined
     if(this.checkIsDiff(meeting, newMeeting)){
-      this.updateMeeting(meeting, newMeeting);
       if ((meeting.startTime != newMeeting.startTime) || (meeting.endTime != newMeeting.endTime)){
         const iCal = this.calenderService.createICAL(meeting);
-        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, attendees, iCal));
+        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.timeChanged(m, bookings, iCal));
       }
-      else if (meeting.location != newMeeting.location){
-        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.locationChanged(m, attendees))
+      if (meeting.location != newMeeting.location){
+        return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.locationChanged(m, bookings));
       }
+      this.updateMeeting(meeting, newMeeting);
     }
     return this.meetingRepository.save(meeting);
   }
@@ -155,7 +154,6 @@ export class MeetingsService {
     if(request.images != undefined){
       updatedFields.images = request.images;
     }
-    //merge the current and new meetingObject
     Object.assign(meeting, updatedFields);
     return this.meetingRepository.save(meeting);
   }
@@ -167,7 +165,8 @@ export class MeetingsService {
   async delete(id: number) {
     const meeting = await this.meetingRepository.findOne({where: {mid: id}});
     meeting.deleted = true;
-    return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.deletedMeeting(m));
+    const attendees = await this.getBookingsByMeetingID(id);
+    return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.deletedMeeting(m, attendees));
   }
 
   async addComment(id: number, username: string, text: string): Promise<MeetingEntity>{
@@ -184,11 +183,11 @@ export class MeetingsService {
       meeting.comments = [];
     }
     meeting.comments.push(comment);
-    const attendees = await this.getAttendeesByMeetingID(id);
+    const attendees = await this.getBookingsByMeetingID(id);
     return this.meetingRepository.save(meeting).then(m => this.notificationAboutMeetingsService.newComment(m, comment, attendees));
   }
 
-  async getAttendeesByMeetingID(id: number): Promise<BookingEntity[]>{
+  async getBookingsByMeetingID(id: number): Promise<BookingEntity[]>{
     const meeting = await this.meetingRepository.findOne({where: {mid: id}});
     if (!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
