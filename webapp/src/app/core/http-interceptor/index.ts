@@ -1,6 +1,5 @@
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AuthInterceptor } from "./auth.interceptor";
-import { APIInterceptor } from "./api_interceptor";
 
 var interceptors = [
     {
@@ -8,11 +7,6 @@ var interceptors = [
       useClass: AuthInterceptor,
       multi: true
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: APIInterceptor,
-      multi: true  
-    }
 ];
 
 export default interceptors;

@@ -6,7 +6,6 @@ import { NotFoundInterceptor } from './not-found.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix("api");
-  app.enableCors();
 
   // swagger-docs
   const config = new DocumentBuilder()

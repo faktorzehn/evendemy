@@ -1,8 +1,17 @@
 version: '3.8'
 
 services:
+  # uncomment this if you want to run the db in docker too
+  # evendb:
+  #   image: postgres:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRES_USER=${DB_USERNAME}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}-
+  #   port:
+  #     - ${DB_PORT}:5432
+
   evendemy:
-    image: node:latest
     restart: unless-stopped
     environment:
       - MAIL_ENABLED=${MAIL_ENABLED}
@@ -15,17 +24,21 @@ services:
       - CALENDAR_TIMEZONE=${CALENDAR_TIMEZONE}
       - CALENDAR_ORGANIZER_NAME=${CALENDAR_ORGANIZER_NAME}
       - CALENDAR_ORGANIZER_MAIL=${CALENDAR_ORGANIZER_MAIL}
+      - USER_IMAGE_FOLDER=${USER_IMAGE_FOLDER}
+      - MEETING_IMAGE_FOLDER=${MEETING_IMAGE_FOLDER}
+    # Build the docker container located in ./backend
     build: 
-      context: ./backend
+      context: ./
       dockerfile: Dockerfile
+    # Read the environment file 
     env_file:
       - .env
     ports:
       - "${EVENDEMY_PORT}:3000"
+    # Add the volumes to the container
     volumes:
-      - ./backend/:/usr/src/backend/
-      - ./webapp/:/usr/src/webapp/
-      - /usr/src/backend/node_modules
-      - ${USER_IMAGE_PATH}:/usr/src/webapp/src/assets/user_images
-      - ${MEETING_IMAGE_PATH}:/usr/src/webapp/src/assets/meeting_images
+      # User and meeting images. Inserted where dist/assets would be in the webapp
+      - ${USER_IMAGE_FOLDER}:/usr/src/webapp/assets/user_images
+      - ${MEETING_IMAGE_FOLDER}:/usr/src/webapp/assets/meeting_images
+      # insert the plugins into what would be ./backend/dist/plugins
       - ${PLUGIN_PATH}:/usr/src/backend/plugins/
