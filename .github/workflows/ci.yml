@@ -17,16 +17,17 @@ jobs:
             - name: Backend Test
               run: cd backend; npm install; npm run test
 
-    unit-tests-frontend:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - name: Use NodeJS
-              uses: actions/setup-node@v2
-              with:
-                node-version: 16.x
-            - name: Webapp Test
-              run: cd webapp; npm install; npm run test
+# We dont need this right now, because we don't have tests for the webapp
+#   unit-tests-frontend:
+#       runs-on: ubuntu-latest
+#       steps:
+#           - uses: actions/checkout@v2
+#           - name: Use NodeJS
+#             uses: actions/setup-node@v2
+#             with:
+#               node-version: 16.x
+#           - name: Webapp Test
+#             run: cd webapp; npm install; npm run test
 
     build-docker-image:
         runs-on: ubuntu-latest
