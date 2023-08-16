@@ -1,6 +1,9 @@
 name: Continuous Integration for evendemy
 
-on: push
+on: 
+    push:
+        branches:
+            - gh-actions-ci-workflows
 
 jobs: 
     unit-tests-backend:
