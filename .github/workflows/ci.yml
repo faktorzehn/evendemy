@@ -14,8 +14,11 @@ jobs:
               uses: actions/setup-node@v2
               with:
                 node-version: 16.x
+            - name: npm install in backend
+              run: cd backend && npm install
+            
             - name: Backend Test
-              run: cd backend; npm install; npm run test
+              run: cd backend && npm run test
 
 # We dont need this right now, because we don't have tests for the webapp
 #   unit-tests-frontend:
