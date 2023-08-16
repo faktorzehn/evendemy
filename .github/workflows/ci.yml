@@ -1,0 +1,44 @@
+name: Continuous Integration for evendemy
+
+on: push
+
+jobs: 
+    unit-tests-backend:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use NodeJS
+              uses: actions/setup-node@v2
+              with:
+                node-version: 16.x
+            - name: Backend Test
+              run: cd backend; npm run test
+
+    unit-tests-frontend:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use NodeJS
+              uses: actions/setup-node@v2
+              with:
+                node-version: 16.x
+            - name: Webapp Test
+              run: cd webapp; npm run test
+
+    build-docker-image:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use NodeJS
+              uses: actions/setup-node@v2
+              with:
+                node-version: 16.x
+            - name: Install docker
+              uses: docker-practice/actions-setup-docker@master
+              timeout-minutes: 12
+            - name: Build Frontend
+              run: cd webapp; npm run build
+            - name: build Backend
+              run: cd backend; npm run build
+            - name: Build Dockerfile
+              run: docker-compose build
