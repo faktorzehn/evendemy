@@ -15,7 +15,7 @@ jobs:
               with:
                 node-version: 16.x
             - name: Backend Test
-              run: cd backend; npm run test
+              run: cd backend; npm install; npm run test
 
     unit-tests-frontend:
         runs-on: ubuntu-latest
@@ -26,7 +26,7 @@ jobs:
               with:
                 node-version: 16.x
             - name: Webapp Test
-              run: cd webapp; npm run test
+              run: cd webapp; npm install; npm run test
 
     build-docker-image:
         runs-on: ubuntu-latest
@@ -40,8 +40,8 @@ jobs:
               uses: docker-practice/actions-setup-docker@master
               timeout-minutes: 12
             - name: Build Frontend
-              run: cd webapp; npm run build
+              run: cd webapp; npm install; npm run build
             - name: build Backend
-              run: cd backend; npm run build
+              run: cd backend; npm install; npm run build
             - name: Build Dockerfile
               run: docker-compose build
