@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,7 +19,6 @@ import { TagComponent } from './components/tag/tag.component';
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { UserImageComponent } from './components/user-image/user-image.component';
 import { ErrorComponent } from './pages/error/error.component';
-import { LoginComponent } from './pages/login/login.component';
 import { MeetingComponent } from './pages/meeting/meeting.component';
 import { UsersComponent } from './pages/users/users.component';
 import { NamePipe } from './pipes/name.pipe';
@@ -49,9 +48,30 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { MeetingCardComponent } from './components/meeting-card/meeting-card.component';
 import { ConfirmDialogContentComponent } from './components/dialog/confirm-dialog-content/confirm-dialog-content.component';
 import { TranslocoRootModule } from './transloco-root.module';
+import { HammerModule } from '@angular/platform-browser';
+import { ProtectedImagePipe } from './pipes/protected-image.pipe';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'https://ssotest.faktorzehn.de/',
+        realm: 'f10-sso-test',
+        clientId: 'evendemy-local'
+      },
+      initOptions: {
+        onLoad: 'login-required',
+        redirectUri: window.location.origin,
+      },
+      bearerExcludedUrls: [],
+      shouldUpdateToken(request) {
+        return !request.headers.get('token-update') === false;
+      }
+    });
+}
 
 const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
   { path: 'meetings', component: MeetingListComponent, canActivate: [LoggedInGuardService]},
   { path: 'ideas', component: MeetingListComponent, canActivate: [LoggedInGuardService]},
   { path: 'meeting/:mid', component: MeetingComponent, canActivate: [LoggedInGuardService]},
@@ -70,7 +90,6 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     NavbarComponent,
-    LoginComponent,
     MeetingComponent,
     EditorComponent,
     ErrorComponent,
@@ -99,29 +118,54 @@ const appRoutes: Routes = [
     EditableInputComponent,
     UserInfoComponent,
     DialogComponent,
-    ConfirmDialogContentComponent
+    ConfirmDialogContentComponent,
+    ProtectedImagePipe
   ],
   imports: [
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    HammerModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     // NgxDatatableModule,
     ImageCropperModule,
     TagInputModule,
     FontAwesomeModule,
-    TranslocoRootModule
+    TranslocoRootModule,
+    KeycloakAngularModule
   ],
   providers: [
-    LoggedInGuardService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
     MeetingService,
     MeetingsService,
     UserService,
     AuthenticationService,
     TagsService,
     ConfigService,
-    { provide: APP_INITIALIZER, useFactory: (config: ConfigService<any>) => config.load(), deps: [ConfigService], multi: true},
+    LoggedInGuardService,
+    KeycloakService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+        return new Promise<void>(resolve => {
+          resolve();
+        });
+      },
+      deps: [ ConfigService<any> ],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
     [...interceptors]
   ],
   bootstrap: [AppComponent]

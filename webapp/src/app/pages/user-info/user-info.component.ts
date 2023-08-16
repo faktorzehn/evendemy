@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs';
 import { BaseComponent } from '../../components/base/base.component';
@@ -9,18 +9,21 @@ import { User } from '../../model/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingsService } from '../../services/meetings.service';
 import { UserService } from '../../services/user.service';
+import { KeycloakProfile } from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'evendemy-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss']
 })
-export class UserInfoComponent extends BaseComponent{
+export class UserInfoComponent extends BaseComponent implements OnInit {
 
   contexMenuIsOpen = false;
   editMode = false;
   isEditable = true;
   username = '';
+  profile: KeycloakProfile | null = null;
   user?: User;
   createMeetings: Meeting[] = [];
   attendedMeetings: Meeting[] = [];
@@ -32,20 +35,20 @@ export class UserInfoComponent extends BaseComponent{
   })
 
   constructor(    
-    private authService: AuthenticationService,
+    private keycloakService: KeycloakService,
     private userService: UserService,
     private route: ActivatedRoute,
     private meetingsService: MeetingsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogService: DialogService
     ) { 
     super();
     this.route.params.pipe(first()).subscribe(params => {
       if (params['username']) {
         this.username = params['username'];
-        this.isEditable = this.username === this.authService.getLoggedInUsername();
+        this.isEditable = this.username === this.profile.username;
       } else {
-        this.username = this.authService.getLoggedInUsername();
+        this.username = this.profile.username;
         this.isEditable = true;
       }
 
@@ -53,7 +56,14 @@ export class UserInfoComponent extends BaseComponent{
       this.loadCreatedMeetings(this.username);
       this.loadAttendedMeetings(this.username);
     });
-
+  }
+  
+  async ngOnInit() {
+    const loggedIn = await this.keycloakService.isLoggedIn();
+    
+    if(loggedIn) {
+      this.profile = await this.keycloakService.loadUserProfile();
+    }
   }
   
   loadUser(username: string) {

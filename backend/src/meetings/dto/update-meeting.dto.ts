@@ -11,4 +11,5 @@ export class UpdateMeetingDto {
     isIdea:  boolean;
     isFreetime: boolean;
     numberOfAllowedExternals: number;
+    validityPeriode?: '1_WEEK' | '2_WEEKS';
 }

@@ -86,7 +86,6 @@
     "T:MEETING_DIALOG_COPY_DESCRIPTION":"Mit dieser Aktion erstellst du eine Kopie dieses Treffens. Du kannst das Treffen bearbeiten bevor du es veröffentlichst. Das Treffen Bild wird nicht kopiert. Möchtest du das Treffen kopieren?",
     "T:MEETING_DIALOG_CREATE_MEETING_FROM_IDEA_TITEL":"Möchtest du aus der Idee ein Treffen machen?",
     "T:MEETING_DIALOG_CREATE_MEETING_FROM_IDEA_DESCRIPTION":"Mit dieser Aktion machst du aus deiner Idee ein Treffen! Du kannst das Treffen bearbeiten bevor du es veröffentlichst. Das Bild der Idee wird nicht automatisch übernommen. Möchtest du fortfahren?",
-    "T:WITHOUT_DATE":"ohne Datum",
     "T:OLD": "Alt",
     "T:NEW": "Neu",
     "T:CREAT_A_NEW_IDEA": "erstelle eine neue Idee",
@@ -120,5 +119,8 @@
     "T:MONTH_9":"SEP",
     "T:MONTH_10":"OKT",
     "T:MONTH_11":"NOV",
-    "T:MONTH_12":"DEZ"
+    "T:MONTH_12":"DEZ",
+    "T:1_WEEK": "1 Woche",
+    "T:2_WEEKS": "2 Wochen",
+    "T:MEETING_VALIDITY_PERIODE": "Laufzeit"
 }

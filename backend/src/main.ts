@@ -18,6 +18,7 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new NotFoundInterceptor());
 
+  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();

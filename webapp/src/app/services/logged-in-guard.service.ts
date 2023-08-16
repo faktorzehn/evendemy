@@ -1,28 +1,25 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
-import { AuthenticationService } from './authentication.service';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { windowCount } from 'rxjs';
 
 @Injectable()
-export class LoggedInGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthenticationService) {
+export class LoggedInGuardService extends KeycloakAuthGuard {
+  constructor(protected router: Router, protected keycloakService: KeycloakService) {
+    super(router,keycloakService);
   }
 
-  checkPermission() {
-    return this.authService.isLoggedIn();
-  }
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      if (this.checkPermission()) {
-          // logged in so return true
-          return true;
-      }
-
-      // not logged in so redirect to login page
-      this.router.navigate(['/login'], {
-        queryParams: {
-          return: state.url
-        }
+  async isAccessAllowed(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ) {
+    if(!this.authenticated) {
+      await this.keycloakService.login({
+        redirectUri: window.location.origin + state.url
       });
-      return false;
+      
+      return this.authenticated;
+    }
   }
+
 }

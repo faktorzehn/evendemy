@@ -9,8 +9,7 @@ export class MeetingsController {
 
   @Get()
   findAll(
-    @Query('showNotAnnounced', new DefaultValuePipe(false), ParseBoolPipe) showNotAnnounced: boolean, // ParseBoolPipe expect that there is a vlaue, therefore we need the DefaultValuePipe
-    @Query('showOld', new DefaultValuePipe(false), ParseBoolPipe) showOld: boolean, 
+    @Query('showOld', new DefaultValuePipe(false), ParseBoolPipe) showOld: boolean, // ParseBoolPipe expect that there is a vlaue, therefore we need the DefaultValuePipe
     @Query('showNew', new DefaultValuePipe(false), ParseBoolPipe) showNew: boolean, 
     @Query('idea', new DefaultValuePipe(false), ParseBoolPipe) idea: boolean,
     @Query('tags', new DefaultValuePipe([]), new ParseArrayPipe({items: String, separator: ','}),) tags: string[],
@@ -18,7 +17,6 @@ export class MeetingsController {
     @Query('courseOrEvent') courseOrEvent?: 'course' | 'event',
     ) {
     return this.meetingsService.findAll({
-      showNotAnnounced: showNotAnnounced,
       showOld: showOld,
       showNew: showNew,
       username: username,

@@ -20,6 +20,7 @@ export class AppComponent {
   version='';
 
   constructor(private router: Router, configService: ConfigService<any>) {
+    // somehow this is crashing as soon, as we are redirected???
     this.usageNotices = configService.config.usage_notice;
     this.version = packageJson.version;
   }

@@ -1,5 +1,5 @@
-<div class="text" (click)="onEdit()" *ngIf="!edit" [ngClass]="{placeholder: noValue(), editable: editable}" [innerHTML]="noValue() ? placeholder: value">
+<div class="text" (click)="onEdit()" *ngIf="!edit" [ngClass]="{placeholder: noValue(), editable: editable, invalid: invalid}" [innerHTML]="noValue() ? placeholder: value">
 </div>
-<div [ngStyle]="{'display': edit ? 'block' : 'none'}">
+<div class="editable-input" [ngStyle]="{'display': edit ? 'block' : 'none'}" [ngClass]="{invalid: invalid}">
     <ng-content></ng-content>
 </div>

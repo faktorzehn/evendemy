@@ -15,6 +15,7 @@ import { APP_GUARD } from '@nestjs/core';
     UsersModule,
     KeycloakConnectModule.register({
       authServerUrl: 'https://ssotest.faktorzehn.de/realms/f10-sso-test',
+      realm: "f10-sso-test",
       clientId: 'evendemy-local',
       secret: 'VXJY3pddqEVVmmDRyCysCG5dwuk6q5gb',
       // Secret key of the client taken from keycloak server

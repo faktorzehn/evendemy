@@ -24,6 +24,10 @@ services:
       - CALENDAR_TIMEZONE=${CALENDAR_TIMEZONE}
       - CALENDAR_ORGANIZER_NAME=${CALENDAR_ORGANIZER_NAME}
       - CALENDAR_ORGANIZER_MAIL=${CALENDAR_ORGANIZER_MAIL}
+      - KC_SECRET=${KC_SECRET}
+      - KC_CLIENT_ID=${KC_CLIENT_ID}
+      - KC_REALM=${KC_REALM}
+      - KC_URL=${KC_URL}
     # Build the docker container located in ./backend
     build: 
       context: ./
@@ -36,7 +40,7 @@ services:
     # Add the volumes to the container
     volumes:
       # User and meeting images. Inserted where dist/assets would be in the webapp
-      - ${LOCAL_USER_IMAGE_FOLDER}:/usr/src/user_images
-      - ${LOCAL_MEETING_IMAGE_FOLDER}:/usr/src/meeting_images
+      - ${LOCAL_USER_IMAGE_FOLDER}:/usr/src/user_images:rw
+      - ${LOCAL_MEETING_IMAGE_FOLDER}:/usr/src/meeting_images:rw
       # insert the plugins into what would be ./backend/dist/plugins
       - ${PLUGIN_PATH}:/usr/src/backend/plugins/

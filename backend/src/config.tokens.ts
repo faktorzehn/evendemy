@@ -16,4 +16,8 @@ export class ConfigTokens {
     public static CALENDAR_TIMEZONE="CALENDAR_TIMEZONE";
     public static CALENDAR_ORGANIZER_NAME="CALENDAR_ORGANIZER_NAME";
     public static CALENDAR_ORGANIZER_MAIL="CALENDAR_ORGANIZER_MAIL";
+    public static KC_SECRET="KC_SECRET";
+    public static KC_URL="KC_URL";
+    public static KC_REALM="KC_REALM";
+    public static KC_CLIENT_ID="KC_CLIENT_ID";
 }

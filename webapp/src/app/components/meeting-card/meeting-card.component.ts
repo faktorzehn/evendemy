@@ -11,16 +11,15 @@ import { ConfigService } from '../../services/config.service';
 export class MeetingCardComponent {
 
   @Input() meeting: Meeting;
-  private imageFolder = this.configService.config.meeting_image_folder;
 
 
   constructor(private configService: ConfigService<any>) { }
 
   getImage() {
-    if (!this.imageFolder || !this.meeting?.images || this.meeting?.images.length === 0) {
+    if (!this.meeting?.images || this.meeting?.images.length === 0) {
       return 'assets/no-image.png';
     }
-    return this.imageFolder + '/' + this.meeting?.images[0] + '.jpg';
+    return `${this.configService.config.backend_url}/meeting/${this.meeting.mid}/image`;
   }
 
   isMeetingNew(meeting: Meeting): boolean {

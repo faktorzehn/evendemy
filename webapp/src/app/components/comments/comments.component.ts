@@ -4,6 +4,8 @@ import { Comment } from '../../model/comment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { BaseComponent } from '../base/base.component';
 import { UsersStore } from '../../core/store/user.store';
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Component({
   selector: 'evendemy-comments',
@@ -20,10 +22,12 @@ export class CommentsComponent extends BaseComponent {
   
   users: User[] = [];
   commentbox = '';
+  profile: KeycloakProfile | null = null;
 
-  constructor(private authService: AuthenticationService, usersStore: UsersStore) { 
+  constructor(private authService: AuthenticationService, private keycloakService: KeycloakService, usersStore: UsersStore) { 
     super();
     this.addSubscription(usersStore.users().subscribe(users => this.users=users));
+    this.keycloakService.loadUserProfile().then()
   }
 
   getUser(username: string) {
@@ -33,7 +37,7 @@ export class CommentsComponent extends BaseComponent {
 
   onAddComment() {
     const comment = new Comment();
-    comment.author = this.authService.getLoggedInUsername();
+    comment.author = this.profile.username;
     comment.text = this.commentbox;
 
     this.addComment.emit(comment);

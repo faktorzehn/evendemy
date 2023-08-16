@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateMeetingDto } from './dto/update-meeting.dto';
-import { MeetingEntity } from './entities/meeting.entity';
+import { MeetingEntity, VALIDITY_PERIODE } from './entities/meeting.entity';
 import { FindOptionsWhere, Repository, MoreThanOrEqual, LessThan, IsNull, Admin, FindOperator, ArrayContains, And, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationAboutMeetingsService } from './notfication-about-meetings.service';
@@ -8,9 +8,9 @@ import { BookingEntity } from './entities/booking.entity';
 import { CommentEntity } from './entities/comment.entity';
 import { UsersService } from 'src/users/users/users.service';
 import { CalendarService } from './calendar.service';
+import { sub } from 'date-fns';
 
 class MeetingsFilter {
-  showNotAnnounced: boolean;
   showOld: boolean;
   showNew: boolean; 
   username?: string; 
@@ -57,29 +57,56 @@ export class MeetingsService {
       options[0].tags = ArrayContains(filter.tags);
     }
 
-    if(filter.showNew && filter.showNotAnnounced && filter.showOld) {
-      // filter has not to be set
-    } else {
-      var createDateConditions: FindOperator<Date>[] = [];
-      if(filter.showNew) {
-        createDateConditions.push(MoreThanOrEqual(new Date()));
-      }
+    if(filter.idea) {
+      if(filter.showNew && filter.showOld) {
+        // filter has not to be set
+      } else {
+        var createDateConditions: {creationDate: FindOperator<Date>, validityPeriod: VALIDITY_PERIODE}[] = [];
+     
+        if(filter.showNew) {
+          createDateConditions.push({
+            creationDate: MoreThanOrEqual(sub(new Date(), {days: 7})), 
+            validityPeriod: '1_WEEK'
+          });
+          createDateConditions.push({
+            creationDate: MoreThanOrEqual(sub(new Date(), {days: 14})), 
+            validityPeriod: '2_WEEKS'
+          });
+        }
+  
+        if(filter.showOld) {
+          createDateConditions.push({
+            creationDate: LessThan(sub(new Date(), {days: 7})), 
+            validityPeriod: '1_WEEK'
+          });
+          createDateConditions.push({
+            creationDate: LessThan(sub(new Date(), {days: 14})), 
+            validityPeriod: '2_WEEKS'
+          });
+        }
 
-      if(filter.showOld) {
-        createDateConditions.push(LessThan(new Date()));
-      }
-
-      if(filter.showNotAnnounced) {
-        createDateConditions.push(IsNull());
-      }
-
-      createDateConditions.forEach((cond, index) => {
-          if(options.length < index) {
+        createDateConditions.forEach((cond, index) => {
+          if(options.length <= index) {
             options.push({...options[0]});
           }
-          options[index].startTime = cond;
-      });
+          options[index].creationDate = cond.creationDate;
+          options[index].validityPeriode = cond.validityPeriod;
+        });
+      }
+    } else {
+      if(filter.showNew && filter.showOld) {
+        // filter has not to be set
+      } else {
+        if(filter.showNew) {
+          options[0].startTime = MoreThanOrEqual(new Date());
+        }
+  
+        if(filter.showOld) {
+          options[0].startTime =LessThan(new Date());
+        }
+      }
     }
+
 
     return this.meetingRepository.find({ where: options, relations: {
       comments: true
@@ -147,6 +174,9 @@ export class MeetingsService {
     }
     if(newMeeting.tags != undefined){
       updatedFields.tags = newMeeting.tags;
+    }
+    if(newMeeting.validityPeriode != undefined) {
+      updatedFields.validityPeriode = newMeeting.validityPeriode;
     }
     Object.assign(oldMeeting, updatedFields);
     return oldMeeting;

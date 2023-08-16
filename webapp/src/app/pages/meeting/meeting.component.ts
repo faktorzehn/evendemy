@@ -1,12 +1,12 @@
 import {  Component,  OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import * as FileSaver from 'file-saver';
 import { combineLatest } from 'rxjs';
 
 import { Step } from '../../components/breadcrump/breadcrump.component';
 import { Comment } from '../../model/comment';
-import { Meeting } from '../../model/meeting';
+import { Meeting, VALIDITY_PERIODE } from '../../model/meeting';
 import { MeetingUser } from '../../model/meeting_user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingService } from '../../services/meeting.service';
@@ -20,6 +20,8 @@ import * as moment from 'moment';
 import { DialogService } from '../../core/services/dialog.service';
 import { TranslocoService } from '@ngneat/transloco'
 import { FormTabberService } from '../../core/services/form-tabber.service';
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
 export function requiredIfNotAnIdea(isIdea: boolean): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
@@ -45,10 +47,9 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
   allTags = [];
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   steps: Step[] = [];
 
-  imageFolder = this.configService.config.meeting_image_folder;
   tmpImgData: any;
 
   editorContent = "";
@@ -56,22 +57,37 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   contexMenuIsOpen = false;
   editMode = false;
   focusEditor = false;
+  
+  profile: KeycloakProfile | null = null;
+
+  validityReducingNotAllowedValidator(weeks: VALIDITY_PERIODE): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const forbidden = control.value === '1_WEEK' && weeks === '2_WEEKS';
+      return forbidden ? {validityReducingNotAllowed: {value: control.value}} : null;
+    };
+  }
 
   constructor(
-    private authService: AuthenticationService,
+    private keycloakService: KeycloakService,
     private meetingService: MeetingService,
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService<any>,
     private tagsService: TagsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private translationService: TranslocoService,
     private dialogService: DialogService,
     private tabber: FormTabberService) {
       super();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const loggedIn = await this.keycloakService.isLoggedIn();
+
+    if(loggedIn) {
+      this.profile = await this.keycloakService.loadUserProfile();
+    }
+
     this.formGroup = this.formBuilder.group({
       title: '',
       shortDescription: '',
@@ -85,6 +101,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       isFreetime: true,
       costCenter: '',
       numberOfAllowedExternals: 0,
+      validityPeriode: '1_WEEK'
     });
 
     this.addSubscription(combineLatest([this.route.url, this.route.params]).subscribe(([url, params]) => {
@@ -130,6 +147,10 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.location.setValidators([
       requiredIfNotAnIdea(meeting.isIdea)
     ]);
+
+    if(meeting.isIdea) {
+      this.validityPeriode.setValidators([Validators.required, this.validityReducingNotAllowedValidator(this.meeting.validityPeriode)]);
+    }
 
     this.date.updateValueAndValidity();
     this.startTime.updateValueAndValidity();
@@ -177,15 +198,22 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     return this.formGroup.get('description');
   }
 
+  get validityPeriode() {
+    return this.formGroup.get('validityPeriode');
+  }
+
   private initForCreation(isIdea) {
     this.isNew = true;
 
     this.meeting = new Meeting();
-    this.meeting.username = this.authService.getLoggedInUsername();
+    this.meeting.username = this.profile.username;
     this.meeting.numberOfAllowedExternals = 0;
     this.meeting.isFreetime = true;
     this.meeting.isIdea = !!isIdea;
     this.courseOrEvent.patchValue('event');
+    if(isIdea) {
+      this.meeting.validityPeriode = '1_WEEK';
+    }
 
     this.setEditMode(true);
     this.isEditable = true;
@@ -221,7 +249,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       this.isNew = false;
       this.courseOrEvent.patchValue(this.meeting.courseOrEvent);
       this.description.patchValue(this.meeting.description);
-      this.isEditable = this.authService.getLoggedInUsername() === this.meeting.username;
+      this.isEditable = this.profile.username === this.meeting.username;
     
       this.setForm(this.meeting);
       this.tags.patchValue(meeting.tags);
@@ -244,7 +272,8 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       tags: meeting.tags,
       isFreetime: meeting.isFreetime,
       costCenter: meeting.costCenter,
-      numberOfParticipants: meeting.numberOfAllowedExternals
+      numberOfParticipants: meeting.numberOfAllowedExternals,
+      validityPeriode: meeting.validityPeriode
     });
   }
 
@@ -254,7 +283,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
 
     this.addSubscription(this.meetingService.getAllAttendingUsers(mid).subscribe((result) => {
       this.potentialAttendees = result;
-      const attendee = this.potentialAttendees.find(a => a.username === this.authService.getLoggedInUsername());
+      const attendee = this.potentialAttendees.find(a => a.username === this.profile.username);
       if (attendee) {
         this.userHasAccepted = true;
         this.userHasFinished = attendee.tookPart;
@@ -340,9 +369,13 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     meeting.location = this.location.value;
     meeting.costCenter = this.costCenter.value;
     meeting.numberOfAllowedExternals = this.formGroup.get('numberOfAllowedExternals').value;
-    meeting.username = this.authService.getLoggedInUsername();
+    meeting.username = this.profile.username;
     meeting.isFreetime = this.formGroup.get('isFreetime').value; 
     meeting.tags = this.tags.value;
+
+    if(meeting.isIdea) {
+      meeting.validityPeriode = this.validityPeriode.value; 
+    }
     return meeting;
   }
 
@@ -356,6 +389,10 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   updateMeeting() {
+    if(this.meeting.isIdea && this.meeting.validityPeriode === '2_WEEKS' && this.validityPeriode.value === '1_WEEK'){
+      this.dialogService.show('validityCanNotBeReducedDialog');
+      return;
+    }
     this.uploadImage(this.meeting.mid);
     var meeting = this.createMeetingObject();
     this.addSubscription(this.meetingService.updateMeeting(meeting).pipe(first()).subscribe((result) => {
@@ -421,7 +458,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   onAcceptMeeting(external) {
-    this.addSubscription(this.meetingService.attendMeeting(this.meeting.mid, this.authService.getLoggedInUsername(), external)
+    this.addSubscription(this.meetingService.attendMeeting(this.meeting.mid, this.profile.username, external)
       .pipe(first()).subscribe((result) => {
         this.userHasAccepted = true;
         this.userHasFinished = false;
@@ -430,7 +467,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   onRejectMeeting() {
-    this.addSubscription(this.meetingService.rejectAttendingMeeting(this.meeting.mid, this.authService.getLoggedInUsername())
+    this.addSubscription(this.meetingService.rejectAttendingMeeting(this.meeting.mid, this.profile.username)
       .pipe(first()).subscribe((result) => {
         this.userHasAccepted = false;
         this.userHasFinished = false;
@@ -449,7 +486,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     if (username) {
       const foundedAttendee = this.potentialAttendees.find(p => p.username === username);
       foundedAttendee.tookPart = true;
-      if (foundedAttendee.username === this.authService.getLoggedInUsername()) {
+      if (foundedAttendee.username === this.profile.username) {
         this.userHasFinished = true;
       }
       this.addSubscription(this.meetingService.confirmAttendeeToMeeting(this.meeting.mid, foundedAttendee.username).pipe(first()).subscribe((result) => { }));
@@ -481,10 +518,10 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   getImage() {
-    if (!this.imageFolder || !this.meeting?.images || this.meeting?.images.length === 0) {
+    if (!this.meeting?.images || this.meeting?.images.length === 0) {
       return 'assets/no-image.png';
     }
-    return this.imageFolder + '/' + this.meeting?.images[0] + '.jpg';
+    return `${this.configService.config.backend_url}/meeting/${this.meeting.mid}/image`;
   }
 
   getAttendedNumber() {

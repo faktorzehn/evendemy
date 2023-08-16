@@ -2,8 +2,8 @@ import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGenerat
 import { CommentEntity } from "./comment.entity";
 import { MeetingDto } from "../dto/meeting.dto";
 import { BookingEntity} from "./booking.entity";
-import { UserEntity } from "src/users/entities/user.entity";
 
+export type VALIDITY_PERIODE = '1_WEEK' | '2_WEEKS';
 @Entity("meeting")
 export class MeetingEntity {
 
@@ -28,7 +28,7 @@ export class MeetingEntity {
     @Column()
     costCenter: string;
 
-    @Column()
+    @Column({nullable: true})
     location: string;
 
     @Column()
@@ -48,6 +48,9 @@ export class MeetingEntity {
 
     @Column()
     username: string;
+
+    @Column({nullable: true})
+    validityPeriode?: VALIDITY_PERIODE;
 
     @OneToMany(() => CommentEntity, (comment) => comment.meeting, { cascade: true})
     comments: CommentEntity[];
@@ -90,6 +93,7 @@ export class MeetingEntity {
             comments: entity.comments ? entity.comments.map(CommentEntity.toDTO) : [],
             tags: entity.tags,
             images: entity.images,
+            validityPeriode: entity.validityPeriode
         }
     }
 }
