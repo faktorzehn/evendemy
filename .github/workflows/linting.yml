@@ -3,7 +3,7 @@ name: Linting for evendemy
 on: push 
 
 jobs: 
-    unit-tests-backend:
+    linting:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
