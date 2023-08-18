@@ -22,7 +22,6 @@ jobs:
             - name: Backend Test
               run: |
                 cd backend
-                ls
                 npm run test
 
 # We dont need this right now, because we don't have tests for the webapp
