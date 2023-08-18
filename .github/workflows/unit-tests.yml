@@ -16,14 +16,11 @@ jobs:
                 node-version: 16.x
             - name: npm install in backend
               run: |
-                ls
                 cd backend 
-                ls
                 npm install
             
             - name: Backend Test
               run: |
-                ls
                 cd backend
                 ls
                 npm run test
