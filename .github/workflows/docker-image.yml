@@ -1,9 +1,6 @@
 name: Building the evendemy docker image
 
-on: 
-    push:
-        branches:
-            - gh-actions-ci-workflows
+on: push
 
 jobs: 
     build-docker-image:

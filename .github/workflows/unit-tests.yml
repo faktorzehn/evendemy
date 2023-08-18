@@ -1,9 +1,6 @@
 name: Unit tests for evendemy
 
-on: 
-    push:
-        branches:
-            - gh-actions-ci-workflows
+on: push
 
 jobs: 
     unit-tests-backend:
