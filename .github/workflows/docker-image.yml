@@ -13,7 +13,7 @@ jobs:
             - name: Use NodeJS
               uses: actions/setup-node@v3
               with:
-                node-version: 16.x
+                node-version: 18.x
             - name: Install docker
               uses: docker-practice/actions-setup-docker@master
               timeout-minutes: 12

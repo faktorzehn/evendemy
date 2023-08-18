@@ -13,7 +13,7 @@ jobs:
             - name: Use NodeJS
               uses: actions/setup-node@v3
               with:
-                node-version: 16.x
+                node-version: 18.x
             - name: npm install in backend
               run: |
                 cd backend 
