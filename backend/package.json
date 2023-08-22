@@ -30,6 +30,7 @@
     "basic-auth": "^2.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "date-fns": "^2.30.0",
     "ical-generator": "^5.0.0",
     "joi": "^17.9.2",
     "mustache": "^4.2.0",

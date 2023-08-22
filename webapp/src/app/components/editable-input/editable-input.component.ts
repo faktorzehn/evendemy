@@ -16,6 +16,9 @@ export class EditableInputComponent {
   @Input()
   editable = false;
 
+  @Input()
+  invalid = false;
+
   edit = false;
   ignoreFirstClick= false;
 

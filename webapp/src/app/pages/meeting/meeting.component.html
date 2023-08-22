@@ -76,6 +76,15 @@
 
           <div class="section section-more">
             <h4>{{t("T:MEETING_MORE_DETAILS")}}</h4>
+            <div class="more-field" *ngIf="meeting.isIdea">
+              <div>{{t("T:MEETING_VALIDITY_PERIODE")}}</div>
+              <evendemy-editable-input [editable]="editMode" class="validityPeriode" [value]="formGroup.get('validityPeriode')?.value === '1_WEEK' ? t('T:1_WEEK') : t('T:2_WEEKS')" (click)="formControlClicked('validityPeriode')" [invalid]="validityPeriode.invalid">
+                <select formControlName="validityPeriode" class="selectBox">
+                  <option value="1_WEEK">{{t("T:1_WEEK")}}</option>
+                  <option value="2_WEEKS">{{t("T:2_WEEKS")}}</option>
+                </select>
+              </evendemy-editable-input>
+            </div>
             <div class="more-field">
               <div>{{t("T:MEETING_TYPE")}}</div>
               <evendemy-editable-input [editable]="editMode" class="courseOrEvent" [placeholder]="editMode ? t('T:MEETING_COURSE_OR_EVENT') : undefined" [value]="formGroup.get('courseOrEvent')?.value === 'course' ? t('T:COURSE') : t('T:EVENT')" (click)="formControlClicked('courseOrEvent')">

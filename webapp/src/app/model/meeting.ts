@@ -1,5 +1,6 @@
 import { Comment } from './comment';
 
+export type VALIDITY_PERIODE = '1_WEEK' | '2_WEEKS';
 export class Meeting {
   public title: string;
   public shortDescription: string;
@@ -19,6 +20,7 @@ export class Meeting {
   public comments: Comment[];
   public tags: String[];
   public images: String[];
+  public validityPeriode?: VALIDITY_PERIODE;
   public static sortByDate = (a: Meeting, b: Meeting) => {
     const dateA = a.startTime ? new Date(a.startTime).getTime() : 0;
     const dateB = b.startTime ? new Date(b.startTime).getTime() : 0;

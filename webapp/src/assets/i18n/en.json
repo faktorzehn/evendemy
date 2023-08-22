@@ -85,7 +85,6 @@
     "T:MEETING_DIALOG_COPY_DESCRIPTION":"With this action you will copy this meeting! You can edit things before saving. Your image will not be copied! Do you really want to create this meeting?",
     "T:MEETING_DIALOG_CREATE_MEETING_FROM_IDEA_TITEL":"Do you really want to make a meeting of your idea?",
     "T:MEETING_DIALOG_CREATE_MEETING_FROM_IDEA_DESCRIPTION":"With this action you will create a meeting of your idea! You can edit things before saving. Your image will not be copied! Do you really want to copy this meeting?",
-    "T:WITHOUT_DATE":"without date",
     "T:OLD": "Old",
     "T:NEW": "New",
     "T:CREAT_A_NEW_IDEA": "create an idea",
@@ -119,5 +118,8 @@
     "T:MONTH_9":"SEP",
     "T:MONTH_10":"OCT",
     "T:MONTH_11":"NOV",
-    "T:MONTH_12":"DEC"
+    "T:MONTH_12":"DEC",
+    "T:1_WEEK": "1 week",
+    "T:2_WEEKS": "2 weeks",
+    "T:MEETING_VALIDITY_PERIODE": "Validity"
 }

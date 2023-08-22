@@ -1,12 +1,12 @@
 import {  Component,  OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import * as FileSaver from 'file-saver';
 import { combineLatest } from 'rxjs';
 
 import { Step } from '../../components/breadcrump/breadcrump.component';
 import { Comment } from '../../model/comment';
-import { Meeting } from '../../model/meeting';
+import { Meeting, VALIDITY_PERIODE } from '../../model/meeting';
 import { MeetingUser } from '../../model/meeting_user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { MeetingService } from '../../services/meeting.service';
@@ -57,6 +57,13 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   editMode = false;
   focusEditor = false;
 
+  validityReducingNotAllowedValidator(weeks: VALIDITY_PERIODE): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const forbidden = control.value === '1_WEEK' && weeks === '2_WEEKS';
+      return forbidden ? {validityReducingNotAllowed: {value: control.value}} : null;
+    };
+  }
+
   constructor(
     private authService: AuthenticationService,
     private meetingService: MeetingService,
@@ -85,6 +92,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       isFreetime: true,
       costCenter: '',
       numberOfAllowedExternals: 0,
+      validityPeriode: '1_WEEK'
     });
 
     this.addSubscription(combineLatest([this.route.url, this.route.params]).subscribe(([url, params]) => {
@@ -130,6 +138,10 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.location.setValidators([
       requiredIfNotAnIdea(meeting.isIdea)
     ]);
+
+    if(meeting.isIdea) {
+      this.validityPeriode.setValidators([Validators.required, this.validityReducingNotAllowedValidator(this.meeting.validityPeriode)]);
+    }
 
     this.date.updateValueAndValidity();
     this.startTime.updateValueAndValidity();
@@ -177,6 +189,10 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     return this.formGroup.get('description');
   }
 
+  get validityPeriode() {
+    return this.formGroup.get('validityPeriode');
+  }
+
   private initForCreation(isIdea) {
     this.isNew = true;
 
@@ -186,6 +202,9 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     this.meeting.isFreetime = true;
     this.meeting.isIdea = !!isIdea;
     this.courseOrEvent.patchValue('event');
+    if(isIdea) {
+      this.meeting.validityPeriode = '1_WEEK';
+    }
 
     this.setEditMode(true);
     this.isEditable = true;
@@ -244,7 +263,8 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
       tags: meeting.tags,
       isFreetime: meeting.isFreetime,
       costCenter: meeting.costCenter,
-      numberOfParticipants: meeting.numberOfAllowedExternals
+      numberOfParticipants: meeting.numberOfAllowedExternals,
+      validityPeriode: meeting.validityPeriode
     });
   }
 
@@ -343,6 +363,10 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     meeting.username = this.authService.getLoggedInUsername();
     meeting.isFreetime = this.formGroup.get('isFreetime').value; 
     meeting.tags = this.tags.value;
+
+    if(meeting.isIdea) {
+      meeting.validityPeriode = this.validityPeriode.value; 
+    }
     return meeting;
   }
 
@@ -356,6 +380,10 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   updateMeeting() {
+    if(this.meeting.isIdea && this.meeting.validityPeriode === '2_WEEKS' && this.validityPeriode.value === '1_WEEK'){
+      this.dialogService.show('validityCanNotBeReducedDialog');
+      return;
+    }
     this.uploadImage(this.meeting.mid);
     var meeting = this.createMeetingObject();
     this.addSubscription(this.meetingService.updateMeeting(meeting).pipe(first()).subscribe((result) => {

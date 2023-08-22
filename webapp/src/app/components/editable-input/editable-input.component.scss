@@ -11,8 +11,18 @@
     &.editable:hover {
         outline: 1px solid hsl(0, 0%, 78%);
     }
+
+    &.invalid {
+        outline: 1px solid #ff4000 !important;
+    }
 }
 
 .placeholder {
     color: #aaaaaa;
+}
+
+.editable-input {
+    &.invalid {
+        outline: 1px solid #ff4000 !important;
+    }
 }
