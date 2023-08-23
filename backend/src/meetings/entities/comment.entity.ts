@@ -2,7 +2,6 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, Jo
 import { MeetingEntity } from "./meeting.entity";
 import { UserEntity } from "src/users/entities/user.entity";
 import { CommentDto } from "../dto/comment.dto";
-import { UpdateCommentDto } from "../dto/update-comment.dto";
 
 @Entity("comment")
 export class CommentEntity {
@@ -16,9 +15,12 @@ export class CommentEntity {
     @CreateDateColumn()
     creationDate: Date;
 
-    @ManyToOne(() => UserEntity, {eager: true})
+    @ManyToOne(() => UserEntity)
     @JoinColumn({name: "username"})
-    user: UserEntity;
+    _user: UserEntity;
+
+    @Column()
+    username: string;
 
     @ManyToOne(() => MeetingEntity, (meeting) => meeting.comments)
     @JoinColumn({name: "mid"})
@@ -31,7 +33,7 @@ export class CommentEntity {
         return {
             text: entity.text,
             creationDate: entity.creationDate,
-            author: entity.user.username,
+            author: entity._user.username,
         };
     }
 }

@@ -12,6 +12,8 @@ import { BookingEntity } from '../entities/booking.entity';
 import { BookingDto } from '../dto/booking.dto';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { MeetingDto } from '../dto/meeting.dto';
+import { UsersService } from 'src/users/users/users.service';
+import { NotificationAboutMeetingsService } from '../notfication-about-meetings.service';
 
 @Controller('meeting')
 export class MeetingController {
@@ -20,6 +22,8 @@ export class MeetingController {
 
   constructor(
     private readonly meetingsService: MeetingsService, 
+    private readonly usersService: UsersService,
+    private readonly notificationService: NotificationAboutMeetingsService,
     private imageService: ImageService, 
     private configService: ConfigService,
     private calendarService: CalendarService,
@@ -146,23 +150,63 @@ export class MeetingController {
     return this.meetingsService.getBookingsByMeetingID(meetingID).then(attendees => attendees.map(BookingEntity.toDTO));
   }
 
-  @Get(":mid/attendee/:username/attend")
-  async getAttendesUsername(@Param('mid') mid : string, @Param('username') username : string){
-
+  @Put(":mid/attendee/:username/attend")
+  async getAttendesUsername(@Param('mid') mid : string, @Param('username') username : string): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+    }
+    if(!mid || !username){
+      throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    const meeting = await this.meetingsService.findOne(meetingID);
+    const user = await this.usersService.findOne(username);
+    if(meeting && user){
+      return this.meetingsService.attendingToMeeting(meetingID, username).then(BookingEntity.toDTO);
+    } else {
+      throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Delete(":mid/attendee/:username/attend")
-  async deleteAttendesUsername(){
-
+  async deleteAttendesUsername(@Param('mid') mid : string, @Param('username') username : string): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+    }
+    if(!mid || !username){
+      throw new HttpException('Np mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    const meeting = await this.meetingsService.findOne(meetingID);
+    const user = await this.usersService.findOne(username);
+    if (meeting && user){
+      return this.meetingsService.notAttendingToMeeting(meetingID, username).then(BookingEntity.toDTO);
+    } else {
+      throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Put(":mid/attendee/:username/confirm")
-  async putConfirm(){
-
+  async confirmUser(@Param('mid') mid : string, @Param('username') username : string): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+    }
+    if (!mid || !username){
+      throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    return this.meetingsService.confirmUserForMeeting(meetingID, username).then(BookingEntity.toDTO);
   }
 
   @Delete(":mid/attendee/:username/confirm")
-  async deleteConfirm(){
-    
+  async rejectUser(@Param('mid') mid : string, @Param('username') username : string): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+    }
+    if(!mid || !username){
+      throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    return this.meetingsService.rejectUserFromMeeting(meetingID, username).then(BookingEntity.toDTO);
   }
 }
