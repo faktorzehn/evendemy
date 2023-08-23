@@ -32,8 +32,8 @@ export class MeetingsController {
   }
 
   @Get('attending/confirmed/:username')
-  async findMeetingsAttendedByUser(@Param('username') username : string, @Req() req: EvendemyRequest): Promise<MeetingDto[]>{
-    const userID = req.user.username;
+  async findMeetingsAttendedByUser(@Param('username') username : string): Promise<MeetingDto[]>{
+    const userID = username;
     if (userID != username){
       throw new ForbiddenException('You do not have permission to access this data');
     }
@@ -41,8 +41,8 @@ export class MeetingsController {
   }
 
   @Get('attending-information/:username')
-  async findAttendingInformationForUser(@Param('username') username : string, @Req() req: EvendemyRequest): Promise<BookingDto[]>{
-    const userID = req.user.username;
+  async findAttendingInformationForUser(@Param('username') username : string): Promise<BookingDto[]>{
+    const userID = username;
     if (userID != username){
       throw new ForbiddenException('You do not have permission to access this data');
     }
@@ -50,8 +50,8 @@ export class MeetingsController {
   }
 
   @Get('author/:username')
-  async findMeetingsByAuthor(@Param('username') username : string, @Req() req: EvendemyRequest): Promise<MeetingDto[]>{
-    const userID = req.user.username;
+  async findMeetingsByAuthor(@Param('username') username : string): Promise<MeetingDto[]>{
+    const userID = username;
     if (userID != username){
       throw new ForbiddenException('You do not have permission to access this data');
     }
