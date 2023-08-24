@@ -324,14 +324,14 @@ h6 {
   margin-left: 15px;
 }
 
-@import '~pretty-checkbox/src/scss/variables';
+@import 'pretty-checkbox/src/scss/variables';
 @import './../../../variables';
 
 $pretty--colors: (
   primary: $evendemy-primary,
 );
 
-@import '~pretty-checkbox/src/pretty-checkbox.scss';
+@import 'pretty-checkbox/src/pretty-checkbox.scss';
 
 @import './../../override-tags-styling';
 
