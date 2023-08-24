@@ -21,6 +21,11 @@
               "src/favicon.ico",
               "src/config.json"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules"
+              ]
+            },
             "styles": [
               "src/styles.scss",
               "node_modules/quill/dist/quill.snow.css",
