@@ -1,5 +1,5 @@
 import {  Component,  OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import * as FileSaver from 'file-saver';
 import { combineLatest } from 'rxjs';
@@ -45,7 +45,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
   randomizedNumber = Math.floor(Math.random() * 10000);
   listView = false;
   allTags = [];
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   steps: Step[] = [];
 
   imageFolder = this.configService.config.meeting_image_folder;
@@ -71,7 +71,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     private router: Router,
     private configService: ConfigService<any>,
     private tagsService: TagsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private translationService: TranslocoService,
     private dialogService: DialogService,
     private tabber: FormTabberService) {
