@@ -131,7 +131,6 @@
       }
     }
   },
-  "defaultProject": "evendemy",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "evendemy",
@@ -140,5 +139,8 @@
     "@schematics/angular:directive": {
       "prefix": "evendemy"
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

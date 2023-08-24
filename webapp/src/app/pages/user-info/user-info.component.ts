@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs';
 import { BaseComponent } from '../../components/base/base.component';
@@ -36,7 +36,7 @@ export class UserInfoComponent extends BaseComponent{
     private userService: UserService,
     private route: ActivatedRoute,
     private meetingsService: MeetingsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogService: DialogService
     ) { 
     super();

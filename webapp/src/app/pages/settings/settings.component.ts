@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { BaseComponent } from '../../components/base/base.component';
 import { DialogService } from '../../core/services/dialog.service';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -20,7 +20,7 @@ export class SettingsComponent extends BaseComponent{
   settings?: Settings;
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: UntypedFormBuilder, 
     private settingsService: SettingsService, 
     private authService: AuthenticationService,
     private dialogService: DialogService) { 
