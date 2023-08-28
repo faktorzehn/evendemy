@@ -138,7 +138,7 @@ export class NotificationAboutMeetingsService {
     return this.sendMail(attendeeEmails, parts.title, html).then(_ => meeting);
   }
 
-  async notifyUser(user: UserEntity, meeting: MeetingEntity): Promise<MeetingEntity>{
+  async notifyUserAboutBooking(user: UserEntity, meeting: MeetingEntity): Promise<MeetingEntity>{
     if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
         this.logger.warn("Mail is not enabled!");
         return Promise.resolve(meeting);
@@ -153,7 +153,7 @@ export class NotificationAboutMeetingsService {
     return this.sendMail([user.email], parts.title, html).then(_ => meeting);
   }
 
-  async notifyAuthor(isNewAttendee: boolean, meeting: MeetingEntity, attendee: UserEntity): Promise<void>{
+  async notifyAuthorAboutBooking(isNewAttendee: boolean, meeting: MeetingEntity, attendee: UserEntity): Promise<void>{
     if (!this.configService.get(ConfigTokens.MAIL_ENABLED)) {
       this.logger.warn("Mail is not enabled!");
       return;

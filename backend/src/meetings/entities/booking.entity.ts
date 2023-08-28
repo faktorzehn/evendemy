@@ -13,7 +13,7 @@ export class BookingEntity{
 
     @ManyToOne(() => MeetingEntity, (meeting) => meeting.bookings)
     @JoinColumn({name: "mid"})
-    meeting: MeetingEntity;
+    _meeting: MeetingEntity;
 
     @Column({default: false})
     tookPart: boolean;

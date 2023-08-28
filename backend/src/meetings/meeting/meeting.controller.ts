@@ -151,28 +151,31 @@ export class MeetingController {
   }
 
   @Put(":mid/attendee/:username/attend")
-  async getAttendesUsername(@Param('mid') mid : string, @Param('username') username : string): Promise<BookingDto>{
+  async bookMeeting(@Param('mid') mid : string, @Param('username') username : string, @Body() req: EvendemyRequest): Promise<BookingDto>{
     const meetingID = parseInt(mid);
     if (isNaN(meetingID)){
-      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Meeting ID is not a number', HttpStatus.NOT_ACCEPTABLE);
     }
     if(!mid || !username){
       throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
     }
     const meeting = await this.meetingsService.findOne(meetingID);
     const user = await this.usersService.findOne(username);
+    console.log(req);
+    const externals = [req.external?.email];
+    console.log(externals);
     if(meeting && user){
-      return this.meetingsService.attendingToMeeting(meetingID, username).then(BookingEntity.toDTO);
+      return this.meetingsService.attendingToMeeting(meetingID, username, externals).then(BookingEntity.toDTO);
     } else {
       throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
     }
   }
 
   @Delete(":mid/attendee/:username/attend")
-  async deleteAttendesUsername(@Param('mid') mid : string, @Param('username') username : string): Promise<BookingDto>{
+  async deleteBooking(@Param('mid') mid : string, @Param('username') username : string): Promise<BookingDto>{
     const meetingID = parseInt(mid);
     if (isNaN(meetingID)){
-      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Meeting ID is not a number', HttpStatus.NOT_ACCEPTABLE);
     }
     if(!mid || !username){
       throw new HttpException('Np mid or username', HttpStatus.NOT_ACCEPTABLE);

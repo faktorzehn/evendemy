@@ -248,58 +248,58 @@ export class MeetingsService {
     return this.bookingRepository.save(booking);
   }
 
-  async attendingToMeeting(mid: number, username: string){
+  async attendingToMeeting(mid: number, username: string, externals: string[]){
     username = username.toLowerCase();
     const booking = await this.bookingRepository.findOne({
       where: {mid: mid, user: {username: username}},
       relations: {user: true}
     });
+    const externalsTuple: [string] = externals.length > 0 ? [externals[0]] : [''];
     if (!booking){
       const newBooking = new BookingEntity();
       newBooking.mid = mid;
       const user = await this.usersService.findOne(username);
       newBooking.user = user;
       newBooking.tookPart = false;
-      newBooking.dateOfRegistration = new Date();
-      newBooking.externals = [''];
+      newBooking.externals = externalsTuple;
       newBooking.deleted = false;
       const savedBooking = await this.bookingRepository.save(newBooking);
       const meeting = await this.meetingRepository.findOne({where: {mid: mid}});
       if (meeting && savedBooking.user) {
-        this.notificationAboutMeetingsService.notifyAuthor(true, meeting, savedBooking.user);
+        this.notificationAboutMeetingsService.notifyAuthorAboutBooking(true, meeting, savedBooking.user);
       }
       return savedBooking;
     }
     return booking;
   }
 
-  async notAttendingToMeeting(mid: number, username: string): Promise<BookingEntity>{
+  async notAttendingToMeeting(mid: number, username: string): Promise<BookingEntity> {
     username = username.toLowerCase();
     const booking = await this.bookingRepository.findOne({
-      where: {mid: mid, user: {username: username}, deleted: false},
-      relations: {user: true}
+        where: { mid: mid, user: { username: username }, deleted: false },
+        relations: { user: true }
     });
-    if (!booking){
-      throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
+    if (!booking) {
+        throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
     }
-    booking.deleted = true;
-    const meeting = await this.meetingRepository.findOne({where: {mid: mid}});
-    const savedBooking = await this.bookingRepository.save(booking);
-    if(meeting && booking.user){
-      if (meeting.username == booking.user.username){
-        //Author is rejecting the participant
-        if(meeting.isIdea){
-          this.notificationAboutMeetingsService.notifyUser(booking.user, meeting);
-        }else{
-          this.notificationAboutMeetingsService.notifyUser(booking.user, meeting);
+    const meeting = await this.meetingRepository.findOne({ where: { mid: mid } });
+
+    if (meeting) {
+        if (meeting.username === booking.user.username) {
+            if (meeting.isIdea) {
+              this.notificationAboutMeetingsService.notifyUserAboutBooking(booking.user, meeting);
+            } else {
+              this.notificationAboutMeetingsService.notifyUserAboutBooking(booking.user, meeting);
+            }
+        } else {
+          booking.deleted = true;
+          const savedBooking = await this.bookingRepository.save(booking);
+          this.notificationAboutMeetingsService.notifyAuthorAboutBooking(false, meeting, booking.user);
+          return savedBooking;
         }
-      }else {
-        //User doesn't want to attend anymore
-        this.notificationAboutMeetingsService.notifyAuthor(false, meeting, booking.user);
-      }
     }
-    return savedBooking;
-  }
+}
+
 
   async getMeetingsForUserWhichTookPart(username: string): Promise<MeetingEntity[]>{
     username = username.toLowerCase();

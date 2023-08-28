@@ -32,29 +32,29 @@ export class MeetingsController {
   }
 
   @Get('attending/confirmed/:username')
-  async findMeetingsAttendedByUser(@Param('username') username : string): Promise<MeetingDto[]>{
-    const userID = username;
-    if (userID != username){
+  async findMeetingsAttendedByUser(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<MeetingDto[]>{
+    const requestingUsername = request.user.username;
+    if (requestingUsername != username){
       throw new ForbiddenException('You do not have permission to access this data');
     }
-    return this.meetingsService.getMeetingsForUserWhichTookPart(username).then(username => username.map(MeetingEntity.toDTO));
+    return this.meetingsService.getMeetingsForUserWhichTookPart(requestingUsername).then(username => username.map(MeetingEntity.toDTO));
   }
 
   @Get('attending-information/:username')
-  async findAttendingInformationForUser(@Param('username') username : string): Promise<BookingDto[]>{
-    const userID = username;
-    if (userID != username){
+  async findAttendingInformationForUser(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<BookingDto[]>{
+    const requestingUsername = request.user.username;
+    if (requestingUsername != username){
       throw new ForbiddenException('You do not have permission to access this data');
     }
-    return this.meetingsService.getAttendingInformationForUser(username).then(username => username.map(BookingEntity.toDTO));
+    return this.meetingsService.getAttendingInformationForUser(requestingUsername).then(username => username.map(BookingEntity.toDTO));
   }
 
   @Get('author/:username')
-  async findMeetingsByAuthor(@Param('username') username : string): Promise<MeetingDto[]>{
-    const userID = username;
-    if (userID != username){
+  async findMeetingsByAuthor(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<MeetingDto[]>{
+    const requestingUsername = request.user.username;
+    if (requestingUsername != username){
       throw new ForbiddenException('You do not have permission to access this data');
     }
-    return this.meetingsService.getMeetingsFromAuthor(username, userID).then(username => username.map(MeetingEntity.toDTO));
+    return this.meetingsService.getMeetingsFromAuthor(username, requestingUsername).then(username => username.map(MeetingEntity.toDTO));
   }
 }

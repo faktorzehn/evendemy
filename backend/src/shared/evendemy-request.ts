@@ -10,4 +10,7 @@ export class EvendemyRequest extends Request {
         firstname: string,
         lastname: string
     };
+    external: {
+        email: string;
+    }
 }

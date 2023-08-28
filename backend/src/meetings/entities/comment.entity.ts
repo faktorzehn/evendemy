@@ -15,7 +15,7 @@ export class CommentEntity {
     @CreateDateColumn()
     creationDate: Date;
 
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity, {eager: true})
     @JoinColumn({name: "username"})
     _user: UserEntity;
 
