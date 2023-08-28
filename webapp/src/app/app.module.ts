@@ -49,6 +49,7 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { MeetingCardComponent } from './components/meeting-card/meeting-card.component';
 import { ConfirmDialogContentComponent } from './components/dialog/confirm-dialog-content/confirm-dialog-content.component';
 import { TranslocoRootModule } from './transloco-root.module';
+import { HammerModule } from '@angular/platform-browser';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -105,6 +106,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    HammerModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     // NgxDatatableModule,
