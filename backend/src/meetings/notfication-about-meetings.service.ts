@@ -171,9 +171,12 @@ export class NotificationAboutMeetingsService {
       null
     );
     const html = this.renderMail(parts);
-    const author = await this.usersService.findOne(attendee.username);
-    if (author){
-      return this.sendMail([author.email], parts.title, html).then(() => {});
+    if (attendee){
+      try{
+        return this.sendMail([attendee.email], parts.title, html).then(() => {});
+      } catch(error){
+        this.logger.error('Error sending email:', error)
+      }
     }
   }
 

@@ -254,6 +254,7 @@ export class MeetingsService {
       where: {mid: mid, user: {username: username}},
       relations: {user: true}
     });
+    console.log(externals, typeof externals);
     const externalsTuple: [string] = externals.length > 0 ? [externals[0]] : [''];
     if (!booking){
       const newBooking = new BookingEntity();
@@ -287,8 +288,6 @@ export class MeetingsService {
     if (meeting) {
         if (meeting.username === booking.user.username) {
             if (meeting.isIdea) {
-              this.notificationAboutMeetingsService.notifyUserAboutBooking(booking.user, meeting);
-            } else {
               this.notificationAboutMeetingsService.notifyUserAboutBooking(booking.user, meeting);
             }
         } else {

@@ -5,11 +5,13 @@ import { EvendemyRequest } from 'src/shared/evendemy-request';
 import { MeetingDto } from '../dto/meeting.dto';
 import { BookingEntity } from '../entities/booking.entity';
 import { BookingDto } from '../dto/booking.dto';
+import { SettingsService } from 'src/users/settings/settings.service';
 
 @Controller('meetings')
 export class MeetingsController {
   constructor(
-    private readonly meetingsService: MeetingsService
+    private readonly meetingsService: MeetingsService,
+    private readonly settingsService: SettingsService
   ) {}
 
   @Get()
@@ -34,26 +36,38 @@ export class MeetingsController {
   @Get('attending/confirmed/:username')
   async findMeetingsAttendedByUser(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<MeetingDto[]>{
     const requestingUsername = request.user.username;
+    // additional check if other user's data is requested
     if (requestingUsername != username){
-      throw new ForbiddenException('You do not have permission to access this data');
-    }
-    return this.meetingsService.getMeetingsForUserWhichTookPart(requestingUsername).then(username => username.map(MeetingEntity.toDTO));
+      const settings = await this.settingsService.findOne(username);
+      if (!settings || settings?.summaryOfMeetingsVisible == false){
+        throw new ForbiddenException('Not allowed');
+      }
+    }   
+    return this.meetingsService.getMeetingsForUserWhichTookPart(username).then(username => username.map(MeetingEntity.toDTO));
   }
 
   @Get('attending-information/:username')
   async findAttendingInformationForUser(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<BookingDto[]>{
     const requestingUsername = request.user.username;
+    //additional check if other users's data is requested
     if (requestingUsername != username){
-      throw new ForbiddenException('You do not have permission to access this data');
+      const settings = await this.settingsService.findOne(username);
+      if (!settings || settings?.summaryOfMeetingsVisible == false){
+        throw new ForbiddenException('Not allowed');
+      } 
     }
-    return this.meetingsService.getAttendingInformationForUser(requestingUsername).then(username => username.map(BookingEntity.toDTO));
+    return this.meetingsService.getAttendingInformationForUser(username).then(username => username.map(BookingEntity.toDTO))
   }
 
   @Get('author/:username')
   async findMeetingsByAuthor(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<MeetingDto[]>{
     const requestingUsername = request.user.username;
+    //additional check if other users's data is requested
     if (requestingUsername != username){
-      throw new ForbiddenException('You do not have permission to access this data');
+      const settings = await this.settingsService.findOne(username);
+      if (settings && settings.summaryOfMeetingsVisible == true){
+        throw new ForbiddenException('Not allowed'); 
+      }
     }
     return this.meetingsService.getMeetingsFromAuthor(username, requestingUsername).then(username => username.map(MeetingEntity.toDTO));
   }
