@@ -7,11 +7,12 @@
   background-color: black;
   opacity: 0.3;
   z-index: 100;
+  display: none;
 }
 
 
 .dialog {
-  display: flex;
+  display: none;
   flex-direction: column;
   background-color: white;
   border-radius: 5px;

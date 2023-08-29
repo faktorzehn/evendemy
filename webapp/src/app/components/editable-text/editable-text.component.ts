@@ -78,7 +78,7 @@ export class EditableTextComponent implements OnInit, ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    throw new Error('Method not implemented.');
+    this.editable = !isDisabled;
   }
 
   onEdit() {

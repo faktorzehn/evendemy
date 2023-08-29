@@ -75,9 +75,9 @@ export class MeetingListComponent extends BaseComponent implements OnInit {
           this.allTags = tags;
         }));
 
-        this.addSubscription(this.meetingsService.getAttendingInformationForMeetings(this.authService.getLoggedInUsername()).pipe(first()).subscribe(meeting_users => {
-          this.attendedMeetings = meeting_users;
-        }));
+        //this.addSubscription(this.meetingsService.getAttendingInformationForMeetings(this.authService.getLoggedInUsername()).pipe(first()).subscribe(meeting_users => {
+        //  this.attendedMeetings = meeting_users;
+        //}));
       }
     ));
   }
