@@ -2,7 +2,7 @@
 <div class="img-tools"
 [style.width.px]="width"
 [style.height.px]="height" *ngIf="user">
-  <img *ngIf="user?.avatar" src="{{folder}}/{{user.username}}.jpg"/>
+  <img *ngIf="user?.avatar" [src]="getImage()"/>
 
   <div *ngIf="!user?.avatar">
     <div style="display:flex;justify-content: center; border-radius: 50%" [style.width.px]="width"

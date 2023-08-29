@@ -511,7 +511,7 @@ export class MeetingComponent extends BaseComponent implements OnInit, OnDestroy
     if (!this.meeting?.images || this.meeting?.images.length === 0) {
       return 'assets/no-image.png';
     }
-    return `http://localhost:8080/api/meeting/${this.meeting.mid}/image`;
+    return `${this.configService.config.backend_url}/meeting/${this.meeting.mid}/image`;
   }
 
   getAttendedNumber() {
