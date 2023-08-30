@@ -1,23 +1,18 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { HttpClient } from "@angular/common/http";
+import { Inject, Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { first } from "rxjs/operators";
+import { APP_CONFIG } from "../../injection-tokens";
 
 @Injectable()
 export class ConfigService<T> {
+  private _config: T;
 
-    private _config: T;
+  constructor(@Inject(APP_CONFIG) private readonly appConfig: any) {
+    this._config = appConfig;
+  }
 
-    constructor(private http: HttpClient) {
-    }
-
-    public load() {
-        var o = this.http.get<T>('./assets/config.json').pipe(first());
-        o.subscribe((config: T) => this._config = config);
-        return () => o;
-    }
-
-    public get config() {
-        return this._config;
-    }
+  public get config() {
+    return this._config;
+  }
 }

@@ -6,7 +6,7 @@
         <form #form="ngForm" [formGroup]="formGroup" name="form">
           <!--Image-->
           <div class="meeting-image">
-            <img [src]="getImage()" *ngIf="!tmpImgData"/>
+            <img [src]="getImage() | protectedImage | async" *ngIf="!tmpImgData"/>
             <img [src]="tmpImgData" *ngIf="tmpImgData">
             <div class="image-overlay"></div>
             <button *ngIf="isEditable && editMode" class="btn btn-info meeting-image-button" 
