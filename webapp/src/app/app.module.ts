@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -50,6 +50,7 @@ import { MeetingCardComponent } from './components/meeting-card/meeting-card.com
 import { ConfirmDialogContentComponent } from './components/dialog/confirm-dialog-content/confirm-dialog-content.component';
 import { TranslocoRootModule } from './transloco-root.module';
 import { HammerModule } from '@angular/platform-browser';
+import { ProtectedImagePipe } from './pipes/protected-image.pipe';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -100,7 +101,8 @@ const appRoutes: Routes = [
     EditableInputComponent,
     UserInfoComponent,
     DialogComponent,
-    ConfirmDialogContentComponent
+    ConfirmDialogContentComponent,
+    ProtectedImagePipe,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -123,7 +125,7 @@ const appRoutes: Routes = [
     AuthenticationService,
     TagsService,
     ConfigService,
-    { provide: APP_INITIALIZER, useFactory: (config: ConfigService<any>) => config.load(), deps: [ConfigService], multi: true},
+    { provide: APP_INITIALIZER, useFactory: (config: ConfigService<any>) => config.load(), deps: [ConfigService, HttpClient], multi: true},
     [...interceptors]
   ],
   bootstrap: [AppComponent]
