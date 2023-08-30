@@ -218,7 +218,7 @@ export class MeetingsService {
     if (!meeting){
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
     }
-    return this.bookingRepository.save(await this.bookingRepository.find({ where: { mid: id }, relations: {user: true}}));
+    return this.bookingRepository.save(await this.bookingRepository.find({ where: { mid: id, deleted: false }, relations: {user: true}}));
   }
 
   async confirmUserForMeeting(id: number, username: string): Promise<BookingEntity>{
@@ -251,7 +251,7 @@ export class MeetingsService {
   async attendingToMeeting(mid: number, username: string, externals: string[]){
     username = username.toLowerCase();
     const booking = await this.bookingRepository.findOne({
-      where: {mid: mid, user: {username: username}},
+      where: {mid: mid, user: {username: username}, deleted: false},
       relations: {user: true}
     });
 
