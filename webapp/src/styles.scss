@@ -50,6 +50,12 @@ input, select {
       background-color: #48cfad;
       border-color: #48cfad;
     }
+
+    &:disabled {
+      background-color: #ccd1d9;
+      border-color: #ccd1d9;
+      outline: 0!important;
+    }
   }
 
   &.btn-danger {

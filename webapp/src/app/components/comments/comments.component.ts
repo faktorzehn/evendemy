@@ -27,7 +27,7 @@ export class CommentsComponent extends BaseComponent {
   }
 
   getUser(username: string) {
-    const res = this.users.find( user => user.username === username);
+    const res = this.users?.find( user => user.username === username);
     return res ? res : undefined;
   }
 
