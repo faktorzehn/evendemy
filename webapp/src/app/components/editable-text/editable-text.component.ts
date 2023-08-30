@@ -78,7 +78,7 @@ export class EditableTextComponent implements OnInit, ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this.editable = !isDisabled;
+    // nothing to do - editable will be used in this component instead
   }
 
   onEdit() {
