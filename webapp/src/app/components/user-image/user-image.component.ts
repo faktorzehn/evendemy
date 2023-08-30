@@ -34,6 +34,9 @@ export class UserImageComponent implements OnInit, OnChanges {
   }
 
   getImage() {
+    if(!this.username) {
+      this.username = this.user.username;
+    }
     return `${this.configService.config.backend_url}/user/${this.username}/image`;
   }
 

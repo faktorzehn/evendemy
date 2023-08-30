@@ -125,7 +125,16 @@ const appRoutes: Routes = [
     AuthenticationService,
     TagsService,
     ConfigService,
-    { provide: APP_INITIALIZER, useFactory: (config: ConfigService<any>) => config.load(), deps: [ConfigService, HttpClient], multi: true},
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+        return new Promise<void>(resolve => {
+          resolve();
+        });
+      },
+      deps: [ ConfigService<any> ],
+      multi: true,
+    },
     [...interceptors]
   ],
   bootstrap: [AppComponent]
