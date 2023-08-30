@@ -254,15 +254,17 @@ export class MeetingsService {
       where: {mid: mid, user: {username: username}},
       relations: {user: true}
     });
-    console.log(externals, typeof externals);
-    const externalsTuple: [string] = externals.length > 0 ? [externals[0]] : [''];
+
+    // at the moment only one external is allowed - to be changed
+    const _externals: [string] = externals.length > 0 ? [externals[0]] : [''];
+
     if (!booking){
       const newBooking = new BookingEntity();
       newBooking.mid = mid;
       const user = await this.usersService.findOne(username);
       newBooking.user = user;
       newBooking.tookPart = false;
-      newBooking.externals = externalsTuple;
+      newBooking.externals = _externals;
       newBooking.deleted = false;
       const savedBooking = await this.bookingRepository.save(newBooking);
       const meeting = await this.meetingRepository.findOne({where: {mid: mid}});
@@ -286,16 +288,14 @@ export class MeetingsService {
     const meeting = await this.meetingRepository.findOne({ where: { mid: mid } });
 
     if (meeting) {
+        booking.deleted = true;
+        const savedBooking = await this.bookingRepository.save(booking);
         if (meeting.username === booking.user.username) {
-            if (meeting.isIdea) {
-              this.notificationAboutMeetingsService.notifyUserAboutBooking(booking.user, meeting);
-            }
+          await this.notificationAboutMeetingsService.confirmNotAttending(booking.user, meeting);
         } else {
-          booking.deleted = true;
-          const savedBooking = await this.bookingRepository.save(booking);
-          this.notificationAboutMeetingsService.notifyAuthorAboutBooking(false, meeting, booking.user);
-          return savedBooking;
+          await this.notificationAboutMeetingsService.notifyAuthorAboutBooking(false, meeting, booking.user);
         }
+        return savedBooking;
     }
 }
 

@@ -165,7 +165,6 @@ export class MeetingController {
     const meeting = await this.meetingsService.findOne(meetingID);
     const user = await this.usersService.findOne(req.user.username);
     const externals = body.externals ?? [];
-    console.log(externals);
     if(!meeting || !user){
       throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
     }
