@@ -12,6 +12,8 @@ import { BookingEntity } from '../entities/booking.entity';
 import { BookingDto } from '../dto/booking.dto';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { MeetingDto } from '../dto/meeting.dto';
+import { UsersService } from 'src/users/users/users.service';
+import { NotificationAboutMeetingsService } from '../notfication-about-meetings.service';
 
 @Controller('meeting')
 export class MeetingController {
@@ -20,6 +22,8 @@ export class MeetingController {
 
   constructor(
     private readonly meetingsService: MeetingsService, 
+    private readonly usersService: UsersService,
+    private readonly notificationService: NotificationAboutMeetingsService,
     private imageService: ImageService, 
     private configService: ConfigService,
     private calendarService: CalendarService,
@@ -146,23 +150,79 @@ export class MeetingController {
     return this.meetingsService.getBookingsByMeetingID(meetingID).then(attendees => attendees.map(BookingEntity.toDTO));
   }
 
-  @Get(":mid/attendee/:username/attend")
-  async getAttendesUsername(@Param('mid') mid : string, @Param('username') username : string){
-
+  @Put(":mid/attendee/:username/attend")
+  async bookMeeting(@Param('mid') mid : string, @Param('username') username : string, @Body() body: BookingDto, @Req() req: EvendemyRequest): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.NOT_ACCEPTABLE);
+    }
+    if(!mid || !username){
+      throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    if(username != req.user.username) {
+      throw new HttpException('Booking can only be added by the user himself.', HttpStatus.FORBIDDEN);
+    }
+    const meeting = await this.meetingsService.findOne(meetingID);
+    const user = await this.usersService.findOne(req.user.username);
+    const externals = body.externals ?? [];
+    console.log(externals);
+    if(!meeting || !user){
+      throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
+    }
+    return this.meetingsService.attendingToMeeting(meetingID, req.user.username, externals).then(BookingEntity.toDTO);
   }
 
   @Delete(":mid/attendee/:username/attend")
-  async deleteAttendesUsername(){
+  async deleteBooking(@Param('mid') mid : string, @Param('username') username : string, @Req() req: EvendemyRequest): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.NOT_ACCEPTABLE);
+    }
+    if(!mid || !username){
+      throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    const meeting = await this.meetingsService.findOne(meetingID);
+    const user = await this.usersService.findOne(username);
 
+    if (!meeting || !user){
+      throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
+    }
+    // booking can only be deleted by the user himself or by the author
+    if(!(username === req.user.username || req.user.username === meeting.username)) {
+      throw new HttpException('Booking is not allowed to be deleted.', HttpStatus.FORBIDDEN);
+    }
+    return this.meetingsService.notAttendingToMeeting(meetingID, username).then(BookingEntity.toDTO);
   }
 
   @Put(":mid/attendee/:username/confirm")
-  async putConfirm(){
-
+  async confirmUser(@Param('mid') mid : string, @Param('username') username : string, @Req() req: EvendemyRequest): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+    }
+    if (!mid || !username){
+      throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    const meeting = await this.meetingsService.findOne(meetingID);
+    if (req.user.username != meeting.username){
+      throw new HttpException('Confirmation is only allowed by the author', HttpStatus.FORBIDDEN);
+    }
+    return this.meetingsService.confirmUserForMeeting(meetingID, username).then(BookingEntity.toDTO);
   }
 
   @Delete(":mid/attendee/:username/confirm")
-  async deleteConfirm(){
-    
+  async rejectUser(@Param('mid') mid : string, @Param('username') username : string, @Req() req: EvendemyRequest): Promise<BookingDto>{
+    const meetingID = parseInt(mid);
+    if (isNaN(meetingID)){
+      throw new HttpException('Meeting ID is not a number', HttpStatus.BAD_REQUEST);
+    }
+    if(!mid || !username){
+      throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
+    }
+    const meeting = await this.meetingsService.findOne(meetingID);
+    if (req.user.username != meeting.username){
+      throw new HttpException('Rejection is only allowed by the author', HttpStatus.FORBIDDEN);
+    }
+    return this.meetingsService.rejectUserFromMeeting(meetingID, username).then(BookingEntity.toDTO);
   }
 }

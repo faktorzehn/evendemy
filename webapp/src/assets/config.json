@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "backend_url": "http://localhost:8080/api",
+=======
+  "backend_url": "http://localhost:3000",
+>>>>>>> 3f433f53dac1459f5eccf0ea458895574020d150
   "meeting_image_folder": "assets/meeting_images",
   "user_image_folder": "assets/user_images",
   "usage_notice": "Evendemy is an open source project.<br/>It is licensed under the GPL-3.0 license. Details and the source code can be found at: https://github.com/faktorzehn/evendemy"

@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, ForbiddenException } from '@nestjs/common';
 import { UpdateMeetingDto } from './dto/update-meeting.dto';
 import { MeetingEntity, VALIDITY_PERIODE } from './entities/meeting.entity';
-import { FindOptionsWhere, Repository, MoreThanOrEqual, LessThan, IsNull, Admin, FindOperator, ArrayContains, And, DataSource } from 'typeorm';
+import { FindOptionsWhere, Repository, MoreThanOrEqual, LessThan, FindOperator, ArrayContains, DataSource, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationAboutMeetingsService } from './notfication-about-meetings.service';
 import { BookingEntity } from './entities/booking.entity';
@@ -9,6 +9,7 @@ import { CommentEntity } from './entities/comment.entity';
 import { UsersService } from 'src/users/users/users.service';
 import { CalendarService } from './calendar.service';
 import { sub } from 'date-fns';
+import { SettingsService } from 'src/users/settings/settings.service';
 
 class MeetingsFilter {
   showOld: boolean;
@@ -30,6 +31,7 @@ export class MeetingsService {
     private notificationAboutMeetingsService: NotificationAboutMeetingsService,
     private calenderService: CalendarService,
     private usersService: UsersService,
+    private settingsService: SettingsService,
     private dataSource: DataSource)
   { }
 
@@ -201,7 +203,8 @@ export class MeetingsService {
     const user = await this.usersService.findOne(username);
     const comment = new CommentEntity();
     comment.text = text;
-    comment.user = user;
+    comment.username = username;
+    comment._user = user;
     if(!meeting.comments){
       meeting.comments = [];
     }
@@ -216,6 +219,121 @@ export class MeetingsService {
       throw new HttpException('Meeting not found', HttpStatus.NOT_FOUND);
     }
     return this.bookingRepository.save(await this.bookingRepository.find({ where: { mid: id }, relations: {user: true}}));
+  }
+
+  async confirmUserForMeeting(id: number, username: string): Promise<BookingEntity>{
+    username = username.toLowerCase();
+    const booking = await this.bookingRepository.findOne({
+      where: {mid: id, user: {username: username}, deleted: false},
+      relations: {user: true}
+    });
+    if (!booking) {
+      throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
+    }
+    booking.tookPart = true;
+    booking.dateOfConfirmation = new Date();
+    return this.bookingRepository.save(booking);
+  }
+
+  async rejectUserFromMeeting(id: number, username: string): Promise<BookingEntity>{
+    username = username.toLowerCase();
+    const booking = await this.bookingRepository.findOne({
+      where: {mid: id, user: {username: username}, deleted: false},
+      relations: {user: true}
+    });
+    if(!booking){
+      throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
+    }
+    booking.tookPart = false;
+    return this.bookingRepository.save(booking);
+  }
+
+  async attendingToMeeting(mid: number, username: string, externals: string[]){
+    username = username.toLowerCase();
+    const booking = await this.bookingRepository.findOne({
+      where: {mid: mid, user: {username: username}},
+      relations: {user: true}
+    });
+    console.log(externals, typeof externals);
+    const externalsTuple: [string] = externals.length > 0 ? [externals[0]] : [''];
+    if (!booking){
+      const newBooking = new BookingEntity();
+      newBooking.mid = mid;
+      const user = await this.usersService.findOne(username);
+      newBooking.user = user;
+      newBooking.tookPart = false;
+      newBooking.externals = externalsTuple;
+      newBooking.deleted = false;
+      const savedBooking = await this.bookingRepository.save(newBooking);
+      const meeting = await this.meetingRepository.findOne({where: {mid: mid}});
+      if (meeting && savedBooking.user) {
+        this.notificationAboutMeetingsService.notifyAuthorAboutBooking(true, meeting, savedBooking.user);
+      }
+      return savedBooking;
+    }
+    return booking;
+  }
+
+  async notAttendingToMeeting(mid: number, username: string): Promise<BookingEntity> {
+    username = username.toLowerCase();
+    const booking = await this.bookingRepository.findOne({
+        where: { mid: mid, user: { username: username }, deleted: false },
+        relations: { user: true }
+    });
+    if (!booking) {
+        throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
+    }
+    const meeting = await this.meetingRepository.findOne({ where: { mid: mid } });
+
+    if (meeting) {
+        if (meeting.username === booking.user.username) {
+            if (meeting.isIdea) {
+              this.notificationAboutMeetingsService.notifyUserAboutBooking(booking.user, meeting);
+            }
+        } else {
+          booking.deleted = true;
+          const savedBooking = await this.bookingRepository.save(booking);
+          this.notificationAboutMeetingsService.notifyAuthorAboutBooking(false, meeting, booking.user);
+          return savedBooking;
+        }
+    }
+}
+
+
+  async getMeetingsForUserWhichTookPart(username: string): Promise<MeetingEntity[]>{
+    username = username.toLowerCase();
+    const bookings = await this.bookingRepository.find({
+      where: {user: {username: username}, tookPart: true, deleted: false}
+    });
+    const meetingsIDs = bookings.map(booking => booking.mid);
+    if(meetingsIDs.length == 0){
+      return [];
+    }
+    return this.meetingRepository.find({
+      where: {mid: In(meetingsIDs)}
+    });
+  }
+
+  //these two functions (above and below) kind of do the same thing as in the old version weird?
+
+  async getAttendingInformationForUser(username: string): Promise<BookingEntity[]>{
+    username = username.toLowerCase();
+    return this.bookingRepository.find({
+      where: {user: {username: username}, tookPart: true, deleted: false}
+    });
+  }
+
+  async getMeetingsFromAuthor(username: string, userID: string): Promise<MeetingEntity[]>{
+    username = username.toLowerCase();
+    const settings = await this.settingsService.findOne(username);
+    if(username == userID || (settings && settings.summaryOfMeetingsVisible === true)){
+      return this.meetingRepository.find({
+        where: {username: username},
+        relations: {comments: true}
+      });
+    } else {
+      throw new ForbiddenException('Access Denied. Not allowed');
+    }
   }
 
   getAllTags(): Promise<string[]> {
