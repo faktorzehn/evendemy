@@ -1,4 +1,5 @@
 import { Controller, Get, Logger, Post, Req } from '@nestjs/common';
+import { Unprotected } from 'nest-keycloak-connect';
 import { EvendemyRequest } from 'src/shared/evendemy-request';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users/users.service';
@@ -14,6 +15,7 @@ export class AuthController {
      * Create a new account - if not already existing
      */
     @Post()
+    @Unprotected()
     async createNewAccount(@Req() req: EvendemyRequest) {
         try {
             await this.usersService.create({... req.user} as CreateUserDto);
@@ -29,6 +31,7 @@ export class AuthController {
      * Returns the current logged in user
      */
     @Get()
+    @Unprotected()
     getAuth(@Req() req: EvendemyRequest) {
       return this.usersService.findOne(req.user.username);
     }

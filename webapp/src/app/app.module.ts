@@ -51,6 +51,8 @@ import { ConfirmDialogContentComponent } from './components/dialog/confirm-dialo
 import { TranslocoRootModule } from './transloco-root.module';
 import { HammerModule } from '@angular/platform-browser';
 import { ProtectedImagePipe } from './pipes/protected-image.pipe';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -67,6 +69,25 @@ const appRoutes: Routes = [
   { path: '', redirectTo: '/meetings', pathMatch: 'full' },
   { path: '**', component: ErrorComponent, canActivate: [LoggedInGuardService] }
 ];
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8090/',
+        realm: 'evendemy',
+        clientId: 'evendemy'
+      },
+      initOptions: {
+        onLoad: 'login-required',
+        redirectUri: 'http://localhost:4200/'//window.location.origin,
+      },
+      bearerExcludedUrls: [],
+      shouldUpdateToken(request) {
+        return !request.headers.get('token-update') === false;
+      }
+    });
+}
 
 @NgModule({
   declarations: [
@@ -115,7 +136,8 @@ const appRoutes: Routes = [
     ImageCropperModule,
     TagInputModule,
     FontAwesomeModule,
-    TranslocoRootModule
+    TranslocoRootModule,
+    KeycloakAngularModule
   ],
   providers: [
     LoggedInGuardService,
@@ -125,6 +147,29 @@ const appRoutes: Routes = [
     AuthenticationService,
     TagsService,
     ConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
+    KeycloakService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+        return new Promise<void>(resolve => {
+          resolve();
+        });
+      },
+      deps: [ ConfigService<any> ],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: () => () => {
