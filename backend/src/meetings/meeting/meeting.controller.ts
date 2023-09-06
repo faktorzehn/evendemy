@@ -32,7 +32,7 @@ export class MeetingController {
 
   @Post()
   async create(@Req() request: EvendemyRequest, @Body() dto: UpdateMeetingDto) {
-    return this.meetingsService.create(request.user.username, dto).then(MeetingEntity.toDTO);
+    return this.meetingsService.create(request.user. preferred_username, dto).then(MeetingEntity.toDTO);
   }
 
   @Get(':mid')
@@ -109,7 +109,7 @@ export class MeetingController {
     if (!updateCommentDto.text) {
       throw new HttpException('No comment', HttpStatus.NOT_ACCEPTABLE);
     }
-    return this.meetingsService.addComment(meetingId, req.user.username, updateCommentDto.text).then(MeetingEntity.toDTO);
+    return this.meetingsService.addComment(meetingId, req.user. preferred_username, updateCommentDto.text).then(MeetingEntity.toDTO);
   }
 
 
@@ -130,7 +130,7 @@ export class MeetingController {
   async delete(@Req() req: EvendemyRequest, @Param('mid') mid: string) {
       const meeting = await this.meetingsService.findOne(+mid);
 
-      if(meeting.username !== req.user.username) {
+      if(meeting.username !== req.user. preferred_username) {
         throw new HttpException('Not allowed to delete meeting', HttpStatus.FORBIDDEN);
       }
 
@@ -159,16 +159,16 @@ export class MeetingController {
     if(!mid || !username){
       throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
     }
-    if(username != req.user.username) {
+    if(username != req.user. preferred_username) {
       throw new HttpException('Booking can only be added by the user himself.', HttpStatus.FORBIDDEN);
     }
     const meeting = await this.meetingsService.findOne(meetingID);
-    const user = await this.usersService.findOne(req.user.username);
+    const user = await this.usersService.findOne(req.user. preferred_username);
     const externals = body.externals ?? [];
     if(!meeting || !user){
       throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
     }
-    return this.meetingsService.attendingToMeeting(meetingID, req.user.username, externals).then(BookingEntity.toDTO);
+    return this.meetingsService.attendingToMeeting(meetingID, req.user. preferred_username, externals).then(BookingEntity.toDTO);
   }
 
   @Delete(":mid/attendee/:username/attend")
@@ -187,7 +187,7 @@ export class MeetingController {
       throw new HttpException('Meeting or user does not exist', HttpStatus.NOT_FOUND);
     }
     // booking can only be deleted by the user himself or by the author
-    if(!(username === req.user.username || req.user.username === meeting.username)) {
+    if(!(username === req.user. preferred_username || req.user. preferred_username === meeting.username)) {
       throw new HttpException('Booking is not allowed to be deleted.', HttpStatus.FORBIDDEN);
     }
     return this.meetingsService.notAttendingToMeeting(meetingID, username).then(BookingEntity.toDTO);
@@ -203,7 +203,7 @@ export class MeetingController {
       throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
     }
     const meeting = await this.meetingsService.findOne(meetingID);
-    if (req.user.username != meeting.username){
+    if (req.user. preferred_username != meeting.username){
       throw new HttpException('Confirmation is only allowed by the author', HttpStatus.FORBIDDEN);
     }
     return this.meetingsService.confirmUserForMeeting(meetingID, username).then(BookingEntity.toDTO);
@@ -219,7 +219,7 @@ export class MeetingController {
       throw new HttpException('No mid or username', HttpStatus.NOT_ACCEPTABLE);
     }
     const meeting = await this.meetingsService.findOne(meetingID);
-    if (req.user.username != meeting.username){
+    if (req.user. preferred_username != meeting.username){
       throw new HttpException('Rejection is only allowed by the author', HttpStatus.FORBIDDEN);
     }
     return this.meetingsService.rejectUserFromMeeting(meetingID, username).then(BookingEntity.toDTO);

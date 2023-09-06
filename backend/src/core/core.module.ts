@@ -1,6 +1,5 @@
 import { Global, Module } from '@nestjs/common';
 import { ImageService } from './image.service';
-import { AuthMiddleware } from './middleware/auth.middleware';
 import { IdService } from './id.service';
 
 /**
@@ -8,7 +7,7 @@ import { IdService } from './id.service';
  */
 @Global()
 @Module({
-    providers: [ ImageService, IdService, AuthMiddleware],
-    exports: [ ImageService, IdService, AuthMiddleware]
+    providers: [ ImageService, IdService],
+    exports: [ ImageService, IdService]
 })
 export class CoreModule {}

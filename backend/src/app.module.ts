@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { MeetingsModule } from './meetings/meetings.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthMiddleware } from './core/middleware/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { ImageService } from './core/image.service';
 import { CoreModule } from './core/core.module';
@@ -100,12 +99,6 @@ import { APP_GUARD } from '@nestjs/core';
     }
   ]
 })
-export class AppModule implements NestModule {
-
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes('*'); // register all modules that should be validated  
-  }
+export class AppModule {
 
 }

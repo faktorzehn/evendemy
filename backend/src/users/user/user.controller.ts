@@ -28,8 +28,8 @@ export class UserController {
             throw new HttpException('No image', HttpStatus.NOT_ACCEPTABLE);
         }
         
-        if(this.imageService.save(req.user.username, data, this.path)) {
-            this.usersService.imageSaved(req.user.username, true);
+        if(this.imageService.save(req.user. preferred_username, data, this.path)) {
+            this.usersService.imageSaved(req.user. preferred_username, true);
         } else {
             throw new HttpException('Image could not be saved.', HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -50,8 +50,8 @@ export class UserController {
         this.checkIfLoggedInUser(req, username);
         // TODO remove username from API path -not needed - only logged in user can change his/her own data
 
-        if(this.imageService.delete(req.user.username, this.path)) {
-            this.usersService.imageSaved(req.user.username, false);
+        if(this.imageService.delete(req.user. preferred_username, this.path)) {
+            this.usersService.imageSaved(req.user. preferred_username, false);
         } else {
             throw new HttpException('Image could not be saved.', HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -61,13 +61,13 @@ export class UserController {
     saveAdditionalInfos(@Req() req: EvendemyRequest, @Body() dto: UpdateUserDto, @Param('username') username: string) {
         this.checkIfLoggedInUser(req, username);
         // TODO remove username from API path -not needed - only logged in user can change his/her own data
-        return this.usersService.update(req.user.username, dto)
-            .then( _ => this.usersService.findOne(req.user.username))
+        return this.usersService.update(req.user. preferred_username, dto)
+            .then( _ => this.usersService.findOne(req.user. preferred_username))
             .then(UserEntity.toDTO);
     }
 
     private checkIfLoggedInUser(req: EvendemyRequest, username: string) {
-        if(username != req.user.username) {
+        if(username != req.user. preferred_username) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
     }

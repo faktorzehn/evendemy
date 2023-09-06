@@ -12,27 +12,11 @@ export class AuthController {
     constructor(private usersService: UsersService) {}
 
     /**
-     * Create a new account - if not already existing
-     */
-    @Post()
-    @Unprotected()
-    async createNewAccount(@Req() req: EvendemyRequest) {
-        try {
-            await this.usersService.create({... req.user} as CreateUserDto);
-            this.logger.log('user has logged in the first time...the account has been created');
-        } catch(e) {
-            this.logger.error(e);
-            //user already exists - at the moment no update, maybe an other solution in the future
-        }
-        return true;
-    }
-
-    /**
      * Returns the current logged in user
      */
     @Get()
     @Unprotected()
     getAuth(@Req() req: EvendemyRequest) {
-      return this.usersService.findOne(req.user.username);
+      return this.usersService.findOne(req.user. preferred_username);
     }
 }

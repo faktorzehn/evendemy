@@ -35,7 +35,7 @@ export class MeetingsController {
 
   @Get('attending/confirmed/:username')
   async findMeetingsAttendedByUser(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<MeetingDto[]>{
-    const requestingUsername = request.user.username;
+    const requestingUsername = request.user. preferred_username;
     // additional check if other user's data is requested
     if (requestingUsername != username){
       const settings = await this.settingsService.findOne(username);
@@ -48,7 +48,7 @@ export class MeetingsController {
 
   @Get('attending-information/:username')
   async findAttendingInformationForUser(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<BookingDto[]>{
-    const requestingUsername = request.user.username;
+    const requestingUsername = request.user. preferred_username;
     //additional check if other users's data is requested
     if (requestingUsername != username){
       const settings = await this.settingsService.findOne(username);
@@ -61,7 +61,7 @@ export class MeetingsController {
 
   @Get('author/:username')
   async findMeetingsByAuthor(@Param('username') username : string, @Req() request: EvendemyRequest): Promise<MeetingDto[]>{
-    const requestingUsername = request.user.username;
+    const requestingUsername = request.user. preferred_username;
     //additional check if other users's data is requested
     if (requestingUsername != username){
       const settings = await this.settingsService.findOne(username);
