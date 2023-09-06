@@ -77,7 +77,7 @@ import { APP_GUARD } from '@nestjs/core';
         authServerUrl: configService.get(ConfigTokens.KC_URL),
         realm: configService.get(ConfigTokens.KC_REALM),
         clientId: configService.get(ConfigTokens.KC_CLIENT_ID),
-        secret: configService.get(ConfigTokens.KC_SECRET),   
+        secret: configService.get(ConfigTokens.KC_SECRET)
       }
     },
       imports: [ConfigModule],

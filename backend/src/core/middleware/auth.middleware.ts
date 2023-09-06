@@ -12,11 +12,11 @@ export class AuthMiddleware implements NestMiddleware {
   allowedUrls = [];
 
   use(req: Request, res: Response, next: NextFunction) {
-    if(this.allowedUrls.includes(req.baseUrl)) {
-      next();
-    } else {
-      this.auth(req, res, next);
-    }
+    next();
+    // if(this.allowedUrls.includes(req.baseUrl)) {
+    // } else {
+    //   this.auth(req, res, next);
+    // }
   }
 
 }
