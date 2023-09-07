@@ -78,9 +78,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
         redirectUri: 'http://localhost:4200/'//window.location.origin,
       },
       bearerExcludedUrls: [],
-      // shouldUpdateToken(request) {
-      //   return !request.headers.get('token-update') === false;
-      // }
+      loadUserProfileAtStartUp: true
     });
 }
 
