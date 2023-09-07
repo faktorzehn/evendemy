@@ -9,7 +9,6 @@ export class BaseService {
 
   protected createHeaders(): HttpHeaders {
     const headers = new HttpHeaders({
-      Authorization: localStorage.getItem('token'),
       'Content-Type': 'application/json'
     });
     return headers;
