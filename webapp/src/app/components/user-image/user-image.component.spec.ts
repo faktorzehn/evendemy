@@ -27,9 +27,6 @@ describe('UserImageComponent', () => {
         lastname: 'Doe'
       });
     });
-    configSpy.getSettings.and.returnValue({
-      user_image_folder: ''
-    });
 
     TestBed.configureTestingModule({
       declarations: [UserImageComponent],
