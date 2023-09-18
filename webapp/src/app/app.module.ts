@@ -66,16 +66,16 @@ const appRoutes: Routes = [
   { path: '**', component: ErrorComponent, canActivate: [AuthGuard] }
 ];
 
-function initializeKeycloak(keycloak: KeycloakService) {
+function initializeKeycloak(keycloak: KeycloakService, configService: ConfigService<any>) {
   return () => keycloak.init({
       config: {
-        url: 'http://localhost:8090/',
-        realm: 'evendemy',
-        clientId: 'evendemy'
+        url: configService.config.kc_url,
+        realm: configService.config.kc_realm,
+        clientId: configService.config.kc_client_id
       },
       initOptions: {
         onLoad: 'login-required',
-        redirectUri: 'http://localhost:4200/'//window.location.origin,
+        redirectUri: window.location.origin,
       },
       bearerExcludedUrls: [],
       loadUserProfileAtStartUp: true
@@ -144,7 +144,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService],
+      deps: [KeycloakService, ConfigService<any>],
     },
     {
       provide: APP_INITIALIZER,

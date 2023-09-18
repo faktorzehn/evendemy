@@ -13,18 +13,6 @@ services:
 
   evendemy:
     restart: unless-stopped
-    environment:
-      - MAIL_ENABLED=${MAIL_ENABLED}
-      - MAIL_HOST=${MAIL_HOST}
-      - MAIL_PORT=${MAIL_PORT}
-      - MAIL_USERNAME=${MAIL_USERNAME}
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - MAIL_ADDRESS=${MAIL_ADDRESS}
-      - CALENDAR_COMPANY=${CALENDAR_COMPANY}
-      - CALENDAR_TIMEZONE=${CALENDAR_TIMEZONE}
-      - CALENDAR_ORGANIZER_NAME=${CALENDAR_ORGANIZER_NAME}
-      - CALENDAR_ORGANIZER_MAIL=${CALENDAR_ORGANIZER_MAIL}
-    # Build the docker container located in ./backend
     build: 
       context: ./
       dockerfile: Dockerfile
@@ -32,7 +20,7 @@ services:
     env_file:
       - .env
     ports:
-      - "${EVENDEMY_PORT}:3000"
+      - "${EVENDEMY_PORT}:8080"
     # Add the volumes to the container
     volumes:
       # User and meeting images. Inserted where dist/assets would be in the webapp

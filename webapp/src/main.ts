@@ -6,11 +6,14 @@ import { environment } from "./environments/environment";
 import { AppModule } from "./app";
 import { APP_CONFIG } from "./injection-tokens";
 
+let urlForConfig= "http://localhost:8080/api/config";
+
 if (environment.production) {
   enableProdMode();
+  urlForConfig = "./api/config";
 }
 
-fetch("assets/config.json")
+fetch(urlForConfig)
   .then((response) => response.json())
   .then((config: any) => {
     if (environment.production) {
@@ -23,4 +26,4 @@ fetch("assets/config.json")
   })
   .catch((e) => {
     console.error("Couldn't load config", e);
-  });
+});

@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { MeetingsModule } from './meetings/meetings.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
 import { ImageService } from './core/image.service';
 import { CoreModule } from './core/core.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -17,6 +16,7 @@ import {
   AuthGuard,
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
+import { WebConfigModule } from './web-config/web-config.module';
 
 @Module({
   imports: [    
@@ -44,7 +44,10 @@ import { APP_GUARD } from '@nestjs/core';
         [ConfigTokens.KC_SECRET]: Joi.string().required(), 
         [ConfigTokens.KC_URL]: Joi.string().required(),
         [ConfigTokens.KC_CLIENT_ID]: Joi.string().required(),
-        [ConfigTokens.KC_REALM]: Joi.string().required()
+        [ConfigTokens.KC_REALM]: Joi.string().required(),
+        [ConfigTokens.WEBAPP_KC_URL]: Joi.string().required(),
+        [ConfigTokens.WEBAPP_KC_CLIENT_ID]: Joi.string().required(),
+        [ConfigTokens.WEBAPP_KC_REALM]: Joi.string().required()
       }),
     }),    
     TypeOrmModule.forRootAsync({
@@ -64,9 +67,8 @@ import { APP_GUARD } from '@nestjs/core';
     CoreModule,
     MeetingsModule, 
     UsersModule,
-    AuthModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname,"../../webapp/dist"),
+      rootPath: join(__dirname,"../../webapp"),
       exclude: ["api/*"],
     }),
     KeycloakConnectModule.registerAsync({
@@ -81,7 +83,8 @@ import { APP_GUARD } from '@nestjs/core';
     },
       imports: [ConfigModule],
       inject: [ConfigService]
-    })
+    }),
+    WebConfigModule
   ],
   providers: [
     ImageService,
