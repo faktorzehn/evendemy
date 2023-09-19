@@ -4,7 +4,7 @@ import { SettingsDto } from '../dto/settings.dto';
 import { EvendemyRequest } from 'src/shared/evendemy-request';
 import { SettingsEntity } from '../entities/setting.entity';
 
-@Controller('settings')
+@Controller('api/settings')
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 

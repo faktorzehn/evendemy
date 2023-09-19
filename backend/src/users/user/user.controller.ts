@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { ConfigTokens } from 'src/config.tokens';
 import { UserEntity } from '../entities/user.entity';
 
-@Controller('user')
+@Controller('api/user')
 export class UserController {
 
     private path = this.configService.get<string>(ConfigTokens.USER_IMAGE_FOLDER);

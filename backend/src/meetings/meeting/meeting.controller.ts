@@ -15,7 +15,7 @@ import { MeetingDto } from '../dto/meeting.dto';
 import { UsersService } from 'src/users/users/users.service';
 import { NotificationAboutMeetingsService } from '../notfication-about-meetings.service';
 
-@Controller('meeting')
+@Controller('api/meeting')
 export class MeetingController {
 
   private path = this.configService.get<string>(ConfigTokens.MEETING_IMAGE_FOLDER);

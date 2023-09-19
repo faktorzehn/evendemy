@@ -9,14 +9,8 @@ import { ConfigTokens } from './config.tokens';
 import * as Joi from 'joi';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import {
-  KeycloakConnectModule,
-  ResourceGuard,
-  RoleGuard,
-  AuthGuard,
-} from 'nest-keycloak-connect';
-import { APP_GUARD } from '@nestjs/core';
 import { WebConfigModule } from './web-config/web-config.module';
+import { AuthMiddleware } from './auth.middleware';
 
 @Module({
   imports: [    
@@ -41,13 +35,9 @@ import { WebConfigModule } from './web-config/web-config.module';
         [ConfigTokens.CALENDAR_ORGANIZER_MAIL]: Joi.string().required(),
         [ConfigTokens.CALENDAR_ORGANIZER_NAME]: Joi.string().required(),
         [ConfigTokens.CALENDAR_TIMEZONE]: Joi.string().required(),
-        [ConfigTokens.KC_SECRET]: Joi.string().required(), 
         [ConfigTokens.KC_URL]: Joi.string().required(),
         [ConfigTokens.KC_CLIENT_ID]: Joi.string().required(),
         [ConfigTokens.KC_REALM]: Joi.string().required(),
-        [ConfigTokens.WEBAPP_KC_URL]: Joi.string().required(),
-        [ConfigTokens.WEBAPP_KC_CLIENT_ID]: Joi.string().required(),
-        [ConfigTokens.WEBAPP_KC_REALM]: Joi.string().required()
       }),
     }),    
     TypeOrmModule.forRootAsync({
@@ -71,37 +61,17 @@ import { WebConfigModule } from './web-config/web-config.module';
       rootPath: join(__dirname,"../../webapp"),
       exclude: ["api/*"],
     }),
-    KeycloakConnectModule.registerAsync({
-      useFactory: (configService: ConfigService) => {
-      console.log(`Enabling keycloak ${configService.get(ConfigTokens.KC_URL)}`);
-      return {
-        authServerUrl: configService.get(ConfigTokens.KC_URL),
-        realm: configService.get(ConfigTokens.KC_REALM),
-        clientId: configService.get(ConfigTokens.KC_CLIENT_ID),
-        secret: configService.get(ConfigTokens.KC_SECRET)
-      }
-    },
-      imports: [ConfigModule],
-      inject: [ConfigService]
-    }),
     WebConfigModule
   ],
   providers: [
-    ImageService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: ResourceGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RoleGuard,
-    }
+    ImageService
   ]
 })
-export class AppModule {
-
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude('api/config')
+      .forRoutes('api');
+  }
 }

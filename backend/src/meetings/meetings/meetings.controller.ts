@@ -7,7 +7,7 @@ import { BookingEntity } from '../entities/booking.entity';
 import { BookingDto } from '../dto/booking.dto';
 import { SettingsService } from 'src/users/settings/settings.service';
 
-@Controller('meetings')
+@Controller('api/meetings')
 export class MeetingsController {
   constructor(
     private readonly meetingsService: MeetingsService,

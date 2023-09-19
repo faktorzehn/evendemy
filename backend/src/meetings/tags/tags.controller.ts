@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { MeetingsService } from '../meetings.service';
 
-@Controller('tags')
+@Controller('api/tags')
 export class TagsController {
 
     constructor(private readonly meetingsService: MeetingsService) {}
