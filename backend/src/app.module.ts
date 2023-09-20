@@ -35,9 +35,11 @@ import { AuthMiddleware } from './auth.middleware';
         [ConfigTokens.CALENDAR_ORGANIZER_MAIL]: Joi.string().required(),
         [ConfigTokens.CALENDAR_ORGANIZER_NAME]: Joi.string().required(),
         [ConfigTokens.CALENDAR_TIMEZONE]: Joi.string().required(),
-        [ConfigTokens.KC_URL]: Joi.string().required(),
+        [ConfigTokens.KC_URL_WEBAPP]: Joi.string().required(),
+        [ConfigTokens.KC_URL_BACKEND]: Joi.string().required(),
         [ConfigTokens.KC_CLIENT_ID]: Joi.string().required(),
         [ConfigTokens.KC_REALM]: Joi.string().required(),
+        [ConfigTokens.HOST]: Joi.string().required(),
       }),
     }),    
     TypeOrmModule.forRootAsync({

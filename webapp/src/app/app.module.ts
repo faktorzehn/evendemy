@@ -76,6 +76,7 @@ function initializeKeycloak(keycloak: KeycloakService, configService: ConfigServ
       initOptions: {
         onLoad: 'login-required',
         redirectUri: window.location.origin,
+        checkLoginIframe: false
       },
       bearerExcludedUrls: [],
       loadUserProfileAtStartUp: true
