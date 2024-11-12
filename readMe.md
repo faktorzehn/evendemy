@@ -1,3 +1,5 @@
+This project is archived. Thank's for the great experience.
+
 # Evendemy 
 
 ## What is Evendemy...
